@@ -1,4 +1,4 @@
-=== Ultimate Addons for Contact Form 7 ===
+=== Hydra Booking ===
 Contributors: themefic, hasanet, mdrejon
 Tags: Booking Plugin, hydra booking, booking form, ultimate booking form
 Requires at least: 4.2
