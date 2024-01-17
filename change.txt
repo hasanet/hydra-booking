@@ -1,0 +1,22 @@
+=  1.1.7 – 03/11/2023  = 
+- Compatible: AI prompts with Ultimate Booking Form(Pro)
+
+= 1.1.6 - 18/07/2023
+- Fixed: conditional issue fixed in date picker
+
+= 1.1.5 - 14/02/2023
+
+- Fixed: Booking Calendar 
+- Fixed: Booking Save Date Error
+
+= 1.1.3 - 21/12/2022 =
+
+- Fixed: Booking API Issue
+- New Feature: Disable multiple bookings at the same slot
+- Fixed: Fixed issue on Sunday
+- Fixed: Disable specific date 
+
+= 1.0.6 - 13/09/2022 =
+
+- New Feature: Google calendar event API Integration
+- New Feature: Time schedule system Feature added
