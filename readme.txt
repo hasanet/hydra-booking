@@ -1,5 +1,5 @@
 === Hydra Booking ===
-Contributors: themefic, hasanet, mdrejon
+Contributors: themefic, hasanet, mdrejon, kamrul07
 Tags: Booking Plugin, hydra booking, booking form, ultimate booking form
 Requires at least: 4.2
 Tested up to: 6.4
