@@ -27,15 +27,7 @@ class THB_INIT {
       
         //  Plugin Loaded
         add_action( 'plugins_loaded', array( $this, 'thb_plugin_loaded' ) );
-   
-        //  Add form tag
-        add_action( 'admin_init', array( $this, 'tag_generator' ) );
-         
-        // add_filter( 'wpcf7_load_js', '__return_false' );
-        add_filter( 'wpcf7_verify_nonce', '__return_true' );
-
-        // thb_print_r('test');
-        // exit;
+    
     }
 
     public function thb_define_constants(){
@@ -74,6 +66,38 @@ class THB_INIT {
 
     // Plugin Loaded
     public function thb_plugin_loaded(){
+        if ( class_exists( 'WPCF7' ) ) {
+			//Init ultimate addons
+			$this->thb_init();
+
+		} else {
+			//Admin notice
+			add_action( 'admin_notices', array( $this, 'thb_admin_notice' ) );
+		}
+
+        
+    }
+
+
+  	/*
+	 * Admin notice- To check the Contact form 7 plugin is installed
+	 */
+	public function thb_admin_notice() {
+		?>
+		<div class="notice notice-error">
+			<p>
+				<?php printf(
+					__( '%s requires %s to be installed and active. You can install and activate it from %s', 'thb-hydra-booking' ), '<strong>Hydra Booking</strong>', '<strong>Contact form 7</strong>', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=contact+form+7' ) . '">here</a>.'
+				); ?>
+			</p>
+		</div>
+		<?php
+	}
+    public function thb_init(){
+        
+        //  Add form tag
+        add_action( 'admin_init', array( $this, 'tag_generator' ) );
+          
         add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) ); 
 
         // Enqueue Admin scripts
@@ -120,10 +144,6 @@ class THB_INIT {
         add_action( 'woocommerce_checkout_create_order_line_item', array($this, 'thb_hydra_save_cart_item_custom_meta_as_order_item_meta'), 10, 4 );
  
     }
-
-
-  
-    
     // Load Text Domain
     public function load_textdomain() {
         load_plugin_textdomain( 'thb-hydra-booking', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
@@ -626,8 +646,7 @@ class THB_INIT {
                     
                 </tbody>
                 </table>
-                
-                <div class="thb-doc-notice thb-guide"><?php echo _e('You need to enable the form from the "Hydra Booking Option" tab. The tab also includes additional settings.', 'thb-hydra-booking') ?></div>
+                 
                 
             </fieldset>
         </div>
@@ -669,8 +688,7 @@ class THB_INIT {
                     </tr>           
                     
                 </tbody>
-                </table>
-                <div class="thb-doc-notice thb-guide"><?php echo _e('You need to enable the form from the "Hydra Booking Option" tab. The tab also includes additional settings.', 'thb-hydra-booking') ?></div>
+                </table> 
                  
             </fieldset>
         </div>
