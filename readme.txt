@@ -4,7 +4,7 @@ Tags: Booking Plugin, hydra booking, booking form, ultimate booking form
 Requires at least: 4.2
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.0.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt 
 
