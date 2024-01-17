@@ -32,7 +32,7 @@ class THB_INIT {
 
     public function thb_define_constants(){
             // Other defines
-            define( 'THB_VERSION', '1.1.8' );
+            define( 'THB_VERSION', '1.0.0' );
             define( 'THB_URL', plugin_dir_url( __FILE__ ) );
             define( 'THB_PATH', plugin_dir_path( __FILE__ ) );
             define( 'THB_ASSETS_URL', THB_URL.'assets/' );
