@@ -269,7 +269,13 @@ class THB_INIT {
 
         
         // WooCommerce
-        $hydra_woo = !empty(get_post_meta( $form_id, 'hydra_woo', true )) ? get_post_meta( $form_id, 'hydra_woo', true ) : '';
+        if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) || version_compare( get_option( 'woocommerce_db_version' ), '2.5', '<' ) ) { 
+            $hydra_woo = 'off';
+        } else{
+            
+            $hydra_woo = !empty(get_post_meta( $form_id, 'hydra_woo', true )) ? get_post_meta( $form_id, 'hydra_woo', true ) : '';
+        }
+        
         $hydra_product = !empty(get_post_meta( $form_id, 'hydra_product', true )) ? get_post_meta( $form_id, 'hydra_product', true ) : '';
         
         $hydra_product_id = !empty(get_post_meta( $form_id, 'hydra_product_id', true )) ? get_post_meta( $form_id, 'hydra_product_id', true ) : '';
@@ -278,7 +284,7 @@ class THB_INIT {
         $hydra_product_name = !empty(get_post_meta( $form_id, 'hydra_product_name', true )) ? get_post_meta( $form_id, 'hydra_product_name', true ) : '';
        
         $hydra_product_price = !empty(get_post_meta( $form_id, 'hydra_product_price', true )) ? get_post_meta( $form_id, 'hydra_product_price', true ) : ''; 
- 
+       
     
 
         $store_data = '';

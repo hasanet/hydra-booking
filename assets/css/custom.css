@@ -27,24 +27,24 @@
 /** 
  * Custom CSS
  */
-.bf-form-input-date, .bf-form-input-time {
+.hydra-form-input-date, .hydra-form-input-time {
     display: none;
 }
 /*Scroll Bar*/
-.bf-time-picker::-webkit-scrollbar-track{
+.hydra-time-picker::-webkit-scrollbar-track{
     -webkit-box-shadow: none;
     box-shadow: none;
     background-color: #F1F1F1;
 }
-.bf-time-picker::-webkit-scrollbar{
+.hydra-time-picker::-webkit-scrollbar{
     width: 6px;
     background-color: #F1F1F1;
 }
-.bf-time-picker::-webkit-scrollbar-thumb{
+.hydra-time-picker::-webkit-scrollbar-thumb{
     background-color: #c1c1c1;
 }
 /*FF*/
-.bf-time-picker{
+.hydra-time-picker{
     scrollbar-width: thin;
 }
 
@@ -52,28 +52,28 @@
  * jQuery Time Picker
  * Custom CSS
  */
-.bf-time-picker {
+.hydra-time-picker {
     width: 308px;
     max-height: 100%;
     height: 200px;
     box-shadow: none;
     padding: 5px;
 }
-.bf-time-picker li {
+.hydra-time-picker li {
     width: 49%;
     float: left;
     text-align: center;
     margin-bottom: 2%;
     background: #f2f2f2;
 }
-.bf-time-picker li:nth-child(odd) {
+.hydra-time-picker li:nth-child(odd) {
     margin-right: 2%;
 }
-.bf-time-picker li.ui-timepicker-selected {
+.hydra-time-picker li.ui-timepicker-selected {
     background: #1980EC;
     color: #fff;
 }
-.bf-time-picker li.ui-timepicker-disabled {
+.hydra-time-picker li.ui-timepicker-disabled {
     display: none;
 }
 .ui-timepicker-list{

@@ -101,10 +101,10 @@
 
                 // Function called
                 day_base_timepicker($this, recent_date, store_data, time_data, time_id);   
-
-
+ 
                 //  Add to cart product then redirect to checkout
-                if ( typeof date_data.hydra_woo !== 'undefined' && date_data.hydra_woo == '1'  ) {  
+                if ( typeof date_data.hydra_woo !== 'undefined' && date_data.hydra_woo == '1'  ) { 
+                  
                     document.addEventListener('wpcf7mailsent', function (event) {
                         if (event.detail.status == 'mail_sent' ) {
                             
@@ -177,8 +177,7 @@
         function day_base_timepicker($this, dateStr, store_data, time_data, time_id){ 
              
             time_data = JSON.parse(time_data);
-            
-            // console.log(time_data);
+             
             var selectedDates = new Date(dateStr); 
             var min_time = time_data.min_time; 
             var max_time = time_data.max_time;
