@@ -1,0 +1,11 @@
+{
+    "name": "hydra-booking/hydra-booking",
+    "description": "Create a booking / Appointment Form using Contact Form 7. You can insert Calendar, Time on the form and manage your booking. User can pay using WooCommerce. ",
+    "type": "project",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "HydraBooking\\Admin\\": "admin/"
+        }
+    }
+}
