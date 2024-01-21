@@ -13,18 +13,66 @@ namespace HydraBooking\Admin\Includes;
 
     public function admin_menu() {
         add_menu_page(
-            'Hydra Booking',
-            'Hydra Booking',
+            esc_html__('Hydra Booking', 'thb-hydra-booking'),
+            esc_html__('Hydra Booking', 'thb-hydra-booking'),
             'manage_options',
             'hydra-booking',
             array($this, 'hydra_booking_page'),
             'dashicons-calendar-alt',
             6
         );
+
+        add_submenu_page(
+            "hydra-booking",
+            esc_html__("Dashboard", "dashboardpress"),
+            esc_html__("Dashboard", "dashboardpress"),
+            "manage_options",
+            "hydra-booking#",
+            array($this, "hydra_booking_page")
+        );
+        // Create a array for sub menu 
+        $sub_menu = array(
+            array(
+                'id' => 'availability',
+                'Title' => esc_html__('Availability', 'thb-hydra-booking'),
+                'capability' => 'manage_options', 
+            ), 
+            array(
+                'id' => 'event',
+                'Title' => esc_html__('Events', 'thb-hydra-booking'),
+                'capability' => 'manage_options', 
+            ), 
+            array(
+                'id' => 'booking',
+                'Title' => esc_html__('Booking', 'thb-hydra-booking'),
+                'capability' => 'manage_options', 
+            ), 
+            array(
+                'id' => 'settings',
+                'Title' => esc_html__('Settings', 'thb-hydra-booking'),
+                'capability' => 'manage_options', 
+            ), 
+        );
+        // Loop through array and create sub menu
+        foreach ($sub_menu as $menu) {
+            $menu_id = $menu['id'];
+            add_submenu_page(
+                'hydra-booking',
+                $menu['Title'],
+                $menu['Title'],
+                $menu['capability'],
+                'hydra-booking#/' . $menu_id,
+                array($this, 'hydra_booking_page')
+            );
+        }
+
+
+        // remove Sub Menu
+        remove_submenu_page('hydra-booking', 'hydra-booking');
     }
 
     public function hydra_booking_page() {
-        echo '<div id="app">{{ message }}</div>';
+        echo '<div id="thb-admin-app"></div>';
     }
     
 
