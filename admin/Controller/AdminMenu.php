@@ -1,5 +1,5 @@
 <?php 
-namespace HydraBooking\Admin\Includes;
+namespace HydraBooking\Admin\Controller;
   // exit
   if ( ! defined( 'ABSPATH' ) ) { exit; }
 

@@ -1,5 +1,5 @@
 <?php 
-namespace HydraBooking\Admin\Includes;
+namespace HydraBooking\Admin\Controller;
   // exit
   if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -22,7 +22,9 @@ namespace HydraBooking\Admin\Includes;
         // wp_enqueue_script('thb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
         wp_enqueue_script('thb-vue-core', 'http://localhost:5173/src/main.js', [], time(), true);
         wp_localize_script('thb-vue-core', 'thb_wpvue', [
-            'url' => THB_URL,
+            // 'url' => THB_URL,
+            'wp_rest_nonce' => wp_create_nonce( 'wp_rest' ),
+            'admin_url' => site_url(),
         ]);
    
     }

@@ -1,4 +1,25 @@
+<script setup>    
+import { reactive } from 'vue';
+import axios from 'axios'
+// import ThbInput from '../form-fields/Input.vue';
+const availability = reactive ({
+  title: '', 
+  time_zone: '', 
+  slots: '', 
+});
+
+const createAvailability = async () => {
+
+  const response = await axios.post(thb_wpvue.admin_url+'/wp-json/hydra-booking/v1/availability/create', availability);
+    if(response.data.success){
+      console.log(response.data);
+    } 
+}
+
+</script>
+
 <template>
+  {{ availability }}
   <div class="thb-event-dashboard">
       <div class="thb-dashboard-heading">
           <div class="thb-admin-title">
@@ -9,21 +30,34 @@
               <router-link to="/event/create" class="thb-btn">Add New</router-link>
           </div> 
       </div>
-      <div class="thb-content-wrap">
+      <div class="thb-content-wrap"> 
           <div class="no-content">
+            <div class="thb-create-form"> 
+                <div class="thb-form-group">
+                    <label>Event Name :</label>
+                    <input type="text" v-model="availability.title" placeholder="Please input" />
+                </div>
+
+                <div class="thb-form-group">
+                    <label>Time Zone:</label> 
+                    <select v-model="availability.time_zone">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                    </select>
+                </div>
+                <div class="thb-form-group"> 
+                  <button class="thb-btn" @click="createAvailability">Save</button>
+                </div>
+            <div> 
+          </div>
+          </div> 
               <p>There are no events yet.</p>
           </div>
       </div>
   </div>
 
 </template>
-
-<script>
-export default {
-  name: 'Availability',
-  // Your component options go here
-}
-</script>
+ 
 
 <style scoped>
 /* Your component styles go here */

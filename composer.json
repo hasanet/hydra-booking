@@ -5,7 +5,8 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "HydraBooking\\Admin\\": "admin/"
+            "HydraBooking\\Admin\\": "admin/",
+            "HydraBooking\\DB\\": "database/"
         }
     }
 }

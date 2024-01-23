@@ -1,10 +1,10 @@
 
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Dashboard from '../components/page/Dashboard.vue';
-import Availability from '../components/page/Availability.vue';
-import Booking from '../components/page/Booking.vue';
-import Event from '../components/page/Event.vue';
-import Settings from '../components/page/Settings.vue';
+import Dashboard from '../view/Dashboard.vue';
+import Availability from '../view/Availability.vue';
+import Booking from '../view/Booking.vue';
+import Event from '../view/Event.vue';
+import Settings from '../view/Settings.vue';
 
 
  

@@ -9,11 +9,16 @@ class ComposerStaticInitf230e5d46c73a3bfe303ee4885dd24a1
     public static $prefixLengthsPsr4 = array (
         'H' => 
         array (
+            'HydraBooking\\DB\\' => 16,
             'HydraBooking\\Admin\\' => 19,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'HydraBooking\\DB\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database',
+        ),
         'HydraBooking\\Admin\\' => 
         array (
             0 => __DIR__ . '/../..' . '/admin',
