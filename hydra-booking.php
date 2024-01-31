@@ -15,33 +15,33 @@
 // don't load directly
 defined( 'ABSPATH' ) || exit;
 
-class THB_INIT {
+class TFHB_HYDRA_INIT {
 
     public function __construct() { 
         
         // Define thb constants
-        $this->thb_define_constants();
+        $this->tfhb_define_constants();
 
         // Include required files
-        $this->thb_include_files();
+        $this->tfhb_include_files();
       
         //  Plugin Loaded
-        add_action( 'plugins_loaded', array( $this, 'thb_plugin_loaded' ) );
+        add_action( 'plugins_loaded', array( $this, 'tfhb_plugin_loaded' ) );
     
     }
 
-    public function thb_define_constants(){
+    public function tfhb_define_constants(){
             // Other defines
-            define( 'THB_VERSION', '1.0.0' );
-            define( 'THB_URL', plugin_dir_url( __FILE__ ) );
-            define( 'THB_PATH', plugin_dir_path( __FILE__ ) );
-            define( 'THB_ASSETS_URL', THB_URL.'assets/' );
-            define( 'THB_ADMIN_URL', THB_URL.'admin/' );
+            define( 'TFHB_VERSION', '1.0.0' );
+            define( 'TFHB_URL', plugin_dir_url( __FILE__ ) );
+            define( 'TFHB_PATH', plugin_dir_path( __FILE__ ) );
+            define( 'TFHB_ASSETS_URL', TFHB_URL.'assets/' );
+            define( 'TFHB_ADMIN_URL', TFHB_URL.'admin/' );
 
     }
 
    
-    public function thb_include_files(){
+    public function tfhb_include_files(){
 
         /**
          * Including Plugin file
@@ -65,14 +65,14 @@ class THB_INIT {
     }
 
     // Plugin Loaded
-    public function thb_plugin_loaded(){
+    public function tfhb_plugin_loaded(){
         if ( class_exists( 'WPCF7' ) ) {
 			//Init ultimate addons
-			$this->thb_init();
+			$this->tfhb_init();
 
 		} else {
 			//Admin notice
-			add_action( 'admin_notices', array( $this, 'thb_admin_notice' ) );
+			add_action( 'admin_notices', array( $this, 'tfhb_admin_notice' ) );
 		}
 
         
@@ -82,7 +82,7 @@ class THB_INIT {
   	/*
 	 * Admin notice- To check the Contact form 7 plugin is installed
 	 */
-	public function thb_admin_notice() {
+	public function tfhb_admin_notice() {
 		?>
 		<div class="notice notice-error">
 			<p>
@@ -93,85 +93,87 @@ class THB_INIT {
 		</div>
 		<?php
 	}
-    public function thb_init(){
+    public function tfhb_init(){
         
         //  Add form tag
         add_action( 'admin_init', array( $this, 'tag_generator' ) );
           
-        add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) ); 
+        // Load Text Domain
+        $this->tfhb_load_textdomain();
 
         // Enqueue Admin scripts
-        add_action( 'admin_enqueue_scripts', array($this, 'thb_enqueue_admin_scripts') ); 
+        add_action( 'admin_enqueue_scripts', array($this, 'tfhb_enqueue_admin_scripts') ); 
 
         // Dequeue Scripts
-        add_filter( 'wp_enqueue_scripts', array($this, 'thb_dequeue_scripts'), 9999 );
+        add_filter( 'wp_enqueue_scripts', array($this, 'tfhb_dequeue_scripts'), 9999 );
 
         // Enqueue frontend scripts
-        add_filter( 'wp_enqueue_scripts', array($this, 'thb_enqueue_scripts'), 99999 );
+        add_filter( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts'), 99999 );
 
         // Add admin menu
-        add_action( 'wpcf7_init', array($this, 'thb_form_tag' ));
+        add_action( 'wpcf7_init', array($this, 'tfhb_form_tag' ));
 
         // Validation filter for date
-        add_filter( 'wpcf7_validate_thb_booking_form_date', array($this, 'thb_date_validation_filter'), 10, 2 );
-        add_filter( 'wpcf7_validate_thb_booking_form_date*', array($this, 'thb_date_validation_filter'), 10, 2 );
+        add_filter( 'wpcf7_validate_tfhb_booking_form_date', array($this, 'tfhb_date_validation_filter'), 10, 2 );
+        add_filter( 'wpcf7_validate_tfhb_booking_form_date*', array($this, 'tfhb_date_validation_filter'), 10, 2 );
 
         // Validation filter for time
-        add_filter( 'wpcf7_validate_thb_booking_form_time', array($this, 'thb_time_validation_filter'), 10, 2 );
-        add_filter( 'wpcf7_validate_thb_booking_form_time*', array($this, 'thb_time_validation_filter'), 10, 2 );
+        add_filter( 'wpcf7_validate_tfhb_booking_form_time', array($this, 'tfhb_time_validation_filter'), 10, 2 );
+        add_filter( 'wpcf7_validate_tfhb_booking_form_time*', array($this, 'tfhb_time_validation_filter'), 10, 2 );
 
 
         // Validation message for time
-        add_filter( 'wpcf7_messages', array($this, 'thb_time_messages'), 10, 1 );
+        add_filter( 'wpcf7_messages', array($this, 'tfhb_time_messages'), 10, 1 );
 
-        // 
-        add_action( 'wpcf7_editor_panels', array($this, 'thb_hydra_add_panel') );
+        // Editor Panels
+        add_action( 'wpcf7_editor_panels', array($this, 'tfhb_hydra_add_panel') );
  
-        // 
-        add_action( 'wpcf7_after_save', array($this, 'thb_hydra_save_contact_form') );
+        // Save After Form Submission
+        add_action( 'wpcf7_after_save', array($this, 'tfhb_hydra_save_contact_form') );
 
-        // 
-        add_filter( 'wpcf7_contact_form_properties', array($this,  'thb_hydra_properties'), 10, 2 );
+        // Save Properties
+        add_filter( 'wpcf7_contact_form_properties', array($this,  'tfhb_hydra_properties'), 10, 2 );
 
-        // 
-        add_action( 'wp_ajax_thb_hydra_ajax_add_to_cart_product', array($this, 'thb_hydra_ajax_add_to_cart_product') );
-        add_action( 'wp_ajax_nopriv_thb_hydra_ajax_add_to_cart_product', array($this, 'thb_hydra_ajax_add_to_cart_product') );
+        // Ajax Add To Cart
+        add_action( 'wp_ajax_tfhb_hydra_ajax_add_to_cart_product', array($this, 'tfhb_hydra_ajax_add_to_cart_product') );
 
-        // 
-        add_filter( 'woocommerce_get_item_data', array($this, 'thb_hydra_display_cart_item_custom_meta_data'), 10, 2 );
+        add_action( 'wp_ajax_nopriv_tfhb_hydra_ajax_add_to_cart_product', array($this, 'tfhb_hydra_ajax_add_to_cart_product') );
 
-        // 
-        add_action( 'woocommerce_checkout_create_order_line_item', array($this, 'thb_hydra_save_cart_item_custom_meta_as_order_item_meta'), 10, 4 );
+        // Display Cart Item Custom Meta Data
+        add_filter( 'woocommerce_get_item_data', array($this, 'tfhb_hydra_display_cart_item_custom_meta_data'), 10, 2 );
+
+        // Save Cart Item Custom Meta Data
+        add_action( 'woocommerce_checkout_create_order_line_item', array($this, 'tfhb_hydra_save_cart_item_custom_meta_as_order_item_meta'), 10, 4 );
  
     }
 
     // Load Text Domain
-    public function load_textdomain() {
+    public function tfhb_load_textdomain() {
         load_plugin_textdomain( 'hydra-booking', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
     }
 
     // Enqueue Admin scripts
-    public function thb_enqueue_admin_scripts(){
+    public function tfhb_enqueue_admin_scripts(){
 
         // flatpickr
-        wp_enqueue_script( 'flatpickr', THB_ASSETS_URL . 'flatpickr/flatpickr.min.js', array('jquery'), '4.6.9', true );
-        wp_enqueue_script( 'flatpickr-range', THB_ASSETS_URL . 'flatpickr/rangePlugin.min.js', array('jquery'), '4.6.9', true );
+        wp_enqueue_script( 'flatpickr', TFHB_ASSETS_URL . 'flatpickr/flatpickr.min.js', array('jquery'), '4.6.9', true );
+        wp_enqueue_script( 'flatpickr-range', TFHB_ASSETS_URL . 'flatpickr/rangePlugin.min.js', array('jquery'), '4.6.9', true );
 
         // jquery-timepicker
-        wp_enqueue_script( 'jquery.timepicker', THB_ADMIN_URL . 'js/jquery.timepicker.min.js', array('jquery'), '1.13.18', true );
+        wp_enqueue_script( 'jquery.timepicker', TFHB_ADMIN_URL . 'js/jquery.timepicker.min.js', array('jquery'), '1.13.18', true );
 
         // Custom
-        wp_enqueue_style('thb', THB_ADMIN_URL . 'css/admin.css','', THB_VERSION );
-        wp_enqueue_script( 'thb', THB_ADMIN_URL . 'js/admin.js', array('jquery'), THB_VERSION, true );   
-        wp_localize_script( 'thb', 'thb_params',
+        wp_enqueue_style('thb', TFHB_ADMIN_URL . 'css/admin.css','', TFHB_VERSION );
+        wp_enqueue_script( 'thb', TFHB_ADMIN_URL . 'js/admin.js', array('jquery'), TFHB_VERSION, true );   
+        wp_localize_script( 'thb', 'tfhb_params',
             array(
-                'thb_nonce' => wp_create_nonce( 'updates' ),
+                'tfhb_nonce' => wp_create_nonce( 'updates' ),
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
             )
         );
     }
 
-    public function thb_dequeue_scripts(){
+    public function tfhb_dequeue_scripts(){
 
         wp_deregister_script( 'flatpickr' );
 		wp_dequeue_script( 'flatpickr' );
@@ -181,17 +183,17 @@ class THB_INIT {
     }
 
     // Enqueue frontend scripts
-    public function thb_enqueue_scripts(){
+    public function tfhb_enqueue_scripts(){
 
         // flatpickr
-        wp_enqueue_script( 'flatpickr', THB_ASSETS_URL . 'flatpickr/flatpickr.min.js', array('jquery'), '4.6.9', true );
+        wp_enqueue_script( 'flatpickr', TFHB_ASSETS_URL . 'flatpickr/flatpickr.min.js', array('jquery'), '4.6.9', true );
 
         // jquery-timepicker
-        wp_enqueue_script( 'jquery.timepicker', THB_ASSETS_URL . 'jquery-timepicker/jquery.timepicker.min.js', array('jquery'), '1.13.18', true );
+        wp_enqueue_script( 'jquery.timepicker', TFHB_ASSETS_URL . 'jquery-timepicker/jquery.timepicker.min.js', array('jquery'), '1.13.18', true );
 
         // Custom
-        wp_enqueue_style('thb-style', THB_ASSETS_URL . 'css/custom.css','', THB_VERSION );
-        wp_enqueue_script( 'thb-script', THB_ASSETS_URL . 'js/custom.js', array('jquery'), THB_VERSION, true );
+        wp_enqueue_style('thb-style', TFHB_ASSETS_URL . 'css/custom.css','', TFHB_VERSION );
+        wp_enqueue_script( 'thb-script', TFHB_ASSETS_URL . 'js/custom.js', array('jquery'), TFHB_VERSION, true );
 		
 		$checkout_url = '';
 		if(function_exists('wc_get_checkout_url')){ 
@@ -202,33 +204,33 @@ class THB_INIT {
 		if(function_exists('wc_get_cart_url')){ 
 			$cart_url = wc_get_cart_url();
 		} 
-		wp_localize_script( 'thb-script', 'thb_pro_object',
+		wp_localize_script( 'thb-script', 'tfhb_pro_object',
 			array(
 				'checkout_page' => $checkout_url,
 				'cart_page' => $cart_url,
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-                'thb_nonce' => wp_create_nonce( 'updates' ),
+                'tfhb_nonce' => wp_create_nonce( 'updates' ),
 			)
 		);
 		
     }
     
 
-    public function thb_form_tag() {
-        wpcf7_add_form_tag( array( 'thb_booking_form_date', 'thb_booking_form_date*' ), array($this, 'thb_booking_form_date_tag_handler'), array( 'name-attr' => true ) );
+    public function tfhb_form_tag() {
+        wpcf7_add_form_tag( array( 'tfhb_booking_form_date', 'tfhb_booking_form_date*' ), array($this, 'tfhb_booking_form_date_tag_handler'), array( 'name-attr' => true ) );
 
-        wpcf7_add_form_tag( array( 'thb_booking_form_time', 'thb_booking_form_time*' ), array($this, 'thb_booking_form_time_tag_handler'), array( 'name-attr' => true ) );
+        wpcf7_add_form_tag( array( 'tfhb_booking_form_time', 'tfhb_booking_form_time*' ), array($this, 'tfhb_booking_form_time_tag_handler'), array( 'name-attr' => true ) );
     }
 
 
      
     /**
      * Form Tag handler
-     * thb_booking_form_date
+     * tfhb_booking_form_date
      * 
      * @since 1.0
      */
-    public function thb_booking_form_date_tag_handler( $tag ) {
+    public function tfhb_booking_form_date_tag_handler( $tag ) {
 
 
         $wpcf7 = WPCF7_ContactForm::get_current(); 
@@ -402,11 +404,11 @@ class THB_INIT {
 
     /**
      * Form Tag handler
-     * thb_booking_form_time
+     * tfhb_booking_form_time
      * 
      * @since 1.0
      */
-    public function thb_booking_form_time_tag_handler( $tag ) {
+    public function tfhb_booking_form_time_tag_handler( $tag ) {
         if ( empty( $tag->name ) ) {
             return '';
         }
@@ -457,7 +459,7 @@ class THB_INIT {
             'from_dis_time' => esc_html($from_dis_time),
             'to_dis_time' => esc_html($to_dis_time),
             'time_one_step' => esc_html($time_one_step),
-            'time_two_step' => $time_two_step,
+            'time_two_step' => esc_html($time_two_step),
             
         );
 
@@ -555,8 +557,8 @@ class THB_INIT {
      * @since 1.0
      */
 
-    public function thb_date_validation_filter( $result, $tag ) {  
-        if( isset($_POST['_thb_nonce']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_thb_nonce'] ) ), 'update' ) ){
+    public function tfhb_date_validation_filter( $result, $tag ) {  
+        if( isset($_POST['_tfhb_nonce']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tfhb_nonce'] ) ), 'update' ) ){
             $name = $tag->name;
 
             $value = isset( $_POST[$name] )
@@ -573,8 +575,8 @@ class THB_INIT {
     }
 
     // Custom Validation Filter
-    public function thb_time_validation_filter( $result, $tag ) {
-        if( isset($_POST['_thb_nonce']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_thb_nonce'] ) ), '_thb_nonce' ) ){
+    public function tfhb_time_validation_filter( $result, $tag ) {
+        if( isset($_POST['_tfhb_nonce']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tfhb_nonce'] ) ), '_tfhb_nonce' ) ){
             $name = $tag->name;
     
             $value = isset( $_POST[$name] )
@@ -594,7 +596,7 @@ class THB_INIT {
         
             if ( $tag->is_required() and '' === $value ) {
                 $result->invalidate( $tag, wpcf7_get_message( 'invalid_required' ) );
-            } elseif ( '' !== $value and ! $this->thb_is_time( $value, 'g:ia' ) ) {
+            } elseif ( '' !== $value and ! $this->tfhb_is_time( $value, 'g:ia' ) ) {
                 $result->invalidate( $tag, wpcf7_get_message( 'invalid_time' ) );
             }
         }
@@ -604,7 +606,7 @@ class THB_INIT {
     }
 
     // Validation message for time
-    public function thb_time_messages( $messages ) {
+    public function tfhb_time_messages( $messages ) {
         return array_merge( $messages, array(
             'invalid_time' => array(
                 'description' => __( "Time format that the sender entered is invalid", 'hydra-booking' ),
@@ -613,7 +615,7 @@ class THB_INIT {
         ) );
     }
     
-    public function thb_is_time(string $date, string $format = 'Y-m-d') {
+    public function tfhb_is_time(string $date, string $format = 'Y-m-d') {
         $dateObj = DateTime::createFromFormat($format, $date);
         return $dateObj && $dateObj->format($format) == $date;
     }
@@ -624,19 +626,19 @@ class THB_INIT {
      * @since 1.0
      */
     public function tag_generator() {
-        wpcf7_add_tag_generator( 'thb_booking_form_date', __( 'Hydra Booking Date', 'hydra-booking' ), 'thb-tg-pane-booking_form_date', array($this, 'tg_panel_booking_form_date') );
-        wpcf7_add_tag_generator( 'thb_booking_form_time', __( 'Hydra Booking Time', 'hydra-booking' ), 'thb-tg-pane-booking_form_time', array($this, 'tg_panel_booking_form_time') );
+        wpcf7_add_tag_generator( 'tfhb_booking_form_date', __( 'Hydra Booking Date', 'hydra-booking' ), 'thb-tg-pane-booking_form_date', array($this, 'tg_panel_booking_form_date') );
+        wpcf7_add_tag_generator( 'tfhb_booking_form_time', __( 'Hydra Booking Time', 'hydra-booking' ), 'thb-tg-pane-booking_form_time', array($this, 'tg_panel_booking_form_time') );
     }
 
     /**
      * Form tag generator handler
-     * thb_booking_form_date
+     * tfhb_booking_form_date
      * 
      * @since 1.0
      */
     public function tg_panel_booking_form_date( $cf, $args = '' ) {
         $args = wp_parse_args( $args, array() );
-        $thb_field_type = 'thb_booking_form_date';
+        $tfhb_field_type = 'tfhb_booking_form_date';
         ?>
         <div class="control-box">
             <fieldset>
@@ -663,7 +665,7 @@ class THB_INIT {
             </fieldset>
         </div>
         <div class="insert-box">
-            <input type="text" name="<?php  esc_attr_e( $thb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
+            <input type="text" name="<?php  esc_attr_e( $tfhb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
             <div class="submitbox">
                 <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'hydra-booking' ); ?>" />
             </div>
@@ -673,13 +675,13 @@ class THB_INIT {
 
     /**
      * Form tag generator handler
-     * thb_booking_form_time
+     * tfhb_booking_form_time
      * 
      * @since 1.0
      */
     public function tg_panel_booking_form_time( $cf, $args = '' ) {
         $args = wp_parse_args( $args, array() );
-        $thb_field_type = 'thb_booking_form_time';
+        $tfhb_field_type = 'tfhb_booking_form_time';
         ?>
         <div class="control-box">
             <fieldset>
@@ -705,7 +707,7 @@ class THB_INIT {
             </fieldset>
         </div>
         <div class="insert-box">
-            <input type="text" name="<?php esc_attr_e( $thb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
+            <input type="text" name="<?php esc_attr_e( $tfhb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
             <div class="submitbox">
                 <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'hydra-booking' ); ?>" />
             </div>
@@ -718,10 +720,10 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public function thb_hydra_add_panel( $panels ) {
+    public function tfhb_hydra_add_panel( $panels ) {
         $panels['thb-hydra-panel'] = array(
             'title'    => __( 'Hydra Booking Option', 'hydra-booking' ),
-            'callback' => array($this, 'thb_create_hydra_panel_fields'),
+            'callback' => array($this, 'tfhb_create_hydra_panel_fields'),
         );
         return $panels;
     }
@@ -731,7 +733,7 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public  function thb_create_hydra_panel_fields( $post ) {
+    public  function tfhb_create_hydra_panel_fields( $post ) {
 
     // get saved value      
     $hydra_enable = !empty(get_post_meta( $post->id(), 'hydra_enable', true )) ? get_post_meta( $post->id(), 'hydra_enable', true ) : '';
@@ -1201,7 +1203,7 @@ class THB_INIT {
         ?> 
     </script>
     <?php
-        wp_nonce_field( 'thb_hydra_nonce_action', 'thb_hydra_nonce' );
+        wp_nonce_field( 'tfhb_hydra_nonce_action', 'tfhb_hydra_nonce' );
     }
 
     /**
@@ -1209,12 +1211,12 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public function thb_hydra_save_contact_form( $post ) {
+    public function tfhb_hydra_save_contact_form( $post ) {
                 
         if ( ! isset( $_POST ) || empty( $_POST ) ) {
             return;
         }
-        if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['thb_hydra_nonce'] ) ), 'thb_hydra_nonce_action' ) ) {
+        if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tfhb_hydra_nonce'] ) ), 'tfhb_hydra_nonce_action' ) ) {
             return;
         }
 
@@ -1438,7 +1440,7 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public function thb_hydra_properties($properties, $post) {
+    public function tfhb_hydra_properties($properties, $post) {
 
         // echo "<pre>";
         // print_r($properties);
@@ -1446,7 +1448,7 @@ class THB_INIT {
             
         if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) { 
             // Generate a custom nonce value
-            $thb_nonce = wp_create_nonce( '_thb_nonce' );
+            $tfhb_nonce = wp_create_nonce( '_tfhb_nonce' );
             
       
             $form = $properties['form']; 
@@ -1458,7 +1460,7 @@ class THB_INIT {
             ob_start(); 
             echo $form;    
              // Add the custom nonce value to the CF7 form
-            echo '<input type="hidden" readonly name="_thb_nonce" value="' . esc_attr( $thb_nonce ) . '" />';
+            echo '<input type="hidden" readonly name="_tfhb_nonce" value="' . esc_attr( $tfhb_nonce ) . '" />';
             if ($hydra_enable) {
                 if ($hydra_date_theme != 'default') { echo '<link rel="stylesheet" type="text/css" href="' .plugin_dir_url( __FILE__ ). 'assets/flatpickr/themes/' .$hydra_date_theme. '.css">'; } 
             } 
@@ -1480,9 +1482,9 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public function thb_hydra_ajax_add_to_cart_product() {
+    public function tfhb_hydra_ajax_add_to_cart_product() {
        
-        if( isset($_POST['thb_nonce']) && ! wp_verify_nonce( sanitize_text_field($_POST['thb_nonce']), 'updates' ) ){
+        if( isset($_POST['tfhb_nonce']) && ! wp_verify_nonce( sanitize_text_field($_POST['tfhb_nonce']), 'updates' ) ){
             return; 
         } 
         $hydra_product = sanitize_text_field($_POST['hydra_product']);
@@ -1553,7 +1555,7 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public function thb_hydra_display_cart_item_custom_meta_data( $item_data, $cart_item ) {
+    public function tfhb_hydra_display_cart_item_custom_meta_data( $item_data, $cart_item ) {
         if ( isset($cart_item['booking_date']) && !empty($cart_item['booking_date']) ) {
             $item_data[] = array(
                 'key'       => 'Booking Date',
@@ -1574,7 +1576,7 @@ class THB_INIT {
      * 
      * @since 1.0
      */
-    public function thb_hydra_save_cart_item_custom_meta_as_order_item_meta( $item, $cart_item_key, $values, $order ) {
+    public function tfhb_hydra_save_cart_item_custom_meta_as_order_item_meta( $item, $cart_item_key, $values, $order ) {
 
         if ( isset($values['booking_date']) && !empty($values['booking_date']) ) {
             $item->update_meta_data( 'Booking Date', $values['booking_date'] );
@@ -1590,7 +1592,7 @@ class THB_INIT {
      *
      * @since 1.0
      */
-    public function thb_woocommerce_inactive_notice() {
+    public function tfhb_woocommerce_inactive_notice() {
         if ( current_user_can( 'activate_plugins' ) ) {
             if ( !is_plugin_active( 'woocommerce/woocommerce.php' ) && !file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {
             ?>
@@ -1625,6 +1627,6 @@ class THB_INIT {
 
 }
 
-new THB_INIT();
+new TFHB_HYDRA_INIT();
  
  

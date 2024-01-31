@@ -116,17 +116,17 @@
                 
                             if (date_data.hydra_product == 'exist') {
                                 var data = {
-                                    action: 'thb_hydra_ajax_add_to_cart_product',
+                                    action: 'tfhb_hydra_ajax_add_to_cart_product',
                                     hydra_product: date_data.hydra_product,
                                     product_id: date_data.hydra_product_id,
                                     booking_date: booking_date,
                                     booking_time: booking_time,
-                                    thb_nonce: thb_pro_object.thb_nonce,
+                                    tfhb_nonce: tfhb_pro_object.tfhb_nonce,
                                 };
                             } else if (date_data.hydra_product == 'custom'){
                                 var data = {
-                                    action: 'thb_hydra_ajax_add_to_cart_product',
-                                    thb_nonce: thb_pro_object.thb_nonce,
+                                    action: 'tfhb_hydra_ajax_add_to_cart_product',
+                                    tfhb_nonce: tfhb_pro_object.tfhb_nonce,
                                     hydra_product: date_data.hydra_product,
                                     product_name: date_data.hydra_product_name,
                                     product_price: date_data.hydra_product_price,
@@ -137,11 +137,11 @@
                 
                             console.log(data);
                                 jQuery.ajax({
-                                    url: thb_pro_object.ajaxurl,
+                                    url: tfhb_pro_object.ajaxurl,
                                     type: 'post',
                                     data: data,
                                     success: function (data) { 
-                                        location.href = thb_pro_object.checkout_page;
+                                        location.href = tfhb_pro_object.checkout_page;
                                     },
                                     error: function (jqXHR, exception) {
                                         var error_msg = '';

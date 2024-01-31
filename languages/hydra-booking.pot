@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hydra Booking\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-17 12:26+0000\n"
+"POT-Creation-Date: 2024-01-31 08:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -13,8 +13,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.6; wp-6.4.2\n"
-"X-Domain: thb-hydra-booking"
+"X-Loco-Version: 2.6.6; wp-6.4.3\n"
+"X-Domain: hydra-booking"
+
+#: hydra-booking.php:1049
+msgid " Default: 30"
+msgstr ""
 
 #: hydra-booking.php:90
 #, php-format
@@ -23,30 +27,34 @@ msgid ""
 "from %s"
 msgstr ""
 
-#: hydra-booking.php:1612
+#: hydra-booking.php:1617
 #, php-format
 msgid ""
 "%sHydra Booking Form is inactive.%s This plugin requires WooCommerce 2.5 or "
 "newer. Please %supdate WooCommerce to version 2.5 or newer%s"
 msgstr ""
 
-#: hydra-booking.php:1604
+#: hydra-booking.php:1127
+msgid "( WooCommerce need to active )"
+msgstr ""
+
+#: hydra-booking.php:1609
 msgid "Activate"
 msgstr ""
 
-#: hydra-booking.php:910 hydra-booking.php:912 hydra-booking.php:1063
+#: hydra-booking.php:913 hydra-booking.php:915 hydra-booking.php:1066
 msgid "Allowed Dates"
 msgstr ""
 
-#: hydra-booking.php:1061
+#: hydra-booking.php:1064
 msgid "Allowed Time"
 msgstr ""
 
-#: hydra-booking.php:913 hydra-booking.php:1064
+#: hydra-booking.php:916 hydra-booking.php:1067
 msgid "Always"
 msgstr ""
 
-#: hydra-booking.php:894
+#: hydra-booking.php:897
 msgid "Calendar Theme"
 msgstr ""
 
@@ -57,103 +65,103 @@ msgid ""
 "WooCommerce."
 msgstr ""
 
-#: hydra-booking.php:1131
+#: hydra-booking.php:1136
 msgid "Custom Product"
 msgstr ""
 
-#: hydra-booking.php:883
+#: hydra-booking.php:886
 msgid "Date Configuration"
 msgstr ""
 
-#: hydra-booking.php:888
+#: hydra-booking.php:891
 msgid "Date Selection Mode"
 msgstr ""
 
-#: hydra-booking.php:886
+#: hydra-booking.php:889
 msgid "Date Settings for Frontend"
 msgstr ""
 
-#: hydra-booking.php:1065
+#: hydra-booking.php:1068
 msgid "Day"
 msgstr ""
 
-#: hydra-booking.php:1054
+#: hydra-booking.php:1057
 msgid "Default: Blank"
 msgstr ""
 
-#: hydra-booking.php:999
+#: hydra-booking.php:1002
 #, php-format
 msgid ""
 "Default: g:ia . For 24 hours format use H:i . You can find more format <a "
 "href=\"%s\" target=\"_blank\">here</a>."
 msgstr ""
 
-#: hydra-booking.php:978
+#: hydra-booking.php:981
 msgid "Disable Specific Dates"
 msgstr ""
 
-#: hydra-booking.php:1024
+#: hydra-booking.php:1027
 msgid "Disable Time Range"
 msgstr ""
 
-#: hydra-booking.php:947
+#: hydra-booking.php:950
 msgid "Disabled Dates"
 msgstr ""
 
-#: hydra-booking.php:806
+#: hydra-booking.php:809
 msgid "Enable Booking Form"
 msgstr ""
 
-#: hydra-booking.php:814
+#: hydra-booking.php:817
 msgid "Enable Calendar Event"
 msgstr ""
 
-#: hydra-booking.php:1121
+#: hydra-booking.php:1124
 msgid "Enable WooCommerce"
 msgstr ""
 
-#: hydra-booking.php:804
+#: hydra-booking.php:807
 msgid "Enable/Disable Booking Form"
 msgstr ""
 
-#: hydra-booking.php:812
+#: hydra-booking.php:815
 msgid "Enable/Disable Calendar Event"
 msgstr ""
 
-#: hydra-booking.php:1119
+#: hydra-booking.php:1122
 msgid "Enable/Disable WooCommerce Integration"
 msgstr ""
 
-#: hydra-booking.php:850
+#: hydra-booking.php:853
 msgid "Event Date"
 msgstr ""
 
-#: hydra-booking.php:823
+#: hydra-booking.php:826
 msgid "Event Email"
 msgstr ""
 
-#: hydra-booking.php:836
+#: hydra-booking.php:839
 msgid "Event Summary"
 msgstr ""
 
-#: hydra-booking.php:864
+#: hydra-booking.php:867
 msgid "Event Time"
 msgstr ""
 
-#: hydra-booking.php:1130
+#: hydra-booking.php:1135
 msgid "Existing Product"
 msgstr ""
 
-#: hydra-booking.php:640 hydra-booking.php:643 hydra-booking.php:683
-#: hydra-booking.php:686
+#: hydra-booking.php:646 hydra-booking.php:649 hydra-booking.php:689
+#: hydra-booking.php:692
 msgid "Field Type"
 msgstr ""
 
-#: hydra-booking.php:954 hydra-booking.php:1074
+#: hydra-booking.php:957 hydra-booking.php:1077
 msgid "Friday"
 msgstr ""
 
-#: hydra-booking.php:1027
+#: hydra-booking.php:1030
 msgid "From"
 msgstr ""
 
@@ -169,135 +177,135 @@ msgstr ""
 msgid "Hydra Booking"
 msgstr ""
 
-#: hydra-booking.php:621
+#: hydra-booking.php:627
 msgid "Hydra Booking Date"
 msgstr ""
 
-#: hydra-booking.php:1603
+#: hydra-booking.php:1608
 #, php-format
 msgid "Hydra Booking Form requires %1$s WooCommerce %2$s to be activated."
 msgstr ""
 
-#: hydra-booking.php:717 hydra-booking.php:798
+#: hydra-booking.php:723 hydra-booking.php:801
 msgid "Hydra Booking Option"
 msgstr ""
 
-#: hydra-booking.php:622
+#: hydra-booking.php:628
 msgid "Hydra Booking Time"
 msgstr ""
 
-#: hydra-booking.php:662 hydra-booking.php:704
+#: hydra-booking.php:668 hydra-booking.php:710
 msgid "Insert Tag"
 msgstr ""
 
-#: hydra-booking.php:1595
+#: hydra-booking.php:1600
 msgid "Install Now"
 msgstr ""
 
-#: hydra-booking.php:1017 hydra-booking.php:1099
+#: hydra-booking.php:1020 hydra-booking.php:1102
 msgid "Max"
 msgstr ""
 
-#: hydra-booking.php:1010 hydra-booking.php:1092
+#: hydra-booking.php:1013 hydra-booking.php:1095
 msgid "Min"
 msgstr ""
 
-#: hydra-booking.php:950 hydra-booking.php:1070
+#: hydra-booking.php:953 hydra-booking.php:1073
 msgid "Monday"
 msgstr ""
 
-#: hydra-booking.php:649 hydra-booking.php:692
+#: hydra-booking.php:655 hydra-booking.php:698
 msgid "Name"
 msgstr ""
 
-#: hydra-booking.php:1138
+#: hydra-booking.php:1143
 msgid "Only one product id is allowed"
 msgstr ""
 
-#: hydra-booking.php:1134
+#: hydra-booking.php:1139
 msgid "Product ID"
 msgstr ""
 
-#: hydra-booking.php:1143
+#: hydra-booking.php:1148
 msgid "Product Name"
 msgstr ""
 
-#: hydra-booking.php:1151
+#: hydra-booking.php:1156
 msgid "Product Price"
 msgstr ""
 
-#: hydra-booking.php:890
+#: hydra-booking.php:893
 msgid "Range of date"
 msgstr ""
 
-#: hydra-booking.php:914
+#: hydra-booking.php:917
 msgid "Ranges"
 msgstr ""
 
-#: hydra-booking.php:644 hydra-booking.php:687
+#: hydra-booking.php:650 hydra-booking.php:693
 msgid "Required Field"
 msgstr ""
 
-#: hydra-booking.php:955 hydra-booking.php:1075
+#: hydra-booking.php:958 hydra-booking.php:1078
 msgid "Saturday"
 msgstr ""
 
-#: hydra-booking.php:960
+#: hydra-booking.php:963
 msgid "Select a date range to disable"
 msgstr ""
 
-#: hydra-booking.php:1069
+#: hydra-booking.php:1072
 msgid "Select day"
 msgstr ""
 
-#: hydra-booking.php:949
+#: hydra-booking.php:952
 msgid "Select day to disable"
 msgstr ""
 
-#: hydra-booking.php:919
+#: hydra-booking.php:922
 msgid "Select Minimum & Maximum Date"
 msgstr ""
 
-#: hydra-booking.php:1129
+#: hydra-booking.php:1134
 msgid "Select Product"
 msgstr ""
 
-#: hydra-booking.php:1007 hydra-booking.php:1088
+#: hydra-booking.php:1010 hydra-booking.php:1091
 msgid "Select start & end time limit"
 msgstr ""
 
-#: hydra-booking.php:895
+#: hydra-booking.php:898
 msgid "Select Theme"
 msgstr ""
 
-#: hydra-booking.php:889
+#: hydra-booking.php:892
 msgid "Single date"
 msgstr ""
 
-#: hydra-booking.php:915 hydra-booking.php:1066
+#: hydra-booking.php:918 hydra-booking.php:1069
 msgid "Specific"
 msgstr ""
 
-#: hydra-booking.php:937
+#: hydra-booking.php:940
 msgid "Specific Date"
 msgstr ""
 
-#: hydra-booking.php:1080
+#: hydra-booking.php:1083
 msgid "Specific Dates"
 msgstr ""
 
-#: hydra-booking.php:956 hydra-booking.php:1076
+#: hydra-booking.php:959 hydra-booking.php:1079
 msgid "Sunday"
 msgstr ""
 
-#: hydra-booking.php:1594
+#: hydra-booking.php:1599
 #, php-format
 msgid ""
 "thb Addon - Booking / Appointment Form requires %1$s WooCommerce %2$s to be "
 "activated."
 msgstr ""
 
-#: hydra-booking.php:605
+#: hydra-booking.php:611
 msgid "The time format is incorrect."
 msgstr ""
 
@@ -305,54 +313,54 @@ msgstr ""
 msgid "Themefic"
 msgstr ""
 
-#: hydra-booking.php:953 hydra-booking.php:1073
+#: hydra-booking.php:956 hydra-booking.php:1076
 msgid "Thursday"
 msgstr ""
 
-#: hydra-booking.php:1052
+#: hydra-booking.php:1055
 msgid "Time Break"
 msgstr ""
 
-#: hydra-booking.php:987
+#: hydra-booking.php:990
 msgid "Time Configuration"
 msgstr ""
 
-#: hydra-booking.php:1044
+#: hydra-booking.php:1047
 msgid "Time Duration"
 msgstr ""
 
-#: hydra-booking.php:992
+#: hydra-booking.php:995
 msgid "Time Format for Frontend"
 msgstr ""
 
-#: hydra-booking.php:604
+#: hydra-booking.php:610
 msgid "Time format that the sender entered is invalid"
 msgstr ""
 
-#: hydra-booking.php:1041
+#: hydra-booking.php:1044
 msgid "Time Interval"
 msgstr ""
 
-#: hydra-booking.php:990
+#: hydra-booking.php:993
 msgid "Time Settings"
 msgstr ""
 
-#: hydra-booking.php:539
+#: hydra-booking.php:545
 msgid "Timezone: "
 msgstr ""
 
-#: hydra-booking.php:1034
+#: hydra-booking.php:1037
 msgid "To"
 msgstr ""
 
-#: hydra-booking.php:951 hydra-booking.php:1071
+#: hydra-booking.php:954 hydra-booking.php:1074
 msgid "Tuesday"
 msgstr ""
 
-#: hydra-booking.php:952 hydra-booking.php:1072
+#: hydra-booking.php:955 hydra-booking.php:1075
 msgid "Wednesday"
 msgstr ""
 
-#: hydra-booking.php:1107
+#: hydra-booking.php:1110
 msgid "WooCommerce Configuration"
 msgstr ""
