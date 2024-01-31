@@ -8,7 +8,7 @@
  * Author URI: https://themefic.com/
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain: thb-hydra-booking
+ * Text Domain: hydra-booking
  * Domain Path: /languages
  */
 
@@ -87,7 +87,7 @@ class THB_INIT {
 		<div class="notice notice-error">
 			<p>
 				<?php printf(
-					__( '%s requires %s to be installed and active. You can install and activate it from %s', 'thb-hydra-booking' ), '<strong>Hydra Booking</strong>', '<strong>Contact form 7</strong>', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=contact+form+7' ) . '">here</a>.'
+					__( '%s requires %s to be installed and active. You can install and activate it from %s', 'hydra-booking' ), '<strong>Hydra Booking</strong>', '<strong>Contact form 7</strong>', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=contact+form+7' ) . '">here</a>.'
 				); ?>
 			</p>
 		</div>
@@ -147,7 +147,7 @@ class THB_INIT {
 
     // Load Text Domain
     public function load_textdomain() {
-        load_plugin_textdomain( 'thb-hydra-booking', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+        load_plugin_textdomain( 'hydra-booking', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
     }
 
     // Enqueue Admin scripts
@@ -542,7 +542,7 @@ class THB_INIT {
             sanitize_html_class( $tag->name ), $atts, $validation_error
         );
 
-        $html .= __( "Timezone: ", "thb-hydra-booking" ). '' .$timezone;
+        $html .= __( "Timezone: ", "hydra-booking" ). '' .$timezone;
     
         return $html;
     }
@@ -607,8 +607,8 @@ class THB_INIT {
     public function thb_time_messages( $messages ) {
         return array_merge( $messages, array(
             'invalid_time' => array(
-                'description' => __( "Time format that the sender entered is invalid", 'thb-hydra-booking' ),
-                'default' => __( "The time format is incorrect.", 'thb-hydra-booking' ),
+                'description' => __( "Time format that the sender entered is invalid", 'hydra-booking' ),
+                'default' => __( "The time format is incorrect.", 'hydra-booking' ),
             ),
         ) );
     }
@@ -624,8 +624,8 @@ class THB_INIT {
      * @since 1.0
      */
     public function tag_generator() {
-        wpcf7_add_tag_generator( 'thb_booking_form_date', __( 'Hydra Booking Date', 'thb-hydra-booking' ), 'thb-tg-pane-booking_form_date', array($this, 'tg_panel_booking_form_date') );
-        wpcf7_add_tag_generator( 'thb_booking_form_time', __( 'Hydra Booking Time', 'thb-hydra-booking' ), 'thb-tg-pane-booking_form_time', array($this, 'tg_panel_booking_form_time') );
+        wpcf7_add_tag_generator( 'thb_booking_form_date', __( 'Hydra Booking Date', 'hydra-booking' ), 'thb-tg-pane-booking_form_date', array($this, 'tg_panel_booking_form_date') );
+        wpcf7_add_tag_generator( 'thb_booking_form_time', __( 'Hydra Booking Time', 'hydra-booking' ), 'thb-tg-pane-booking_form_time', array($this, 'tg_panel_booking_form_time') );
     }
 
     /**
@@ -643,16 +643,16 @@ class THB_INIT {
                 <table class="form-table">
                 <tbody>
                     <tr>
-                        <th scope="row"><?php esc_html_e( 'Field Type', 'thb-hydra-booking' );?></th>
+                        <th scope="row"><?php esc_html_e( 'Field Type', 'hydra-booking' );?></th>
                         <td>
                             <fieldset>
-                                <legend class="screen-reader-text"><?php esc_html_e( 'Field Type', 'thb-hydra-booking' );?></legend>
-                                <label><input type="checkbox" name="required" value="on"><?php esc_html_e( 'Required Field', 'thb-hydra-booking' );?></label>
+                                <legend class="screen-reader-text"><?php esc_html_e( 'Field Type', 'hydra-booking' );?></legend>
+                                <label><input type="checkbox" name="required" value="on"><?php esc_html_e( 'Required Field', 'hydra-booking' );?></label>
                             </fieldset>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="<?php esc_attr_e( $args['content'] . '-name' ); ?>"><?php esc_html_e( 'Name', 'thb-hydra-booking' ); ?></label></th>
+                        <th scope="row"><label for="<?php esc_attr_e( $args['content'] . '-name' ); ?>"><?php esc_html_e( 'Name', 'hydra-booking' ); ?></label></th>
                         <td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr( $args['content'] . '-name' ); ?>" /></td>
                     </tr>           
                     
@@ -665,7 +665,7 @@ class THB_INIT {
         <div class="insert-box">
             <input type="text" name="<?php  esc_attr_e( $thb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
             <div class="submitbox">
-                <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'thb-hydra-booking' ); ?>" />
+                <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'hydra-booking' ); ?>" />
             </div>
         </div>
         <?php
@@ -686,16 +686,16 @@ class THB_INIT {
                 <table class="form-table">
                 <tbody>
                     <tr>
-                        <th scope="row"><?php esc_html_e( 'Field Type', 'thb-hydra-booking' );?></th>
+                        <th scope="row"><?php esc_html_e( 'Field Type', 'hydra-booking' );?></th>
                         <td>
                             <fieldset>
-                                <legend class="screen-reader-text"><?php esc_html_e( 'Field Type', 'thb-hydra-booking' );?></legend>
-                                <label><input type="checkbox" name="required" value="on"><?php esc_html_e( 'Required Field', 'thb-hydra-booking' );?></label>
+                                <legend class="screen-reader-text"><?php esc_html_e( 'Field Type', 'hydra-booking' );?></legend>
+                                <label><input type="checkbox" name="required" value="on"><?php esc_html_e( 'Required Field', 'hydra-booking' );?></label>
                             </fieldset>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="<?php esc_attr_e( $args['content'] . '-name' ); ?>"><?php echo esc_html_e( 'Name', 'thb-hydra-booking' ) ; ?></label></th>
+                        <th scope="row"><label for="<?php esc_attr_e( $args['content'] . '-name' ); ?>"><?php echo esc_html_e( 'Name', 'hydra-booking' ) ; ?></label></th>
                         <td><input type="text" name="name" class="tg-name oneline" id="<?php esc_attr_e( $args['content'] . '-name' ); ?>" /></td>
                     </tr>           
                     
@@ -707,7 +707,7 @@ class THB_INIT {
         <div class="insert-box">
             <input type="text" name="<?php esc_attr_e( $thb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
             <div class="submitbox">
-                <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'thb-hydra-booking' ); ?>" />
+                <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'hydra-booking' ); ?>" />
             </div>
         </div>
         <?php
@@ -720,7 +720,7 @@ class THB_INIT {
      */
     public function thb_hydra_add_panel( $panels ) {
         $panels['thb-hydra-panel'] = array(
-            'title'    => __( 'Hydra Booking Option', 'thb-hydra-booking' ),
+            'title'    => __( 'Hydra Booking Option', 'hydra-booking' ),
             'callback' => array($this, 'thb_create_hydra_panel_fields'),
         );
         return $panels;
@@ -798,23 +798,23 @@ class THB_INIT {
 
     ?>
     <div class="ultimate-hydra-admin">
-        <h1><?php esc_html_e( 'Hydra Booking Option', 'thb-hydra-booking' ); ?></h1>
+        <h1><?php esc_html_e( 'Hydra Booking Option', 'hydra-booking' ); ?></h1>
       
          
         <fieldset> 
             <div class="main-block">
                 <div class="sub-block">
-                    <h3><?php esc_html_e( 'Enable/Disable Booking Form', 'thb-hydra-booking' ); ?></h3>
+                    <h3><?php esc_html_e( 'Enable/Disable Booking Form', 'hydra-booking' ); ?></h3>
                     <label for="hydra-enable">
-                        <input class="hydra-enable" id="hydra_enable" name="hydra_enable" type="checkbox" value="1" <?php checked( '1', $hydra_enable, true ); ?>> <?php esc_html_e( 'Enable Booking Form', 'thb-hydra-booking' ); ?>
+                        <input class="hydra-enable" id="hydra_enable" name="hydra_enable" type="checkbox" value="1" <?php checked( '1', $hydra_enable, true ); ?>> <?php esc_html_e( 'Enable Booking Form', 'hydra-booking' ); ?>
                     </label>
                 </div>
             </div> 
             <div class="main-block">
                 <div class="sub-block">
-                    <h3><?php esc_html_e( 'Enable/Disable Calendar Event', 'thb-hydra-booking' ); ?></h3>
+                    <h3><?php esc_html_e( 'Enable/Disable Calendar Event', 'hydra-booking' ); ?></h3>
                     <label for="hydra-enable">
-                        <input class="calendar-enable" id="calendar_event_enable" name="calendar_event_enable" type="checkbox" value="1" <?php checked( '1', $calendar_event_enable, true ); ?>> <?php esc_html_e( 'Enable Calendar Event', 'thb-hydra-booking' ); ?>
+                        <input class="calendar-enable" id="calendar_event_enable" name="calendar_event_enable" type="checkbox" value="1" <?php checked( '1', $calendar_event_enable, true ); ?>> <?php esc_html_e( 'Enable Calendar Event', 'hydra-booking' ); ?>
                     </label>
                     <br>
                     <br>
@@ -823,7 +823,7 @@ class THB_INIT {
                         <tr> 
                             <td>
                                 <div class="sub-block"> 
-                                    <label><?php esc_html_e( 'Event Email', 'thb-hydra-booking' ); ?></label> 
+                                    <label><?php esc_html_e( 'Event Email', 'hydra-booking' ); ?></label> 
                                     <select name="event_email" id="event_email">
                                         <?php
                                         $all_tags = $post->scan_form_tags(array('type' => 'email', 'type' => 'email*'));
@@ -836,7 +836,7 @@ class THB_INIT {
                             </td> 
                             <td>
                                 <div class="sub-block"> 
-                                    <label><?php esc_html_e( 'Event Summary', 'thb-hydra-booking' ); ?></label> 
+                                    <label><?php esc_html_e( 'Event Summary', 'hydra-booking' ); ?></label> 
                                     <select name="event_summary" id="event_summary">
                                         <?php
                                         foreach ($all_fields as $tag) {
@@ -850,7 +850,7 @@ class THB_INIT {
                             </td> 
                             <td>
                                 <div class="sub-block"> 
-                                    <label><?php esc_html_e( 'Event Date', 'thb-hydra-booking' ); ?></label> 
+                                    <label><?php esc_html_e( 'Event Date', 'hydra-booking' ); ?></label> 
                                     <select name="event_date" id="event_date">
                                         <?php
                                         foreach ($all_fields as $tag) {
@@ -864,7 +864,7 @@ class THB_INIT {
                             </td> 
                             <td>
                                 <div class="sub-block"> 
-                                    <label><?php esc_html_e( 'Event Time', 'thb-hydra-booking' ); ?></label> 
+                                    <label><?php esc_html_e( 'Event Time', 'hydra-booking' ); ?></label> 
                                     <select name="event_time" id="event_time">
                                         <?php
                                         foreach ($all_fields as $tag) {
@@ -883,19 +883,19 @@ class THB_INIT {
                         
             
             
-            <h2><?php esc_html_e( 'Date Configuration', 'thb-hydra-booking' ); ?></h2>
+            <h2><?php esc_html_e( 'Date Configuration', 'hydra-booking' ); ?></h2>
 
             <div class="main-block">
-                <h3><?php esc_html_e( 'Date Settings for Frontend', 'thb-hydra-booking' ); ?></h3>
+                <h3><?php esc_html_e( 'Date Settings for Frontend', 'hydra-booking' ); ?></h3>
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Date Selection Mode', 'thb-hydra-booking' ); ?></h4>
-                    <label><input type="radio" name="date_mode_front" class="" id="" value="single" <?php if ($date_mode_front == 'single'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Single date', 'thb-hydra-booking' ); ?></label> 
-                    <label><input type="radio" name="date_mode_front" class="" id="" value="range" <?php if ($date_mode_front == 'range'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Range of date', 'thb-hydra-booking' ); ?></label>
+                    <h4><?php esc_html_e( 'Date Selection Mode', 'hydra-booking' ); ?></h4>
+                    <label><input type="radio" name="date_mode_front" class="" id="" value="single" <?php if ($date_mode_front == 'single'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Single date', 'hydra-booking' ); ?></label> 
+                    <label><input type="radio" name="date_mode_front" class="" id="" value="range" <?php if ($date_mode_front == 'range'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Range of date', 'hydra-booking' ); ?></label>
                 </div>
 
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Calendar Theme', 'thb-hydra-booking' ); ?></h4>
-                    <label><?php esc_html_e( 'Select Theme', 'thb-hydra-booking' ); ?></label> 
+                    <h4><?php esc_html_e( 'Calendar Theme', 'hydra-booking' ); ?></h4>
+                    <label><?php esc_html_e( 'Select Theme', 'hydra-booking' ); ?></label> 
                     <select name="hydra_date_theme" id="">
                         <option value="default" <?php selected("default", esc_attr($hydra_date_theme)); ?>>Default</option>
                         <option value="dark" <?php selected("dark", esc_attr($hydra_date_theme)); ?>>Dark</option>
@@ -910,16 +910,16 @@ class THB_INIT {
             </div>
 
             <div class="main-block">
-                <h3><?php esc_html_e( 'Allowed Dates', 'thb-hydra-booking' ); ?></h3> 
+                <h3><?php esc_html_e( 'Allowed Dates', 'hydra-booking' ); ?></h3> 
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Allowed Dates', 'thb-hydra-booking' ); ?></h4>
-                    <label for=""><input type="radio" name="hydra_allowed_date" class="" id="hydra-date-always" value="always" <?php if ($hydra_allowed_date == 'always'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Always', 'thb-hydra-booking' ); ?></label>
-                    <label for=""><input type="radio" name="hydra_allowed_date" class="" id="hydra-date-range" value="range" <?php if ($hydra_allowed_date == 'range'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Ranges', 'thb-hydra-booking' ); ?></label>
-                    <label for=""><input type="radio" name="hydra_allowed_date" class="" id="hydra-date-specific" value="specific" <?php if ($hydra_allowed_date == 'specific'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Specific', 'thb-hydra-booking' ); ?></label>
+                    <h4><?php esc_html_e( 'Allowed Dates', 'hydra-booking' ); ?></h4>
+                    <label for=""><input type="radio" name="hydra_allowed_date" class="" id="hydra-date-always" value="always" <?php if ($hydra_allowed_date == 'always'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Always', 'hydra-booking' ); ?></label>
+                    <label for=""><input type="radio" name="hydra_allowed_date" class="" id="hydra-date-range" value="range" <?php if ($hydra_allowed_date == 'range'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Ranges', 'hydra-booking' ); ?></label>
+                    <label for=""><input type="radio" name="hydra_allowed_date" class="" id="hydra-date-specific" value="specific" <?php if ($hydra_allowed_date == 'specific'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Specific', 'hydra-booking' ); ?></label>
                 </div>
 
                 <div class="sub-block allowed-date-range">
-                    <h4><?php esc_html_e( 'Select Minimum & Maximum Date', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Select Minimum & Maximum Date', 'hydra-booking' ); ?></h4>
                     <div class="hydra-inline">
                         <p class="description">
                             <label for="min-date">From<br>
@@ -937,7 +937,7 @@ class THB_INIT {
                 </div>
 
                 <div class="sub-block allowed-specific-date">
-                    <h4><?php esc_html_e( 'Specific Date', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Specific Date', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="allowed-specific-date">
                         <input type="text" name="allowed_specific_date" class="allowed-specific-date large-text" id="allowed-specific-date" placeholder="" autocomplete="off" value="<?php esc_html_e( $allowed_specific_date ); ?>"/>
@@ -947,20 +947,20 @@ class THB_INIT {
             </div>
 
             <div class="main-block cond-disabled-date">
-                <h3><?php esc_html_e( 'Disabled Dates', 'thb-hydra-booking' ); ?></h3> 
+                <h3><?php esc_html_e( 'Disabled Dates', 'hydra-booking' ); ?></h3> 
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Select day to disable', 'thb-hydra-booking' );?></h4>
-                    <label for="disable-day-1"><input class="" id="disable-day-1" name="disable_day_1" type="checkbox" value="1" <?php checked( '1', esc_attr($disable_day_1), true ); ?>> <?php esc_html_e( 'Monday', 'thb-hydra-booking' ); ?></label>
-                    <label for="disable-day-2"><input class="" id="disable-day-2" name="disable_day_2" type="checkbox" value="2" <?php checked( '2', esc_attr($disable_day_2), true ); ?>> <?php esc_html_e( 'Tuesday', 'thb-hydra-booking' ); ?></label>
-                    <label for="disable-day-3"><input class="" id="disable-day-3" name="disable_day_3" type="checkbox" value="3" <?php checked( '3', esc_attr($disable_day_3), true ); ?>> <?php esc_html_e( 'Wednesday', 'thb-hydra-booking' ); ?></label>
-                    <label for="disable-day-4"><input class="" id="disable-day-4" name="disable_day_4" type="checkbox" value="4" <?php checked( '4', esc_attr($disable_day_4), true ); ?>> <?php esc_html_e( 'Thursday', 'thb-hydra-booking' ); ?></label>
-                    <label for="disable-day-5"><input class="" id="disable-day-5" name="disable_day_5" type="checkbox" value="5" <?php checked( '5', esc_attr($disable_day_5), true ); ?>> <?php esc_html_e( 'Friday', 'thb-hydra-booking' ); ?></label>
-                    <label for="disable-day-6"><input class="" id="disable-day-6" name="disable_day_6" type="checkbox" value="6" <?php checked( '6', esc_attr($disable_day_6), true ); ?>> <?php esc_html_e( 'Saturday', 'thb-hydra-booking' ); ?></label>
-                    <label for="disable-day-0"><input class="" id="disable-day-0" name="disable_day_0" type="checkbox" value="0" <?php checked( '0', esc_attr($disable_day_0), true ); ?>> <?php esc_html_e( 'Sunday', 'thb-hydra-booking' ); ?></label>
+                    <h4><?php esc_html_e( 'Select day to disable', 'hydra-booking' );?></h4>
+                    <label for="disable-day-1"><input class="" id="disable-day-1" name="disable_day_1" type="checkbox" value="1" <?php checked( '1', esc_attr($disable_day_1), true ); ?>> <?php esc_html_e( 'Monday', 'hydra-booking' ); ?></label>
+                    <label for="disable-day-2"><input class="" id="disable-day-2" name="disable_day_2" type="checkbox" value="2" <?php checked( '2', esc_attr($disable_day_2), true ); ?>> <?php esc_html_e( 'Tuesday', 'hydra-booking' ); ?></label>
+                    <label for="disable-day-3"><input class="" id="disable-day-3" name="disable_day_3" type="checkbox" value="3" <?php checked( '3', esc_attr($disable_day_3), true ); ?>> <?php esc_html_e( 'Wednesday', 'hydra-booking' ); ?></label>
+                    <label for="disable-day-4"><input class="" id="disable-day-4" name="disable_day_4" type="checkbox" value="4" <?php checked( '4', esc_attr($disable_day_4), true ); ?>> <?php esc_html_e( 'Thursday', 'hydra-booking' ); ?></label>
+                    <label for="disable-day-5"><input class="" id="disable-day-5" name="disable_day_5" type="checkbox" value="5" <?php checked( '5', esc_attr($disable_day_5), true ); ?>> <?php esc_html_e( 'Friday', 'hydra-booking' ); ?></label>
+                    <label for="disable-day-6"><input class="" id="disable-day-6" name="disable_day_6" type="checkbox" value="6" <?php checked( '6', esc_attr($disable_day_6), true ); ?>> <?php esc_html_e( 'Saturday', 'hydra-booking' ); ?></label>
+                    <label for="disable-day-0"><input class="" id="disable-day-0" name="disable_day_0" type="checkbox" value="0" <?php checked( '0', esc_attr($disable_day_0), true ); ?>> <?php esc_html_e( 'Sunday', 'hydra-booking' ); ?></label>
                 </div>
 
                 <div class="sub-block ">
-                    <h4><?php esc_html_e( 'Select a date range to disable', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Select a date range to disable', 'hydra-booking' ); ?></h4>
                     <div class="hydra-inline">
                         <p class="description">
                             <label for="disabled-start-date">From<br>
@@ -978,7 +978,7 @@ class THB_INIT {
                 </div>
 
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Disable Specific Dates', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Disable Specific Dates', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="disabled-specific-date">
                         <input type="text" name="disabled_specific_date" class="disabled-specific-date large-text" id="disabled-specific-date" placeholder="" autocomplete="off" value="<?php esc_html_e($disabled_specific_date); ?>"/>
@@ -987,19 +987,19 @@ class THB_INIT {
                 </div>
             </div>
 
-            <h2><?php esc_html_e( 'Time Configuration', 'thb-hydra-booking' ); ?></h2>
+            <h2><?php esc_html_e( 'Time Configuration', 'hydra-booking' ); ?></h2>
             
             <div class="main-block">
-                <h3><?php esc_html_e( 'Time Settings', 'thb-hydra-booking' ); ?></h3>
+                <h3><?php esc_html_e( 'Time Settings', 'hydra-booking' ); ?></h3>
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Time Format for Frontend', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Time Format for Frontend', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="time-format-front">
                         <input type="text" name="time_format_front" class="" id="time-format-front" placeholder="g:ia" autocomplete="off" data="<?php esc_html_e($time_format_front); ?>" /><br>
                     
                         <div class="thb-doc-notice">
                             <?php 
-                                echo printf(esc_html__( 'Default: g:ia . For 24 hours format use H:i . You can find more format <a href="%s" target="_blank">here</a>.', 'thb-hydra-booking' ), 'https://www.php.net/manual/en/function.date.php')
+                                echo printf(esc_html__( 'Default: g:ia . For 24 hours format use H:i . You can find more format <a href="%s" target="_blank">here</a>.', 'hydra-booking' ), 'https://www.php.net/manual/en/function.date.php')
                             ?> 
                         </div>
                         
@@ -1007,80 +1007,80 @@ class THB_INIT {
                     </p>
                 </div>
                 <div class="sub-block">                    
-                    <h4><?php esc_html_e( 'Select start & end time limit', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Select start & end time limit', 'hydra-booking' ); ?></h4>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="min-time"><?php esc_html_e('Min', 'thb-hydra-booking') ?><br>
+                            <label for="min-time"><?php esc_html_e('Min', 'hydra-booking') ?><br>
                             <input type="text" name="min_time" class="" id="min-time" placeholder="" autocomplete="off" value="<?php esc_html_e($min_time); ?>"/>
                             </label>
                         </p>
                     </div>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="max-time"><?php esc_html_e('Max', 'thb-hydra-booking') ?><br>
+                            <label for="max-time"><?php esc_html_e('Max', 'hydra-booking') ?><br>
                             <input type="text" name="max_time" class="" id="max-time" placeholder="" autocomplete="off" value="<?php esc_html_e($max_time); ?>"/>
                             </label>
                         </p>
                     </div>
                 </div>
                 <div class="sub-block">                    
-                    <h4><?php esc_html_e( 'Disable Time Range', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Disable Time Range', 'hydra-booking' ); ?></h4>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="from-dis-time"><?php esc_html_e('From', 'thb-hydra-booking') ?><br>
+                            <label for="from-dis-time"><?php esc_html_e('From', 'hydra-booking') ?><br>
                             <input type="text" name="from_dis_time" class="" id="from-dis-time" placeholder="" autocomplete="off" <?php echo !empty($from_dis_time) ? 'value="' . $from_dis_time . '"' : ''; ?>/>
                             </label>
                         </p>
                     </div>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="to-dis-time"><?php  esc_html_e('To', 'thb-hydra-booking') ?><br>
+                            <label for="to-dis-time"><?php  esc_html_e('To', 'hydra-booking') ?><br>
                             <input type="text" name="to_dis_time" class="" id="to-dis-time" placeholder="" autocomplete="off" <?php echo !empty($to_dis_time) ? 'value="' . $to_dis_time . '"' : ''; ?>/>
                             </label>
                         </p>
                     </div>
                 </div>
                 <div class="sub-block">                    
-                    <h4><?php esc_html_e( 'Time Interval', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Time Interval', 'hydra-booking' ); ?></h4>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="time-one-step"><?php  esc_html_e('Time Duration', 'thb-hydra-booking') ?><br>
+                            <label for="time-one-step"><?php  esc_html_e('Time Duration', 'hydra-booking') ?><br>
                             <input type="text" name="time_one_step" class="" id="time-one-step" placeholder="" autocomplete="off" value="<?php esc_html_e($time_one_step); ?>"/><br>
-                           <?php esc_html_e(' Default: 30', 'thb-hydra-booking') ?>
+                           <?php esc_html_e(' Default: 30', 'hydra-booking') ?>
                             </label>
                         </p>
                     </div>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="time-two-step"><?php  esc_html_e('Time Break', 'thb-hydra-booking') ?><br>
+                            <label for="time-two-step"><?php  esc_html_e('Time Break', 'hydra-booking') ?><br>
                             <input type="text" name="time_two_step" class="" id="time-two-step" placeholder="" autocomplete="off" value="<?php esc_html_e($time_two_step); ?>"/><br>
-                            <?php  esc_html_e('Default: Blank', 'thb-hydra-booking') ?>
+                            <?php  esc_html_e('Default: Blank', 'hydra-booking') ?>
                             </label>
                         </p>
                     </div>
                 </div>
             </div>
             <div class="main-block">
-                <h3><?php esc_html_e( 'Allowed Time', 'thb-hydra-booking' ); ?></h3> 
+                <h3><?php esc_html_e( 'Allowed Time', 'hydra-booking' ); ?></h3> 
                 <div class="sub-block">
-                    <h4><?php esc_html_e( 'Allowed Dates', 'thb-hydra-booking' ); ?></h4>
-                    <label for=""><input type="radio" name="hydra_allowed_time" class="" id="hydra-time-always" value="always" <?php if ($hydra_allowed_time == 'always'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Always', 'thb-hydra-booking' ); ?></label>
-                    <label for=""><input type="radio" name="hydra_allowed_time" class="" id="hydra-time-day" value="day" <?php if ($hydra_allowed_time == 'day'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Day', 'thb-hydra-booking' ); ?></label>
-                    <label for=""><input type="radio" name="hydra_allowed_time" class="" id="hydra-time-specific" value="specific" <?php if ($hydra_allowed_time == 'specific'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Specific', 'thb-hydra-booking' ); ?></label>
+                    <h4><?php esc_html_e( 'Allowed Dates', 'hydra-booking' ); ?></h4>
+                    <label for=""><input type="radio" name="hydra_allowed_time" class="" id="hydra-time-always" value="always" <?php if ($hydra_allowed_time == 'always'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Always', 'hydra-booking' ); ?></label>
+                    <label for=""><input type="radio" name="hydra_allowed_time" class="" id="hydra-time-day" value="day" <?php if ($hydra_allowed_time == 'day'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Day', 'hydra-booking' ); ?></label>
+                    <label for=""><input type="radio" name="hydra_allowed_time" class="" id="hydra-time-specific" value="specific" <?php if ($hydra_allowed_time == 'specific'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Specific', 'hydra-booking' ); ?></label>
                 </div>
                 <div class="sub-block allowed-day-time-date">                    
-                        <h4><?php esc_html_e( 'Select day', 'thb-hydra-booking' ); ?></h4>
-                        <label for="time-day-1"><input class="" id="time-day-1" name="time_day_1" type="checkbox" value="1" <?php checked( '1', esc_attr($time_day_1), true ); ?>> <?php esc_html_e( 'Monday', 'thb-hydra-booking' ); ?></label>
-                        <label for="time-day-2"><input class="" id="time-day-2" name="time_day_2" type="checkbox" value="2" <?php checked( '2', esc_attr($time_day_2), true ); ?>> <?php esc_html_e( 'Tuesday', 'thb-hydra-booking' ); ?></label>
-                        <label for="time-day-3"><input class="" id="time-day-3" name="time_day_3" type="checkbox" value="3" <?php checked( '3', esc_attr($time_day_3), true ); ?>> <?php esc_html_e( 'Wednesday', 'thb-hydra-booking' ); ?></label>
-                        <label for="time-day-4"><input class="" id="time-day-4" name="time_day_4" type="checkbox" value="4" <?php checked( '4', esc_attr($time_day_4), true ); ?>> <?php esc_html_e( 'Thursday', 'thb-hydra-booking' ); ?></label>
-                        <label for="time-day-5"><input class="" id="time-day-5" name="time_day_5" type="checkbox" value="5" <?php checked( '5', esc_attr($time_day_5), true ); ?>> <?php esc_html_e( 'Friday', 'thb-hydra-booking' ); ?></label>
-                        <label for="time-day-6"><input class="" id="time-day-6" name="time_day_6" type="checkbox" value="6" <?php checked( '6', esc_attr($time_day_6), true ); ?>> <?php esc_html_e( 'Saturday', 'thb-hydra-booking' ); ?></label>
-                        <label for="time-day-0"><input class="" id="time-day-0" name="time_day_0" type="checkbox" value="0" <?php checked( '0', esc_attr($time_day_0), true ); ?>> <?php esc_html_e( 'Sunday', 'thb-hydra-booking' ); ?></label> 
+                        <h4><?php esc_html_e( 'Select day', 'hydra-booking' ); ?></h4>
+                        <label for="time-day-1"><input class="" id="time-day-1" name="time_day_1" type="checkbox" value="1" <?php checked( '1', esc_attr($time_day_1), true ); ?>> <?php esc_html_e( 'Monday', 'hydra-booking' ); ?></label>
+                        <label for="time-day-2"><input class="" id="time-day-2" name="time_day_2" type="checkbox" value="2" <?php checked( '2', esc_attr($time_day_2), true ); ?>> <?php esc_html_e( 'Tuesday', 'hydra-booking' ); ?></label>
+                        <label for="time-day-3"><input class="" id="time-day-3" name="time_day_3" type="checkbox" value="3" <?php checked( '3', esc_attr($time_day_3), true ); ?>> <?php esc_html_e( 'Wednesday', 'hydra-booking' ); ?></label>
+                        <label for="time-day-4"><input class="" id="time-day-4" name="time_day_4" type="checkbox" value="4" <?php checked( '4', esc_attr($time_day_4), true ); ?>> <?php esc_html_e( 'Thursday', 'hydra-booking' ); ?></label>
+                        <label for="time-day-5"><input class="" id="time-day-5" name="time_day_5" type="checkbox" value="5" <?php checked( '5', esc_attr($time_day_5), true ); ?>> <?php esc_html_e( 'Friday', 'hydra-booking' ); ?></label>
+                        <label for="time-day-6"><input class="" id="time-day-6" name="time_day_6" type="checkbox" value="6" <?php checked( '6', esc_attr($time_day_6), true ); ?>> <?php esc_html_e( 'Saturday', 'hydra-booking' ); ?></label>
+                        <label for="time-day-0"><input class="" id="time-day-0" name="time_day_0" type="checkbox" value="0" <?php checked( '0', esc_attr($time_day_0), true ); ?>> <?php esc_html_e( 'Sunday', 'hydra-booking' ); ?></label> 
                 </div>
 
                 <div class="sub-block allowed-specific-time-date">
-                    <h4><?php esc_html_e( 'Specific Dates', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Specific Dates', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="specific-date-time">
                         <input type="text" name="specific_date_time" class="specific-date-time large-text" id="specific-date-time" placeholder="" autocomplete="off" value="<?php esc_html_e($specific_date_time); ?>"/>
@@ -1088,18 +1088,18 @@ class THB_INIT {
                     </p>
                 </div>  
                 <div class="sub-block allowed-time-date">
-                <h4><?php esc_html_e( 'Select start & end time limit', 'thb-hydra-booking' ); ?></h4>
+                <h4><?php esc_html_e( 'Select start & end time limit', 'hydra-booking' ); ?></h4>
                     
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="min-day-time"><?php echo esc_html_e('Min', 'thb-hydra-booking') ?><br>
+                            <label for="min-day-time"><?php echo esc_html_e('Min', 'hydra-booking') ?><br>
                             <input type="text" name="min_day_time" class="" id="min-day-time" placeholder="" autocomplete="off" value="<?php esc_html_e($min_day_time); ?>"/>
                             </label>
                         </p>
                     </div>
                     <div class="hydra-inline">
                         <p class="description">
-                            <label for="max-day-time"><?php echo esc_html_e('Max', 'thb-hydra-booking') ?><br>
+                            <label for="max-day-time"><?php echo esc_html_e('Max', 'hydra-booking') ?><br>
                             <input type="text" name="max_day_time" class="" id="max-day-time" placeholder="" autocomplete="off" value ="<?php esc_html_e($max_day_time) ?>"/>
                             </label>
                         </p>
@@ -1107,7 +1107,7 @@ class THB_INIT {
                 </div>  
             </div>
             <!-- Completed For To Day -->
-            <h2><?php esc_html_e( 'WooCommerce Configuration', 'thb-hydra-booking' ); ?></h2>
+            <h2><?php esc_html_e( 'WooCommerce Configuration', 'hydra-booking' ); ?></h2>
             <?php 
                 if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) || version_compare( get_option( 'woocommerce_db_version' ), '2.5', '<' ) ) {
                     $woo_activation = false;
@@ -1119,31 +1119,33 @@ class THB_INIT {
             
             <div class="main-block">
                 <div class="sub-block">
-                    <h3><?php esc_html_e( 'Enable/Disable WooCommerce Integration', 'thb-hydra-booking' ); ?></h3>
+                    <h3><?php esc_html_e( 'Enable/Disable WooCommerce Integration', 'hydra-booking' ); ?></h3>
                     <label for="hydra-woo">
-                        <input class="" <?php if($woo_activation == false){echo "disabled"; } ?>  id="hydra-woo" name="hydra_woo" type="checkbox" value="1" <?php checked( '1', $hydra_woo, true ); ?>> <?php esc_html_e( 'Enable WooCommerce', 'thb-hydra-booking' ); ?> 
+                        <input class="" <?php if($woo_activation == false){echo "disabled"; } ?>  id="hydra-woo" name="hydra_woo" type="checkbox" value="1" <?php checked( '1', $hydra_woo, true ); ?>> <?php esc_html_e( 'Enable WooCommerce', 'hydra-booking' ); ?> 
                         <?php  if($woo_activation == false){
-                            echo ' <a style="color:red" target="_blank" href="'.admin_url('plugin-install.php?s=woocommerce&tab=search&type=term').'">( WooCommerce need to active )</a>';
+                            echo ' <a style="color:red" target="_blank" href="'.admin_url('plugin-install.php?s=woocommerce&tab=search&type=term').'">
+                            '.esc_html( __("( WooCommerce need to active )", "hydra-booking") ).'
+                            </a>';
                         } ?> 
                     </label>
                 </div>
 
                 <div class="sub-block cond-product-conf">
-                    <h4><?php esc_html_e( 'Select Product', 'thb-hydra-booking' ); ?></h4>
-                    <label for="hydra-product-exist"><input type="radio" name="hydra_product" class="" id="hydra-product-exist" value="exist" <?php if ($hydra_product == 'exist'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Existing Product', 'thb-hydra-booking' ); ?></label>
-                    <label for="hydra-product-custom"><input type="radio" name="hydra_product" class="" id="hydra-product-custom" value="custom" <?php if ($hydra_product == 'custom'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Custom Product', 'thb-hydra-booking' ); ?></label>
+                    <h4><?php esc_html_e( 'Select Product', 'hydra-booking' ); ?></h4>
+                    <label for="hydra-product-exist"><input type="radio" name="hydra_product" class="" id="hydra-product-exist" value="exist" <?php if ($hydra_product == 'exist'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Existing Product', 'hydra-booking' ); ?></label>
+                    <label for="hydra-product-custom"><input type="radio" name="hydra_product" class="" id="hydra-product-custom" value="custom" <?php if ($hydra_product == 'custom'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Custom Product', 'hydra-booking' ); ?></label>
                 </div>
                 <div class="sub-block product-exist">
-                    <h4><?php esc_html_e( 'Product ID', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Product ID', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="hydra-product-id">
                         <input type="text" name="hydra_product_id" class="" id="hydra-product-id" placeholder="" autocomplete="off" <?php echo !empty($hydra_product_id) ? 'value="' . $hydra_product_id . '"' : ''; ?>/><br>
-                        <?php echo esc_html_e('Only one product id is allowed', 'thb-hydra-booking') ?>
+                        <?php echo esc_html_e('Only one product id is allowed', 'hydra-booking') ?>
                         </label>
                     </p>
                 </div>
                 <div class="sub-block product-custom">
-                    <h4><?php esc_html_e( 'Product Name', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Product Name', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="hydra-product-name">
                         <input type="text" name="hydra_product_name" class="large-text" id="hydra-product-name" placeholder="" autocomplete="off" <?php echo !empty($hydra_product_name) ? 'value="' . $hydra_product_name . '"' : ''; ?>/>
@@ -1151,7 +1153,7 @@ class THB_INIT {
                     </p>
                 </div>
                 <div class="sub-block product-custom">
-                    <h4><?php esc_html_e( 'Product Price', 'thb-hydra-booking' ); ?></h4>
+                    <h4><?php esc_html_e( 'Product Price', 'hydra-booking' ); ?></h4>
                     <p class="description">
                         <label for="hydra-product-price">
                         <input type="text" name="hydra_product_price" class="" id="hydra-product-price" placeholder="" autocomplete="off" <?php echo !empty($hydra_product_price) ? 'value="' . $hydra_product_price . '"' : ''; ?>/>
@@ -1594,8 +1596,8 @@ class THB_INIT {
             ?>
 
                 <div id="message" class="error">
-                    <p><?php printf( __( 'thb Addon - Booking / Appointment Form requires %1$s WooCommerce %2$s to be activated.', 'thb-hydra-booking' ), '<strong><a href="https://wordpress.org/plugins/woocommerce/" target="_blank">', '</a></strong>' ); ?></p>
-                    <p><a class="install-now button tf-install" data-plugin-slug="woocommerce"><?php esc_attr_e( 'Install Now', 'thb-hydra-booking' ); ?></a></p>
+                    <p><?php printf( esc_html__( 'thb Addon - Booking / Appointment Form requires %1$s WooCommerce %2$s to be activated.', 'hydra-booking' ), '<strong><a href="https://wordpress.org/plugins/woocommerce/" target="_blank">', '</a></strong>' ); ?></p>
+                    <p><a class="install-now button tf-install" data-plugin-slug="woocommerce"><?php esc_attr_e( 'Install Now', 'hydra-booking' ); ?></a></p>
                 </div>
 
             <?php 
@@ -1603,8 +1605,8 @@ class THB_INIT {
             ?>
 
                 <div id="message" class="error">
-                    <p><?php printf( __( 'Hydra Booking Form requires %1$s WooCommerce %2$s to be activated.', 'thb-hydra-booking' ), '<strong><a href="https://wordpress.org/plugins/woocommerce/" target="_blank">', '</a></strong>' ); ?></p>
-                    <p><a href="<?php echo get_admin_url(); ?>plugins.php?_wpnonce=<?php echo wp_create_nonce( 'activate-plugin_woocommerce/woocommerce.php' ); ?>&action=activate&plugin=woocommerce/woocommerce.php" class="button activate-now button-primary"><?php esc_attr_e( 'Activate', 'thb-hydra-booking' ); ?></a></p>
+                    <p><?php printf( esc_html__( 'Hydra Booking Form requires %1$s WooCommerce %2$s to be activated.', 'hydra-booking' ), '<strong><a href="https://wordpress.org/plugins/woocommerce/" target="_blank">', '</a></strong>' ); ?></p>
+                    <p><a href="<?php echo get_admin_url(); ?>plugins.php?_wpnonce=<?php echo wp_create_nonce( 'activate-plugin_woocommerce/woocommerce.php' ); ?>&action=activate&plugin=woocommerce/woocommerce.php" class="button activate-now button-primary"><?php esc_attr_e( 'Activate', 'hydra-booking' ); ?></a></p>
                 </div>
 
             <?php 
@@ -1612,7 +1614,7 @@ class THB_INIT {
             ?>
 
                 <div id="message" class="error">
-                    <p><?php printf( __( '%sHydra Booking Form is inactive.%s This plugin requires WooCommerce 2.5 or newer. Please %supdate WooCommerce to version 2.5 or newer%s', 'thb-hydra-booking' ), '<strong>', '</strong>', '<a href="' . admin_url( 'plugins.php' ) . '">', '&nbsp;&raquo;</a>' ); ?></p>
+                    <p><?php printf( esc_html__( '%sHydra Booking Form is inactive.%s This plugin requires WooCommerce 2.5 or newer. Please %supdate WooCommerce to version 2.5 or newer%s', 'hydra-booking' ), '<strong>', '</strong>', '<a href="' . admin_url( 'plugins.php' ) . '">', '&nbsp;&raquo;</a>' ); ?></p>
                 </div>
 
             <?php 
