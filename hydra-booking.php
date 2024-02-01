@@ -35,7 +35,7 @@ class THB_INIT{
 
     public function init() {  
 
-         
+       
         new HydraBooking\Admin\Controller\RouteController(); 
         
         if(is_admin()) {

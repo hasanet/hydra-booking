@@ -18,11 +18,11 @@
         </div>
         <nav class="header-navigation">
             <ul>
-            <li><router-link to="/" exact :class="{ 'active': $route.path === '/' }">Dashboard</router-link></li>
-            <li><router-link to="/availability" :class="{ 'active': $route.path === '/availability' }">Availability</router-link></li>
-            <li><router-link to="/event" :class="{ 'active': $route.path === '/event' }">Event</router-link></li>
-            <li><router-link to="/booking" :class="{ 'active': $route.path === '/booking' }">Booking</router-link></li>
-            <li><router-link to="/settings" :class="{ 'active': $route.path === '/settings' }">Settings</router-link></li>
+                <li><router-link to="/" exact :class="{ 'active': $route.path === '/' }">Dashboard</router-link></li>
+                <li><router-link to="/availability" :class="{ 'active': $route.path === '/availability' }">Availability</router-link></li>
+                <li><router-link to="/event" :class="{ 'active': $route.path === '/event' }">Event</router-link></li>
+                <li><router-link to="/booking" :class="{ 'active': $route.path === '/booking' }">Booking</router-link></li>
+                <li><router-link to="/settings" :class="{ 'active': $route.path === '/settings' }">Settings</router-link></li>
             </ul>
         </nav>
     </div>

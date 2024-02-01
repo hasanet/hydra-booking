@@ -1,9 +1,11 @@
 <script setup>
-import { reactive, onBeforeMount } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 // import ThbInput from '../form-fields/Input.vue';
-
+const route = useRoute()
 const availability = reactive({
+  id: '',
   title: '',
   time_zone: '',
   slots: '',
@@ -14,49 +16,45 @@ const availabilityGet = reactive({});
 
 // availability News
 const fetchAvailability = async () => {
-  const response = await axios.get(thb_wpvue.admin_url + '/wp-json/hydra-booking/v1/availability/', availability);
-  
 
-  if (response.data.status) { 
-    availabilityGet.value = response.data.availability;
+  const response = await axios.get(thb_wpvue.admin_url + '/wp-json/hydra-booking/v1/availability/'+route.params.id+'/');
+   
+  if (response.data.status) {
+    availability.id = response.data.availability.id;
+    availability.title = response.data.availability.title;
+    availability.time_zone = response.data.availability.time_zone;
+    availability.slots = response.data.availability.slots;
     timeZone.value = response.data.time_zone;
   }
 }
 
 
-const createAvailability = async () => {
+const UpdateAvailability = async () => {
 
-  const response = await axios.post(thb_wpvue.admin_url + '/wp-json/hydra-booking/v1/availability/create', availability);
+  const response = await axios.post(thb_wpvue.admin_url + '/wp-json/hydra-booking/v1/availability/update', availability);
+  
+ 
   if (response.data.status) {
-    // console.log(response.data);
-    availability.title =  '';
-    availability.time_zone =  '';
-    availability.slots =  '';
-    fetchAvailability();
-  }
-}
-const deleteAvailability = async ($id) => { 
-  const response = await axios.get(thb_wpvue.admin_url + '/wp-json/hydra-booking/v1/availability/delete/'+$id+'/',);
-  if (response.data.status) { 
-    fetchAvailability();
+    console.log(response.data); 
+    // fetchAvailability();
   }
 }
 onBeforeMount(() => {
+  
   fetchAvailability();
 });
 
 </script>
 
-<template>
-  <!-- {{ availabilityGet }} -->
+<template> 
   <div class="thb-event-dashboard">
     <div class="thb-dashboard-heading">
       <div class="thb-admin-title">
-        <h1>Availability</h1>
+        <h1>Availability Edit</h1>
         <span>Configure times when you are available for bookings.</span>
       </div>
       <div class="thb-admin-btn right">
-        <router-link to="/event/create" class="thb-btn">Add New</router-link>
+        <!-- <router-link to="/event/create" class="thb-btn">Add New</router-link> -->
       </div>
     </div>
     <div class="thb-content-wrap">
@@ -76,23 +74,9 @@ onBeforeMount(() => {
           </div>
 
           <div class="thb-form-group">
-            <button class="thb-btn" @click="createAvailability">Save</button>
+            <button class="thb-btn" @click="UpdateAvailability">Save</button>
           </div>
-            
-          <div  class="thb-list-availability">
-            <div class="thb-single-availability" v-for="item in availabilityGet.value">
-              
-              <router-link  :to="{ name: 'availabilityEdit', params: { id: item.id } }">
-                <h3>{{item.title}}</h3>
-                <span> <strong>Time Zone: </strong>  {{ item.time_zone }} </span>
-              </router-link>
-              
-              <button @click="deleteAvailability(item.id)">Delete Items</button>
-            </div>
-
-          </div>
-
-          <p>There are no events yet.</p>
+             
         </div>
       </div>
     </div>
@@ -158,14 +142,7 @@ onBeforeMount(() => {
   margin-top: 10px;
   flex-basis: calc(33% - 30px);
 }
-.thb-list-availability .thb-single-availability a {
-  background-color: #fee9f2;
-  display: inline-block;
-  width: 100%; 
-  color: #301C25;
-  text-decoration: none;
-  border-radius: 5px; 
-}
+
 .thb-list-availability .thb-single-availability h3 {
   margin: 0;
   margin-bottom: 5px;

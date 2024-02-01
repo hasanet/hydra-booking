@@ -24,6 +24,7 @@ use HydraBooking\DB\Migrator;
 
       // admin menu
       new AdminMenu();
+
       
       // availability controller
       new AvailabilityController();
