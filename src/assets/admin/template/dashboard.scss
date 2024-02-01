@@ -1,0 +1,17 @@
+.tfhb-hydra-wrap {
+	padding: 32px;
+	width: 80%;
+	margin: 40px auto;
+	background-color: $ui0;
+	border-radius: 16px;
+
+	.tfhb-hydra-admin-tabs {
+		ul {
+			display: flex;
+
+			li {
+				padding: 10px;
+			}
+		}
+	}
+}

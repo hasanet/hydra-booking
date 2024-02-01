@@ -1,19 +1,15 @@
-<template>
-    <div>
-        <label>{{title}} :</label>
-        <!-- <el-input :type="type"  placeholder="Please input" /> -->
-        <input v-model="vvvmodel" :type="type">
-    </div>
-</template>
-
-<script>
-export default {
-    name: 'Input',
-    props: ['title','type', 'vvvmodel']
-}
-console.log(props)
+<script setup>
+const props = defineProps([
+    'modelValue',
+    'ftype'
+])
+const emit = defineEmits(['update:modelValue'])
 </script>
 
+<template>
+    <input :value="props.modelValue" @input="emit('update:modelValue', $event.target.value)" :type="ftype"
+  />
+</template>
+
 <style scoped>
-/* Add your custom styles here */
-</style>
+</style> 

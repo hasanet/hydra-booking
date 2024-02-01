@@ -4,7 +4,8 @@ import Dashboard from '../view/Dashboard.vue';
 import Availability from '../view/Availability.vue';
 import AvailabilityEdit from '../view/AvailabilityEdit.vue';
 import Booking from '../view/Booking.vue';
-import Event from '../view/Event.vue';
+import Event from '../view/event/Event.vue';
+import EventCreate from '../view/event/create.vue';
 import Settings from '../view/Settings.vue';
 
 
@@ -30,10 +31,17 @@ const routes = [
         path: '/booking',
         component: Booking
     },
+    // Event routes
     {
         path: '/event',
         component: Event
     },
+    {
+        path: '/event/create',
+        name: 'EventCreate',
+        component: EventCreate
+    },
+    // Event routes
     {
         path: '/settings',
         component: Settings

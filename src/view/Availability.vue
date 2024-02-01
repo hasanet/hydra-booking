@@ -1,7 +1,8 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
 import axios from 'axios'
-// import ThbInput from '../form-fields/Input.vue';
+import Input from  '../components/form-fields/Input.vue'
+ 
 
 const availability = reactive({
   title: '',
@@ -64,7 +65,7 @@ onBeforeMount(() => {
         <div class="thb-create-form">
           <div class="thb-form-group">
             <label>Availability Name :</label>
-            <input type="text" v-model="availability.title" placeholder="Please input" />
+            <Input v-model="availability.title" ftype="text" /> 
           </div>
 
           <div class="thb-form-group">

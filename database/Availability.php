@@ -3,7 +3,7 @@ namespace HydraBooking\DB;
 
 class Availability {
     
-    public  $table = 'thb_availability';
+    public  $table = 'tfhb_availability';
     public function __construct() {   
 
         
