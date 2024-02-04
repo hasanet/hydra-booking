@@ -1,3 +1,10 @@
+<script setup> 
+// Use children routes for the tabs 
+import { useRouter, RouterView,  } from 'vue-router'  
+const router = useRouter();
+
+
+</script>
 <template>
     <div class="thb-event-dashboard">
         <div class="thb-dashboard-heading">
@@ -14,15 +21,11 @@
             </div>
         </div>
     </div>
+    
  
 </template>
 
-<script>
-export default {
-    name: 'Settings',
-    // Your component options go here
-}
-</script>
+ 
 
 <style scoped>
 /* Your component styles go here */

@@ -1,20 +1,34 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
-import axios from 'axios' 
+import { useRouter, RouterView } from 'vue-router'
+
+import axios from 'axios'  
+
+
  
 
 const event = reactive({
-  details: [],
-  availability: [],
-  questions: '',
-  notifications: [],
-  Payment: [],
+    data : {
+        title: 'Hello World',
+        description: 'This is a First Event',
+        duration: '20',
+        location: 'online',
+        host: 'sydur',
+    }
 });  
+
+
+
+const updateEvent = async () => {
+
+ console.log(event.data); 
+}
 </script>
 
 <template>
     <!-- {{ tfhbClass }} -->
-     <div class="tfhb-hydra-wrap tfhb-hydra-event"    >
+     <div class="tfhb-hydra-wrap tfhb-hydra-event"    > 
+ 
         <div class="tfhb-hydra-admin-heading">
             <div class="tfhb-hydra-admin-title">
                 <h1>Create One-to-One booking type</h1>
@@ -24,15 +38,19 @@ const event = reactive({
                 <button>Share</button>
             </div> 
         </div>
-        <nav class="tfhb-hydra-admin-tabs">
+        <nav class="tfhb-hydra-admin-tabs"> 
             <ul>
-                <li><router-link to="/event/details" exact :class="{ 'active': $route.path === 'event/details' }">Details</router-link></li>
-                <li><router-link to="/event/availability" :class="{ 'active': $route.path === '/event/availability' }">Availability</router-link></li>
-                <li><router-link to="/event/questions" :class="{ 'active': $route.path === '/event/questions' }">Questions</router-link></li>
-                <li><router-link to="/event/notifications" :class="{ 'active': $route.path === '/event/notifications' }">Notifications</router-link></li>
-                <li><router-link to="/event/payment" :class="{ 'active': $route.path === '/event/payment' }">Payment</router-link></li>
-            </ul>
-        </nav>
+                <li><router-link to="/event/create/details" exact :class="{ 'active': $route.path === '/event/create/details' }">Details</router-link></li>
+                <li><router-link to="/event/create/availability" :class="{ 'active': $route.path === '/event/create/availability' }">Availability</router-link></li>
+                <li><router-link to="/event/create/questions" :class="{ 'active': $route.path === '/event/create/questions' }">Questions</router-link></li>
+                <li><router-link to="/event/create/notifications" :class="{ 'active': $route.path === '/event/create/notifications' }">Notifications</router-link></li>
+                <li><router-link to="/event/create/payment" :class="{ 'active': $route.path === '/event/create/payment' }">Payment</router-link></li>
+            </ul>  
+        </nav>  
+
+        <router-view :events="event"/>
+        
+        <button class="thb-btn" @click="updateEvent">Save</button>
 
      </div>
 </template>

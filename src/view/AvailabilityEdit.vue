@@ -66,11 +66,7 @@ onBeforeMount(() => {
           </div>
 
           <div class="thb-form-group">
-            <label>Time Zone:</label>
-            <el-select v-model="availability.time_zone" class="m-2" placeholder="Select" size="large"
-              style="width: 240px">
-              <el-option v-for="item in timeZone.value" :key="item" :label="item" :value="item" />
-            </el-select>
+            <label>Time Zone:</label> 
           </div>
 
           <div class="thb-form-group">

@@ -8,6 +8,8 @@ import Event from '../view/event/Event.vue';
 import EventCreate from '../view/event/create.vue';
 import Settings from '../view/Settings.vue';
 
+// Event 
+
 
  
 
@@ -34,13 +36,58 @@ const routes = [
     // Event routes
     {
         path: '/event',
-        component: Event
+        name : 'events',
+        component: Event,  
     },
+    // Event routes
     {
         path: '/event/create',
         name: 'EventCreate',
-        component: EventCreate
-    },
+        component: EventCreate,
+        children: [ 
+            {
+                path: 'details',
+                name: 'EventDetails',
+                component: () => import('../components/event/EventDetails.vue')
+            },
+            {
+                path: 'availability',
+                name: 'EventAvailability',
+                component: () => import('../components/event/EventAvailability.vue')
+            },
+            {
+                path: 'questions',
+                name: 'EventQuestions',
+                component: () => import('../components/event/EventQuestions.vue')
+            },
+            {
+                path: 'notifications',
+                name: 'EventNotifications',
+                component: () => import('../components/event/EventNotifications.vue')
+            },
+            {
+                path: 'payment',
+                name: 'EventPayment',
+                component: () => import('../components/event/EventPayment.vue')
+            },
+            // {
+            //     path: 'ticket',
+            //     name: 'EventTicket',
+            //     component: () => import('../components/event/EventTicket.vue')
+            // },
+            // {
+            //     path: 'confirmation',
+            //     name: 'EventConfirmation',
+            //     component: () => import('../components/event/EventConfirmation.vue')
+            // }
+        ]
+    }, 
+   
+    // {
+    //     path: '/event/details',
+    //     name: 'EventDetails',
+    //     component: EventDetails
+    // },
     // Event routes
     {
         path: '/settings',

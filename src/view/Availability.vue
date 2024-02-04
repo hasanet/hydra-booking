@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
 import axios from 'axios'
-import Input from  '../components/form-fields/Input.vue'
+import HbText from  '../components/form-fields/HbText.vue'
  
 
 const availability = reactive({
