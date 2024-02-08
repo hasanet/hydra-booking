@@ -1,9 +1,9 @@
 <?php 
 namespace HydraBooking\DB;
 
-class Availability{
+class Host {
     
-    public  $table = 'tfhb_availability';
+    public  $table = 'tfhb_event_hosts';
     public function __construct() {   
 
         
@@ -23,9 +23,9 @@ class Availability{
         if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT,
-                title VARCHAR(255) NOT NULL,
-                time_zone VARCHAR(255) NOT NULL,
-                slots LONGTEXT NOT NULL,
+                event_id INT(11) NOT NULL,
+                user_id INT(11) NOT NULL, 
+                status VARCHAR(11) NOT NULL,
                 created_at DATE NOT NULL,
                 updated_at DATE NOT NULL, 
                 PRIMARY KEY (id)

@@ -2,6 +2,8 @@
 namespace HydraBooking\DB;
  
 use HydraBooking\DB\Availability;
+use HydraBooking\DB\Host;
+use HydraBooking\DB\Event;
 
 class Migrator {
 
@@ -13,7 +15,17 @@ class Migrator {
      * Run the database migration.
      */
     public function migrate() {
-        $this->availability();
+        // availability migration
+        $Availability =  new Availability(); 
+        $Availability->migrate();
+
+        // Host migration
+        $Host =  new Host();
+        $Host->migrate();
+
+        // Event migration
+        $Event =  new Event();
+        $Event->migrate();
     }
 
     /**
@@ -30,7 +42,6 @@ class Migrator {
      * Availability migration.
      */
     private function availability() {
-        $Availability =  new Availability(); 
-        $Availability->migrate();
+       
     }
 } 
