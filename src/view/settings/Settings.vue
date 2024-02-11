@@ -27,27 +27,28 @@ const updateEvent = async () => {
 
 <template>
     <!-- {{ tfhbClass }} -->
-     <div class="tfhb-hydra-wrap tfhb-hydra-dasboard"    > 
- 
-        
-        <nav class="tfhb-hydra-admin-tabs tfhb-hydra-settings"> 
-            <ul>
-                <li><router-link to="/settings/general" exact :class="{ 'active': $route.path === '/settings/general' }"> <Icon name="SlidersHorizontal" /> General</router-link></li> 
-                <li><router-link to="/settings/availability" :class="{ 'active': $route.path === '/settings/availability' }"> <Icon name="Clock" /> Availability</router-link></li>
-                <li><router-link to="/settings/questions" :class="{ 'active': $route.path === '/settings/questions' }"> <Icon name="MessageCircleQuestion" /> Booking questions</router-link></li>
-                <li><router-link to="/settings/notifications" :class="{ 'active': $route.path === '/settings/notifications' }"> <Icon name="BellDot" /> Notifications</router-link></li>
-                <li><router-link to="/settings/integrations" :class="{ 'active': $route.path === '/settings/integrations' }"> <Icon name="Blocks" /> Integrations</router-link></li>
-                <li><router-link to="/settings/appearance" :class="{ 'active': $route.path === '/settings/appearance' }"> <Icon name="SwatchBook" /> Appearance</router-link></li>
+    <div class="tfhb-hydra-dasboard">
+        <div class="tfhb-hydra-wrap ">    
+            <nav class="tfhb-hydra-admin-tabs tfhb-hydra-settings"> 
+                <ul>
+                    <li><router-link to="/settings/general" exact :class="{ 'active': $route.path === '/settings/general' }"> <Icon name="SlidersHorizontal" /> General</router-link></li> 
+                    <li><router-link to="/settings/availability" :class="{ 'active': $route.path === '/settings/availability' }"> <Icon name="Clock" /> Availability</router-link></li>
+                    <li><router-link to="/settings/questions" :class="{ 'active': $route.path === '/settings/questions' }"> <Icon name="MessageCircleQuestion" /> Booking questions</router-link></li>
+                    <li><router-link to="/settings/notifications" :class="{ 'active': $route.path === '/settings/notifications' }"> <Icon name="BellDot" /> Notifications</router-link></li>
+                    <li><router-link to="/settings/integrations" :class="{ 'active': $route.path === '/settings/integrations' }"> <Icon name="Blocks" /> Integrations</router-link></li>
+                    <li><router-link to="/settings/appearance" :class="{ 'active': $route.path === '/settings/appearance' }"> <Icon name="SwatchBook" /> Appearance</router-link></li>
 
-            </ul>  
-        </nav>  
-        <div class="tfhb-hydra-dasboard-content"> 
-            <router-view :events="event"/>
-        </div> 
-        
-        <button class="thb-btn" @click="updateEvent">Save</button>
+                </ul>  
+            </nav>  
+            <div class="tfhb-hydra-dasboard-content"> 
+                <router-view :events="event"/>
+                <button class="thb-btn" @click="updateEvent">Save</button>
+            </div> 
+            
+          
 
-     </div>
+            </div>
+    </div>
 </template>
 
 
@@ -55,6 +56,27 @@ const updateEvent = async () => {
 <style scoped>
 /* Your component styles go here */
 
+.tfhb-hydra-dasboard .tfhb-hydra-wrap {
+  display: flex;
+}
+ 
+ .tfhb-hydra-settings ul {
+  display: inline-block;
+}
+.tfhb-hydra-settings {
+  width: 250px;
+}
+.tfhb-hydra-dasboard-content {
+  width: calc(100% - 250px);
+}
+.tfhb-hydra-dasboard {
+	width: 100%;
+    
+}
+.tfhb-hydra-dasboard .tfhb-hydra-wrap {
+    width: auto;
+    margin-right: 10px;
+}
 .thb-event-dashboard .thb-dashboard-heading {
     display: flex;
     align-items: center;
