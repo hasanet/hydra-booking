@@ -29,7 +29,7 @@ class THB_INIT{
             require_once THB_PATH . '/vendor/autoload.php'; 
         }
 
-        add_action('plugin_loaded', array($this, 'init'));
+        add_action('init', array($this, 'init'));
 
     }
 

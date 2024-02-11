@@ -1,12 +1,12 @@
 <template>
-    <div>
-       <h1>Settings</h1>
+    <div> 
+        <h1>Questions</h1>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Settings',
+    name: 'Booking',
     // Your component options go here
 }
 </script>
@@ -14,3 +14,4 @@ export default {
 <style scoped>
 /* Your component styles go here */
 </style>
+

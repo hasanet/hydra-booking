@@ -6,7 +6,7 @@ import AvailabilityEdit from '../view/AvailabilityEdit.vue';
 import Booking from '../view/Booking.vue';
 import Event from '../view/event/Event.vue';
 import EventCreate from '../view/event/create.vue';
-import Settings from '../view/Settings.vue';
+import Settings from '../view/settings/Settings.vue';
 
 // Event 
 
@@ -44,6 +44,7 @@ const routes = [
         path: '/event/create',
         name: 'EventCreate',
         component: EventCreate,
+        redirect: { name: 'EventDetails' },
         children: [ 
             {
                 path: 'details',
@@ -88,10 +89,45 @@ const routes = [
     //     name: 'EventDetails',
     //     component: EventDetails
     // },
-    // Event routes
+    // Settings routes
     {
         path: '/settings',
-        component: Settings
+        component: Settings,
+        redirect: { name: 'SettingsGeneral' },
+        children: [ 
+            {
+                path: 'general',
+                name: 'SettingsGeneral',
+                component: () => import('../view/settings/General.vue')
+            },
+            {
+                path: 'availability',
+                name: 'SettingsAvailability',
+                component: () => import('../view/settings/Availability.vue')
+            },
+            {
+                path: 'questions',
+                name: 'SettingsAuestions',
+                component: () => import('../view/settings/Questions.vue')
+            },
+            {
+                path: 'notifications',
+                name: 'SettingsAotifications',
+                component: () => import('../view/settings/Notifications.vue')
+            },
+            {
+                path: 'integrations',
+                name: 'SettingsAntegrations',
+                component: () => import('../view/settings/Integrations.vue')
+            },  
+            {
+                path: 'appearance',
+                name: 'SettingsAppearance',
+                component: () => import('../view/settings/appearance.vue')
+            },  
+             
+        ]
+        
     },
     // ...
 ];
