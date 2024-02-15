@@ -46,7 +46,6 @@ const updateEvent = async () => {
             </div> 
             
           
-
             </div>
     </div>
 </template>
