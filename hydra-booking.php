@@ -91,7 +91,7 @@ class TFHB_HYDRA_INIT {
                 
                 printf(
                     /* translators: %s is replaced with "Plugin Name & link" */ 
-                    esc_html__( ' %1$s srequires %2$s to be installed and active. You can install and activate it from  %3$s .', 'hydra-booking' ),
+                    esc_html__( ' %1$s requires %2$s to be installed and active. You can install and activate it from  %3$s .', 'hydra-booking' ),
                     '<strong>Hydra Booking </strong> ', 
                     '<strong>Contact form 7</strong> ', 
                     '<a href="' . esc_url(admin_url( 'plugin-install.php?tab=search&s=contact+form+7' )) . '">here</a>'
