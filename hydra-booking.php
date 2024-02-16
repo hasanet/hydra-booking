@@ -87,12 +87,16 @@ class TFHB_HYDRA_INIT {
 		?>
 		<div class="notice notice-error">
 			<p>
-				<?php printf( 
-                    esc_html__( ' % srequires %s to be installed and active. You can install and activate it from  %s .', 'hydra-booking' ), 
+				<?php 
+                
+                printf(
+                    /* translators: %s is replaced with "Plugin Name & link" */ 
+                    esc_html__( ' %1$s srequires %2$s to be installed and active. You can install and activate it from  %3$s .', 'hydra-booking' ),
                     '<strong>Hydra Booking </strong> ', 
                     '<strong>Contact form 7</strong> ', 
                     '<a href="' . esc_url(admin_url( 'plugin-install.php?tab=search&s=contact+form+7' )) . '">here</a>'
-				); ?>
+                ); 
+                ?>
 			</p>
 		</div>
 		<?php
@@ -657,7 +661,7 @@ class TFHB_HYDRA_INIT {
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="<?php esc_attr_e( $args['content'] . '-name' ); ?>"><?php esc_html_e( 'Name', 'hydra-booking' ); ?></label></th>
+                        <th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-name' ); ?>"><?php esc_html_e( 'Name', 'hydra-booking' ); ?></label></th>
                         <td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr( $args['content'] . '-name' ); ?>" /></td>
                     </tr>           
                     
@@ -700,8 +704,8 @@ class TFHB_HYDRA_INIT {
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="<?php esc_attr_e( $args['content'] . '-name' ); ?>"><?php echo esc_html_e( 'Name', 'hydra-booking' ) ; ?></label></th>
-                        <td><input type="text" name="name" class="tg-name oneline" id="<?php esc_attr_e( $args['content'] . '-name' ); ?>" /></td>
+                        <th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-name' ); ?>"><?php echo esc_html_e( 'Name', 'hydra-booking' ) ; ?></label></th>
+                        <td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr( $args['content'] . '-name' ); ?>" /></td>
                     </tr>           
                     
                 </tbody>
@@ -710,7 +714,7 @@ class TFHB_HYDRA_INIT {
             </fieldset>
         </div>
         <div class="insert-box">
-            <input type="text" name="<?php esc_attr_e( $tfhb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
+            <input type="text" name="<?php echo esc_attr( $tfhb_field_type ); ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
             <div class="submitbox">
                 <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr_e( 'Insert Tag', 'hydra-booking' ); ?>" />
             </div>
@@ -1005,10 +1009,11 @@ class TFHB_HYDRA_INIT {
                     
                         <div class="thb-doc-notice">
                             <?php 
-                                echo printf( 
+                                  printf( 
+                                    /* translators: %s: Link */
                                     esc_html__( 'Default: g:ia . For 24 hours format use H:i . You can find more format %s.', 'hydra-booking' ),
                                     '<a href="'.esc_url ('https://www.php.net/manual/en/function.date.php').'" target="_blank">here</a>'
-                                    )
+                                  );
                             ?> 
                         </div>
                         
@@ -1607,9 +1612,9 @@ class TFHB_HYDRA_INIT {
 
                 <div id="message" class="error">
                     <p>
-                        <?php
-
+                        <?php 
                         printf( 
+                            /* translators: %s: Link */
                             esc_html__(  'Hydra Booking Form requires %1$s WooCommerce %2$s to be activated.', 'hydra-booking' ), 
                             '<strong><a href="'.esc_url('https://wordpress.org/plugins/woocommerce/').'" target="_blank">', 
                             '</a></strong>' 
@@ -1624,23 +1629,6 @@ class TFHB_HYDRA_INIT {
                 </div>
 
             <?php 
-            } elseif ( !is_plugin_active( 'woocommerce/woocommerce.php' ) && file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {
-            ?>
-
-                <div id="message" class="error">
-                    <p>
-                        <?php 
-                        printf( 
-                            esc_html__( 'Hydra Booking Form requires %1$s WooCommerce %2$s to be activated.', 'hydra-booking' ),
-                            '<strong><a href="'.esc_url('https://wordpress.org/plugins/woocommerce/').'" target="_blank">', 
-                            '</a></strong>'
-                         ); 
-                        ?>
-                    </p>
-                    <p><a href="<?php echo esc_url( get_admin_url() ); ?>plugins.php?_wpnonce=<?php echo wp_create_nonce( 'activate-plugin_woocommerce/woocommerce.php' ); ?>&action=activate&plugin=woocommerce/woocommerce.php" class="button activate-now button-primary"><?php esc_attr_e( 'Activate', 'hydra-booking' ); ?></a></p>
-                </div>
-
-            <?php 
             } elseif ( version_compare( get_option( 'woocommerce_db_version' ), '2.5', '<' ) ) {
             ?>
 
@@ -1648,7 +1636,8 @@ class TFHB_HYDRA_INIT {
                     <p>
                         <?php 
                             printf( 
-                                esc_html__( '%s Hydra Booking Form is inactive. %s This plugin requires WooCommerce 2.5 or newer. Please %supdate WooCommerce to version 2.5 or newer%s', 'hydra-booking' ), 
+                                 /* translators: %1$: <strong>,  %2$: </strong>,  %3$: link,  %4$: link end, */
+                                esc_html__( '%1$ Hydra Booking Form is inactive.  %2$: This plugin requires WooCommerce 2.5 or newer. Please %3$ supdate WooCommerce to version 2.5 or newer %4$', 'hydra-booking' ), 
                                 '<strong>', 
                                 '</strong>', 
                                 '<a href="' . esc_url(admin_url( 'plugins.php' )) . '">', 
