@@ -52,70 +52,35 @@ const updateEvent = async () => {
 
 
 
-<style scoped>
+<style scoped lang="scss">
 /* Your component styles go here */
 
-.tfhb-hydra-dasboard .tfhb-hydra-wrap {
-  display: flex;
-}
- 
- .tfhb-hydra-settings ul {
-  display: inline-block;
-}
-.tfhb-hydra-settings {
-  width: 250px;
-}
-.tfhb-hydra-dasboard-content {
-  width: calc(100% - 250px);
-}
 .tfhb-hydra-dasboard {
-	width: 100%;
-    
-}
-.tfhb-hydra-dasboard .tfhb-hydra-wrap {
-    width: auto;
-    margin-right: 10px;
-}
-.thb-event-dashboard .thb-dashboard-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 60px;  
-    border-radius: 4px; 
-    margin-right: 16px;
-}
-.thb-event-dashboard .thb-admin-title h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #000;
-    text-decoration: none;
-    outline: none;
-    box-shadow: none;
-    margin-left: 5px;
-}
-.thb-event-dashboard .thb-admin-btn.right {
-    margin-top: 10px;
-}
-.thb-event-dashboard .thb-admin-btn.right .thb-btn {
-    background-color: #F62681;
-    color: #fff;
-    border-radius: 4px;
-    padding: 8px 16px;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    outline: none;
-    box-shadow: none;
-    margin-left: 5px;
-}
 
-.thb-content-wrap .no-content {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.04);
-    margin-right: 16px;
-    margin-top: 32px;
+    width: 100%;
+
+    .tfhb-hydra-wrap {
+        display: flex;
+        // gap: 16px;
+    }
+
+    .tfhb-hydra-settings {
+
+        width: 272px;
+
+        ul {
+            display: inline-block;
+        }
+    }
+
+    .tfhb-hydra-dasboard-content {
+        width: calc(100% - 272px);
+        padding: 24px;
+    }
+
+    .tfhb-hydra-wrap {
+        width: auto;
+        margin-right: 10px;
+    }
 }
 </style>
