@@ -1,6 +1,7 @@
 <script setup> 
 // Use children routes for the tabs 
 import { useRouter, RouterView,} from 'vue-router'  
+import Icon from '@/components/icon/LucideIcon.vue'
 const router = useRouter();
 
 
@@ -9,10 +10,11 @@ const router = useRouter();
     <div class="thb-event-dashboard">
         <div class="thb-dashboard-heading">
             <div class="thb-admin-title">
-                <h1>Events</h1>
+                <h1>General Settings</h1> 
+                <p>Manage your time zone settings and bookings</p>
             </div>
-            <div class="thb-admin-btn right">
-                <router-link to="/event/create" class="thb-btn">Create Event</router-link>
+            <div class="thb-admin-btn right"> 
+                <a href="#" target="_blank" class="tfhb-btn">View Documentation <Icon name="ArrowUpRight" size="15px" /></a>
             </div> 
         </div>
         <div class="thb-content-wrap">

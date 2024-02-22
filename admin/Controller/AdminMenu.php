@@ -72,7 +72,7 @@ namespace HydraBooking\Admin\Controller;
     }
 
     public function hydra_booking_page() {
-        echo '<div id="thb-admin-app"></div>';
+        echo '<div id="tfhb-admin-app"></div>';
     }
     
 

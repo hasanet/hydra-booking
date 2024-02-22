@@ -1,0 +1,26 @@
+#tfhb-admin-app{
+    a, h1, h2, h3, h4, h5, h6, p, span {
+        font-family: 'Inter', sans-serif;
+    }
+    a{
+        text-decoration: none;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+    h1, h2, h3, h4, h5, h6{
+        font-weight: 600; 
+        color: #3F2731;
+    }
+    p, span { 
+        font-weight: 400; 
+        font-size: 13px;
+        line-height: 20px;
+        color: #765664;
+    }
+     h1 {
+        font-size: 24px; 
+        line-height: 32px; 
+    }
+}

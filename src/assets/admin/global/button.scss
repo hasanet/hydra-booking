@@ -1,0 +1,11 @@
+.tfhb-btn {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #F62881;
+    transition: 0.4s;
+    &:hover, &:focus, &:active {
+        color: #C40859;
+    }
+  }
+  
