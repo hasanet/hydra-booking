@@ -4,6 +4,19 @@
     line-height: 20px;
     color: #F62881;
     transition: 0.4s;
+    &.boxed-btn {
+        padding: 8px 24px; 
+        border-radius: 8px; 
+        // border: 1px solid #F62881;
+        background-color: #F62881;
+        color: #FFFFFF;
+        border: none;
+        cursor: pointer;
+        &:hover, &:focus, &:active {
+            background-color: #C40859;
+            color: #FFFFFF;
+        }
+    }
     &:hover, &:focus, &:active {
         color: #C40859;
     }

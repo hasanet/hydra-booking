@@ -1,6 +1,7 @@
 #tfhb-admin-app{
-    a, h1, h2, h3, h4, h5, h6, p, span {
+    a, h1, h2, h3, h4, h5, h6, p, span, label {
         font-family: 'Inter', sans-serif;
+        margin: 0;
     }
     a{
         text-decoration: none;
@@ -12,15 +13,27 @@
     h1, h2, h3, h4, h5, h6{
         font-weight: 600; 
         color: #3F2731;
+        margin: 4px 0;
     }
-    p, span { 
+    p, span, label { 
         font-weight: 400; 
         font-size: 13px;
         line-height: 20px;
         color: #765664;
+        margin: 4px 0;
+    }
+    label {  
+        color: #3F2731; 
     }
      h1 {
         font-size: 24px; 
         line-height: 32px; 
+    }
+    .tfhb-flexbox{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap; 
+        gap: 24px;
     }
 }

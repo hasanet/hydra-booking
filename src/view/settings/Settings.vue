@@ -42,7 +42,7 @@ const updateEvent = async () => {
             </nav>  
             <div class="tfhb-hydra-dasboard-content"> 
                 <router-view :events="event"/>
-                <button class="thb-btn" @click="updateEvent">Save</button>
+                <button class="tfhb-btn boxed-btn" @click="updateEvent">Save</button>
             </div> 
             
           

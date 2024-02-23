@@ -11,7 +11,7 @@ const router = useRouter();
         <div class="thb-dashboard-heading">
             <div class="thb-admin-title">
                 <h1>Notifications</h1> 
-                <p>One-liner description</p>
+                <p>One-liner description</p> 
             </div>
             <div class="thb-admin-btn right"> 
                 <a href="#" target="_blank" class="tfhb-btn">View Documentation <Icon name="ArrowUpRight" size="15px" /></a>
