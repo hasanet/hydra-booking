@@ -12,7 +12,8 @@
     "axios": "^1.6.5",
     "lucide-vue-next": "^0.323.0",
     "vue": "^3.3.11",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vue3-loading-skeleton": "^0.0.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

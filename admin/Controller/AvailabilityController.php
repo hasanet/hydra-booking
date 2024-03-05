@@ -116,6 +116,4 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }
-}
-
-?>
+} 

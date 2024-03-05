@@ -32,10 +32,9 @@ const emit = defineEmits(['update:modelValue'])
               :type="type"
               :placeholder="placeholder"
           >  
-
-              <option v-for="item in option" :key="item.id" selected :value="item.id">{{ item.name }}</option>
-          </select>
-          
+              <option value="">{{ placeholder }}</option>
+              <option v-for="(value, key) in option" :key="key" selected :value="key">{{ value }}</option>
+          </select> 
       </div>
 
   </div>

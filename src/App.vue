@@ -1,6 +1,6 @@
 <script setup>
 import Header from './components/Header.vue'; 
-
+import "vue3-loading-skeleton/dist/style.css";
 
 </script>
 

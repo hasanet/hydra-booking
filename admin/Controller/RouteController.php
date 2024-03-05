@@ -2,6 +2,7 @@
 namespace HydraBooking\Admin\Controller;
 
 use HydraBooking\Admin\Controller\AvailabilityController;
+use HydraBooking\Admin\Controller\SettingsController;
 
 // Use DB 
 use HydraBooking\DB\Availability;
@@ -16,12 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         
         // availability controller
         $this->create(new AvailabilityController(), 'create_endpoint');
+        $this->create(new SettingsController(), 'create_endpoint');
     }
 
     public function create($class, $function){
         add_action('rest_api_init', array($class, $function));
     }
- 
+    
+    public function permission_callback() {
+        return current_user_can('manage_options');
+    }
 }
 
 ?>
