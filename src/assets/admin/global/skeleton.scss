@@ -1,45 +1,6 @@
-// .tfhb-skeleton{
-//     background-color: #e8e7e7;
-//     border-radius: 2px;
-//     width: 100%; 
-//     margin-bottom: 10px;
-// }
-// .tfhb-skeleton {
-//     position: relative;
-//     width: 100%;
-//     height: 100%;
-//     // background-color: red;
-//     &::before {
-//         content: '';
-//         top: 0;
-//         left: 0;
-//         width: 100%;
-//         height: 100%;
-//         position: absolute;
-//         display: block; 
-//         background: linear-gradient( 
-//             to right,
-//             rgba(255, 255, 255, 0),
-//             rgba(255, 255, 255, 0.5) 50%,
-//             rgba(255, 255, 255, 0) 80%
-//           ),
-//           lightgray;
-//         background-repeat: repeat-y;
-//         background-size: 200px 500px;
-//         background-position: 0 0;
-//         animation: shine .5s infinite; 
-//     }
-//   }
-//   @keyframes shine { 
-//     to {
-//       background-position: 100% 0, /* move highlight to right */ 0 0;
-//     }
-//   }
-
-
 
 .tfhb-skeleton {
-    h1, h2, span, p, label, .tfhb-single-form-field, a {
+    h1, h2, span, p, label, .tfhb-single-form-field, a, button {
         display: block;
         height: 100%;
         width: 100;

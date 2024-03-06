@@ -17,6 +17,11 @@
             color: #FFFFFF;
         }
     }
+    &.flex-btn{
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
     &:hover, &:focus, &:active {
         color: #C40859;
     }

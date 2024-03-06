@@ -4,6 +4,7 @@ import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
+import { toast } from "vue3-toastify"; 
 
 
 // import Form Field 
@@ -19,6 +20,7 @@ const generalSettings = reactive({
   booking_status: '',
   allowed_reschedule_before_meeting_start: '', 
 });
+
 //  Load Time Zone
 const timeZone = reactive({});
 const  countryList = reactive({});
@@ -28,24 +30,48 @@ const skeleton = ref(true);
 // Fetch generalSettings
 const fetchGeneralSettings = async () => {
 
-    const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/general');
-
-    try {
-        if (response.data.status) {
-
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/general');
+        if (response.data.status) { 
             timeZone.value = response.data.time_zone; 
-            countryList.value = response.data.country_list; 
-            console.log(response.data); 
+            countryList.value = response.data.country_list;  
+            // Set General Settings
+            generalSettings.time_zone = response.data.general_settings.time_zone;
+            generalSettings.time_format = response.data.general_settings.time_format;
+            generalSettings.week_start_from = response.data.general_settings.week_start_from;
+            generalSettings.date_format = response.data.general_settings.date_format;
+            generalSettings.country = response.data.general_settings.country;
+            generalSettings.after_booking_completed = response.data.general_settings.after_booking_completed;
+            generalSettings.booking_status = response.data.general_settings.booking_status;
+            generalSettings.allowed_reschedule_before_meeting_start = response.data.general_settings.allowed_reschedule_before_meeting_start;
+
+
             skeleton.value = false;
         }
     } catch (error) {
         console.log(error);
-    }
- 
- 
-  
+    } 
 }
-
+const UpdateGeneralSettings = async () => { 
+    
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/general/update', generalSettings, {
+             
+        } );
+      
+        if (response.data.status) {    
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+            
+        }
+    } catch (error) {
+        toast.error('Action successful', {
+            position: 'bottom-right', // Set the desired position
+        });
+    }
+}
 onBeforeMount(() => { 
     fetchGeneralSettings();
 });
@@ -207,6 +233,8 @@ onBeforeMount(() => {
                 <!-- Minimum time required before Booking/Cancel/Reschedule -->
                  
             </div>  
+
+            <button class="tfhb-btn boxed-btn" @click="UpdateGeneralSettings">{{ $tfhb_trans['Update General Settings'] }}</button>
             <!--Bookings -->
 
 

@@ -1,10 +1,24 @@
 .tfhb-single-form-field{
 
+    
     .tfhb-single-form-field-wrap{
         width: 100%;
         // Select Field
         &.tfhb-field-select{ 
             select { 
+                padding: 8px 8px 8px 12px;
+                min-width: 100%;
+                margin-top: 4px;
+                border-radius: 4px;
+                border: 1px solid #F6EEF2;
+                &:focus, &:active {
+                    outline: none;
+                    box-shadow: none; 
+                }
+            }
+        }
+        &.tfhb-field-input{ 
+            input { 
                 padding: 8px 8px 8px 12px;
                 min-width: 100%;
                 margin-top: 4px;

@@ -12,6 +12,7 @@ namespace HydraBooking\Admin\Controller;
             
             // General Settings
             'General' =>  __('General', 'hydra-booking'),
+            'Update General Settings' =>  __('Update General Settings', 'hydra-booking'),
             'General Settings' =>  __('General Settings', 'hydra-booking'),
             'Manage your time zone settings and bookings' =>  __('Manage your time zone settings and bookings', 'hydra-booking'),
             'Date and Time' =>  __('Date and Time', 'hydra-booking'),
@@ -26,6 +27,12 @@ namespace HydraBooking\Admin\Controller;
             'Bookings will be completed automatically after' =>  __('Bookings will be completed automatically after', 'hydra-booking'),
             'Default status of bookings' =>  __('Default status of bookings', 'hydra-booking'),
             'Minimum time required before Booking/Cancel/Reschedule' =>  __('Minimum time required before Booking/Cancel/Reschedule', 'hydra-booking'),
+
+            // Availability Settings
+            'Availability' =>  __('Availability', 'hydra-booking'),
+            'Title' =>  __('Title', 'hydra-booking'),
+            'Set up booking times when you are available' =>  __('Set up booking times when you are available', 'hydra-booking'),
+            ' Add New Availability' =>  __(' Add New Availability', 'hydra-booking'),
         );
      } 
 

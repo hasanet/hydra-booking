@@ -1,13 +1,12 @@
 import './assets/main.scss' 
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router/router.js' 
-import { SkeletonLoader } from "vue3-loading-skeleton";
-
+import router from './router/router.js'    
 const tfhb_trans = tfhb_core_apps.trans || {};  
 
-const tfhbApps = createApp(App).use(router);
-tfhbApps.component("SkeletonLoader", SkeletonLoader);
+const tfhbApps = createApp(App).use(router); 
+ 
+// tfhbApps.component("toast", toast);
 tfhbApps.config.globalProperties.$tfhb_trans = tfhb_trans;
 
 tfhbApps.mount('#tfhb-admin-app')
