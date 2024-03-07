@@ -57,6 +57,34 @@
 			}
 		}
 	}
+	.tfhb-availability-popup{ 
+		.tfhb-dashboard-heading {
+			.tfhb-admin-title{
+				margin-bottom: 0 !important;
+			}
+			margin-bottom: 24px !important;
+		}
+		button {
+			border: none;
+			background-color: transparent; 
+		}
+		.tfhb-hydra-dasboard-content{ 
+			.tfhb-availability-content-wrap{
+				.tfhb-availability-schedule-single{
+					justify-content: normal !important;
+					input, label, span {
+						margin-top: 0 !important;
+					}
+					.tfhb-availability-schedule-clone-btn {
+						border: none;
+						background-color: transparent; 
+					}
+				}
+			}
+		}
+		
+
+	}
 }
 
 

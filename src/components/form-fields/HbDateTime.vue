@@ -8,6 +8,9 @@ const props = defineProps([
     'name',
     'modelValue',
     'fieldClass',
+    'enableTime',
+    'noCalendar',
+    'config', // flatpickr config
     'required',
     'type',
     'label',
@@ -19,13 +22,8 @@ const props = defineProps([
 const emit = defineEmits(['update:modelValue'])
 
 // Read more at https://flatpickr.js.org/options/
-const config = ref({ 
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: "H:i",
-    defaultDate: "13:45",
-    // mode: "range" 
-});
+const config = ref(props.config || {});
+
 </script>
 
 <template>

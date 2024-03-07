@@ -3,6 +3,9 @@
         font-family: 'Inter', sans-serif;
         margin: 0;
     }
+    button{
+        cursor: pointer;
+    }
     a{
         text-decoration: none;
         &:focus {

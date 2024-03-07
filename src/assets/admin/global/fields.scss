@@ -17,13 +17,15 @@
                 }
             }
         }
-        &.tfhb-field-input{ 
+        &.tfhb-field-input, &.tfhb-field-date{ 
             input { 
                 padding: 8px 8px 8px 12px;
                 min-width: 100%;
                 margin-top: 4px;
                 border-radius: 4px;
                 border: 1px solid #F6EEF2;
+                background-color: transparent;
+                line-height: 20px;
                 &:focus, &:active {
                     outline: none;
                     box-shadow: none; 
