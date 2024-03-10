@@ -257,7 +257,7 @@ class TFHB_HYDRA_INIT {
         
         // Frontend values
         $date_mode_front = !empty(get_post_meta( $form_id, 'date_mode_front', true )) ? get_post_meta( $form_id, 'date_mode_front', true ) : 'single';
-        $hydra_date_theme = !empty(get_post_meta( $form_id, 'hydra_date_theme', true )) ? get_post_meta( $form_id, 'hydra_date_theme', true ) : '';
+         
         
         // Allowed dates
         $hydra_allowed_date = !empty(get_post_meta( $form_id, 'hydra_allowed_date', true )) ? get_post_meta( $form_id, 'hydra_allowed_date', true ) : 'always'; 
@@ -309,8 +309,7 @@ class TFHB_HYDRA_INIT {
      
         $booking_date = array(
             'hydra_enable' => esc_html($hydra_enable),
-            'date_mode_front' => esc_html($date_mode_front),
-            'hydra_date_theme' => esc_html($hydra_date_theme),
+            'date_mode_front' => esc_html($date_mode_front), 
             'hydra_allowed_date' => esc_html($hydra_allowed_date),
             'allowed_start_date' => esc_html($allowed_start_date),
             'allowed_end_date' => esc_html($allowed_end_date),
@@ -585,9 +584,10 @@ class TFHB_HYDRA_INIT {
     public function tfhb_time_validation_filter( $result, $tag ) {
         if( isset($_POST['_tfhb_nonce']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tfhb_nonce'] ) ), '_tfhb_nonce' ) ){
             $name = $tag->name;
+           $post_name = isset($_POST[$name]) ? sanitize_text_field($_POST[$name]) : '';
     
-            $value = isset( $_POST[$name] )
-                ? trim( strtr( (string) esc_html($_POST[$name]), "\n", " " ) )
+            $value = !empty( $post_name )
+                ? trim( strtr( (string) esc_html($post_name), "\n", " " ) )
                 : '';
         
             if ( $value ) {
@@ -748,8 +748,7 @@ class TFHB_HYDRA_INIT {
     $hydra_duplicate_status = !empty(get_post_meta( $post->id(), 'hydra_duplicate_status', true )) ? get_post_meta( $post->id(), 'hydra_duplicate_status', true ) : '';
 
     // Frontend values
-    $date_mode_front = !empty(get_post_meta( $post->id(), 'date_mode_front', true )) ? get_post_meta( $post->id(), 'date_mode_front', true ) : 'single';
-    $hydra_date_theme = !empty(get_post_meta( $post->id(), 'hydra_date_theme', true )) ? get_post_meta( $post->id(), 'hydra_date_theme', true ) : '';
+    $date_mode_front = !empty(get_post_meta( $post->id(), 'date_mode_front', true )) ? get_post_meta( $post->id(), 'date_mode_front', true ) : 'single'; 
 
     // Allowed dates
     $hydra_allowed_date = !empty(get_post_meta( $post->id(), 'hydra_allowed_date', true )) ? get_post_meta( $post->id(), 'hydra_allowed_date', true ) : 'always';
@@ -901,22 +900,8 @@ class TFHB_HYDRA_INIT {
                     <h4><?php esc_html_e( 'Date Selection Mode', 'hydra-booking' ); ?></h4>
                     <label><input type="radio" name="date_mode_front" class="" id="" value="single" <?php if ($date_mode_front == 'single'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Single date', 'hydra-booking' ); ?></label> 
                     <label><input type="radio" name="date_mode_front" class="" id="" value="range" <?php if ($date_mode_front == 'range'){ esc_attr_e('checked'); } ?>/> <?php esc_html_e( 'Range of date', 'hydra-booking' ); ?></label>
-                </div>
+                </div> 
 
-                <div class="sub-block">
-                    <h4><?php esc_html_e( 'Calendar Theme', 'hydra-booking' ); ?></h4>
-                    <label><?php esc_html_e( 'Select Theme', 'hydra-booking' ); ?></label> 
-                    <select name="hydra_date_theme" id="">
-                        <option value="default" <?php selected("default", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Default', 'hydra-booking' ); ?></option>
-                        <option value="dark" <?php selected("dark", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Dark', 'hydra-booking' ); ?></option>
-                        <option value="material_blue" <?php selected("material_blue", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Material Blue', 'hydra-booking' ); ?></option>
-                        <option value="material_green" <?php selected("material_green", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Material Green', 'hydra-booking' ); ?></option>
-                        <option value="material_red" <?php selected("material_red", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Material Red', 'hydra-booking' ); ?></option>
-                        <option value="material_orange" <?php selected("material_orange", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Material Orange', 'hydra-booking' ); ?></option>
-                        <option value="airbnb" <?php selected("airbnb", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Airbnb', 'hydra-booking' ); ?></option>
-                        <option value="confetti" <?php selected("confetti", esc_attr($hydra_date_theme)); ?>><?php esc_html_e( 'Confetti', 'hydra-booking' ); ?></option>
-                    </select>
-                </div>
             </div>
 
             <div class="main-block">
@@ -1253,11 +1238,7 @@ class TFHB_HYDRA_INIT {
             update_post_meta( $post->id(), 'date_mode_front', sanitize_text_field( $_POST['date_mode_front'] ) );
         }else{
             update_post_meta( $post->id(), 'date_mode_front', '0' );
-        }
-        if( isset( $_POST['hydra_date_theme'] ) ) {  
-            update_post_meta( $post->id(), 'hydra_date_theme', sanitize_text_field( $_POST['hydra_date_theme'] ) );
-        }
-
+        } 
         // Allowed dates
         if( isset( $_POST['hydra_allowed_date'] ) ) { 
             update_post_meta( $post->id(), 'hydra_allowed_date', sanitize_text_field( $_POST['hydra_allowed_date'] ) );
@@ -1465,18 +1446,13 @@ class TFHB_HYDRA_INIT {
             $form = $properties['form']; 
             // get saved value      
             $hydra_enable = !empty(get_post_meta( $post->id(), 'hydra_enable', true )) ? get_post_meta( $post->id(), 'hydra_enable', true ) : '';
-            
-            $hydra_date_theme = !empty(get_post_meta( $post->id(), 'hydra_date_theme', true )) ? get_post_meta( $post->id(), 'hydra_date_theme', true ) : ''; 
+             
             
             ob_start(); 
             echo wp_kses_post($form);    
              // Add the custom nonce value to the CF7 form
             echo '<input type="hidden" readonly name="_tfhb_nonce" value="' . esc_attr( $tfhb_nonce ) . '" />';
-            if ($hydra_enable) {
-                if ($hydra_date_theme != 'default') { 
-                    echo '<link rel="stylesheet" type="text/css" href="' . esc_url(plugin_dir_url( __FILE__ ). 'assets/flatpickr/themes/' . esc_html($hydra_date_theme) . '.css' ) .'">'; 
-                } 
-            } 
+             
             
             $properties['form'] = ob_get_clean();   
         
