@@ -33,7 +33,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'UpdateGeneralSettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
-        )); 
+        ));
+        // Availability Routes
+        register_rest_route('hydra-booking/v1', '/settings/availability', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'GetAvailabilitySettings'),
+            // 'permission_callback' =>  array($this, 'permission_callback'),
+        ));
+        register_rest_route('hydra-booking/v1', '/settings/availability/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateAvailabilitySettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
        
     }
     // permission_callback
@@ -75,5 +86,61 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'message' => 'General Settings Updated Successfully', 
         );
         return rest_ensure_response($data);
+    }
+
+    // Get Availability Settings
+    public function GetAvailabilitySettings() {
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
+        $availability = get_option('_tfhb_availability_settings');
+        $data = array(
+            'status' => true, 
+            'time_zone' => $time_zone,
+            'availability' => $availability,
+        );
+        return rest_ensure_response($data);
+    }
+
+    // Update Availability Settings
+    public function UpdateAvailabilitySettings(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $_tfhb_availability_settings = get_option('_tfhb_availability_settings');
+
+        // senitaized
+        $availability['title'] = sanitize_text_field($request['title']);
+        $availability['time_zone'] = sanitize_text_field($request['time_zone']); 
+        $availability['date_status'] = sanitize_text_field($request['date_status']); 
+
+        // time slots 
+        foreach ($request['time_slots'] as $key => $value) {
+
+            $availability['time_slots'][$key]['day'] = sanitize_text_field($value['day']);
+            $availability['time_slots'][$key]['status'] =  sanitize_text_field($value['status']);
+
+             foreach ($value['times'] as $key2 => $value2) {
+                $availability['time_slots'][$key]['times'][$key2]['start'] = sanitize_text_field($value2['start']);
+                $availability['time_slots'][$key]['times'][$key2]['end'] = sanitize_text_field($value2['end']);
+             }
+ 
+        }
+
+        // Date Slots
+        foreach ($request['date_slots'] as $key => $value) {
+            $availability['date_slots'][$key]['start'] = sanitize_text_field($value['start']);
+            $availability['date_slots'][$key]['end'] =  sanitize_text_field($value['end']);
+ 
+        }
+
+        $_tfhb_availability_settings[] = $request;
+         // update option
+        update_option('_tfhb_availability_settings', $_tfhb_availability_settings);
+        $availability = get_option('_tfhb_availability_settings');
+         $data = array(
+             'status' => true, 
+             'availability' => $availability,  
+             'message' => 'Availability Updated Successfully',  
+         );
+         return rest_ensure_response($data);
+
     }
 } 

@@ -4,33 +4,41 @@ import { useRouter, RouterView,} from 'vue-router'
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import AvailabilityPopupSingle from '@/components/availability/AvailabilityPopupSingle.vue';
+import AvailabilitySingle from '@/components/availability/AvailabilitySingle.vue';
 import { toast } from "vue3-toastify"; 
 
-const isModalOpened = ref(true);
+const isModalOpened = ref(false);
 
 const openModal = () => {
   isModalOpened.value = true;
 };
-const closeModal = () => {
+const closeModal = () => { 
   isModalOpened.value = false;
 };
-
-
-// import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue'
-
-
-
-const generalSettings = reactive({
-  time_zone: '',
-  time_format: '',
-  week_start_from: '',
-  date_format: '',
-  country: '',
-  after_booking_completed: '',
-  booking_status: '',
-  allowed_reschedule_before_meeting_start: '', 
+const timeZone = reactive({}); 
+const AvailabilityGet = reactive({
+  data: [],
 });
+
+// Fetch generalSettings
+const fetchAvailabilitySettings = async () => {
+
+  try { 
+      const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability'); 
+      if (response.data.status) { 
+          timeZone.value = response.data.time_zone;     
+          AvailabilityGet.data = response.data.availability; 
+      }
+  } catch (error) {
+      console.log(error);
+  } 
+}
+
+onBeforeMount(() => { 
+  fetchAvailabilitySettings();
+});
+
+ 
 const skeleton = ref(false);
 
 </script>
@@ -46,8 +54,9 @@ const skeleton = ref(false);
             <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="15px" /> {{ $tfhb_trans[' Add New Availability'] }}</button> 
         </div> 
     </div>
-    <div class="tfhb-content-wrap">
-         <AvailabilityPopupSingle :isOpen="isModalOpened" @modal-close="closeModal" />
+    <div class="tfhb-content-wrap tfhb-flexbox">
+         <AvailabilityPopupSingle :timeZone="timeZone.value" :isOpen="isModalOpened" @modal-close="closeModal"  @update-availability="fetchAvailabilitySettings" />
+         <AvailabilitySingle  v-for="(availability, key) in AvailabilityGet.data" :availability="availability" :key="key" />
     </div>
 </div>
  

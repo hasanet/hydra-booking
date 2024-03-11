@@ -1,21 +1,28 @@
 <script setup>
 import { ref, reactive, onBeforeMount, } from 'vue'; 
 import { useRouter, RouterView,} from 'vue-router' 
+import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '../form-fields/HbText.vue';
 import HbSelect from '../form-fields/HbSelect.vue';
 import HbDateTime from '../form-fields/HbDateTime.vue';
+import { toast } from "vue3-toastify"; 
+ 
 
-
-const timeZone = reactive({}); 
+const props = defineProps({
+  isOpen: Boolean,
+  timeZone: {}, 
+});
+const emit = defineEmits(["modal-close", "update-availability"]); 
+ 
 const availabilityData = reactive({
-    id: 1,
+    id: 0,
     title: 'Title',
-    time_zone: 'timezone',
+    time_zone: '',
+    date_status: false,
     time_slots: [
-        {
-            id: 'monday',
-            day: 'Monday', 
+        { 
+            day: 'Monday',
             status: true,
             times: [
                 {
@@ -24,8 +31,7 @@ const availabilityData = reactive({
                 },   
             ]
         },
-        {
-            id: 'tuesday',
+        { 
             day: 'Tuesday', 
             status: true,
             times: [
@@ -35,8 +41,7 @@ const availabilityData = reactive({
                 }
             ]
         },
-        {
-            id: 'wednesday',
+        { 
             day: 'Wednesday', 
             status: true,
             times: [
@@ -46,8 +51,7 @@ const availabilityData = reactive({
                 }
             ]
         },
-        {
-            id: 'thursday',
+        { 
             day: 'Thursday', 
             status: true,
             times: [
@@ -57,8 +61,7 @@ const availabilityData = reactive({
                 }
             ]
         },
-        {
-            id: 'friday',
+        { 
             day: 'Friday', 
             status: true,
             times: [
@@ -68,8 +71,7 @@ const availabilityData = reactive({
                 }
             ]
         },
-        {
-            id: 'saturday',
+        { 
             day: 'Saturday', 
             status: false,
             times: [
@@ -79,8 +81,7 @@ const availabilityData = reactive({
                 }
             ]
         },
-        {
-            id: 'sunday',
+        { 
             day: 'Sunday', 
             status: false,
             times: [
@@ -99,9 +100,33 @@ const availabilityData = reactive({
     ]
 });
 
-const handleCheckboxChange = (e) => {
-    console.log(availabilityData);
+
+// Update Availability Settings
+const UpdateAvailabilitySettings = async () => {   
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/update', availabilityData, {
+             
+        } );
+      
+        if (response.data.status) {    
+ 
+            // close the popup
+            emit('modal-close');
+            emit('update-availability');
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+            
+        }
+    } catch (error) {
+        toast.error('Action successful', {
+            position: 'bottom-right', // Set the desired position
+        });
+    }
 }
+
+ 
 // Remove time slot
 const removeAvailabilityTime = (key, tkey = null) => {
     availabilityData.time_slots[key].times.splice(tkey, 1);
@@ -116,7 +141,7 @@ const addAvailabilityTime = (key) => {
 
 // Remove date slot 
 const removeAvailabilityTDate = (key) => {
-    availabilityData.date_slots.splice(tkey, 1);
+    availabilityData.date_slots.splice(key, 1);
 }
 
 // Add new date slot
@@ -126,167 +151,158 @@ const addAvailabilityDate = (key) => {
         end: '2022-01-01',
     });
 }
-const props = defineProps({
-  isOpen: Boolean,
-});
-const emit = defineEmits(["modal-close"]); 
-
-onBeforeMount(() => {
-    timeZone.value = [
-        { value: 'timezone', label: 'Select Time Zone' },
-        { value: 'timezone1', label: 'Select Time Zone 1' },
-        { value: 'timezone2', label: 'Select Time Zone 2' },
-        { value: 'timezone3', label: 'Select Time Zone 3' },
-    ];
-});
-
+ 
 
 </script>
  
 
 <template> 
-   <div v-if="isOpen" class="tfhb-availability-popup">
-        <div  class="tfhb-dashboard-heading ">
-            <div class="tfhb-admin-title"> 
-                <h2 >Add New Availability </h2>  
+   <div    v-if="isOpen" class="tfhb-availability-popup">
+        <div class="tfhb-availability-popup-wrap">
+            <div  class="tfhb-dashboard-heading ">
+                <div class="tfhb-admin-title"> 
+                    <h2 >Add New Availability </h2>  
+                </div>
+                <div class="thb-admin-btn right"> 
+                    <button class="tfhb-availability-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
+                </div> 
             </div>
-            <div class="thb-admin-btn right"> 
-                <button class="tfhb-availability-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
-            </div> 
-        </div>
-        <div class="tfhb-content-wrap tfhb-flexbox"> 
-            <!-- Title -->
-            <HbText  
-                v-model="availabilityData.title"  
-                required= "true"  
-                :label="$tfhb_trans['Title']"  
-                selected = "1"
-                placeholder="Type your schedule title"   
-            /> 
-            <!-- Title -->
-            <!-- Time Zone -->
-            <HbSelect 
-                    
-                v-model="time_zone"  
-                required= "true"  
-                :label="$tfhb_trans['Time zone']"  
-                selected = "1"
-                placeholder="Select Time Zone"  
-                :option = "timeZone.value" 
-            /> 
-            <!-- Time Zone --> 
-        </div>
-        <div class="tfhb-content-wrap tfhb-availability-content-wrap">  
-
-            <div class="tfhb-admin-card-box ">  
-                <div  class="tfhb-dashboard-heading ">
-                    <div class="tfhb-admin-title"> 
-                        <h3 >Weekly hours </h3>  
-                    </div>
-                    <div class="thb-admin-btn right"> 
-                        <span>Asia/Dhaka</span> 
-                    </div> 
-                </div>
-                <div v-for="(time_slot, key) in availabilityData.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
-                    <div class="tfhb-availability-schedule-swicher">
-                         <!-- Checkbox swicher -->
-                         <label class="switch">
-                            <input id="swicher" v-model="time_slot.status" @change="handleCheckboxChange"   type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="tfhb-schedule-swicher" for="swicher"> {{time_slot.day}}</label>
-                        <!-- Swicher -->
-                    </div>
-                    <div v-if="time_slot.status == true" class="tfhb-availability-schedule-wrap ">
-                        <div v-for="(time, tkey) in time_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
-                            <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                                <HbDateTime  
-                                    v-model="time.start"    
-                                    selected = "1" 
-                                    :config="{
-                                        enableTime: true,
-                                        noCalendar: true,
-                                        dateFormat: 'H:i',
-                                        defaultDate: time.start
-                                    }"
-                                    width="45"
-                                    placeholder="Type your schedule title"   
-                                /> 
-                                <Icon name="MoveRight" size="20px" /> 
-                                <HbDateTime  
-                                    v-model="time.end"   
-                                    :label="$tfhb_trans['End']"  
-                                    selected = "1"
-                                    :config="{
-                                        enableTime: true,
-                                        noCalendar: true,
-                                        dateFormat: 'H:i',
-                                        defaultDate: time.end
-                                    }"
-                                    width="45"
-                                    placeholder="Type your schedule title"   
-                                /> 
-
-                            </div>
-                            <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-clone-btn" @click="addAvailabilityTime(key)"><Icon name="Plus" size="20px" /> </button> 
-                            </div>
-                            <div v-else class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-clone-btn" @click="removeAvailabilityTime(key, tkey)"><Icon name="X" size="20px" /> </button> 
-                            </div>
-                        </div>
+            <div class="tfhb-content-wrap tfhb-flexbox"> 
+                <!-- Title -->
+                <HbText  
+                    v-model="availabilityData.title"  
+                    required= "true"  
+                    :label="$tfhb_trans['Title']"  
+                    selected = "1"
+                    placeholder="Type your schedule title"   
+                /> 
+                <!-- Title -->
+                <!-- Time Zone -->
+                <HbSelect 
                         
-                    </div>
-                </div>
-               
-            </div>  
-            <div class="tfhb-admin-card-box ">  
-                 <!-- Yearly dates -->
-                 <div  class="tfhb-dashboard-heading ">
-                    <div class="tfhb-admin-title"> 
-                        <h3 >Yearly dates </h3>  
-                    </div> 
-                </div>
-                <div class="tfhb-availability-schedule-single tfhb-flexbox">
-                    <div class="tfhb-availability-schedule-swicher">
-                         <!-- Checkbox swicher -->
-                         <label class="switch">
-                            <input id="swicher" type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="tfhb-schedule-swicher" for="swicher"> Dates</label>
-                        <!-- Swicher -->
-                    </div>
-                    <div class="tfhb-availability-schedule-wrap ">
-                        <div v-for="(date_slot, key) in availabilityData.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                            <div  class="tfhb-availability-schedule-time tfhb-flexbox">
-                                <HbDateTime  
-                                    v-model="date_slot.start"    
-                                    selected = "1"
-                                    width="45"
-                                    enableTime='true'
-                                    placeholder="Type your schedule title"   
-                                /> 
-                                <Icon name="MoveRight" size="20px" /> 
-                                <HbDateTime  
-                                    v-model="date_slot.end"    
-                                    selected = "1"
-                                    width="45"
-                                    placeholder="Type your schedule title"   
-                                /> 
+                    v-model="availabilityData.time_zone"  
+                    required= "true"  
+                    :label="$tfhb_trans['Time zone']"  
+                    selected = "1"
+                    placeholder="Select Time Zone"  
+                    :option = "props.timeZone" 
+                /> 
+                <!-- Time Zone --> 
+            </div>
+            <div class="tfhb-content-wrap tfhb-availability-content-wrap">  
 
+                <div class="tfhb-admin-card-box ">  
+                    <div  class="tfhb-dashboard-heading ">
+                        <div class="tfhb-admin-title"> 
+                            <h3 >Weekly hours </h3>  
+                        </div>
+                        <div class="thb-admin-btn right"> 
+                            <span>Asia/Dhaka</span> 
+                        </div> 
+                    </div>
+                    <div v-for="(time_slot, key) in availabilityData.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
+                        <div class="tfhb-availability-schedule-swicher">
+                            <!-- Checkbox swicher -->
+                            <label class="switch">
+                                <input id="swicher" v-model="time_slot.status"    type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <label class="tfhb-schedule-swicher" for="swicher"> {{time_slot.day}}</label>
+                            <!-- Swicher -->
+                        </div>
+                        <div v-if="time_slot.status == true" class="tfhb-availability-schedule-wrap ">
+                            <div v-for="(time, tkey) in time_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                                    <HbDateTime  
+                                        v-model="time.start"    
+                                        selected = "1" 
+                                        :config="{
+                                            enableTime: true,
+                                            noCalendar: true,
+                                            dateFormat: 'H:i',
+                                            defaultDate: time.start
+                                        }"
+                                        width="45"
+                                        placeholder="Type your schedule title"   
+                                    /> 
+                                    <Icon name="MoveRight" size="20px" /> 
+                                    <HbDateTime  
+                                        v-model="time.end"   
+                                        :label="$tfhb_trans['End']"  
+                                        selected = "1"
+                                        :config="{
+                                            enableTime: true,
+                                            noCalendar: true,
+                                            dateFormat: 'H:i',
+                                            defaultDate: time.end
+                                        }"
+                                        width="45"
+                                        placeholder="Type your schedule title"   
+                                    /> 
+
+                                </div>
+                                <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="addAvailabilityTime(key)"><Icon name="Plus" size="20px" /> </button> 
+                                </div>
+                                <div v-else class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="removeAvailabilityTime(key, tkey)"><Icon name="X" size="20px" /> </button> 
+                                </div>
                             </div>
-                            <div v-if="key == 0" class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-clone-btn" @click="addAvailabilityDate(key)"><Icon name="Plus" size="20px" /> </button> 
-                            </div>
-                            <div v-else class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-clone-btn" @click="removeAvailabilityTDate(key, tkey)"><Icon name="X" size="20px" /> {{ key }} </button> 
+                            
+                        </div>
+                    </div>
+                
+                </div>  
+                <div class="tfhb-admin-card-box ">  
+                    <!-- Yearly dates -->
+                    <div  class="tfhb-dashboard-heading ">
+                        <div class="tfhb-admin-title"> 
+                            <h3 >Yearly dates </h3>  
+                        </div> 
+                    </div>
+                    <div class="tfhb-availability-schedule-single tfhb-flexbox">
+                        <div class="tfhb-availability-schedule-swicher">
+                            <!-- Checkbox swicher -->
+                            <label class="switch">
+                                <input id="swicher" v-model="availabilityData.date_status"    type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <label class="tfhb-schedule-swicher"  for="swicher"> Dates</label>
+                            <!-- Swicher -->
+                        </div>
+                        <div class="tfhb-availability-schedule-wrap ">
+                            <div v-for="(date_slot, key) in availabilityData.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                <div  class="tfhb-availability-schedule-time tfhb-flexbox">
+                                    <HbDateTime  
+                                        v-model="date_slot.start"    
+                                        selected = "1"
+                                        width="45"
+                                        enableTime='true'
+                                        placeholder="Type your schedule title"   
+                                    /> 
+                                    <Icon name="MoveRight" size="20px" /> 
+                                    <HbDateTime  
+                                        v-model="date_slot.end"    
+                                        selected = "1"
+                                        width="45"
+                                        placeholder="Type your schedule title"   
+                                    /> 
+
+                                </div>
+                                <div v-if="key == 0" class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="addAvailabilityDate(key)"><Icon name="Plus" size="20px" /> </button> 
+                                </div>
+                                <div v-else class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="removeAvailabilityTDate(key)"><Icon name="X" size="20px" />   </button> 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-               
-            </div>  
+                
+                </div>  
+                <!-- Create Or Update Availability -->
+                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ $tfhb_trans['Update General Settings'] }}</button>
+            </div>
         </div>
    </div>
    

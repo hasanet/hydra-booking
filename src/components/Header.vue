@@ -13,8 +13,7 @@
                 <stop offset="1" stop-color="#ED85B2"/>
                 </radialGradient>
                 </defs>
-            </svg>
-
+            </svg> 
         </div>
         <nav class="header-navigation">
             <ul>
