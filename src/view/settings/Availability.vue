@@ -8,17 +8,115 @@ import AvailabilitySingle from '@/components/availability/AvailabilitySingle.vue
 import { toast } from "vue3-toastify"; 
 
 const isModalOpened = ref(false);
-
-const openModal = () => {
-  isModalOpened.value = true;
-};
-const closeModal = () => { 
-  isModalOpened.value = false;
-};
 const timeZone = reactive({}); 
 const AvailabilityGet = reactive({
   data: [],
 });
+const availabilityDataSingle = reactive({}) 
+const skeleton = ref(false);
+// 
+
+
+const openModal = () => {
+  availabilityDataSingle.value = {
+    key: 0,
+    id: 0,
+    title: '',
+    time_zone: '',
+    date_status: false,
+    time_slots: [
+        { 
+            day: 'Monday',
+            status: true,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                },   
+            ]
+        },
+        { 
+            day: 'Tuesday', 
+            status: true,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        },
+        { 
+            day: 'Wednesday', 
+            status: true,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        },
+        { 
+            day: 'Thursday', 
+            status: true,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        },
+        { 
+            day: 'Friday', 
+            status: true,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        },
+        { 
+            day: 'Saturday', 
+            status: false,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        },
+        { 
+            day: 'Sunday', 
+            status: false,
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        }
+    ],
+    date_slots: [
+        {
+            start: '2022-01-01',
+            end: '2022-01-01',
+        }
+    ]
+  };
+  isModalOpened.value = true;
+};
+
+// Edit availability
+const EditAvailabilitySettings = async (key, id, availability ) => { 
+  // availabilityDataSingle.value.key = key;
+  availabilityDataSingle.value = availability;
+  isModalOpened.value = true;
+}
+
+const closeModal = () => { 
+  isModalOpened.value = false;
+};
+
 
 // Fetch generalSettings
 const fetchAvailabilitySettings = async () => {
@@ -34,12 +132,38 @@ const fetchAvailabilitySettings = async () => {
   } 
 }
 
+// Fetch generalSettings pass value update avaulability
+const fetchAvailabilitySettingsUpdate = async (data) => {
+  AvailabilityGet.data = data; 
+}
+
+// Fetch generalSettings pass value update avaulability
+const deleteAvailabilitySettings = async (key, id ) => { 
+  const deleteAvailability = {
+    key: key,
+    id: id
+  }
+  try { 
+      // const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+key); 
+      const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/delete', deleteAvailability, {
+             
+      } );
+      if (response.data.status) { 
+        AvailabilityGet.data = response.data.availability; 
+          toast.success(response.data.message); 
+      }
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+
+
 onBeforeMount(() => { 
   fetchAvailabilitySettings();
 });
 
  
-const skeleton = ref(false);
 
 </script>
 <template>
@@ -55,8 +179,9 @@ const skeleton = ref(false);
         </div> 
     </div>
     <div class="tfhb-content-wrap tfhb-flexbox">
-         <AvailabilityPopupSingle :timeZone="timeZone.value" :isOpen="isModalOpened" @modal-close="closeModal"  @update-availability="fetchAvailabilitySettings" />
-         <AvailabilitySingle  v-for="(availability, key) in AvailabilityGet.data" :availability="availability" :key="key" />
+         <AvailabilitySingle  v-for="(availability, key) in AvailabilityGet.data" :availability="availability" :key="key" @delete-availability="deleteAvailabilitySettings(key, availability.id)" @edit-availability="EditAvailabilitySettings(key, availability.id, availability)"  />
+
+         <AvailabilityPopupSingle v-if="isModalOpened" :timeZone="timeZone.value" :availabilityDataSingle="availabilityDataSingle.value" :isOpen="isModalOpened" @modal-close="closeModal"  @update-availability="fetchAvailabilitySettingsUpdate" />
     </div>
 </div>
  

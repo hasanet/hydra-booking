@@ -5,6 +5,8 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\RouteController;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
+ // Use DB 
+use HydraBooking\DB\Availability;
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -45,6 +47,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'UpdateAvailabilitySettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
+        
+        register_rest_route('hydra-booking/v1', '/settings/availability/delete', array( 
+            'methods' => 'POST',
+            'callback' => array($this, 'DeleteAvailabilitySettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
+        
        
     }
     // permission_callback
@@ -107,9 +117,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $_tfhb_availability_settings = get_option('_tfhb_availability_settings');
 
         // senitaized
+        $availability['id'] = $request['title'];
         $availability['title'] = sanitize_text_field($request['title']);
         $availability['time_zone'] = sanitize_text_field($request['time_zone']); 
         $availability['date_status'] = sanitize_text_field($request['date_status']); 
+        $availability['override'] = ''; 
+        $availability['status'] = 'active'; 
 
         // time slots 
         foreach ($request['time_slots'] as $key => $value) {
@@ -131,16 +144,86 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  
         }
 
-        $_tfhb_availability_settings[] = $request;
+        if($availability['id'] == 0){
+                // Insert into database
+                $AvailabilityInsert = new Availability(); 
+
+                $insert = $AvailabilityInsert->add($availability); 
+                if($insert['status'] === true){
+                    $availability['id'] = $insert['insert_id'];
+                }else{
+                    $data = array(
+                        'status' => false, 
+                        'message' => 'Availability Not Updated', 
+                    );
+                    return rest_ensure_response($data);
+                }
+
+
+
+                $_tfhb_availability_settings[] = $availability;
+        }else{
+            //  update
+            $AvailabilityInsert = new Availability();
+            $update = $AvailabilityInsert->update($availability);
+            if($update['status'] === true){
+                $availability['id'] = $update['update_id'];
+            }else{
+                $data = array(
+                    'status' => false, 
+                    'message' => 'Availability Not Updated', 
+                );
+                return rest_ensure_response($data);
+            }
+
+            foreach ($_tfhb_availability_settings as $key => $value) {
+                if($value['id'] == $availability['id']){
+                    $_tfhb_availability_settings[$key] = $availability; 
+                }
+            } 
+
+        }
+        
+ 
+
          // update option
         update_option('_tfhb_availability_settings', $_tfhb_availability_settings);
         $availability = get_option('_tfhb_availability_settings');
          $data = array(
              'status' => true, 
-             'availability' => $availability,  
+             'availability' => $availability,    
+             'update' => $update,    
              'message' => 'Availability Updated Successfully',  
          );
          return rest_ensure_response($data);
 
+    }
+
+    // Delete Availability Settings
+    public function DeleteAvailabilitySettings(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $key = sanitize_text_field($request['key']);
+        $id = sanitize_text_field($request['id']);
+
+        $_tfhb_availability_settings = get_option('_tfhb_availability_settings');
+        unset($_tfhb_availability_settings[$key]); 
+
+        //  delete from database
+        if($id != 0){
+            $AvailabilityInsert = new Availability();
+            $AvailabilityInsert->delete($id);
+        }
+       
+
+        
+        // update option
+        update_option('_tfhb_availability_settings', $_tfhb_availability_settings);
+        $availability = get_option('_tfhb_availability_settings');
+        $data = array(
+            'status' => true, 
+            'availability' => $availability,  
+            'message' => 'Availability Deleted Successfully', 
+        );
+        return rest_ensure_response($data);
     }
 } 

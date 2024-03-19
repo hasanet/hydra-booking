@@ -5,6 +5,15 @@ import Icon from '@/components/icon/LucideIcon.vue'
 const props = defineProps([
     'availability', 
 ]) 
+const emit = defineEmits(["delete-availability", "edit-availability"]); 
+
+const deleteAvailability = () => {
+    emit('delete-availability');
+}
+const editAvailability = () => { 
+    emit('edit-availability');
+}
+
 </script>
 
 <template>
@@ -15,7 +24,14 @@ const props = defineProps([
                 <h2 >{{availability.title}} </h2>  
             </div>
             <div class="thb-admin-btn right"> 
-                <span><Icon name="ListCollapse" size="20px" /> </span>
+                <div class="tfhb-availability-action tfhb-dropdown">
+                    <Icon name="ListCollapse" size="20px" /> 
+                    <div class="tfhb-dropdown-wrap">
+                        <span class="tfhb-dropdown-single" @click="editAvailability">Edit</span>
+                        <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
+                        <span class="tfhb-dropdown-single" @click="deleteAvailability">Delete</span>
+                    </div>
+                </div>
             </div> 
         </div>
         <div class="tfhb-availability-single-box-info  tfhb-flexbox">

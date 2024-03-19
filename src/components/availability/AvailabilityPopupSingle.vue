@@ -11,100 +11,17 @@ import { toast } from "vue3-toastify";
 
 const props = defineProps({
   isOpen: Boolean,
+  availabilityDataSingle: {},
   timeZone: {}, 
 });
-const emit = defineEmits(["modal-close", "update-availability"]); 
+const emit = defineEmits(["update:availabilityData", "modal-close", "update-availability"]); 
+
  
-const availabilityData = reactive({
-    id: 0,
-    title: 'Title',
-    time_zone: '',
-    date_status: false,
-    time_slots: [
-        { 
-            day: 'Monday',
-            status: true,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                },   
-            ]
-        },
-        { 
-            day: 'Tuesday', 
-            status: true,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                }
-            ]
-        },
-        { 
-            day: 'Wednesday', 
-            status: true,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                }
-            ]
-        },
-        { 
-            day: 'Thursday', 
-            status: true,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                }
-            ]
-        },
-        { 
-            day: 'Friday', 
-            status: true,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                }
-            ]
-        },
-        { 
-            day: 'Saturday', 
-            status: false,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                }
-            ]
-        },
-        { 
-            day: 'Sunday', 
-            status: false,
-            times: [
-                {
-                    start: '09:00',
-                    end: '17:00',
-                }
-            ]
-        }
-    ],
-    date_slots: [
-        {
-            start: '2022-01-01',
-            end: '2022-01-01',
-        }
-    ]
-});
-
-
+ 
 // Update Availability Settings
 const UpdateAvailabilitySettings = async () => {   
     try { 
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/update', availabilityData, {
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/update', props.availabilityDataSingle, {
              
         } );
       
@@ -112,7 +29,7 @@ const UpdateAvailabilitySettings = async () => {
  
             // close the popup
             emit('modal-close');
-            emit('update-availability');
+            emit('update-availability', response.data.availability);
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
@@ -161,7 +78,7 @@ const addAvailabilityDate = (key) => {
         <div class="tfhb-availability-popup-wrap">
             <div  class="tfhb-dashboard-heading ">
                 <div class="tfhb-admin-title"> 
-                    <h2 >Add New Availability </h2>  
+                    <h2 >Add New Availability  {{ props.availabilityDataSingle.id }}</h2>  
                 </div>
                 <div class="thb-admin-btn right"> 
                     <button class="tfhb-availability-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
@@ -170,7 +87,7 @@ const addAvailabilityDate = (key) => {
             <div class="tfhb-content-wrap tfhb-flexbox"> 
                 <!-- Title -->
                 <HbText  
-                    v-model="availabilityData.title"  
+                    v-model="props.availabilityDataSingle.title"  
                     required= "true"  
                     :label="$tfhb_trans['Title']"  
                     selected = "1"
@@ -180,7 +97,7 @@ const addAvailabilityDate = (key) => {
                 <!-- Time Zone -->
                 <HbSelect 
                         
-                    v-model="availabilityData.time_zone"  
+                    v-model="props.availabilityDataSingle.time_zone"  
                     required= "true"  
                     :label="$tfhb_trans['Time zone']"  
                     selected = "1"
@@ -200,7 +117,7 @@ const addAvailabilityDate = (key) => {
                             <span>Asia/Dhaka</span> 
                         </div> 
                     </div>
-                    <div v-for="(time_slot, key) in availabilityData.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
+                    <div v-for="(time_slot, key) in props.availabilityDataSingle.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
                         <div class="tfhb-availability-schedule-swicher">
                             <!-- Checkbox swicher -->
                             <label class="switch">
@@ -264,14 +181,14 @@ const addAvailabilityDate = (key) => {
                         <div class="tfhb-availability-schedule-swicher">
                             <!-- Checkbox swicher -->
                             <label class="switch">
-                                <input id="swicher" v-model="availabilityData.date_status"    type="checkbox">
+                                <input id="swicher" v-model="props.availabilityDataSingle.date_status"    type="checkbox">
                                 <span class="slider"></span>
                             </label>
                             <label class="tfhb-schedule-swicher"  for="swicher"> Dates</label>
                             <!-- Swicher -->
                         </div>
                         <div class="tfhb-availability-schedule-wrap ">
-                            <div v-for="(date_slot, key) in availabilityData.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-flexbox">
+                            <div v-for="(date_slot, key) in props.availabilityDataSingle.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-flexbox">
                                 <div  class="tfhb-availability-schedule-time tfhb-flexbox">
                                     <HbDateTime  
                                         v-model="date_slot.start"    

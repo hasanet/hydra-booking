@@ -1,43 +1,110 @@
-#tfhb-admin-app{
-    a, h1, h2, h3, h4, h5, h6, p, span, label {
+#tfhb-admin-app {
+
+    a,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    label {
         font-family: 'Inter', sans-serif;
         margin: 0;
     }
-    button{
+
+    button {
         cursor: pointer;
     }
-    a{
+
+    a {
         text-decoration: none;
+
         &:focus {
             outline: none;
             box-shadow: none;
         }
     }
-    h1, h2, h3, h4, h5, h6{
-        font-weight: 600; 
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 600;
         color: #3F2731;
         margin: 4px 0;
     }
-    p, span, label { 
-        font-weight: 400; 
+
+    p,
+    span,
+    label {
+        font-weight: 400;
         font-size: 13px;
         line-height: 20px;
         color: #765664;
         margin: 4px 0;
     }
-    label {  
-        color: #3F2731; 
+
+    label {
+        color: #3F2731;
     }
-     h1 {
-        font-size: 24px; 
-        line-height: 32px; 
+
+    h1 {
+        font-size: 24px;
+        line-height: 32px;
     }
-    .tfhb-flexbox{
+
+    .tfhb-flexbox {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap; 
+        flex-wrap: wrap;
         gap: 24px;
     }
-    
+
+
+
+    .tfhb-dropdown {
+        position: relative;
+        cursor: pointer;
+        
+
+        .tfhb-dropdown-wrap {
+            position: absolute;
+            top: 100%;
+            right:  0;
+            width: 120px;
+            box-shadow: 0px 15px 30px 0px #28101A1A;
+            background-color: #FAF5F7;
+            padding: 2px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            .tfhb-dropdown-single {
+                display: block; 
+                padding: 8px 12px 8px 12px;
+                border-radius: 4px 0px 0px 0px; 
+                background-color: #fff;
+                margin: 0 !important;
+                &:hover {
+                    background-color: #FAF5F7;
+                }
+            }
+
+        }
+
+        &:hover .tfhb-dropdown-wrap {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+
 }

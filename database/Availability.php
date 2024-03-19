@@ -23,9 +23,13 @@ class Availability{
         if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT,
-                title VARCHAR(255) NOT NULL,
-                time_zone VARCHAR(255) NOT NULL,
-                slots LONGTEXT NOT NULL,
+                title VARCHAR(100) NOT NULL,
+                time_zone VARCHAR(50) NOT NULL,
+                override VARCHAR(255) NOT NULL,
+                time_slots LONGTEXT NOT NULL, 
+                date_status LONGTEXT NOT NULL, 
+                date_slots LONGTEXT NOT NULL, 
+                status VARCHAR(20) NOT NULL,
                 created_at DATE NOT NULL,
                 updated_at DATE NOT NULL, 
                 PRIMARY KEY (id)
@@ -57,6 +61,9 @@ class Availability{
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
+        $request['time_slots'] =  maybe_serialize($request['time_slots']);
+        $request['date_slots'] =  maybe_serialize($request['date_slots']);
+        
 
         // insert availability
         $result =  $wpdb->insert(
