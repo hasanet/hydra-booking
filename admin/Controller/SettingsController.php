@@ -117,7 +117,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $_tfhb_availability_settings = get_option('_tfhb_availability_settings');
 
         // senitaized
-        $availability['id'] = $request['title'];
+        if(!isset($request['id'])){
+            // response
+            $data = array(
+                'status' => false,  
+                'message' => 'Something Went Wrong, Please Try Again Later.',  
+            );
+            return rest_ensure_response($data);
+        }
+        $availability['id'] = isset($request['id']) ? sanitize_text_field($request['id']) : 0;
         $availability['title'] = sanitize_text_field($request['title']);
         $availability['time_zone'] = sanitize_text_field($request['time_zone']); 
         $availability['date_status'] = sanitize_text_field($request['date_status']); 
@@ -145,56 +153,55 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
 
         if($availability['id'] == 0){
-                // Insert into database
-                $AvailabilityInsert = new Availability(); 
 
-                $insert = $AvailabilityInsert->add($availability); 
-                if($insert['status'] === true){
-                    $availability['id'] = $insert['insert_id'];
-                }else{
-                    $data = array(
-                        'status' => false, 
-                        'message' => 'Availability Not Updated', 
-                    );
-                    return rest_ensure_response($data);
-                }
+            // Insert into database
+            $AvailabilityInsert = new Availability(); 
 
-
-
-                $_tfhb_availability_settings[] = $availability;
-        }else{
-            //  update
-            $AvailabilityInsert = new Availability();
-            $update = $AvailabilityInsert->update($availability);
-            if($update['status'] === true){
-                $availability['id'] = $update['update_id'];
+            $insert = $AvailabilityInsert->add($availability); 
+            if($insert['status'] === true){
+                $availability['id'] = $insert['insert_id'];
             }else{
                 $data = array(
                     'status' => false, 
                     'message' => 'Availability Not Updated', 
                 );
                 return rest_ensure_response($data);
-            }
+            } 
+                
+            $_tfhb_availability_settings[] = $availability;
 
+        }else{
+            
+            //  update
+            $AvailabilityInsert = new Availability();
+            $update = $AvailabilityInsert->update($availability);
+            if($update['status'] != true){
+                $data = array(
+                    'status' => false, 
+                    'message' => 'Availability Not Updated', 
+                );
+                return rest_ensure_response($data);
+            }  
             foreach ($_tfhb_availability_settings as $key => $value) {
                 if($value['id'] == $availability['id']){
                     $_tfhb_availability_settings[$key] = $availability; 
                 }
             } 
 
-        }
-        
- 
+           
+        } 
 
          // update option
         update_option('_tfhb_availability_settings', $_tfhb_availability_settings);
         $availability = get_option('_tfhb_availability_settings');
-         $data = array(
-             'status' => true, 
-             'availability' => $availability,    
-             'update' => $update,    
-             'message' => 'Availability Updated Successfully',  
-         );
+
+        // response
+        $data = array(
+            'status' => true, 
+            'availability' => $availability,    
+            'update' => $update,    
+            'message' => 'Availability Updated Successfully',  
+        );
          return rest_ensure_response($data);
 
     }

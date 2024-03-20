@@ -23,11 +23,11 @@ const openModal = () => {
     id: 0,
     title: '',
     time_zone: '',
-    date_status: false,
+    date_status: 0,
     time_slots: [
         { 
             day: 'Monday',
-            status: true,
+            status: 1,
             times: [
                 {
                     start: '09:00',
@@ -37,7 +37,7 @@ const openModal = () => {
         },
         { 
             day: 'Tuesday', 
-            status: true,
+            status: 1,
             times: [
                 {
                     start: '09:00',
@@ -47,7 +47,7 @@ const openModal = () => {
         },
         { 
             day: 'Wednesday', 
-            status: true,
+            status: 1,
             times: [
                 {
                     start: '09:00',
@@ -57,7 +57,7 @@ const openModal = () => {
         },
         { 
             day: 'Thursday', 
-            status: true,
+            status: 1,
             times: [
                 {
                     start: '09:00',
@@ -67,7 +67,7 @@ const openModal = () => {
         },
         { 
             day: 'Friday', 
-            status: true,
+            status: 1,
             times: [
                 {
                     start: '09:00',
@@ -77,7 +77,7 @@ const openModal = () => {
         },
         { 
             day: 'Saturday', 
-            status: false,
+            status: 1,
             times: [
                 {
                     start: '09:00',
@@ -87,7 +87,7 @@ const openModal = () => {
         },
         { 
             day: 'Sunday', 
-            status: false,
+            status: 1,
             times: [
                 {
                     start: '09:00',

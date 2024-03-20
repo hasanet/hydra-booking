@@ -53,14 +53,46 @@
 					justify-content: normal !important;
 					gap: 16px !important; 
 				}
-				span {
-					font-size: 15px !important; 
-					line-height: 24px !important; 
+				span { 
 					width: 90%;
+					p{
+						display: inline-block;
+						font-size: 15px !important; 
+						line-height: 24px !important;  
+					}
 				  }
 			  }
 			
 		}
+		.tfhb-integrations-wrap{
+			width: 100% !important; 
+			justify-content: normal !important;
+			.tfhb-integrations-single-block{
+				margin: 0;
+  				width: calc(30% - 48px);
+				h3 {
+					font-weight: 600;
+					line-height: 1.5;
+				} 
+				.tfhb-integrations-single-block-icon {
+					margin-bottom: 16px !important;
+					display: inline-block;
+				} 
+				.tfhb-integrations-single-block-btn {
+					margin-top: 32px;
+				}
+			} 
+		}
+		.tfhb-notification-wrap{
+			.tfhb-notification-single {
+				margin-bottom: 16px;
+				// last child
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+		
 	}
 
   

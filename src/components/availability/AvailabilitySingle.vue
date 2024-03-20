@@ -21,7 +21,8 @@ const editAvailability = () => {
     <div class="tfhb-availability-single-box-wrap">
         <div  class="tfhb-dashboard-heading ">
             <div class="tfhb-admin-title"> 
-                <h2 >{{availability.title}} </h2>  
+                <h2 >{{availability.title}}  </h2>   
+                <!-- {{ availability }} -->
             </div>
             <div class="thb-admin-btn right"> 
                 <div class="tfhb-availability-action tfhb-dropdown">
@@ -35,8 +36,10 @@ const editAvailability = () => {
             </div> 
         </div>
         <div class="tfhb-availability-single-box-info  tfhb-flexbox">
-            <Icon name="Clock" size="20px" /> 
-            <span>Mon(04:50 am-05:00 pm),  (09:00 pm - 10:00pm)</span>
+            <Icon name="Clock" size="20px" />  
+            <span><p v-for="(day, key)  in availability.time_slots" :key="key"  v-show = "day.status == 1"  >    
+                {{ day.status == 1 ? day.day + ' (' + day.times[0].start + ' - ' + day.times[0].end + ') ,' : '' }} 
+            </p></span>
         </div>
         <div class="tfhb-availability-single-box-info tfhb-flexbox">
             <Icon name="MapPin" size="20px" /> 

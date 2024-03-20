@@ -106,8 +106,7 @@ class Availability{
             return false;
         }else{
             return [
-                'status' => true,
-                'update_id' => $wpdb->insert_id
+                'status' => true, 
             ];
         } 
 

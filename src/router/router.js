@@ -104,12 +104,7 @@ const routes = [
                 path: 'availability',
                 name: 'SettingsAvailability',
                 component: () => import('../view/settings/Availability.vue')
-            },
-            {
-                path: 'questions',
-                name: 'SettingsAuestions',
-                component: () => import('../view/settings/Questions.vue')
-            },
+            }, 
             {
                 path: 'notifications',
                 name: 'SettingsAotifications',
@@ -120,11 +115,11 @@ const routes = [
                 name: 'SettingsAntegrations',
                 component: () => import('../view/settings/Integrations.vue')
             },  
-            {
-                path: 'appearance',
-                name: 'SettingsAppearance',
-                component: () => import('../view/settings/appearance.vue')
-            },  
+            // {
+            //     path: 'appearance',
+            //     name: 'SettingsAppearance',
+            //     component: () => import('../view/settings/appearance.vue')
+            // },  
              
         ]
         

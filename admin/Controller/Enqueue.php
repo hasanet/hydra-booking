@@ -24,7 +24,7 @@ use HydraBooking\Admin\Controller\TransStrings;
         wp_enqueue_script('tfhb-vue-core', 'http://localhost:5173/src/main.js', [], time(), true);
         wp_localize_script('tfhb-vue-core', 'tfhb_core_apps', [
             // 'url' => THB_URL,
-            'wp_rest_nonce' => wp_create_nonce( 'wp_rest' ),
+            'rest_nonce' => wp_create_nonce( 'wp_rest' ),
             'admin_url' => site_url(),
             'trans' => TransStrings::getTransStrings(),
         ]);

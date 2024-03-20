@@ -33,6 +33,11 @@ namespace HydraBooking\Admin\Controller;
             'Title' =>  __('Title', 'hydra-booking'),
             'Set up booking times when you are available' =>  __('Set up booking times when you are available', 'hydra-booking'),
             ' Add New Availability' =>  __(' Add New Availability', 'hydra-booking'),
+
+            // Integrations
+            'Integrations' =>  __('Integrations', 'hydra-booking'),
+            'One-liner description' =>  __('One-liner description', 'hydra-booking'),
+
         );
      } 
 
