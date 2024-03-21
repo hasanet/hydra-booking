@@ -1,6 +1,14 @@
+<script setup>
+const props = defineProps([
+    'title',
+     
+]) 
+</script>
+
+
 <template>
     <div class="thb-admin-header">
-        <div class="thb-admin-header-icon">
+        <div class="thb-admin-header-icon tfhb-flexbox">
             <svg width="40" height="40" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="128" height="128" rx="32" fill="url(#paint0_radial_1_31)"/>
                 <path d="M69.9489 96.522L52.2774 78.8506L48.0965 74.6696L45.6437 72.2168L35.9996 62.5728V103.1H69.9489C71.9557 103.1 73.9068 102.821 75.7465 102.32L69.9489 96.522Z" fill="white"/>
@@ -14,25 +22,19 @@
                 </radialGradient>
                 </defs>
             </svg> 
+            <h2 class="tfhb-admin-header-title">{{ props.title }}</h2>
         </div>
         <nav class="header-navigation">
-            <ul>
+            <!-- <ul>
                 <li><router-link to="/" exact :class="{ 'active': $route.path === '/' }">Dashboard</router-link></li>
                 <li><router-link to="/availability" :class="{ 'active': $route.path === '/availability' }">Availability</router-link></li>
                 <li><router-link to="/event" :class="{ 'active': $route.path === '/event' }">Event</router-link></li>
                 <li><router-link to="/booking" :class="{ 'active': $route.path === '/booking' }">Booking</router-link></li>
                 <li><router-link to="/settings" :class="{ 'active': $route.path === '/settings' }">Settings</router-link></li>
-            </ul>
+            </ul> -->
         </nav>
     </div>
-</template>
-
-<script>
-export default {
-    name: 'Booking',
-    // Your component options go here
-}
-</script>
+</template> 
 
 <style scoped>
 /* Your component styles go here */

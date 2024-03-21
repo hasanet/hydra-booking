@@ -1,13 +1,10 @@
-<script setup>
-import Header from './components/Header.vue'; 
+<script setup> 
 import "vue3-loading-skeleton/dist/style.css"; 
 import 'vue3-toastify/dist/index.css';
 
 </script>
 
-<template>  
-  <!-- <Header /> -->
-  
+<template>    
   <router-view /> 
 </template> 
 <style scoped>  

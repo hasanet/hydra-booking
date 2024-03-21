@@ -38,6 +38,10 @@ namespace HydraBooking\Admin\Controller;
             'Integrations' =>  __('Integrations', 'hydra-booking'),
             'One-liner description' =>  __('One-liner description', 'hydra-booking'),
 
+            // Hosts
+            'Add New Host' =>  __('Add New Host', 'hydra-booking'), 
+            'Select Hosts' =>  __('Select Hosts', 'hydra-booking'), 
+            'Create Hosts' =>  __('Create Hosts', 'hydra-booking'), 
         );
      } 
 

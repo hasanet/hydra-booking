@@ -1,12 +1,11 @@
 
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Dashboard from '../view/Dashboard.vue';
-import Availability from '../view/Availability.vue';
-import AvailabilityEdit from '../view/AvailabilityEdit.vue';
+import Dashboard from '../view/Dashboard.vue';  
 import Booking from '../view/Booking.vue';
 import Event from '../view/event/Event.vue';
 import EventCreate from '../view/event/create.vue';
 import Settings from '../view/settings/Settings.vue';
+import Hosts from '../view/hosts/hosts.vue';
 
 // Event 
 
@@ -19,16 +18,7 @@ const routes = [
     {
         path: '/',
         component: Dashboard
-    },
-    {
-        path: '/availability',
-        component: Availability
-    },
-    {
-        path: '/availability/edit/:id',
-        name: 'availabilityEdit',
-        component: AvailabilityEdit
-    },
+    },  
     {
         path: '/booking',
         component: Booking
@@ -39,6 +29,21 @@ const routes = [
         name : 'events',
         component: Event,  
     },
+    // Hosts routes
+    {
+        path: '/hosts',
+        name: 'hosts',
+        component: Hosts,
+        redirect: { name: 'HostsLists' },
+        children: [ 
+            {
+                path: 'list',
+                name: 'HostsLists',
+                component: () => import('../view/hosts/hosts-list.vue')
+            }, 
+        ]
+    }, 
+   
     // Event routes
     {
         path: '/event/create',

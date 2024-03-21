@@ -3,7 +3,7 @@ namespace HydraBooking\DB;
 
 class Host {
     
-    public  $table = 'tfhb_event_hosts';
+    public  $table = 'tfhb_hosts';
     public function __construct() {   
 
         
@@ -22,9 +22,13 @@ class Host {
  
         if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table_name (
-                id INT(11) NOT NULL AUTO_INCREMENT,
-                event_id INT(11) NOT NULL,
+                id INT(11) NOT NULL AUTO_INCREMENT, 
                 user_id INT(11) NOT NULL, 
+                host_name VARCHAR(100) NOT NULL,  
+                phone_number VARCHAR(20) NOT NULL,
+                host_about text NOT NULL,
+                avatar VARCHAR(255) NOT NULL, 
+                featured_image VARCHAR(255) NOT NULL, 
                 status VARCHAR(11) NOT NULL,
                 created_at DATE NOT NULL,
                 updated_at DATE NOT NULL, 
@@ -126,9 +130,7 @@ class Host {
             $data = $wpdb->get_results(
                 $wpdb->prepare( $sql )
             ); 
-        }
-
-        
+        } 
         // Get all data
        
         return $data; 

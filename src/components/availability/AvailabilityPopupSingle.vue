@@ -77,14 +77,14 @@ const addAvailabilityDate = (key) => {
  
 
 <template> 
-   <div    v-if="isOpen" class="tfhb-availability-popup">
-        <div class="tfhb-availability-popup-wrap">
+   <div    v-if="isOpen" class="tfhb-popup tfhb-availability-popup">
+        <div class="tfhb-popup-wrap tfhb-availability-popup-wrap">
             <div  class="tfhb-dashboard-heading ">
                 <div class="tfhb-admin-title"> 
                     <h2 >Add New Availability  </h2>   
                 </div>
-                <div class="thb-admin-btn right"> 
-                    <button class="tfhb-availability-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
+                <div class="thb-admin-btn"> 
+                    <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
                 </div> 
             </div>
             <div class="tfhb-content-wrap tfhb-flexbox"> 
