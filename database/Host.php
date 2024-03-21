@@ -112,16 +112,24 @@ class Host {
      /**
      * Get all  availability Data. 
      */
-    public function get($id = null) {
+    public function get($where = null) {
         
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
         
-        if($id){
-            $sql = "SELECT * FROM $table_name WHERE id = $id";
-
-            $data = $wpdb->get_row(
+        if(is_array($where)){
+            $sql = "SELECT * FROM $table_name WHERE ";
+            $i = 0;
+            foreach($where as $k => $v){
+                if($i == 0){
+                    $sql .= " $k = $v";
+                }else{
+                    $sql .= " AND $k = $v";
+                }
+                $i++;
+            }
+            $data = $wpdb->get_results(
                 $wpdb->prepare( $sql )
             );
         }else{

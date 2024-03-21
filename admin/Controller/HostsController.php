@@ -73,8 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
         // Check if user is already a host
         $host = new Host();
-        $hostCheck = $host->get($request['id']);
-
+        $hostCheck = $host->get( array('user_id' => $request['id']) ); 
         if (!empty($hostCheck)) {
             return rest_ensure_response(array('status' => false, 'message' => 'This User is already a host'));
         }
@@ -92,6 +91,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Insert Host
         $hostInsert = $host->add($data);
+        if(!$hostInsert['status']) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while creating host'));
+        }
+        $hosts_id = $hostInsert['insert_id'];
         unset($data['user_id']);
         $data['host_id'] = $hostInsert['insert_id'];
 
@@ -104,6 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true, 
             'HostsList' => $HostsList,  
+            'id' => $hosts_id,  
             'message' => 'General Settings Updated Successfully', 
         );
         

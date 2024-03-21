@@ -41,6 +41,11 @@ const routes = [
                 name: 'HostsLists',
                 component: () => import('../view/hosts/hosts-list.vue')
             }, 
+            {
+                path: 'profile/:id',
+                name: 'HostsProfile',
+                component: () => import('../view/hosts/hosts-profile.vue')
+            }, 
         ]
     }, 
    

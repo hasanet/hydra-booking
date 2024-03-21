@@ -5,10 +5,13 @@ import axios from 'axios'
 import Icon from '@/components/icon/LucideIcon.vue'
 import Header from '@/components/Header.vue';
 import CreateHostPopup from '@/components/hosts/CreateHostPopup.vue';
+// Import for redirect route  
+ 
 
 import { toast } from "vue3-toastify"; 
-
+const router = useRouter();
 const isModalOpened = ref(false);
+const skeleton = ref(true);
 const closeModal = () => { 
   isModalOpened.value = false;
 };
@@ -31,8 +34,9 @@ const fetchHosts = async () => {
     } 
 } 
 // Hosts
-const CreateHosts = async (host) => {   
-
+const CreateHosts = async (host) => {    
+    // redirect with router argument
+   
     try { 
         // axisos sent dataHeader Nonce Data
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/create', host, {
@@ -46,7 +50,11 @@ const CreateHosts = async (host) => {
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
-            });
+            });  
+            closeModal(); 
+            router.push({ name: 'HostsProfile', params: { id: response.data.id} });
+            // Redirecto to Other Route
+            // router.push({ name: 'HostsProfile' });
         }else{
             toast.error(response.data.message, {
                 position: 'bottom-right', // Set the desired position
@@ -65,17 +73,18 @@ onBeforeMount(() => {
 <template>
 
     <!-- {{ tfhbClass }} -->
-    <div class="tfhb-admin-hosts">
+    <div :class="{ 'tfhb-skeleton': skeleton }" class="tfhb-admin-hosts">
         <Header title="Hosts" />
         <div class="tfhb-dashboard-heading tfhb-flexbox">
            <div class="tfhb-header-filters">
                 <input type="text" placeholder="Search Hosts" /> 
+                <span><Icon name="Search" size="20" /></span>
            </div>
             <div class="thb-admin-btn right">
-               <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="15px" /> {{ $tfhb_trans['Add New Host'] }}</button> 
+               <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="15" /> {{ $tfhb_trans['Add New Host'] }}</button> 
             </div> 
         </div>
-        <div class="tfhb-hydra-hosts-content">  
+        <div class="tfhb-hosts-content">  
             <CreateHostPopup v-if="isModalOpened" :isOpen="isModalOpened" :usersData="usersData.data" @modal-close="closeModal" @hosts-create="CreateHosts"   />
             <router-view :hosts="hosts.data"/> 
         </div> 
