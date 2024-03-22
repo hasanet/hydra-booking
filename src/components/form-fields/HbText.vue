@@ -9,6 +9,7 @@ const props = defineProps([
     'subtitle',
     'placeholder',
     'description', 
+    'disabled', 
 ])
 const emit = defineEmits(['update:modelValue'])
 </script>
@@ -32,6 +33,7 @@ const emit = defineEmits(['update:modelValue'])
           @input="emit('update:modelValue', $event.target.value)" 
           :type="type"
           :placeholder="placeholder"
+          :disabled="disabled"
           
         /> 
              

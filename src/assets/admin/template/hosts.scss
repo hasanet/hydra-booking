@@ -1,92 +1,98 @@
-.tfhb-admin-hosts{
-    .tfhb-popup {
-        .tfhb-popup-wrap{
-            max-width: 500px !important;
-            .tfhb-dashboard-heading{
-                margin-right: 0 !important;
-            }
-        }
+.tfhb-admin-hosts {
+  .tfhb-popup {
+    .tfhb-popup-wrap {
+      max-width: 500px !important;
+      .tfhb-dashboard-heading {
+        margin-right: 0 !important;
+      }
     }
-     
-    .tfhb-header-filters {
-        width: 400px;
-        position: relative;
-        input {
-            padding: 8px 32px 8px 12px;
-            border: 1px solid #F6EEF2;
-            background-color: #FFFFFF;
-            border-radius: 8px;
-            width: 100%;
-            &:focus{
-                outline: none;
-                box-shadow: none;
-            
-            }
-        }
-        span { 
-            position: absolute; 
-            position: absolute;
-            right: 10px;
-            top: 12px;
-            margin: 0 !important;
-            color: #765664 !important;
-        }
-        
-    }
+  }
 
-    .tfhb-hosts-content{
-        margin-top: 32px;
+  .tfhb-header-filters {
+    width: 400px;
+    position: relative;
+    input {
+      padding: 8px 32px 8px 12px;
+      border: 1px solid #f6eef2;
+      background-color: #ffffff;
+      border-radius: 8px;
+      width: 100%;
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
     }
-
-.tfhb-hosts-list-wrap{
+    span {
+      position: absolute;
+      position: absolute;
+      right: 10px;
+      top: 12px;
+      margin: 0 !important;
+      color: #765664 !important;
+    }
+  }
+  .tfhb-hosts-content {
+    margin-top: 32px;
+  }
+  .tfhb-hosts-list-wrap {
     justify-content: normal !important;
-    .tfhb-single-hosts{
-        width: calc(33.333% - 24px);
-        .tfhb-single-hosts-wrap {
-            border-radius: 8px;
-            background-color: #fff;
-            padding: 24px;
-            border: 1px solid #F6EEF2;
-            position: relative;
-            hr{
-                margin: 16px 0;
-                border-top: 0.5px solid #F6EEF2;
-            }
-            .tfhb-hosts-info {
-                justify-content: normal !important;
-                gap: 8px !important;
-                img {
-                    border-radius: 50%;
-                  }
-                  .tfhb-info-icon-text {
-                    display: inline-block;
-                    width: 100%;
-                    justify-content: normal !important;
-                    font-size: 16px !important;
-                    gap: 16px !important;  
-                    margin: 8px 0 !important;
-                }
-              }
-              
-            .tfhb-hosts-status {
-                position: absolute;
-                right: 24px;
-                top: 24px;
-                padding: 2px 8px 2px 8px;
-                border-radius: 16px;
-                background-color: #E6FAEE;
-                color: #21A159;
-                font-weight: 600 !important;
-                font-size: 11px !important;
-            }
-            .tfhb-single-hosts-action {
-                position: absolute !important;
-                right: 24px;
-                bottom: 24px; 
-            }
-          } 
-    }
-    
-}
+    .tfhb-single-hosts {
+      width: calc(33.333% - 24px);
+      .tfhb-single-hosts-wrap {
+        border-radius: 8px;
+        background-color: #fff;
+        padding: 24px;
+        border: 1px solid #f6eef2;
+        position: relative;
+        hr {
+          margin: 16px 0;
+          border-top: 0.5px solid #f6eef2;
+        }
+        .tfhb-hosts-info {
+          justify-content: normal !important;
+          gap: 8px !important;
+          img {
+            border-radius: 50%;
+          }
+          .tfhb-info-icon-text {
+            display: inline-block;
+            width: 100%;
+            justify-content: normal !important;
+            font-size: 16px !important;
+            gap: 16px !important;
+            margin: 8px 0 !important;
+          }
+        }
 
+        .tfhb-hosts-status {
+          position: absolute;
+          right: 24px;
+          top: 24px;
+          padding: 2px 8px 2px 8px;
+          border-radius: 16px;
+          background-color: #e6faee;
+          color: #21a159;
+          font-weight: 600 !important;
+          font-size: 11px !important;
+        }
+        .tfhb-single-hosts-action {
+          position: absolute !important;
+          right: 24px;
+          bottom: 24px;
+        }
+      }
+    }
+  }
+  .tfhbb-host-profile-page {
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0 auto;
+    .tfhb-dashboard-heading {
+      margin-bottom: 24px !important;
+      height: auto !important;
+    }
+
+   
+  }
 }

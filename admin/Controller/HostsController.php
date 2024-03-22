@@ -36,6 +36,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'CreateHosts'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));  
+        register_rest_route('hydra-booking/v1', '/hosts/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'DeleteHosts'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));  
        
     }
     // permission_callback
@@ -46,10 +51,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         foreach ($users as $user) {
             $userData[$user->ID] =  $user->display_name . ' (' . $user->user_email . ')';
         } 
+
+        // Hosts Lists 
+        $host = new Host();
+        $HostsList = $host->get();
         // Return response
         $data = array(
             'status' => true, 
             'users' => $userData, 
+            'hosts' => $HostsList, 
             'message' => 'General Settings Updated Successfully', 
         );
         return rest_ensure_response($data);
@@ -106,11 +116,39 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Return response
         $data = array(
             'status' => true, 
-            'HostsList' => $HostsList,  
+            'hosts' => $HostsList,  
             'id' => $hosts_id,  
             'message' => 'General Settings Updated Successfully', 
         );
         
+        return rest_ensure_response($data);
+    }
+
+    // Delete Host
+    public function DeleteHosts(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        // Check if user is selected
+        $host_id = $request['id'];
+        $user_id = $request['user_id']; 
+        if (empty($host_id) || $host_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Delete Host
+        $host = new Host();
+        $hostDelete = $host->delete($host_id);
+        if(!$hostDelete) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while deleting host'));
+        }
+        // Update user Option
+        delete_user_meta($user_id, '_tfhb_host');
+        // Hosts Lists
+        $HostsList = $host->get();
+        // Return response
+        $data = array(
+            'status' => true, 
+            'hosts' => $HostsList,  
+            'message' => 'Host Deleted Successfully', 
+        );
         return rest_ensure_response($data);
     }
 } 
