@@ -6,10 +6,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import { toast } from "vue3-toastify";
-// Get Current Route url
-const currentRoute = useRouter().currentRoute.value.path;
-
- 
+// Get Current Route url 
 </script>
 
 <template>
@@ -22,7 +19,7 @@ const currentRoute = useRouter().currentRoute.value.path;
             required= "true"  
             :label="$tfhb_trans['First name']"  
             selected = "1"
-            placeholder="Type your First Name"
+            :placeholder="$tfhb_trans['Type your first name']" 
             width="50"
         /> 
         <HbText  
@@ -30,7 +27,7 @@ const currentRoute = useRouter().currentRoute.value.path;
             required= "true"  
             :label="$tfhb_trans['Last name']"  
             selected = "1"
-            placeholder="Type your Last Name"
+            :placeholder="$tfhb_trans['Type your last name']" 
             width="50"
         />  
         <HbText  
@@ -38,7 +35,7 @@ const currentRoute = useRouter().currentRoute.value.path;
             required= "true"  
             :label="$tfhb_trans['Email']"  
             selected = "1"
-            placeholder="Type your Email"
+             :placeholder="$tfhb_trans['Type your email']" 
             width="50"
             disabled="true"
         /> 
@@ -47,11 +44,11 @@ const currentRoute = useRouter().currentRoute.value.path;
             required= "true"  
             :label="$tfhb_trans['Mobile']"  
             selected = "1"
-            placeholder="Type your Mobile Number"
+            :placeholder="$tfhb_trans['Type your mobile no']" 
             width="50" 
         /> 
         <!--  Update Hosts Information -->
-        <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ $tfhb_trans['Update General Settings'] }}</button>
+        <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ $tfhb_trans['Save'] }}</button>
     </div>  
 </template>
 

@@ -24,9 +24,11 @@ class Host {
             $sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT, 
                 user_id INT(11) NOT NULL, 
-                host_name VARCHAR(100) NOT NULL,  
+                first_name VARCHAR(100) NOT NULL,  
+                last_name VARCHAR(100) NOT NULL,  
+                email VARCHAR(100) NOT NULL,  
                 phone_number VARCHAR(20) NOT NULL,
-                host_about text NOT NULL,
+                about text NOT NULL,
                 avatar VARCHAR(255) NOT NULL, 
                 featured_image VARCHAR(255) NOT NULL, 
                 status VARCHAR(11) NOT NULL,
@@ -132,6 +134,10 @@ class Host {
             $data = $wpdb->get_results(
                 $wpdb->prepare( $sql )
             );
+        }elseif($where != null){ 
+            $data = $wpdb->get_row(
+                $wpdb->prepare( "SELECT * FROM $table_name WHERE id = $where" )
+            ); 
         }else{
             $sql = "SELECT * FROM $table_name";
 
