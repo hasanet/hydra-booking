@@ -2,6 +2,7 @@
 import { useRouter, RouterView } from 'vue-router' 
 import Header from '@/components/Header.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
+import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 </script>
 <template>
 
@@ -9,13 +10,128 @@ import Icon from '@/components/icon/LucideIcon.vue'
 <div class="tfhb-admin-meetings">
     <Header title="Meetings" />
     <div class="tfhb-dashboard-heading tfhb-flexbox">
-        <div class="tfhb-header-filters">
-            <input type="text" placeholder="Search by meeting title" /> 
-            <span><Icon name="Search" size="20" /></span>
+        <div class="tfhb-filter-box tfhb-flexbox">
+            <div class="tfhb-filter-btn tfhb-flexbox">
+                <Icon name="Filter" size="20" /> 
+                Filter
+            </div>
+            <div class="tfhb-header-filters">
+                <input type="text" placeholder="Search by meeting title" /> 
+                <span><Icon name="Search" size="20" /></span>
+            </div>
         </div>
         <div class="thb-admin-btn right">
             <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Create New Meeting'] }}</button> 
         </div> 
+    </div>
+
+    <div class="tfhb-filter-box-content">
+        <div class="tfhb-filter-form">
+            <div class="tfhb-filter-category">
+                <div class="tfhb-host-filter-box tfhb-flexbox">
+                    All Host <Icon name="ChevronDown" size="20" />
+                </div>
+                <div class="tfhb-filter-category-box">
+                    <ul class="tfhb-flexbox">
+                        <li class="tfhb-flexbox">
+                            <label for="checkbox1">
+                                <input type="checkbox" id="checkbox1">
+                                Darrell Steward
+                            </label>
+                            <div class="tfhb-category-items">
+                                25
+                            </div>
+                        </li>
+                        <li class="tfhb-flexbox">
+                            <label for="checkbox2">
+                                <input type="checkbox" id="checkbox2">
+                                Darrell Steward
+                            </label>
+                            <div class="tfhb-category-items">
+                                25
+                            </div>
+                        </li>
+                        <li class="tfhb-flexbox">
+                            <label for="checkbox3">
+                                <input type="checkbox" id="checkbox3">
+                                Darrell Steward
+                            </label>
+                            <div class="tfhb-category-items">
+                                25
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tfhb-filter-category">
+                <div class="tfhb-host-filter-box tfhb-flexbox">
+                    All Category <Icon name="ChevronDown" size="20" />
+                </div>
+                <div class="tfhb-filter-category-box">
+                    <ul class="tfhb-flexbox">
+                        <li class="tfhb-flexbox">
+                            <label for="checkbox1">
+                                <input type="checkbox" id="checkbox1">
+                                Darrell Steward
+                            </label>
+                            <div class="tfhb-category-items">
+                                25
+                            </div>
+                        </li>
+                        <li class="tfhb-flexbox">
+                            <label for="checkbox2">
+                                <input type="checkbox" id="checkbox2">
+                                Darrell Steward
+                            </label>
+                            <div class="tfhb-category-items">
+                                25
+                            </div>
+                        </li>
+                        <li class="tfhb-flexbox">
+                            <label for="checkbox3">
+                                <input type="checkbox" id="checkbox3">
+                                Darrell Steward
+                            </label>
+                            <div class="tfhb-category-items">
+                                25
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tfhb-filter-dates tfhb-flexbox">
+                <div class="tfhb-filter-start-date">
+                    <HbDateTime 
+                        selected = "1"
+                        width="45"
+                        enableTime='true'
+                        placeholder="From"   
+                    /> 
+                    <Icon name="CalendarDays" size="20" /> 
+                </div>
+                <div class="tfhb-calender-move-icon">
+                    <Icon name="MoveRight" size="20px" /> 
+                </div>
+                <div class="tfhb-filter-end-date">
+                    <HbDateTime 
+                        selected = "1"
+                        width="45"
+                        enableTime='true'
+                        placeholder="To"   
+                    /> 
+                    <Icon name="CalendarDays" size="20" /> 
+                </div>
+            </div>
+
+        </div>
+        <div class="tfhb-reset-btn">
+            <a href="#" class="tfhb-flexbox">
+                <Icon name="RefreshCw" size="20" /> 
+                Reset Filter
+            </a>
+        </div>
     </div>
 
     <div class="tfhb-meetings-list-content">
