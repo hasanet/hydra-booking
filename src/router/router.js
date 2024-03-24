@@ -6,6 +6,7 @@ import Event from '../view/event/Event.vue';
 import EventCreate from '../view/event/create.vue';
 import Settings from '../view/settings/Settings.vue';
 import Hosts from '../view/hosts/hosts.vue';
+import Meetings from '../view/meetings/meetings.vue';
 
 // Event 
 
@@ -67,6 +68,44 @@ const routes = [
         ]
     }, 
    
+    // Meetings routes
+    {
+        path: '/meetings',
+        name: 'meetings',
+        component: Meetings,
+        redirect: { name: 'MeetingsLists' },
+        children: [ 
+            {
+                path: 'list',
+                name: 'MeetingsLists',
+                component: () => import('../view/meetings/meetings-list.vue')
+            }, 
+            // {
+            //     path: 'profile/:id',
+            //     name: 'HostsProfile',
+            //     component: () => import('../view/hosts/hosts-profile.vue'),
+            //     redirect: { name: 'HostsProfileInformation' },
+            //     children: [
+            //         {
+            //             path: 'information',
+            //             name: 'HostsProfileInformation',
+            //             component: () => import('../view/hosts/hosts-information.vue')
+            //         }, 
+            //         {
+            //             path: 'meeting',
+            //             name: 'HostsProfileMeeting',
+            //             component: () => import('../view/hosts/hosts-meeting.vue')
+            //         }, 
+            //         {
+            //             path: 'integrations',
+            //             name: 'HostsProfileIntegrations',
+            //             component: () => import('../view/hosts/hosts-integrations.vue')
+            //         }, 
+            //     ]
+            // }, 
+        ]
+    }, 
+
     // Event routes
     {
         path: '/event/create',

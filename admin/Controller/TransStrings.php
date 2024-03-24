@@ -42,6 +42,10 @@ namespace HydraBooking\Admin\Controller;
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 
             'Select Hosts' =>  __('Select Hosts', 'hydra-booking'), 
             'Create Hosts' =>  __('Create Hosts', 'hydra-booking'), 
+            'First name' =>  __('First name', 'hydra-booking'), 
+
+            // Meetings
+            'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),
         );
      } 
 
