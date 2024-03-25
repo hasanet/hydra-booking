@@ -34,8 +34,8 @@ const config = ref(props.config || {});
          <!--if has label show label with tag else remove tags  -->
          
         <label v-if="label !=''" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
-        <h4 v-if="subtitle !=''">{{ subtitle }}</h4>
-        <p v-if="description !=''">{{ description }}</p>
+        <h4 v-if="subtitle">{{ subtitle }}</h4>
+        <p v-if="description">{{ description }}</p>
         
         <flatPickr :value="props.modelValue" :config="config" />
         <!-- <input 

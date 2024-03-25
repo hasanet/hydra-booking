@@ -54,6 +54,19 @@ namespace HydraBooking\Admin\Controller;
 
             // Meetings
             'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),
+            'Meeting title' => __("Meeting title", 'hydra-booking'),
+            'Type meeting title' => __("Type meeting title", 'hydra-booking'),
+            'Description' => __("Description", 'hydra-booking'),
+            'Describe about meeting' => __("Describe about meeting", 'hydra-booking'),
+            'Duration' => __("Duration", 'hydra-booking'),
+            'Allow attendee to select duration' => __('Allow attendee to select duration', 'hydra-booking'),
+            'Select Category' => __('Select Category', 'hydra-booking'),
+            'Location' => __('Location', 'hydra-booking'),
+            'Address' => __('Address', 'hydra-booking'),
+            'Type Address' => __('Type Address', 'hydra-booking'),
+            'Save & Continue' => __('Save & Continue', 'hydra-booking'),
+            'Select Host' => __('Select Host', 'hydra-booking'),
+            'Choose Schedule' => __('Choose Schedule', 'hydra-booking'),
         );
      } 
 

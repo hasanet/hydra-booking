@@ -81,6 +81,25 @@ const routes = [
                 name: 'MeetingsLists',
                 component: () => import('../view/meetings/meetings-list.vue')
             }, 
+            {
+                path: 'create',
+                name: 'MeetingsCreate',
+                component: () => import('../view/meetings/meetings-create.vue'),
+                props: true,
+                redirect: { name: 'MeetingsCreateDetails' },
+                children: [
+                    {
+                        path: 'details',
+                        name: 'MeetingsCreateDetails',
+                        component: () => import('../view/meetings/meetings-details.vue')
+                    },
+                    {
+                        path: 'availability',
+                        name: 'MeetingsCreateAvailability',
+                        component: () => import('../view/meetings/meetings-availability.vue')
+                    }
+                ]
+            }, 
             // {
             //     path: 'profile/:id',
             //     name: 'HostsProfile',

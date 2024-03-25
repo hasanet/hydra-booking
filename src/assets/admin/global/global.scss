@@ -63,6 +63,20 @@
     ul li{
         margin: 0;
     }
+    .tfhb-mb-32{
+        margin-bottom: 32px !important;
+    }
+    .tfhb-m-0{
+        margin: 0 !important;
+    }
+
+    //Gap
+    .tfhb-gap-24{
+        gap: 24px !important;
+    }
+    .tfhb-gap-16{
+        gap: 16px !important;
+    }
 
     .tfhb-flexbox {
         display: flex;
@@ -320,4 +334,9 @@
           color: #765664 !important;
         }
       }
+}
+
+.tfhb-availability-schedule-btn {
+    border: none;
+    background-color: transparent; 
 }

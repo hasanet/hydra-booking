@@ -216,4 +216,52 @@
         }
      }   
     }
+
+    // Meeting Create
+    .tfhb-meeting-create{
+        border-radius: 16px;
+        background: #FFF;
+        padding: 32px; 
+        width: 80%;
+        margin: 0 auto;
+        .tfhb-meeting-create-notice{
+            .tfhb-meeting-heading{
+                justify-content: normal !important;
+                gap: 2px !important;
+                h3{
+                    font-size: 17px;
+                    font-style: normal;
+                    line-height: 150%; /* 25.5px */
+                    margin: 0px !important;
+                }
+            }
+            .tfhb-meeting-subtitle{
+                color: #765664;
+                font-size: 13px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 20px; /* 153.846% */
+                padding-left: 22px;
+            }
+        }
+        .meeting-create-details{
+            display: flex;
+            flex-wrap: wrap;
+            .tfhb-admin-card-box{
+                width: 100%;
+            }
+            .tfhb-schedule-heading{
+                h3{
+                    margin: 0px !important;
+                }
+            }
+            .tfhb-admin-card-box{
+                display: flex;
+                flex-wrap: wrap;
+                .tfhb-availability-schedule-single{
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
