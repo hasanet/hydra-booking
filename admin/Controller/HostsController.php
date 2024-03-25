@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'updateHostInformation'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
-        ));  
+        ));   
        
     }
     // permission_callback
@@ -213,6 +213,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
         // Update Host
         $data = [ 
+            'id' => $request['id'],
             'first_name' => $request['first_name'],
             'last_name' => $request['last_name'],
             'email' => $request['email'],
@@ -222,7 +223,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'featured_image' => $request['featured_image'],
             'status' => $request['status'], 
         ];
-        $hostUpdate = $host->update($data, $host_id);
+        $hostUpdate = $host->update($data);
         if(!$hostUpdate['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while updating host'));
         }
@@ -233,8 +234,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $HostsList = $host->get();
         // Return response
         $data = array(
-            'status' => true, 
-            'hosts' => $HostsList,  
+            'status' => true,  
             'message' => 'Host Updated Successfully', 
         );
         return rest_ensure_response($data);

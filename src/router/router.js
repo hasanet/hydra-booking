@@ -52,6 +52,7 @@ const routes = [
                     {
                         path: 'information',
                         name: 'HostsProfileInformation',
+                        props: true,
                         component: () => import('../view/hosts/hosts-information.vue')
                     }, 
                     {

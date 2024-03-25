@@ -34,3 +34,46 @@
         }
     }
 }
+
+.tfhb-single-form-field-wrap{
+    justify-content: normal !important;
+    .tfhb-field-image{
+        position: relative;
+        border-radius: 50%;
+        height: 72px;
+        width: 72px;
+        overflow: hidden;
+        &:hover{
+            .tfhb-image-btn{
+                opacity: 1;
+                visibility: visible;
+                bottom: 0;
+            }
+        }
+        input {
+            display: none;
+        }
+        img{
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+        }
+        .tfhb-image-btn {
+            background-color: #00000057;
+            border: none;
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            padding: 8px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 400;
+            opacity: 0;
+            transition: all 0.3s;
+            visibility: hidden;
+            
+        }
+
+    }
+}

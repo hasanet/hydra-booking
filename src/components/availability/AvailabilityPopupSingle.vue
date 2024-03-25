@@ -210,10 +210,10 @@ const addAvailabilityDate = (key) => {
 
                                 </div>
                                 <div v-if="key == 0" class="tfhb-availability-schedule-clone-single">
-                                    <button class="tfhb-availability-schedule-btn" @click="addAvailabilityDate(key)"><Icon name="Plus" size="20px" /> </button> 
+                                    <button class="tfhb-availability-schedule-btn" @click="addAvailabilityDate(key)"><Icon name="Plus" size="20" /> </button> 
                                 </div>
                                 <div v-else class="tfhb-availability-schedule-clone-single">
-                                    <button class="tfhb-availability-schedule-btn" @click="removeAvailabilityTDate(key)"><Icon name="X" size="20px" />   </button> 
+                                    <button class="tfhb-availability-schedule-btn" @click="removeAvailabilityTDate(key)"><Icon name="X" size="20" />   </button> 
                                 </div>
                             </div>
                         </div>
