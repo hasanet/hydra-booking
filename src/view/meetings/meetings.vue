@@ -1,8 +1,12 @@
 <script setup>
+import { ref } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
 import Header from '@/components/Header.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
+const FilterPreview = ref(false);
+const FilterHostPreview = ref(false);
+const FilterCatgoryPreview = ref(false);
 </script>
 <template>
 
@@ -11,7 +15,7 @@ import HbDateTime from '@/components/form-fields/HbDateTime.vue';
     <Header title="Meetings" />
     <div class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="tfhb-filter-box tfhb-flexbox">
-            <div class="tfhb-filter-btn tfhb-flexbox">
+            <div class="tfhb-filter-btn tfhb-flexbox" @click="FilterPreview=!FilterPreview" :class="FilterPreview ? 'active' : ''">
                 <Icon name="Filter" size="20" /> 
                 Filter
             </div>
@@ -25,13 +29,13 @@ import HbDateTime from '@/components/form-fields/HbDateTime.vue';
         </div> 
     </div>
 
-    <div class="tfhb-filter-box-content">
+    <div class="tfhb-filter-box-content" v-show="FilterPreview">
         <div class="tfhb-filter-form">
             <div class="tfhb-filter-category">
-                <div class="tfhb-host-filter-box tfhb-flexbox">
-                    All Host <Icon name="ChevronDown" size="20" />
+                <div class="tfhb-host-filter-box tfhb-flexbox" @click="FilterHostPreview=!FilterHostPreview">
+                    All Host <Icon name="ChevronUp" size="20" v-if="FilterHostPreview"/> <Icon name="ChevronDown" size="20" v-else="FilterHostPreview"/>
                 </div>
-                <div class="tfhb-filter-category-box">
+                <div class="tfhb-filter-category-box" v-show="FilterHostPreview">
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox">
                             <label for="checkbox1">
@@ -65,10 +69,10 @@ import HbDateTime from '@/components/form-fields/HbDateTime.vue';
             </div>
 
             <div class="tfhb-filter-category">
-                <div class="tfhb-host-filter-box tfhb-flexbox">
-                    All Category <Icon name="ChevronDown" size="20" />
+                <div class="tfhb-host-filter-box tfhb-flexbox" @click="FilterCatgoryPreview=!FilterCatgoryPreview">
+                    All Category <Icon name="ChevronUp" size="20" v-if="FilterCatgoryPreview"/> <Icon name="ChevronDown" size="20" v-else="FilterCatgoryPreview"/>
                 </div>
-                <div class="tfhb-filter-category-box">
+                <div class="tfhb-filter-category-box" v-show="FilterCatgoryPreview">
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox">
                             <label for="checkbox1">
