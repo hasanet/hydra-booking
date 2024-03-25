@@ -45,6 +45,7 @@ const routes = [
             {
                 path: 'profile/:id',
                 name: 'HostsProfile',
+                props: true,
                 component: () => import('../view/hosts/hosts-profile.vue'),
                 redirect: { name: 'HostsProfileInformation' },
                 children: [

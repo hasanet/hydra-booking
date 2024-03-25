@@ -9,6 +9,7 @@ namespace HydraBooking\Admin\Controller;
         return array(
             //  Common 
             'View Documentation' =>  __('View Documentation', 'hydra-booking'),
+            'Save' =>  __('Save', 'hydra-booking'),
             
             // General Settings
             'General' =>  __('General', 'hydra-booking'),
@@ -43,6 +44,13 @@ namespace HydraBooking\Admin\Controller;
             'Select Hosts' =>  __('Select Hosts', 'hydra-booking'), 
             'Create Hosts' =>  __('Create Hosts', 'hydra-booking'), 
             'First name' =>  __('First name', 'hydra-booking'), 
+            'Type your first name' =>  __('Type your first name', 'hydra-booking'), 
+            'Last name' =>  __('Last name', 'hydra-booking'), 
+            'Type your last name' =>  __('Type your last name', 'hydra-booking'), 
+            'Email' =>  __('Email', 'hydra-booking'), 
+            'Type your email' =>  __('Type your email', 'hydra-booking'), 
+            'Mobile' =>  __('Mobile', 'hydra-booking'), 
+            'Type your mobile no' =>  __('Type your mobile no', 'hydra-booking'), 
 
             // Meetings
             'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),

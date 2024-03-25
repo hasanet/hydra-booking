@@ -41,6 +41,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'DeleteHosts'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));  
+        // Get Single Host based on id
+        register_rest_route('hydra-booking/v1', '/hosts/(?P<id>[0-9]+)', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'getTheHostData'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+        register_rest_route('hydra-booking/v1', '/hosts/information/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'updateHostInformation'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));  
        
     }
     // permission_callback
@@ -76,24 +87,31 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Get user Data 
         $user = get_user_by('id', $request['id']);
+        
+        
 
         // Check if user is valid
         if (empty($user)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid User'));
         }
+
         // Check if user is already a host
         $host = new Host();
+
         $hostCheck = $host->get( array('user_id' => $request['id']) ); 
         if (!empty($hostCheck)) {
             return rest_ensure_response(array('status' => false, 'message' => 'This User is already a host'));
         }
+        
 
 
         $data = [ 
-            'user_id' => $request['id'],
-            'host_name' => $user->display_name,
+            'user_id' => $user->ID, 
+            'first_name' => get_user_meta( $user->ID, 'first_name', true ) != '' ? get_user_meta( $user->ID, 'first_name', true ) : $user->display_name,
+            'last_name' => get_user_meta( $user->ID, 'last_name', true ) != '' ? get_user_meta( $user->ID, 'last_name', true ) : '',
+            'email' => $user->user_email,
             'phone_number' => '',
-            'host_about' => '',
+            'about' => '',
             'avatar' => '',
             'featured_image' => '',
             'status' => 1, 
@@ -110,6 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Update user Option 
         update_user_meta($request['id'], '_tfhb_host', $data);
+
         // Hosts Lists 
         $HostsList = $host->get();
 
@@ -148,6 +167,75 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true, 
             'hosts' => $HostsList,  
             'message' => 'Host Deleted Successfully', 
+        );
+        return rest_ensure_response($data);
+    }
+
+    // Delete Host
+    public function getTheHostData($request){
+        $id = $request['id']; 
+        // Check if user is selected
+        if (empty($id) || $id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Get Host
+        $host = new Host();
+        $HostData = $host->get( $id );
+
+        if(empty($HostData)) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Return response
+        $data = array(
+            'status' => true, 
+            'host' => $HostData,  
+            'message' => 'Host Data',
+        );
+        return rest_ensure_response($data);
+
+    }
+
+    // Update Host Information
+    public function updateHostInformation(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        // Check if user is selected
+        $host_id = $request['id'];
+        $user_id = $request['user_id']; 
+        if (empty($host_id) || $host_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Get Host
+        $host = new Host();
+        $HostData = $host->get( $host_id );
+
+        if(empty($HostData)) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Update Host
+        $data = [ 
+            'first_name' => $request['first_name'],
+            'last_name' => $request['last_name'],
+            'email' => $request['email'],
+            'phone_number' => $request['phone_number'],
+            'about' => $request['about'],
+            'avatar' => $request['avatar'],
+            'featured_image' => $request['featured_image'],
+            'status' => $request['status'], 
+        ];
+        $hostUpdate = $host->update($data, $host_id);
+        if(!$hostUpdate['status']) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while updating host'));
+        }
+        // Update user Option
+        $data['host_id'] = $host_id;
+        update_user_meta($user_id, '_tfhb_host', $data);
+        // Hosts Lists
+        $HostsList = $host->get();
+        // Return response
+        $data = array(
+            'status' => true, 
+            'hosts' => $HostsList,  
+            'message' => 'Host Updated Successfully', 
         );
         return rest_ensure_response($data);
     }
