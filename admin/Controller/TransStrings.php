@@ -66,7 +66,10 @@ namespace HydraBooking\Admin\Controller;
             'Type Address' => __('Type Address', 'hydra-booking'),
             'Save & Continue' => __('Save & Continue', 'hydra-booking'),
             'Select Host' => __('Select Host', 'hydra-booking'),
+            'Name' => __('Name', 'hydra-booking'),
             'Choose Schedule' => __('Choose Schedule', 'hydra-booking'),
+            'Type your name' => __('Type your name', 'hydra-booking'),'Email' => __('Email', 'hydra-booking'),
+            'Type your email' => __('Type your email', 'hydra-booking'),
         );
      } 
 

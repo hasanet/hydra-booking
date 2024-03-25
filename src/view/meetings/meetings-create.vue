@@ -20,10 +20,10 @@ import { useRouter, RouterView } from 'vue-router'
                 
                 <li><router-link :to="'/meetings/create/details'" exact :class="{ 'active': $route.path === '/meetings/create/details' }"> Details</router-link></li> 
                 <li><router-link :to="'/meetings/create/availability'" :class="{ 'active': $route.path === '/meetings/create/availability' }"> Availability</router-link></li>  
-                <!-- <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> Limits</router-link></li>  
-                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> Questions</router-link></li>  
-                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> Notifications</router-link></li>  
-                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> Payment</router-link></li>   -->
+                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> Limits</router-link></li>  
+                <li><router-link :to="'/meetings/create/questions'" :class="{ 'active': $route.path === '/meetings/create/questions' }"> Questions</router-link></li>  
+                <li><router-link :to="'/meetings/create/notifications'" :class="{ 'active': $route.path === '/meetings/create/notifications' }"> Notifications</router-link></li>  
+                <li><router-link :to="'/meetings/create/questions'" :class="{ 'active': $route.path === '/meetings/create/questions' }"> Payment</router-link></li>  
 
             </ul>  
         </nav>

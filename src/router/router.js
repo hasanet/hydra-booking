@@ -97,6 +97,16 @@ const routes = [
                         path: 'availability',
                         name: 'MeetingsCreateAvailability',
                         component: () => import('../view/meetings/meetings-availability.vue')
+                    },
+                    {
+                        path: 'questions',
+                        name: 'MeetingsCreateQuestions',
+                        component: () => import('../view/meetings/meetings-questions.vue')
+                    },
+                    {
+                        path: 'notifications',
+                        name: 'MeetingsCreateNotifications',
+                        component: () => import('../view/meetings/meetings-notifications.vue')
                     }
                 ]
             }, 
