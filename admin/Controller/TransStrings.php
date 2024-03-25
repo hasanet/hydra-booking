@@ -70,6 +70,10 @@ namespace HydraBooking\Admin\Controller;
             'Choose Schedule' => __('Choose Schedule', 'hydra-booking'),
             'Type your name' => __('Type your name', 'hydra-booking'),'Email' => __('Email', 'hydra-booking'),
             'Type your email' => __('Type your email', 'hydra-booking'),
+            'Buffer time before meeting' => __('Buffer time before meeting', 'hydra-booking'),
+            'Buffer time after meeting' => __('Buffer time after meeting', 'hydra-booking'),
+            'Meeting interval' => __('Meeting interval', 'hydra-booking'),
+            'Use meeting length (default)' => __('Use meeting length (default)', 'hydra-booking')
         );
      } 
 

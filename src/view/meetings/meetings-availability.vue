@@ -1,8 +1,5 @@
 <script setup>
 import HbSelect from '@/components/form-fields/HbSelect.vue'
-import HbText from '@/components/form-fields/HbText.vue'
-import HbTextarea from '@/components/form-fields/HbTextarea.vue'
-import HBSwitch from '@/components/form-fields/HBSwitch.vue';
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 </script>

@@ -99,6 +99,11 @@ const routes = [
                         component: () => import('../view/meetings/meetings-availability.vue')
                     },
                     {
+                        path: 'limits',
+                        name: 'MeetingsCreateLimits',
+                        component: () => import('../view/meetings/meetings-limits.vue')
+                    },
+                    {
                         path: 'questions',
                         name: 'MeetingsCreateQuestions',
                         component: () => import('../view/meetings/meetings-questions.vue')
