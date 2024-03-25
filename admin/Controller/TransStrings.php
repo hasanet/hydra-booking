@@ -54,6 +54,26 @@ namespace HydraBooking\Admin\Controller;
 
             // Meetings
             'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),
+            'Meeting title' => __("Meeting title", 'hydra-booking'),
+            'Type meeting title' => __("Type meeting title", 'hydra-booking'),
+            'Description' => __("Description", 'hydra-booking'),
+            'Describe about meeting' => __("Describe about meeting", 'hydra-booking'),
+            'Duration' => __("Duration", 'hydra-booking'),
+            'Allow attendee to select duration' => __('Allow attendee to select duration', 'hydra-booking'),
+            'Select Category' => __('Select Category', 'hydra-booking'),
+            'Location' => __('Location', 'hydra-booking'),
+            'Address' => __('Address', 'hydra-booking'),
+            'Type Address' => __('Type Address', 'hydra-booking'),
+            'Save & Continue' => __('Save & Continue', 'hydra-booking'),
+            'Select Host' => __('Select Host', 'hydra-booking'),
+            'Name' => __('Name', 'hydra-booking'),
+            'Choose Schedule' => __('Choose Schedule', 'hydra-booking'),
+            'Type your name' => __('Type your name', 'hydra-booking'),'Email' => __('Email', 'hydra-booking'),
+            'Type your email' => __('Type your email', 'hydra-booking'),
+            'Buffer time before meeting' => __('Buffer time before meeting', 'hydra-booking'),
+            'Buffer time after meeting' => __('Buffer time after meeting', 'hydra-booking'),
+            'Meeting interval' => __('Meeting interval', 'hydra-booking'),
+            'Use meeting length (default)' => __('Use meeting length (default)', 'hydra-booking')
         );
      } 
 

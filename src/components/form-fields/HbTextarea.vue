@@ -12,19 +12,20 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div class="thb-single-field" :class="name">
-    <label v-if="label !=''" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
-    <h4 v-if="subtitle !=''">{{ subtitle }}</h4>
-    <p v-if="description !=''">{{ description }}</p>
-    
-    <textarea 
-      :value="props.modelValue" 
-      :required= "required"
-      :id="name" 
-      @input="emit('update:modelValue', $event.target.value)"  
-      :placeholder="placeholder"
-      >{{ props.modelValue }}</textarea>
-    
+  <div class="tfhb-single-form-field" :class="name" :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }">
+    <div class="tfhb-single-form-field-wrap tfhb-field-textarea">
+      <label v-if="label !=''" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
+      <h4 v-if="subtitle !=''">{{ subtitle }}</h4>
+      <p v-if="description !=''">{{ description }}</p>
+      
+      <textarea 
+        :value="props.modelValue" 
+        :required= "required"
+        :id="name" 
+        @input="emit('update:modelValue', $event.target.value)"  
+        :placeholder="placeholder"
+        >{{ props.modelValue }}</textarea>
+    </div>
   </div>
    
 </template>

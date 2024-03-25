@@ -15,6 +15,10 @@
             gap: 8px !important;
             cursor: pointer;
         }
+        .tfhb-filter-btn.active{
+            border: 1px solid #F6EEF2;
+            background: #FEE6F0;
+        }
     }
     .tfhb-filter-box-content{
         border-radius: 8px;
@@ -22,6 +26,8 @@
         background: #FFF;
         box-shadow: 0px 8px 30px 0px rgba(40, 16, 26, 0.10);
         width: 350px;
+        position: absolute;
+        z-index: 99;
         .tfhb-filter-form{
             .tfhb-filter-category{
                 border-bottom: 1px solid #F6EEF2; 
@@ -32,6 +38,7 @@
                     padding: 8px 8px 8px 12px;
                     height: 40px;
                     margin: 24px 24px 0 24px;
+                    cursor: pointer;
                 }
                 .tfhb-filter-category-box{
                     border-radius: 8px;
@@ -208,5 +215,91 @@
             }
         }
      }   
+    }
+
+    // Meeting Create
+    .tfhb-meeting-create{
+        border-radius: 16px;
+        background: #FFF;
+        padding: 32px; 
+        width: 80%;
+        margin: 0 auto;
+        .tfhb-meeting-create-notice{
+            .tfhb-meeting-heading{
+                justify-content: normal !important;
+                gap: 2px !important;
+                h3{
+                    font-size: 17px;
+                    font-style: normal;
+                    line-height: 150%; /* 25.5px */
+                    margin: 0px !important;
+                }
+            }
+            .tfhb-meeting-subtitle{
+                color: #765664;
+                font-size: 13px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 20px; /* 153.846% */
+                padding-left: 22px;
+            }
+        }
+        .meeting-create-details{
+            display: flex;
+            flex-wrap: wrap;
+            .tfhb-admin-card-box{
+                width: 100%;
+            }
+            .tfhb-schedule-heading{
+                h3{
+                    margin: 0px !important;
+                }
+            }
+            .tfhb-admin-card-box{
+                display: flex;
+                flex-wrap: wrap;
+                .tfhb-availability-schedule-single,
+                .tfhb-notification-single{
+                    width: 100%;
+                }
+                .tfhb-add-new-question{
+                    color: #F62881;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */
+                    cursor: pointer;
+                }
+            }
+            .tfhb-question-box{
+                width: 100%;
+                .tfhb-flexbox{
+                    flex-wrap: nowrap !important;
+                    select{
+                        padding: 0px 8px 0px 12px;
+                        min-width: calc(100% - 88px);
+                        margin-top: 4px;
+                        border-radius: 4px;
+                        height: 40px;
+                        border: 1px solid #F6EEF2;
+                        &:focus, &:active {
+                            outline: none;
+                            box-shadow: none; 
+                        }
+                    }
+                    button{
+                        border-radius: 4px;
+                        border: 1px solid #F6EEF2;
+                        background: #FFF;
+                        height: 24px;
+                        width: 24px;
+                        padding: 4px; 
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
     }
 }

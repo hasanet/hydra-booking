@@ -34,9 +34,9 @@ onBeforeMount(() => {
             </div> 
         </div>
         <div class="tfhb-content-wrap">
-            <div class="tfhb-notification-button-tabs tfhb-flexbox">
-                <button class="tfhb-btn boxed-btn flex-btn"><Icon name="UserRound" size="15px" /> To host </button>
-                <button class="tfhb-btn boxed-btn flex-btn"><Icon name="UsersRound" size="15px" /> To Attendee </button>
+            <div class="tfhb-notification-button-tabs tfhb-flexbox tfhb-mb-16">
+                <button class="tfhb-btn boxed-secondary-btn active flex-btn"><Icon name="UserRound" size="15px" /> To host </button>
+                <button class="tfhb-btn boxed-secondary-btn flex-btn"><Icon name="UsersRound" size="15px" /> To Attendee </button>
             </div>
 
             <div class="tfhb-notification-wrap tfhb-admin-card-box ">
@@ -53,7 +53,7 @@ onBeforeMount(() => {
                         <!-- Checkbox Swicher -->
                     </div>
 
-                    <button class="tfhb-btn boxed-btn flex-btn"><Icon name="PencilLine" size="15px" /> Edit </button>
+                    <button class="tfhb-btn tfhb-edit flex-btn"><Icon name="PencilLine" size="15px" /> Edit </button>
                 </div>
                 <!-- Single Integrations  -->
 
@@ -69,7 +69,7 @@ onBeforeMount(() => {
                         <!-- Checkbox Swicher -->
                     </div>
 
-                    <button class="tfhb-btn boxed-btn flex-btn"><Icon name="PencilLine" size="15px" /> Edit </button>
+                    <button class="tfhb-btn tfhb-edit flex-btn"><Icon name="PencilLine" size="15px" /> Edit </button>
                 </div>
                 <!-- Single Integrations  -->
  

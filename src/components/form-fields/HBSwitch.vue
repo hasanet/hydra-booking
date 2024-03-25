@@ -13,21 +13,23 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-    <div class="thb-single-field" :class="name">
-        <label v-if="label !=''" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
-        <h4 v-if="subtitle !=''">{{ subtitle }}</h4>
-        <p v-if="description !=''">{{ description }}</p>
-        <label class="switch">
+<div class="tfhb-single-form-field">
+    <div class="tfhb-single-form-field-wrap">
+        <div class="tfhb-swicher-wrap tfhb-flexbox">
+            <!-- Checkbox swicher -->
+            <label class="switch">
                 <input 
-                        :type= "type" 
-                        :v-model="props.modelValue" 
-                        @change="name" 
-                        :name="name"  
-                        :required="required === 'true'">
+                    :type= "type" 
+                    :v-model="props.modelValue" 
+                    @change="name" 
+                    :name="name"  
+                    :required="required === 'true'">
                 <span class="slider"></span>
-        </label>
+            </label>
+            <label class="tfhb-schedule-swicher" v-if="label !=''" :for="name"> {{ label }} <span  v-if="required == 'true'"> *</span></label>
+        </div>
     </div>
-     
+</div>
 </template>
 
 <style scoped>

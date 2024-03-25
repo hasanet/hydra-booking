@@ -63,6 +63,29 @@
     ul li{
         margin: 0;
     }
+    .tfhb-mb-32{
+        margin-bottom: 32px !important;
+    }
+    .tfhb-mb-16{
+        margin-bottom: 16px !important;
+    }
+    .tfhb-m-0{
+        margin: 0 !important;
+    }
+
+    //Gap
+    .tfhb-gap-32{
+        gap: 32px !important;
+    }
+    .tfhb-gap-24{
+        gap: 24px !important;
+    }
+    .tfhb-gap-16{
+        gap: 16px !important;
+    }
+    .tfhb-gap-8{
+        gap: 8px !important;
+    }
 
     .tfhb-flexbox {
         display: flex;
@@ -320,4 +343,12 @@
           color: #765664 !important;
         }
       }
+}
+
+.tfhb-availability-schedule-btn {
+    border: none;
+    background-color: transparent; 
+}
+.tfhb-notification-button-tabs{
+    justify-content: normal !important;
 }

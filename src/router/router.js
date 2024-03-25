@@ -82,6 +82,40 @@ const routes = [
                 name: 'MeetingsLists',
                 component: () => import('../view/meetings/meetings-list.vue')
             }, 
+            {
+                path: 'create',
+                name: 'MeetingsCreate',
+                component: () => import('../view/meetings/meetings-create.vue'),
+                props: true,
+                redirect: { name: 'MeetingsCreateDetails' },
+                children: [
+                    {
+                        path: 'details',
+                        name: 'MeetingsCreateDetails',
+                        component: () => import('../view/meetings/meetings-details.vue')
+                    },
+                    {
+                        path: 'availability',
+                        name: 'MeetingsCreateAvailability',
+                        component: () => import('../view/meetings/meetings-availability.vue')
+                    },
+                    {
+                        path: 'limits',
+                        name: 'MeetingsCreateLimits',
+                        component: () => import('../view/meetings/meetings-limits.vue')
+                    },
+                    {
+                        path: 'questions',
+                        name: 'MeetingsCreateQuestions',
+                        component: () => import('../view/meetings/meetings-questions.vue')
+                    },
+                    {
+                        path: 'notifications',
+                        name: 'MeetingsCreateNotifications',
+                        component: () => import('../view/meetings/meetings-notifications.vue')
+                    }
+                ]
+            }, 
             // {
             //     path: 'profile/:id',
             //     name: 'HostsProfile',
