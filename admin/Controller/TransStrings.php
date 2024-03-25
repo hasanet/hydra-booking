@@ -51,6 +51,9 @@ namespace HydraBooking\Admin\Controller;
             'Type your email' =>  __('Type your email', 'hydra-booking'), 
             'Mobile' =>  __('Mobile', 'hydra-booking'), 
             'Type your mobile no' =>  __('Type your mobile no', 'hydra-booking'), 
+
+            // Meetings
+            'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),
         );
      } 
 

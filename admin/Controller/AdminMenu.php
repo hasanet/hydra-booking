@@ -38,6 +38,11 @@ namespace HydraBooking\Admin\Controller;
                 'capability' => 'manage_options', 
             ), 
             array(
+                'id' => 'meetings',
+                'Title' => esc_html__('Meetings', 'thb-hydra-booking'),
+                'capability' => 'manage_options', 
+            ), 
+            array(
                 'id' => 'booking',
                 'Title' => esc_html__('Booking', 'thb-hydra-booking'),
                 'capability' => 'manage_options', 

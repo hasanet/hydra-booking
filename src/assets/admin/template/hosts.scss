@@ -8,29 +8,6 @@
     }
   }
 
-  .tfhb-header-filters {
-    width: 400px;
-    position: relative;
-    input {
-      padding: 8px 32px 8px 12px;
-      border: 1px solid #f6eef2;
-      background-color: #ffffff;
-      border-radius: 8px;
-      width: 100%;
-      &:focus {
-        outline: none;
-        box-shadow: none;
-      }
-    }
-    span {
-      position: absolute;
-      position: absolute;
-      right: 10px;
-      top: 12px;
-      margin: 0 !important;
-      color: #765664 !important;
-    }
-  }
   .tfhb-hosts-content {
     margin-top: 32px;
   }
