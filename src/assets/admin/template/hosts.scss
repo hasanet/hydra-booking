@@ -28,9 +28,16 @@
         .tfhb-hosts-info {
           justify-content: normal !important;
           gap: 8px !important;
-          img {
-            border-radius: 50%;
+          .hosts-avatar{
+            height: 32px;
+            width: 32px;
+            img {
+              height: 100%;
+              width: 100%;
+              border-radius: 50%;
+            }
           }
+          
           .tfhb-info-icon-text {
             display: inline-block;
             width: 100%;

@@ -66,11 +66,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Hosts Lists 
         $host = new Host();
         $HostsList = $host->get();
+
         // Return response
         $data = array(
             'status' => true, 
             'users' => $userData, 
-            'hosts' => $HostsList, 
+            'hosts' => $HostsList,  
             'message' => 'General Settings Updated Successfully', 
         );
         return rest_ensure_response($data);
@@ -114,6 +115,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'about' => '',
             'avatar' => '',
             'featured_image' => '',
+            'time_zone' => '',
             'status' => 1, 
         ];
 
@@ -185,10 +187,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(empty($HostData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
+        
+        $DateTimeZone = new \DateTimeZone('UTC');
+        $time_zone = $DateTimeZone->listIdentifiers();
         // Return response
         $data = array(
             'status' => true, 
             'host' => $HostData,  
+            'time_zone' => $time_zone,  
             'message' => 'Host Data',
         );
         return rest_ensure_response($data);
@@ -221,6 +227,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'about' => $request['about'],
             'avatar' => $request['avatar'],
             'featured_image' => $request['featured_image'],
+            'time_zone' => $request['time_zone'],
             'status' => $request['status'], 
         ];
         $hostUpdate = $host->update($data);

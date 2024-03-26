@@ -13,41 +13,38 @@ const props = defineProps([
 ])
 const emit = defineEmits(['update:modelValue'])
 
-const UploadImage = () => { 
-    // on clicked upload image button
-    // click to input imagte file
-    document.querySelector('input[type="file"]#'+props.name).click();
-
+const UploadImage = () => {  
+ 
+      wp.media.editor.send.attachment = (props, attachment) => { 
+        // set the image url to the input field
+        imageChange(attachment);
+      }; 
+      
+      wp.media.editor.open();
 
 }
-const imageChange = (e) => {
-    // console.log(e.target.files[0]);
-    // on change get the image and display it into image tag 
-    const file = e.target.files[0]; 
-    // selected image need to display .display
-    const img = document.querySelector('img.'+props.name+'_display');
-    img.src = URL.createObjectURL(file);
+const imageChange = (attachment) => { 
+    const image = document.querySelector('.'+props.name+'_display'); 
+    image.src = attachment.url; 
+    emit('update:modelValue', attachment.url) 
 }
 </script>
 
-<template>
+<template> 
   <div class="tfhb-single-form-field tfhb-flexbox" :class="name" 
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
     >
     <div class="tfhb-single-form-field-wrap tfhb-flexbox">
         <div class="tfhb-field-image" > 
-            <img :class="name+'_display'"  src="https://via.placeholder.com/100" alt="Hosts Avatar">
+            <img  :class="name+'_display'"  :src="props.modelValue">
             <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">Change</button> 
-            <input 
-              @change="imageChange"
+            <input  
               :value="props.modelValue" 
               :required= "required"
               :name= "name"
-              :id="name" 
-              @input="emit('update:modelValue', $event.target.value)" 
+              :id="name"  
               :type="type"
-              :placeholder="placeholder" 
-              
+              :placeholder="placeholder"  
             /> 
 
         </div>

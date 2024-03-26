@@ -19,9 +19,12 @@ const hostData = reactive({
     about: '',
     avatar: '',
     featured_image: '',
+    time_zone: '',
     status: '',
 
 });
+const time_zone = reactive({});
+
 const hostId = route.params.id;
  // Fetch generalSettings
  const fetchHost = async () => {
@@ -41,6 +44,7 @@ const hostId = route.params.id;
             hostData.featured_image = response.data.host.featured_image;
             hostData.status = response.data.host.status;
             skeleton.value = false;
+            time_zone.data = response.data.time_zone; 
         }else{ 
             // return to redirect back route 
             router.push({ name: 'HostsLists' });
@@ -74,8 +78,8 @@ onBeforeMount(() => {
 
             </ul>  
         </nav>
-        <div class="tfhb-hydra-dasboard-content"> 
-            <router-view :hostId ="hostId" :host="hostData"/>
+        <div class="tfhb-hydra-dasboard-content">      
+            <router-view :hostId ="hostId" :host="hostData" :time_zone="time_zone.data"/>
             
         </div> 
     </div> 

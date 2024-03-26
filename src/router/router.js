@@ -1,6 +1,6 @@
 
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Dashboard from '../view/Dashboard.vue';  
+import Dashboard from '../view/dashboard/Dashboard.vue';  
 import Booking from '../view/Booking.vue';
 import Event from '../view/event/Event.vue';
 import EventCreate from '../view/event/create.vue';

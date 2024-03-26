@@ -31,6 +31,7 @@ class Host {
                 about text NOT NULL,
                 avatar VARCHAR(255) NOT NULL, 
                 featured_image VARCHAR(255) NOT NULL, 
+                time_zone VARCHAR(255) NOT NULL, 
                 status VARCHAR(11) NOT NULL,
                 created_at DATE NOT NULL,
                 updated_at DATE NOT NULL, 

@@ -28,6 +28,10 @@ use HydraBooking\Admin\Controller\TransStrings;
             'admin_url' => site_url(),
             'trans' => TransStrings::getTransStrings(),
         ]);
+
+        if (function_exists('wp_enqueue_media')) {
+            wp_enqueue_media();
+         }
    
     }
 
