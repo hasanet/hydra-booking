@@ -75,7 +75,15 @@ namespace HydraBooking\Admin\Controller;
             'Buffer time before meeting' => __('Buffer time before meeting', 'hydra-booking'),
             'Buffer time after meeting' => __('Buffer time after meeting', 'hydra-booking'),
             'Meeting interval' => __('Meeting interval', 'hydra-booking'),
-            'Use meeting length (default)' => __('Use meeting length (default)', 'hydra-booking')
+            'Use meeting length (default)' => __('Use meeting length (default)', 'hydra-booking'),
+            'Booking frequency' => __('Booking frequency', 'hydra-booking'),
+            'Limit how many times this meeting can be booked' => __("Limit how many times this meeting can be booked", 'hydra-booking'),
+            'Repeats every' => __("Repeats every", 'hydra-booking'),
+            'For a maximum of' => __("For a maximum of", 'hydra-booking'),
+            'Field type' => __("Field type", 'hydra-booking'),
+            'Type level here' => __('Type level here', 'hydra-booking'),
+            'Level' => __('Level', 'hydra-booking'),
+            'Required' => __('Required', 'hydra-booking')
         );
      } 
 
