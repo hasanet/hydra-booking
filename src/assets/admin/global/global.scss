@@ -66,6 +66,9 @@
     .tfhb-mb-32{
         margin-bottom: 32px !important;
     }
+    .tfhb-mt-32{
+        margin-top: 32px !important;
+    }
     .tfhb-mb-16{
         margin-bottom: 16px !important;
     }
@@ -90,6 +93,9 @@
     }
     .tfhb-gap-8{
         gap: 8px !important;
+    }
+    .tfhb-gap-2{
+        gap: 2px !important;
     }
     .tfhb-gap-0{
         gap: 0px !important;
@@ -265,6 +271,18 @@
             outline: none;
             box-shadow: none;
             margin-left: 5px;
+        }
+        .tfhb-action-filter-button{
+            .tfhb-single-form-field{
+                width: 120px !important;
+                .tfhb-single-form-field-wrap{
+                    select{
+                        margin: 0px !important;
+                        border-radius: 8px;
+                        border: 1px solid #F6EEF2;
+                    }
+                }
+            }
         }
     }
     

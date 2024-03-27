@@ -83,7 +83,17 @@ namespace HydraBooking\Admin\Controller;
             'Field type' => __("Field type", 'hydra-booking'),
             'Type level here' => __('Type level here', 'hydra-booking'),
             'Level' => __('Level', 'hydra-booking'),
-            'Required' => __('Required', 'hydra-booking')
+            'Required' => __('Required', 'hydra-booking'),
+
+            //Booking
+            'Add New Booking' => __('Add New Booking', 'hydra-booking'),
+            'Date & Time' => __('Date & Time', 'hydra-booking'),
+            'Title' => __('Title', 'hydra-booking'),
+            'Host' => __('Host', 'hydra-booking'),
+            'Attendee' => __('Attendee', 'hydra-booking'),
+            'Duration' => __('Duration', 'hydra-booking'),
+            'Status' => __('Status', 'hydra-booking'),
+            'Action' => __('Action', 'hydra-booking'),
         );
      } 
 

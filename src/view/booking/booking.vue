@@ -1,11 +1,13 @@
-<script>
+<script setup>
+import { ref } from 'vue';
+import { useRouter, RouterView } from 'vue-router' 
 import Header from '@/components/Header.vue';
 </script>
-
 <template>
-    <!-- {{ tfhbClass }} -->
+
+<!-- {{ tfhbClass }} -->
 <div class="tfhb-admin-booking">
-    <Header title="Bookings" />
+    <Header title="Booking" />
     
     <router-view />
 </div> 
@@ -14,4 +16,3 @@ import Header from '@/components/Header.vue';
 <style scoped>
 
 </style>
-

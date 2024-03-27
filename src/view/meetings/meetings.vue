@@ -14,12 +14,5 @@ import Header from '@/components/Header.vue';
 </template>
 
 <style scoped>
-.tfhb-meetings-list-content {
-    padding: 24px;
-    margin-top: 24px;
-    border-radius: 16px;
-    border: 1px #F6EEF2;
-    background: #FFF;
-    margin-right: 16px;
-}
+
 </style>

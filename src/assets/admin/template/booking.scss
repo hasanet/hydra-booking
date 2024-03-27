@@ -1,0 +1,182 @@
+.tfhb-booking-details{
+    margin-right: 15px;
+    table{
+        width: 100%;
+        border-radius: 8px;
+        background: #F6EEF2;
+        thead{
+            border-bottom: 1px solid #F6EEF2;
+            th{
+                padding: 12px 16px;
+                color: #765664;
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; /* 160% */
+                text-align: left;
+            }
+        }
+        tbody{
+            tr{
+                background-color: #fff;
+                td{
+                    padding: 16px;
+                    color: #765664;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px;
+                    border: 0px solid;
+                    border-bottom: 1px solid #F6EEF2;
+                    input[type="checkbox"]{
+                        background-color: #F6EEF2;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 5px;
+                        border: 0px solid;
+                        margin: 0px;
+                        position: relative;
+                        box-shadow: none;
+                        &:focus{
+                            outline: none;
+                            box-shadow: none;
+                        }
+                        &::before{
+                            background-color: #F62881;
+                            height: 100%;
+                            width: 100%;
+                            left: 3px;
+                            top: 2px;
+                            position: absolute;
+                            border-radius: 5px;
+                            color: #fff;
+                        }
+                    }
+                    span{
+                        font-size: 13px; 
+                        display: block;
+                        margin: 0 !important;
+                    }
+                    .tfhb-details-action{
+                        a{
+                            color: #765664;
+                            text-decoration: none;
+                        }
+                    }
+                    .tfhb-details-status{
+                        .status{
+                            border-radius: 16px;
+                            background: #FFF8E5;
+                            padding: 2px 8px;
+                            color: #D69D00;
+                            text-align: center;
+                            font-size: 11px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 16px; /* 145.455% */
+                            text-transform: capitalize;
+                            &.approved{
+                                background: #E6FAEE; 
+                                color: #21A159; 
+                            }
+                            &.canceled{
+                                background: #FEECEE; 
+                                color: #E5102E; 
+                            }
+                        }
+                        .tfhb-status-bar{
+                            cursor: pointer;
+                            position: relative;
+                            .tfhb-status-popup{
+                                width: 140px; 
+                                border-radius: 6px;
+                                background: #F6EEF2;
+                                padding: 2px;
+                                position: absolute;
+                                right: 0;
+                                visibility: hidden;
+                                opacity: 0;
+                                transition: all 0.3s ease-in-out;
+                                z-index: 99;
+                                ul{
+                                    
+                                    li{
+                                        padding: 8px 12px; 
+                                        border-radius: 4px; 
+                                        background: #E6FAEE; 
+                                        color: #21A159;
+                                        font-size: 15px;
+                                        font-style: normal;
+                                        font-weight: 400;
+                                        line-height: 24px; /* 160% */
+                                        width: 100%;
+                                        &.pending{
+                                            background-color: #FFF8E5;
+                                            color: #D69D00;
+                                        }
+                                        &.schedule{
+                                            background-color: #EBEFFF;
+                                            color: #0037EB;
+                                        }
+                                        &.canceled{
+                                            background-color: #FEECEE;
+                                            color: #E5102E;
+                                        }
+                                    }
+                                }
+                            }
+                            &:hover .tfhb-status-popup,
+                            &:focus .tfhb-status-popup {
+                                visibility: visible;
+                                opacity: 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .tfhb-booking-details-pagination{
+        .tfhb-prev-next-button{
+            border-radius: 8px;
+            border: 1px solid #FFF;
+            background: #FFF;
+            padding: 8px 14px;
+            a{
+                color: #765664;
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; /* 160% */
+                text-decoration: none;
+            }
+        }
+        .tfhb-pagination{
+            ul{
+                li{
+                    height: 40px;
+                    width: 40px;
+                    padding: 12px;
+                    color: #765664;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */
+                    box-sizing: border-box;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    a{
+                        text-decoration: none;
+                        color: #765664;
+                    }
+                    &.active{
+                        background-color: #FFF;
+                        color: #3F2731;
+                    }
+                }
+            }
+        }
+    }
+}

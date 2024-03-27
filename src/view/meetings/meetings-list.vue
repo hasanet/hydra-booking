@@ -23,7 +23,7 @@ const FilterCatgoryPreview = ref(false);
         </div> 
     </div>
 
-    <div class="tfhb-filter-box-content" v-show="FilterPreview">
+    <div class="tfhb-filter-box-content tfhb-mt-32" v-show="FilterPreview">
         <div class="tfhb-filter-form">
             <div class="tfhb-filter-category">
                 <div class="tfhb-host-filter-box tfhb-flexbox" @click="FilterHostPreview=!FilterHostPreview">
@@ -633,5 +633,12 @@ const FilterCatgoryPreview = ref(false);
 </template>
 
 <style scoped>
-
+.tfhb-meetings-list-content {
+    padding: 24px;
+    margin-top: 24px;
+    border-radius: 16px;
+    border: 1px #F6EEF2;
+    background: #FFF;
+    margin-right: 16px;
+}
 </style>

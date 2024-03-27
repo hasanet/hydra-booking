@@ -1,7 +1,7 @@
 
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Dashboard from '../view/dashboard/Dashboard.vue';  
-import Booking from '../view/Booking.vue';
+import Booking from '../view/booking/booking.vue';
 import Event from '../view/event/Event.vue';
 import EventCreate from '../view/event/create.vue';
 import Settings from '../view/settings/Settings.vue';
@@ -22,7 +22,16 @@ const routes = [
     },  
     {
         path: '/booking',
-        component: Booking
+        name: 'booking',
+        component: Booking,
+        redirect: { name: 'BookingLists' },
+        children: [ 
+            {
+                path: 'list',
+                name: 'BookingLists',
+                component: () => import('../view/booking/booking-list.vue')
+            }, 
+        ]
     },
     // Event routes
     {

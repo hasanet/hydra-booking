@@ -4,6 +4,8 @@
     line-height: 24px;
     color: #F62881;
     transition: 0.4s;
+    height: 40px;
+    box-sizing: border-box;
     &.boxed-btn {
         padding: 8px 24px; 
         border-radius: 8px; 
