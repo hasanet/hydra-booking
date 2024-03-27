@@ -39,7 +39,7 @@ const UpdateHostsInformation = async () => {
 
 <template>
     <div class="tfhb-admin-card-box">  
-        <!-- Avater -->
+        <!-- Avater --> 
         <!-- <HbImageBox  
             v-model="host.avatar"  
             required= "true"  

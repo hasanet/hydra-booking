@@ -1,9 +1,7 @@
 
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Dashboard from '../view/dashboard/Dashboard.vue';  
-import Booking from '../view/booking/booking.vue';
-import Event from '../view/event/Event.vue';
-import EventCreate from '../view/event/create.vue';
+import Booking from '../view/booking/booking.vue'; 
 import Settings from '../view/settings/Settings.vue';
 import Hosts from '../view/hosts/hosts.vue';
 import Meetings from '../view/meetings/meetings.vue';
@@ -30,13 +28,7 @@ const routes = [
                 component: () => import('../view/booking/booking-list.vue')
             }, 
         ]
-    },
-    // Event routes
-    {
-        path: '/event',
-        name : 'events',
-        component: Event,  
-    },
+    }, 
     // Hosts routes
     {
         path: '/hosts',
@@ -148,57 +140,8 @@ const routes = [
             // }, 
         ]
     }, 
-
-    // Event routes
-    {
-        path: '/event/create',
-        name: 'EventCreate',
-        component: EventCreate,
-        redirect: { name: 'EventDetails' },
-        children: [ 
-            {
-                path: 'details',
-                name: 'EventDetails',
-                component: () => import('../components/event/EventDetails.vue')
-            },
-            {
-                path: 'availability',
-                name: 'EventAvailability',
-                component: () => import('../components/event/EventAvailability.vue')
-            },
-            {
-                path: 'questions',
-                name: 'EventQuestions',
-                component: () => import('../components/event/EventQuestions.vue')
-            },
-            {
-                path: 'notifications',
-                name: 'EventNotifications',
-                component: () => import('../components/event/EventNotifications.vue')
-            },
-            {
-                path: 'payment',
-                name: 'EventPayment',
-                component: () => import('../components/event/EventPayment.vue')
-            },
-            // {
-            //     path: 'ticket',
-            //     name: 'EventTicket',
-            //     component: () => import('../components/event/EventTicket.vue')
-            // },
-            // {
-            //     path: 'confirmation',
-            //     name: 'EventConfirmation',
-            //     component: () => import('../components/event/EventConfirmation.vue')
-            // }
-        ]
-    }, 
-   
-    // {
-    //     path: '/event/details',
-    //     name: 'EventDetails',
-    //     component: EventDetails
-    // },
+ 
+    
     // Settings routes
     {
         path: '/settings',

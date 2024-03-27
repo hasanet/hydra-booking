@@ -31,12 +31,7 @@ namespace HydraBooking\Admin\Controller;
             array($this, "hydra_booking_page")
         );
         // Create a array for sub menu 
-        $sub_menu = array( 
-            array(
-                'id' => 'event',
-                'Title' => esc_html__('Events', 'thb-hydra-booking'),
-                'capability' => 'manage_options', 
-            ), 
+        $sub_menu = array(  
             array(
                 'id' => 'meetings',
                 'Title' => esc_html__('Meetings', 'thb-hydra-booking'),

@@ -2,7 +2,7 @@
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
-import HBSwitch from '@/components/form-fields/HBSwitch.vue';
+import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 </script>
 
@@ -30,7 +30,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
                 placeholder="Select Time Format"  
                 :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
             />
-            <HBSwitch 
+            <HbSwitch 
                 type="checkbox" 
                 required= "true" 
                 :label="$tfhb_trans['Allow attendee to select duration']" 

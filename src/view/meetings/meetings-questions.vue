@@ -4,7 +4,7 @@ import HbQuestion from '@/components/meetings/HbQuestion.vue'
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbSelect from '@/components/form-fields/HbSelect.vue'
-import HbSwitch from '@/components/form-fields/HBSwitch.vue'
+import HbSwitch from '@/components/form-fields/HbSwitch.vue'
 
 const QuestionPopup = ref(false);
 function QuestionPopupOpen(){

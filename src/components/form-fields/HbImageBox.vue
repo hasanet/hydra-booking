@@ -24,8 +24,10 @@ const UploadImage = () => {
 
 }
 const imageChange = (attachment) => { 
+  console.log(attachment);
     const image = document.querySelector('.'+props.name+'_display'); 
     image.src = attachment.url; 
+    // props.modelValue = attachment.url;
     emit('update:modelValue', attachment.url) 
 }
 </script>
