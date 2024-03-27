@@ -1,5 +1,4 @@
 <script setup>
-import HbQuestion from '@/components/meetings/HbQuestion.vue'
 import Icon from '@/components/icon/LucideIcon.vue'
 </script>
 

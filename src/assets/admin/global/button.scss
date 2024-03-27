@@ -1,16 +1,15 @@
 .tfhb-btn {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 400;
-    line-height: 20px;
+    line-height: 24px;
     color: #F62881;
     transition: 0.4s;
     &.boxed-btn {
         padding: 8px 24px; 
         border-radius: 8px; 
-        // border: 1px solid #F62881;
         background-color: #F62881;
         color: #FFFFFF;
-        border: none;
+        border: 1px solid #F62881;
         cursor: pointer;
         &:hover, &:focus, &:active {
             background-color: #C40859;
@@ -25,12 +24,20 @@
         border: 0px solid;
         cursor: pointer;
         color: #765664;
-        font-size: 15px;
         &:hover, &:focus, &.active {
             background: #FEE6F0;
             color: #F62881;
             box-shadow: 0px 1px 3px 0px rgba(40, 16, 26, 0.10), 0px 1px 2px 0px rgba(40, 16, 26, 0.06);
         }
+    }
+    &.secondary-btn{
+        padding: 8px 24px; 
+        border-radius: 8px; 
+        border: 1px solid #F6EEF2;
+        background: #FFF;
+        color: #765664;
+        font-style: normal;
+        font-weight: 400;
     }
     &.flex-btn{
         display: flex;
