@@ -3,6 +3,7 @@
 import {ref} from 'vue';
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
+import Icon from '@/components/icon/LucideIcon.vue'
 
 const props = defineProps([
     'name',
@@ -18,6 +19,7 @@ const props = defineProps([
     'subtitle',
     'placeholder',
     'description', 
+    'icon', 
 ])
 const emit = defineEmits(['update:modelValue'])
 
@@ -33,21 +35,13 @@ const config = ref(props.config || {});
     <div class="tfhb-single-form-field-wrap tfhb-field-date">
          <!--if has label show label with tag else remove tags  -->
          
-        <label v-if="label !=''" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
+        <label v-if="label !=''" :for="name">{{ label }} <span  v-if="required == 'true'"> *  </span> </label>
         <h4 v-if="subtitle">{{ subtitle }}</h4>
         <p v-if="description">{{ description }}</p>
         
         <flatPickr :value="props.modelValue" :config="config" />
-        <!-- <input 
-          :value="props.modelValue" 
-          :required= "required"
-          :name= "name"
-          :id="name" 
-          @input="emit('update:modelValue', $event.target.value)" 
-          :type="type"
-          :placeholder="placeholder"
-          
-        />  -->
+    
+        <span class="tfhb-flat-icon"><Icon v-if="icon" :name="icon" size="20" /> </span>
              
     </div> 
   </div>

@@ -72,6 +72,7 @@
     .tfhb-mb-16{
         margin-bottom: 16px !important;
     }
+    
     .tfhb-m-0{
         margin: 0 !important;
     }
@@ -157,7 +158,29 @@
         position: relative;
         cursor: pointer;
         
-
+        &.active{
+            .tfhb-dropdown-wrap{
+                visibility: visible !important;
+                opacity: 1 !important;
+            
+            }
+        }
+        &.tfhb-mega-dropdown{
+            .tfhb-dropdown-wrap{ 
+                width: 400px !important;
+            }
+            .tfhb-mega-dropdown-heading {
+                padding: 8px 24px 8px 24px;
+                background-color: #fff;
+                border-radius: 8px;
+                border: 1px solid #F6EEF2;
+                font-size: 15px !important;
+              }
+              .tfhb-calender-move-icon {
+                margin-top: 20px;
+            }
+        }
+       
         .tfhb-dropdown-wrap {
             position: absolute;
             top: 100%;
@@ -173,6 +196,12 @@
             visibility: hidden;
             opacity: 0;
             transition: all 0.3s ease-in-out;
+            z-index: 99;
+            
+            &.active{
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
             .tfhb-dropdown-single {
                 display: block; 
                 padding: 8px 12px 8px 12px;
@@ -182,9 +211,18 @@
                 &:hover {
                     background-color: #FAF5F7;
                 }
+                .tfhb-filter-dates{
+
+                    justify-content: normal !important;
+                    .tfhb-filter-start-date, .tfhb-filter-end-date{
+                        width: 45% !important;
+                    }
+                }
             }
 
         }
+
+        
 
         &:hover .tfhb-dropdown-wrap {
             visibility: visible;
@@ -260,7 +298,7 @@
     }
 
     .tfhb-dashboard-heading {  
-        height: 60px;  
+        // height: 60px;  
         border-radius: 4px; 
         margin-right: 16px;
         h2 {
@@ -374,6 +412,45 @@
           color: #765664 !important;
         }
       }
+
+    
+ 
+    .tfhb-header-notification {
+        .tfhb-dropdown-wrap {
+            padding: 24px !important;
+            border-radius: 8px !important;
+            background-color: #fff !important;
+            .tfhb-notification-wrap {
+                margin-top: 16px;
+
+                .tfhb-single-notification {
+                    align-items: normal !important;
+                    padding: 16px;
+                    border: 1px solid #F6EEF2;
+                    margin-bottom: 16px;
+                    border-radius: 12px;
+                    transition: 0.5s;
+                    &:hover {
+                        background: #FAF5F7;
+                        border-color: #F6EEF2;
+                    }
+                    .tfhb-single-notification-img {
+                        width: 32px;
+                        height: 32px;
+                        img {
+                            border-radius: 50%;
+                        }
+                    }
+
+                    .tfhb-single-notification-content {
+                        width: calc(100% - 75px);
+                    }
+                }
+            }
+        }
+        
+    }
+     
 }
 
 .tfhb-availability-schedule-btn {

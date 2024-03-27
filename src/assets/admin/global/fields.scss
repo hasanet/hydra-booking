@@ -35,6 +35,17 @@
                 }
             }
         }
+        &.tfhb-field-date{
+            position: relative !important;
+            .tfhb-flat-icon {
+                position: absolute;
+                right: 8px;
+                top: 5px;
+            }
+            .flatpickr-input{
+                max-width: 100%;
+            }
+        }
         &.tfhb-field-textarea{
             textarea{
                 height: 96px;
