@@ -14,6 +14,7 @@
             justify-content: normal !important;
             gap: 8px !important;
             cursor: pointer;
+            height: 40px;
         }
         .tfhb-filter-btn.active{
             border: 1px solid #F6EEF2;
@@ -135,7 +136,7 @@
      .tfhb-meetings-list-wrap{
         justify-content: normal;
         .tfhb-single-meeting{
-            width: calc(33.333% - 24px);
+            width: calc(33.333% - 16px);
             border-radius: 8px;
             border: 1px solid #F6EEF2;
             background: #FFF;
