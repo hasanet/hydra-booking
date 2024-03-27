@@ -1,58 +1,107 @@
 .tfhb-admin-dashboard {
-    .tfhb-dashboard-chartbox{
-        margin-right: 16px;
-        .tfhb-single-chartbox {
-            // padding: 24px;
-            width: calc(25% - 24px);
-           
-              .tfhb-single-chartbox-wrap{
-                background: linear-gradient(
-                    100.23deg,
-                    #fcf4df -15.15%,
-                    #fc9cc6 50.47%,
-                    #d66fee 117.42%
-                  ),
-                  linear-gradient(
-                    180deg,
-                    rgba(252, 244, 223, 0.4) 0%,
-                    rgba(252, 156, 198, 0.4) 49.5%,
-                    rgba(214, 111, 238, 0.4) 100%
-                  );
-                padding: 24px;
-                border-radius: 16px; 
-                .cartbox-title{ 
-                    display: inline-block; 
-                    width: 100%;
-                    font-size: 15px;
-                    font-weight: 400;
-                    line-height: 24px;  
-                }
-                .cartbox-value{ 
-                    font-size: 36px !important;
-                    font-weight: 600 !important;
-                    line-height: 43.2px !important; 
-                    color: #765664;
-                    margin: 16px 0;
-                    display: inline-block;
-        
-                }
-                .cartbox-meta{
-                    justify-content: normal !important; 
-                    .cartbox-badge {
-                        padding: 2px 8px 2px 6px; 
-                        background-color: #FFFFFF80;
-                        border-radius: 16px;
-                        span{
-                            margin: 0;
-                            
-                            font-weight: 600 !important;
-                            color: #21A159 !important;
-                        }
-                      }
-                }
-                
-              }
+  
+  .tfhb-dashboard-wrap {
+    margin-right: 16px;
+    margin-top: 16px;
+
+    
+    .tfhb-dashboard-chartbox { 
+      .tfhb-single-chartbox {
+        // padding: 24px;
+        width: calc(25% - 18px);
+
+        .tfhb-single-chartbox-wrap {
+          background: linear-gradient(100.23deg,
+              #fcf4df -15.15%,
+              #fc9cc6 50.47%,
+              #d66fee 117.42%),
+            linear-gradient(180deg,
+              rgba(252, 244, 223, 0.4) 0%,
+              rgba(252, 156, 198, 0.4) 49.5%,
+              rgba(214, 111, 238, 0.4) 100%);
+          padding: 24px;
+          border-radius: 16px;
+
+          .cartbox-title {
+            display: inline-block;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 24px;
           }
+
+          .cartbox-value {
+            font-size: 36px !important;
+            font-weight: 600 !important;
+            line-height: 43.2px !important;
+            color: #765664;
+            margin: 16px 0;
+            display: inline-block;
+
+          }
+
+          .cartbox-meta {
+            justify-content: normal !important;
+
+            .cartbox-badge {
+              padding: 2px 8px 2px 6px;
+              background-color: #FFFFFF80;
+              border-radius: 16px;
+
+              &.badge-down {
+                color: #FF0000;
+              }
+
+              span {
+                margin: 0;
+
+                font-weight: 600 !important;
+                color: #21A159 !important;
+              }
+            }
+          }
+
+        }
+      }
     }
+
+    .tfhb-dashboard-notice-box {
+      margin-top: 24px;
+      align-items: normal !important;
+      .tfhb-dashboard-notice-box-wrap {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        padding: 24px;
+        margin-top: 8px;
+
+        .tfhb-dashboard-notice-single-box {
+          &.tfhb-flexbox{
+            >span{
+              width: 60px;
+            }
+            >.tfhb-admin-card-box{
+              width:  calc(100% - 120px);
+            }
+          }
+          .tfhb-admin-card-box {
+            margin-bottom: 8px !important;
+
+            // last child
+            &:last-child {
+              // margin-bottom: 0 !important;
+            }
+          }
+        }
+      }
+    }
+    .tfhb-dashboard-notice-box{
+      .tfhb-dashboard-notice-box-inner{
+        width: calc(50% - 12px);
+
+      }
+    }
+
+  }
+
 
 }

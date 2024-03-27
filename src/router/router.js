@@ -11,8 +11,6 @@ import Meetings from '../view/meetings/meetings.vue';
 // Event 
 
 
- 
-
 const routes = [
     // Define your routes here
     // For example:
