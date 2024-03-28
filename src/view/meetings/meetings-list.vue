@@ -1,10 +1,56 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import { useRouter, RouterView } from 'vue-router' 
+import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
+import CreateMeetingPopup from '@/components/meetings/CreateMeetingPopup.vue';
+import { toast } from "vue3-toastify"; 
+
+const router = useRouter();
+
 const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false);
+const isModalOpened = ref(false);
+
+const openModal = () => {
+  isModalOpened.value = true;
+};
+const closeModal = () => { 
+  isModalOpened.value = false;
+};
+
+// Meeting_data
+const meeting = reactive({});
+const CreateMeeting = async (type) => {    
+   meeting.data = type
+   try { 
+        // axisos sent dataHeader Nonce Data
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/create', meeting, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+        console.log(response.data);
+        if (response.data.status) {  
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });  
+            closeModal(); 
+            router.push({ name: 'MeetingsCreate', params: { id: response.data.id} });
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }   
+}
+
 </script>
 <template>
     <div class="tfhb-dashboard-heading tfhb-flexbox">
@@ -19,56 +65,11 @@ const FilterCatgoryPreview = ref(false);
             </div>
         </div>
         <div class="thb-admin-btn right">
-            <router-link to="/meetings/create" class="tfhb-btn boxed-btn flex-btn"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Create New Meeting'] }}</router-link>
+            <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Create New Meeting'] }}</button>
         </div> 
     </div>
 
-    <div class="tfhb-question-popup tfhb-p-24">
-        <div class="tfhb-flexbox tfhb-gap-16">
-            <div class="question-header tfhb-flexbox tfhb-full-width">
-                <h3>Create New Meeting Type</h3>
-                <div class="tfhb-question-times" @click="QuestionPopupClose()">
-                    <Icon name="X" :width="20"/>
-                </div>
-            </div>
-            <div class="tfhb-meeting-person-type">
-                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24">
-                    <div class="tfhb-meeting-type-content">
-                        <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-8">
-                            <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-4">
-                                <Icon name="UserRound" size="20" /> 
-                                <Icon name="ArrowRight" size="20" /> 
-                                <Icon name="UserRound" size="20" /> 
-                            </div>
-                            <h3>One to One</h3>
-                        </div>
-                        <p>One host with one invitee. Good for: 1:1 interview, coffee chats</p>
-                    </div>
-                    <div class="tfhb-meeting-type-icon">
-                        <Icon name="ArrowRight" width="20"/>
-                    </div>
-                </div>
-            </div>
-            <div class="tfhb-meeting-person-type">
-                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24">
-                    <div class="tfhb-meeting-type-content">
-                        <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-8">
-                            <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-4">
-                                <Icon name="UserRound" size="20" /> 
-                                <Icon name="ArrowRight" size="20" /> 
-                                <Icon name="UsersRound" size="20" /> 
-                            </div>
-                            <h3>One to Group</h3>
-                        </div>
-                        <p>One host with group of invitee. Good for: webinars, online clasess</p>
-                    </div>
-                    <div class="tfhb-meeting-type-icon">
-                        <Icon name="ArrowRight" width="20"/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <CreateMeetingPopup v-if="isModalOpened" @modal-close="closeModal" @meetings-create="CreateMeeting"  />
 
     <div class="tfhb-filter-box-content tfhb-mt-32" v-show="FilterPreview">
         <div class="tfhb-filter-form">

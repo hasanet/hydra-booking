@@ -82,7 +82,7 @@ const routes = [
                 component: () => import('../view/meetings/meetings-list.vue')
             }, 
             {
-                path: 'create',
+                path: 'single/:id',
                 name: 'MeetingsCreate',
                 component: () => import('../view/meetings/meetings-create.vue'),
                 props: true,
@@ -115,29 +115,6 @@ const routes = [
                     }
                 ]
             }, 
-            // {
-            //     path: 'profile/:id',
-            //     name: 'HostsProfile',
-            //     component: () => import('../view/hosts/hosts-profile.vue'),
-            //     redirect: { name: 'HostsProfileInformation' },
-            //     children: [
-            //         {
-            //             path: 'information',
-            //             name: 'HostsProfileInformation',
-            //             component: () => import('../view/hosts/hosts-information.vue')
-            //         }, 
-            //         {
-            //             path: 'meeting',
-            //             name: 'HostsProfileMeeting',
-            //             component: () => import('../view/hosts/hosts-meeting.vue')
-            //         }, 
-            //         {
-            //             path: 'integrations',
-            //             name: 'HostsProfileIntegrations',
-            //             component: () => import('../view/hosts/hosts-integrations.vue')
-            //         }, 
-            //     ]
-            // }, 
         ]
     }, 
  

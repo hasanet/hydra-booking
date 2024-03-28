@@ -81,7 +81,7 @@ class Meeting {
     }
 
      /**
-     * Create the database availability. 
+     * Create the database meeting. 
      */
     public function add($request) {
         
@@ -89,7 +89,7 @@ class Meeting {
 
         $table_name = $wpdb->prefix . $this->table;
 
-        // insert availability
+        // insert meeting
         $result =  $wpdb->insert(
             $table_name,
             $request
@@ -107,7 +107,7 @@ class Meeting {
 
     }
      /**
-     * Update the database availability. 
+     * Update the database meeting. 
      */ 
 
     public function update($request) {
@@ -118,7 +118,7 @@ class Meeting {
 
         $id = $request['id'];
         unset($request['id']);
-        // Update availability
+        // Update meeting
         $result =  $wpdb->update(
             $table_name,
             $request,
@@ -137,7 +137,7 @@ class Meeting {
 
     }
      /**
-     * Get all  availability Data. 
+     * Get all  meeting Data. 
      */
     public function get($id = null) {
         
