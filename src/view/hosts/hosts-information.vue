@@ -33,24 +33,37 @@ const UpdateHostsInformation = async () => {
         console.log(error);
     } 
 }
- 
+const imageChange = (attachment) => { 
+  console.log(attachment);
+    const image = document.querySelector('.'+props.name+'_display'); 
+    image.src = attachment.url; 
+    // props.modelValue = attachment.url; 
+}
+const UploadImage = () => {   
+    wp.media.editor.send.attachment = (props, attachment) => { 
+    // set the image url to the input field
+    imageChange(attachment);
+    };  
+    wp.media.editor.open(); 
+}
 
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box">  
-        <!-- Avater --> 
-        <!-- <HbImageBox  
-            v-model="host.avatar"  
-            required= "true"  
-            name= "host_avatar"  
-            type= "file"  
-            :label="$tfhb_trans['Profile image']"  
-            selected = "1" 
-            width="50"
-            :description = "$tfhb_trans['Recommended Image Size: 400x400px']"
-        />   -->
+    <div class="tfhb-admin-card-box">   
 
+        <div class="tfhb-single-form-field-wrap tfhb-flexbox">
+            <div class="tfhb-field-image" > 
+                <img  :class="name+'_display'"  :src="host.avatar">
+                <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">Change</button> 
+                <input  type="text"  :v-model="host.avatar"   /> 
+
+            </div>
+            <div class="tfhb-image-box-content">  
+            <h4 v-if="label !=''" :for="name">{{ $tfhb_trans['Profile image'] }} <span  v-if="required == 'true'"> *</span> </h4>
+            <p v-if="description !=''">{{ $tfhb_trans['Recommended Image Size: 400x400px'] }}</p>
+            </div>
+        </div> 
     </div>
     <div class="tfhb-admin-card-box tfhb-flexbox">  
         <HbText  

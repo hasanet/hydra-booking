@@ -30,6 +30,7 @@ class THB_INIT{
         }
 
         add_action('init', array($this, 'init'));
+ 
 
     }
 
@@ -46,10 +47,12 @@ class THB_INIT{
             // Load Frontend Class
             // new HydraBooking\Frontend\Frontend(); 
         }
+
         
     } 
 
 
+    
 }
 
 new THB_INIT();

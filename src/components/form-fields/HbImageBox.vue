@@ -36,6 +36,7 @@ const imageChange = (attachment) => {
   <div class="tfhb-single-form-field tfhb-flexbox" :class="name" 
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
     >
+
     <div class="tfhb-single-form-field-wrap tfhb-flexbox">
         <div class="tfhb-field-image" > 
             <img  :class="name+'_display'"  :src="props.modelValue">
@@ -55,6 +56,7 @@ const imageChange = (attachment) => {
           <p v-if="description !=''">{{ description }}</p>
         </div>
     </div> 
+    
   </div>
    
 </template>

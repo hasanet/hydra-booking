@@ -2,6 +2,7 @@
 import { ref, reactive, onBeforeMount, } from 'vue';  
 import Icon from '@/components/icon/LucideIcon.vue' 
 import HbSelect from '../form-fields/HbSelect.vue'; 
+import HbText from '../form-fields/HbText.vue';
   
 const props = defineProps({
   isOpen: Boolean, 
@@ -31,17 +32,51 @@ const CreateHosts = () => {
             </div>
             <div class="tfhb-content-wrap tfhb-flexbox">  
 
-                <!-- Time Zone -->
-                <HbSelect 
-                        
+                <!-- Select User -->
+                <HbSelect    
                     v-model="host.id"  
                     required= "true"  
-                    :label="$tfhb_trans['Select Hosts']"  
+                    :label="$tfhb_trans['Select User']"  
                     selected = "1"
-                    :placeholder="$tfhb_trans['Select Hosts']" 
+                    :placeholder="$tfhb_trans['Select User']" 
                     :option = "props.usersData" 
                 /> 
-                <!-- Time Zone --> 
+                <!-- Select User --> 
+                <!-- UsernName -->
+                <HbText  
+                    v-if="host.id == 0"
+                    v-model="host.username"  
+                    required= "true"  
+                    :label="$tfhb_trans['Username']"  
+                    selected = "1"
+                    :placeholder="$tfhb_trans['Type Username']"  
+                /> 
+                <!-- UsernName -->
+                <!-- Email -->
+                <HbText  
+                v-if="host.id == 0"
+                    v-model="host.email"  
+                    required= "true"  
+                    type= "email"  
+                    :label="$tfhb_trans['Email']"  
+                    selected = "1"
+                    :placeholder="$tfhb_trans['Type User Email']"  
+                /> 
+                <!-- Email -->
+
+                <!-- Password -->
+                
+                <HbText  
+                    v-if="host.id == 0"
+                    v-model="host.password"  
+                    required= "true"  
+                    type= "password"  
+                    :label="$tfhb_trans['Password']"  
+                    selected = "1"
+                    :placeholder="$tfhb_trans['Type User Password']"  
+                /> 
+                <!-- Password -->
+                
 
                   <!-- Create Or Update Availability -->
                  <button class="tfhb-btn boxed-btn" @click="CreateHosts">{{ $tfhb_trans['Create Hosts'] }}</button>

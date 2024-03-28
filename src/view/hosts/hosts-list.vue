@@ -21,7 +21,7 @@ const fetchHosts = async () => {
 } 
 // Delete Hosts 
 const deleteHost = async ($id, $user_id) => { 
-    const deleteHost = {
+    let deleteHost = {
         id: $id,
         user_id: $user_id
     }

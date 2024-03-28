@@ -5,11 +5,12 @@ import { useRouter, RouterView,} from 'vue-router'
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import { toast } from "vue3-toastify"; 
-import HbSwitch from '@/components/form-fields/HbSwitch.vue';
-
 
 // import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue'
+import HbSelect from '@/components/form-fields/HbSelect.vue' 
+import HbSwitch from '@/components/form-fields/HbSwitch.vue';
+import HbPopup from '@/components/widgets/HbPopup.vue';
+
 
  
 
@@ -18,6 +19,15 @@ const skeleton = ref(false);
  
 onBeforeMount(() => {  
 });
+
+// Const for Modal
+const wooPopup = ref(false);
+const openWooPopup = () => { 
+    wooPopup.value = true;
+};
+const closeWooPopup = () => { 
+    wooPopup.value = false;
+};
 
 
 </script>
@@ -50,13 +60,19 @@ onBeforeMount(() => {
                     <p>New standard in online payment</p>
 
                     <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-                        <a href="#" class=" tfhb-btn tfhb-btn-primary">Connect</a>
+                        <button href="#" @click="openWooPopup" class=" tfhb-btn tfhb-btn-primary">Connect</button>
                          <!-- Checkbox swicher -->
                          <HbSwitch  />
                         <!-- Swicher --> 
                     </div>
 
                 </div> 
+                <HbPopup :isOpen="wooPopup" @modal-close="closeWooPopup" name="first-modal">
+                    <template #header>Custom header</template>
+                    <template #content>Custom content</template>
+                    <template #footer>Custom content</template>
+                </HbPopup>
+
                 <!-- Single Integrations  -->
  
 

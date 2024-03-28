@@ -31,7 +31,7 @@ const emit = defineEmits(['update:modelValue'])
           :name= "name"
           :id="name" 
           @input="emit('update:modelValue', $event.target.value)" 
-          :type="type"
+          :type="type || 'text'"
           :placeholder="placeholder"
           :disabled="disabled"
           

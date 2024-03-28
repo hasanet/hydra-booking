@@ -41,7 +41,7 @@ namespace HydraBooking\Admin\Controller;
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 
-            'Select Hosts' =>  __('Select Hosts', 'hydra-booking'), 
+            'Select User' =>  __('Select User', 'hydra-booking'), 
             'Create Hosts' =>  __('Create Hosts', 'hydra-booking'), 
             'First name' =>  __('First name', 'hydra-booking'), 
             'Type your first name' =>  __('Type your first name', 'hydra-booking'), 
@@ -53,6 +53,11 @@ namespace HydraBooking\Admin\Controller;
             'Type your mobile no' =>  __('Type your mobile no', 'hydra-booking'), 
             'Profile image' =>  __('Profile image', 'hydra-booking'), 
             'Recommended Image Size: 400x400px' =>  __('Recommended Image Size: 400x400px', 'hydra-booking'), 
+            'Username' =>  __('Username', 'hydra-booking'), 
+            'Type Username' =>  __('Type Username', 'hydra-booking'), 
+            'Type User Email' =>  __('Type User Email', 'hydra-booking'), 
+            'Password' =>  __('Password', 'hydra-booking'), 
+            'Type User Password' =>  __('Type User Password', 'hydra-booking'), 
 
             // Meetings
             'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),

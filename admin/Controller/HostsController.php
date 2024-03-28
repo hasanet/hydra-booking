@@ -57,11 +57,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // permission_callback
     public function getHostsData() { 
         // Get all wp users list with 
-        $users = get_users(array('role__in' => array('administrator', 'editor', 'author', 'contributor', 'subscriber')));
+        $users = get_users(array('role__in' => array('administrator', 'editor', 'tfhb_host')));
         $userData = array();
         foreach ($users as $user) {
-            $userData[$user->ID] =  $user->display_name . ' (' . $user->user_email . ')';
+            $userData[$user->ID] =  $user->display_name . ' ( ' . $user->user_email . ' )'. ' - ( ' . $user->roles[0] . ' )';
         } 
+        $userData[0] = __('Create new user', 'hydra-booking');
 
         // Hosts Lists 
         $host = new Host();
@@ -82,14 +83,32 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $request = json_decode(file_get_contents('php://input'), true);
 
         // Check if user is selected
-        if (empty($request['id']) || $request['id'] == 0) {
+        if ( !isset($request['id']) && $request['id']  == '') {
             return rest_ensure_response(array('status' => false, 'message' => 'Select User'));
         }
+        $user_id = $request['id'];
 
+        if($user_id == 0){
+            if(empty($request['username']) || empty($request['email']) || empty($request['password'])){
+                return rest_ensure_response(array('status' => false, 'message' => 'Please fill all fields'));
+            }
+
+            // Create User with set user role  
+            $user_id = wp_create_user(sanitize_text_field($request['username']), sanitize_text_field($request['password']), sanitize_text_field($request['email']));
+            if(is_wp_error($user_id)){
+                return rest_ensure_response(array('status' => false, 'message' => $user_id->get_error_message()));
+            }
+
+            // Set User Role
+            $user = new \WP_User($user_id);
+            $user->set_role('tfhb_host'); 
+
+        
+        }
         // Get user Data 
-        $user = get_user_by('id', $request['id']);
+        $user = get_user_by('id', $user_id);
         
-        
+    
 
         // Check if user is valid
         if (empty($user)) {
@@ -99,12 +118,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Check if user is already a host
         $host = new Host();
 
-        $hostCheck = $host->get( array('user_id' => $request['id']) ); 
+        $hostCheck = $host->get( array('user_id' => $user_id) ); 
         if (!empty($hostCheck)) {
             return rest_ensure_response(array('status' => false, 'message' => 'This User is already a host'));
         }
         
 
+        
 
         $data = [ 
             'user_id' => $user->ID, 
@@ -112,10 +132,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'last_name' => get_user_meta( $user->ID, 'last_name', true ) != '' ? get_user_meta( $user->ID, 'last_name', true ) : '',
             'email' => $user->user_email,
             'phone_number' => '',
+            'time_zone' => '',
             'about' => '',
             'avatar' => '',
-            'featured_image' => '',
-            'time_zone' => '',
+            'featured_image' => '', 
             'status' => 1, 
         ];
 
@@ -129,7 +149,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data['host_id'] = $hostInsert['insert_id'];
 
         // Update user Option 
-        update_user_meta($request['id'], '_tfhb_host', $data);
+        update_user_meta($user_id, '_tfhb_host', $data);
 
         // Hosts Lists 
         $HostsList = $host->get();
