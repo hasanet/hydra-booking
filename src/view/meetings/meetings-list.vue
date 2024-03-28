@@ -23,6 +23,53 @@ const FilterCatgoryPreview = ref(false);
         </div> 
     </div>
 
+    <div class="tfhb-question-popup tfhb-p-24">
+        <div class="tfhb-flexbox tfhb-gap-16">
+            <div class="question-header tfhb-flexbox tfhb-full-width">
+                <h3>Create New Meeting Type</h3>
+                <div class="tfhb-question-times" @click="QuestionPopupClose()">
+                    <Icon name="X" :width="20"/>
+                </div>
+            </div>
+            <div class="tfhb-meeting-person-type">
+                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24">
+                    <div class="tfhb-meeting-type-content">
+                        <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-8">
+                            <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-4">
+                                <Icon name="UserRound" size="20" /> 
+                                <Icon name="ArrowRight" size="20" /> 
+                                <Icon name="UserRound" size="20" /> 
+                            </div>
+                            <h3>One to One</h3>
+                        </div>
+                        <p>One host with one invitee. Good for: 1:1 interview, coffee chats</p>
+                    </div>
+                    <div class="tfhb-meeting-type-icon">
+                        <Icon name="ArrowRight" width="20"/>
+                    </div>
+                </div>
+            </div>
+            <div class="tfhb-meeting-person-type">
+                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24">
+                    <div class="tfhb-meeting-type-content">
+                        <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-8">
+                            <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-4">
+                                <Icon name="UserRound" size="20" /> 
+                                <Icon name="ArrowRight" size="20" /> 
+                                <Icon name="UsersRound" size="20" /> 
+                            </div>
+                            <h3>One to Group</h3>
+                        </div>
+                        <p>One host with group of invitee. Good for: webinars, online clasess</p>
+                    </div>
+                    <div class="tfhb-meeting-type-icon">
+                        <Icon name="ArrowRight" width="20"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="tfhb-filter-box-content tfhb-mt-32" v-show="FilterPreview">
         <div class="tfhb-filter-form">
             <div class="tfhb-filter-category">
