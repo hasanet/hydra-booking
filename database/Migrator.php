@@ -5,6 +5,7 @@ use HydraBooking\DB\Availability;
 use HydraBooking\DB\Host;
 use HydraBooking\DB\Event;
 use HydraBooking\DB\Booking;
+use HydraBooking\DB\Meeting;
 
 class Migrator {
 
@@ -31,6 +32,10 @@ class Migrator {
         // Booking migration
         $Booking =  new Booking();
         $Booking->migrate();
+
+        // Meeting migration
+        $Meeting =  new Meeting();
+        $Meeting->migrate();
     }
 
     /**
