@@ -10,6 +10,14 @@ const props = defineProps([
         'description', 
 ])
 const emit = defineEmits(['update:modelValue'])
+
+const checkedValue = () => {  
+    if(props.modelValue == 1){ 
+        emit('update:modelValue', 0);
+    }else{
+        emit('update:modelValue', 1);
+    }
+}
 </script>
 
 <template>
@@ -21,11 +29,13 @@ const emit = defineEmits(['update:modelValue'])
                 <label class="switch">
                     <input 
                         type="checkbox"
-                        id="swicher" 
-                        :v-model="props.modelValue" 
-                        @change="name" 
-                        :name="name"  
-                        :required="required === 'true'">
+                        :id="name"
+                        true-value="1" 
+                        :v-model="props.modelValue"  
+                        
+                        @click="checkedValue"
+                        :name="name"   
+                        >
                     <span class="slider"></span>
                 </label>
                 <label class="tfhb-schedule-swicher" v-if="label !=''" :for="name"> {{ label }} <span  v-if="required == 'true'"> *</span></label>

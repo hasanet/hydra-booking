@@ -13,6 +13,10 @@ const props = defineProps({
   isOpen: Boolean,
   availabilityDataSingle: {},
   timeZone: {}, 
+  max_width: {
+    type: String,
+    default: '600px'
+  },
 });
 const emit = defineEmits([ "modal-close", ]); 
  
@@ -21,7 +25,7 @@ const emit = defineEmits([ "modal-close", ]);
 
 <template>
     <div v-if="isOpen" class="tfhb-popup">
-        <div class="tfhb-popup-wrap">
+        <div class="tfhb-popup-wrap"  :style="{ 'max-width': max_width }">
             <div  class="tfhb-dashboard-heading ">
                 <div class="tfhb-admin-title"> 
                     <slot name="header"> default header </slot>
