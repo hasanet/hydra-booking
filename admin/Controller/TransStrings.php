@@ -10,6 +10,7 @@ namespace HydraBooking\Admin\Controller;
             //  Common 
             'View Documentation' =>  __('View Documentation', 'hydra-booking'),
             'Save' =>  __('Save', 'hydra-booking'),
+            'Save & Validate' =>  __('Save & Validate', 'hydra-booking'),
             
             // General Settings
             'General' =>  __('General', 'hydra-booking'),
@@ -38,6 +39,12 @@ namespace HydraBooking\Admin\Controller;
             // Integrations
             'Integrations' =>  __('Integrations', 'hydra-booking'),
             'One-liner description' =>  __('One-liner description', 'hydra-booking'),
+            'Zoom Account ID' =>  __('Zoom Account ID', 'hydra-booking'),
+            'Enter Your Account ID' =>  __('Enter Your Account ID', 'hydra-booking'),
+            'Zoom App Client ID' =>  __('Zoom App Client ID', 'hydra-booking'),
+            'Enter Your App Client ID' =>  __('Enter Your App Client ID', 'hydra-booking'),
+            'Zoom App Secret Key' =>  __('Zoom App Secret Key', 'hydra-booking'),
+            'Enter Your App Secret Key' =>  __('Enter Your App Secret Key', 'hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 
@@ -75,7 +82,8 @@ namespace HydraBooking\Admin\Controller;
             'Select Host' => __('Select Host', 'hydra-booking'),
             'Name' => __('Name', 'hydra-booking'),
             'Choose Schedule' => __('Choose Schedule', 'hydra-booking'),
-            'Type your name' => __('Type your name', 'hydra-booking'),'Email' => __('Email', 'hydra-booking'),
+            'Type your name' => __('Type your name', 'hydra-booking'),
+            'Email' => __('Email', 'hydra-booking'),
             'Type your email' => __('Type your email', 'hydra-booking'),
             'Buffer time before meeting' => __('Buffer time before meeting', 'hydra-booking'),
             'Buffer time after meeting' => __('Buffer time after meeting', 'hydra-booking'),

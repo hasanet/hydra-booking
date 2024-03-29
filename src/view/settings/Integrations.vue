@@ -5,8 +5,12 @@ import { useRouter, RouterView,} from 'vue-router'
 import axios from 'axios' 
 import { toast } from "vue3-toastify"; 
 
+// component
+import ZoomIntregration from '@/components/Integrations/ZoomIntegrations.vue';
+
 // import Form Field 
 import HbSelect from '@/components/form-fields/HbSelect.vue' 
+import HbText from '@/components/form-fields/HbText.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
 import Icon from '@/components/icon/LucideIcon.vue' 
@@ -19,13 +23,13 @@ onBeforeMount(() => {
 
 // Const for Modal
 const wooPopup = ref(false);
-const zoomPopup = ref(false);
+
 
 const Integration = reactive( {
     woo_payment : {
         type: 'payment', 
         status: 1, 
-        connection_status: 'Connect',  
+        connection_status: 1,  
     }
 });
 
@@ -47,7 +51,7 @@ const Integration = reactive( {
         <div class="tfhb-content-wrap"> 
             <div class="tfhb-integrations-wrap tfhb-flexbox">
 
-                <!-- Single Integrations  -->
+                <!-- Woo  Integrations  -->
                 <div class="tfhb-integrations-single-block tfhb-admin-card-box ">
                     <span class="tfhb-integrations-single-block-icon">
                         <img :src="$tfhb_url+'/assets/images/Woo.png'" alt="">
@@ -56,10 +60,12 @@ const Integration = reactive( {
                     <h3 >Woo Payment</h3>
                     <p>New standard in online payment</p>
 
+
                     <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-                        <button @click="wooPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">Connect <Icon name="ChevronRight" size="15px" /></button>
+                        <button @click="wooPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ Integration.woo_payment.connection_status == 1 ? 'connected' : 'connect'  }} <Icon name="ChevronRight" size="15px" /></button>
                          <!-- Checkbox swicher -->
-                         <HbSwitch  v-model="Integration.woo_payment.status"    />
+
+                         <HbSwitch v-if="Integration.woo_payment.connection_status"  v-model="Integration.woo_payment.status"    />
                         <!-- Swicher --> 
                     </div>
 
@@ -73,38 +79,11 @@ const Integration = reactive( {
                     </HbPopup>
 
                 </div>  
-                <!-- Single Integrations  -->
- 
-                <!-- Single Integrations  -->
-                <div class="tfhb-integrations-single-block tfhb-admin-card-box ">
-                    <span class="tfhb-integrations-single-block-icon">
-                      <img :src="$tfhb_url+'/assets/images/Zoom.png'" alt="">
-                    </span> 
-
-                    <h3>Zoom</h3>
-                    <p>New standard in online payment</p>
-
-                    <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-                        <button @click="zoomPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">Connect <Icon name="ChevronRight" size="15px" /></button>
-                         <!-- Checkbox swicher -->
-                         <HbSwitch  />
-                        <!-- Swicher --> 
-                    </div>
-
-                    <HbPopup :isOpen="zoomPopup" @modal-close="zoomPopup = false" max_width="600px" name="first-modal">
-                        <template #header> 
-                            <h2>Add New Zoom User Account</h2>
-                        </template>
-                        <template #content>
-
-
-
-                        </template> 
-                    </HbPopup>
-
-                </div>  
-                <!-- Single Integrations  -->
-
+                <!-- Woo Integrations  -->
+                <!-- zoom intrigation -->
+                <ZoomIntregration />
+                <!-- zoom intrigation -->
+          
 
             </div> 
 

@@ -11,12 +11,13 @@ const props = defineProps([
 ])
 const emit = defineEmits(['update:modelValue'])
 
-const checkedValue = () => {  
-    if(props.modelValue == 1){ 
-        emit('update:modelValue', 0);
-    }else{
+const checkedValue = (e) => {   
+    if(e.target.checked){
         emit('update:modelValue', 1);
-    }
+    }else{
+        emit('update:modelValue', 0);
+    } 
+ 
 }
 </script>
 
@@ -26,15 +27,15 @@ const checkedValue = () => {
         <div class="tfhb-single-form-field-wrap">
             <div class="tfhb-swicher-wrap tfhb-flexbox">
                 <!-- Checkbox swicher -->
+                <!--   @change="checkedValue" -->
                 <label class="switch">
                     <input 
                         type="checkbox"
-                        :id="name"
-                        true-value="1" 
+                        :id="name" 
                         :v-model="props.modelValue"  
-                        
-                        @click="checkedValue"
-                        :name="name"   
+                        @change="checkedValue" 
+                        :name="name"  
+                        :checked="props.modelValue == 1 ? true : false"
                         >
                     <span class="slider"></span>
                 </label>
