@@ -1,6 +1,30 @@
 <script setup>
+import { reactive, onBeforeMount, ref } from 'vue';
 import Icon from '@/components/icon/LucideIcon.vue'
-import { useRouter, RouterView } from 'vue-router' 
+import { useRouter, useRoute, RouterView } from 'vue-router' 
+import axios from 'axios'  
+const route = useRoute();
+const router = useRouter();
+
+const meetingData = ref([]);
+const meetingId = route.params.id;
+
+ const fetchMeeting = async () => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/'+meetingId);
+        if (response.data.status == true) { 
+            meetingData.value = response.data.meeting
+        }else{ 
+            router.push({ name: 'MeetingsLists' });
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+} 
+onBeforeMount(() => { 
+    fetchMeeting();
+});
+
 </script>
 
 <template>
@@ -29,8 +53,7 @@ import { useRouter, RouterView } from 'vue-router'
         </nav>
 
         <div class="tfhb-hydra-dasboard-content"> 
-            <router-view />
-            
+            <router-view :meetingId ="meetingId" :meeting="meetingData" />
         </div> 
     </div>
 </template>

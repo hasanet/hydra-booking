@@ -1,20 +1,38 @@
 <script setup>
+import { reactive, onBeforeMount } from 'vue';
+import { useRouter, RouterView } from 'vue-router' 
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
+
+const props = defineProps({
+    meetingId: {
+        type: Number,
+        required: true
+    },
+    meeting: {
+        type: Object,
+        required: true
+    },
+
+});
+
 </script>
 
 <template>
+    {{ meeting }}
     <div class="meeting-create-details tfhb-gap-24">
         <HbText  
+            v-model="meeting.title" 
             required= "true"  
             :label="$tfhb_trans['Meeting title']"  
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
         /> 
         <HbTextarea  
+            v-model="meeting.description" 
             required= "true"  
             :label="$tfhb_trans['Description']"  
             selected = "1"

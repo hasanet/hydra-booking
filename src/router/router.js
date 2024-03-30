@@ -90,6 +90,7 @@ const routes = [
                 children: [
                     {
                         path: 'details',
+                        props: true,
                         name: 'MeetingsCreateDetails',
                         component: () => import('../view/meetings/meetings-details.vue')
                     },

@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Get Single Host based on id
         register_rest_route('hydra-booking/v1', '/meetings/(?P<id>[0-9]+)', array(
             'methods' => 'GET',
-            'callback' => array($this, 'getTheHostData'),
+            'callback' => array($this, 'getMeetingData'),
         ));
         register_rest_route('hydra-booking/v1', '/meetings/details/update', array(
             'methods' => 'POST',
@@ -46,24 +46,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         ));   
        
     }
-    // permission_callback
+    // Meeting List
     public function getMeetingsData() { 
-        // Get all wp users list with 
-        $users = get_users(array('role__in' => array('administrator', 'editor', 'author', 'contributor', 'subscriber')));
-        $userData = array();
-        foreach ($users as $user) {
-            $userData[$user->ID] =  $user->display_name . ' (' . $user->user_email . ')';
-        } 
 
-        // Hosts Lists 
-        $host = new Host();
-        $HostsList = $host->get();
+        // Meeting Lists 
+        $meeting = new Meeting();
+        $MeetingsList = $meeting->get();
 
         // Return response
         $data = array(
             'status' => true, 
-            'users' => $userData, 
-            'hosts' => $HostsList,  
+            'meetings' => $MeetingsList,  
             'message' => 'General Settings Updated Successfully', 
         );
         return rest_ensure_response($data);
@@ -139,29 +132,26 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
     }
 
-    // Delete Host
-    public function getTheHostData($request){
+    // Get Single Host
+    public function getMeetingData($request){
         $id = $request['id']; 
         // Check if user is selected
         if (empty($id) || $id == 0) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
-        // Get Host
-        $host = new Host();
-        $HostData = $host->get( $id );
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get( $id );
 
-        if(empty($HostData)) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        if(empty($MeetingData)) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
         
-        $DateTimeZone = new \DateTimeZone('UTC');
-        $time_zone = $DateTimeZone->listIdentifiers();
         // Return response
         $data = array(
             'status' => true, 
-            'host' => $HostData,  
-            'time_zone' => $time_zone,  
-            'message' => 'Host Data',
+            'meeting' => $MeetingData,  
+            'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
 

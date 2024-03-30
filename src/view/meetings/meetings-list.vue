@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
 import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -21,6 +21,19 @@ const closeModal = () => {
   isModalOpened.value = false;
 };
 
+// Fetch Meetings List
+const meetings = reactive({}); 
+const fetchMeetings = async () => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists');
+        if (response.data.status) { 
+            meetings.data = response.data.meetings;  
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+} 
+
 // Meeting_data
 const meeting = reactive({});
 const CreateMeeting = async (type) => {    
@@ -32,7 +45,7 @@ const CreateMeeting = async (type) => {
                 'X-WP-Nonce': tfhb_core_apps.rest_nonce
             } 
         } );
-        console.log(response.data);
+
         if (response.data.status) {  
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
@@ -51,8 +64,12 @@ const CreateMeeting = async (type) => {
     }   
 }
 
+onBeforeMount(() => { 
+    fetchMeetings();
+});
 </script>
 <template>
+    {{ meetings }}
     <div class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="tfhb-filter-box tfhb-flexbox">
             <div class="tfhb-filter-btn tfhb-flexbox" @click="FilterPreview=!FilterPreview" :class="FilterPreview ? 'active' : ''">
@@ -184,24 +201,24 @@ const CreateMeeting = async (type) => {
         <div class="tfhb-meetings-list-wrap tfhb-flexbox">
 
             <!-- Single Meeting -->
-            <div class="tfhb-single-meeting"> 
+            <div class="tfhb-single-meeting" v-for="(smeeting, key) in meetings.data"> 
                 <div class="single-meeting-content-box tfhb-flexbox">
                     <div class="single-meeting-content">
-                        <h3>Discussion about design system one one meeting for Design people for Design people</h3>
+                        <h3> {{ smeeting.title ? smeeting.title : 'No Title' }} </h3>
                         <div class="meeting-user-info">
                             <ul class="tfhb-flexbox">
-                                <li>
+                                <li v-if="smeeting.duration">
                                     <div class="tfhb-flexbox">
                                         <div class="user-info-icon">
                                             <Icon name="Clock" size="16" /> 
                                         </div>
                                         <div class="user-info-title">
-                                            30 minutes
+                                            {{ smeeting.duration }}
                                         </div>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
+                                <li v-if="smeeting.meeting_type">
+                                    <div class="tfhb-flexbox" v-if="'one-to-one'==smeeting.meeting_type">
                                         <div class="user-info-icon">
                                             <Icon name="UserRound" size="16" /> 
                                             <Icon name="ArrowRight" size="16" /> 
@@ -211,14 +228,24 @@ const CreateMeeting = async (type) => {
                                             One to One
                                         </div>
                                     </div>
+                                    <div class="tfhb-flexbox" v-if="'one-to-group'==smeeting.meeting_type">
+                                        <div class="user-info-icon">
+                                            <Icon name="UserRound" size="16" /> 
+                                            <Icon name="ArrowRight" size="16" /> 
+                                            <Icon name="UsersRound" size="16" /> 
+                                        </div>
+                                        <div class="user-info-title">
+                                            One to Group
+                                        </div>
+                                    </div>
                                 </li>
-                                <li>
+                                <li v-if="smeeting.meeting_price">
                                     <div class="tfhb-flexbox">
                                         <div class="user-info-icon">
                                             <Icon name="Banknote" size="16" /> 
                                         </div>
                                         <div class="user-info-title">
-                                            $200
+                                            {{ smeeting.meeting_price }}
                                         </div>
                                     </div>
                                 </li>
@@ -249,8 +276,8 @@ const CreateMeeting = async (type) => {
                         <Icon name="ListCollapse" size="20" /> 
                         <div class="tfhb-dropdown-wrap"> 
                             <!-- route link -->
-                            <a href="#" class="tfhb-dropdown-single">Edit</a>
-                            <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
+                            <router-link :to="{ name: 'MeetingsCreate', params: { id: smeeting.id } }" class="tfhb-dropdown-single">Edit</router-link>
+                            
                             <span class="tfhb-dropdown-single">Delete</span>
                         </div>
                     </div>
@@ -266,416 +293,7 @@ const CreateMeeting = async (type) => {
                     </a>
                 </div>
             </div>
-            <div class="tfhb-single-meeting"> 
-                <div class="single-meeting-content-box tfhb-flexbox">
-                    <div class="single-meeting-content">
-                        <h3>Discussion about design system one one meeting for Design people for Design people</h3>
-                        <div class="meeting-user-info">
-                            <ul class="tfhb-flexbox">
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Clock" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            30 minutes
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="UserRound" size="16" /> 
-                                            <Icon name="ArrowRight" size="16" /> 
-                                            <Icon name="UserRound" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            One to One
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Banknote" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            $200
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="User" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            Jack Sparrow
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="booked-items">
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="CalendarCheck" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            10/20 Booked
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tfhb-single-hosts-action tfhb-dropdown">
-                        <Icon name="ListCollapse" size="20" /> 
-                        <div class="tfhb-dropdown-wrap"> 
-                            <!-- route link -->
-                            <a href="#" class="tfhb-dropdown-single">Edit</a>
-                            <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single">Delete</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Eye" size="20" /> 
-                        Preview
-                    </a>
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Share2" size="20" /> 
-                        Share
-                    </a>
-                </div>
-            </div>
-            <div class="tfhb-single-meeting"> 
-                <div class="single-meeting-content-box tfhb-flexbox">
-                    <div class="single-meeting-content">
-                        <h3>Discussion about design system one one meeting for Design people for Design people</h3>
-                        <div class="meeting-user-info">
-                            <ul class="tfhb-flexbox">
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Clock" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            30 minutes
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="UserRound" size="16" /> 
-                                            <Icon name="ArrowRight" size="16" /> 
-                                            <Icon name="UserRound" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            One to One
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Banknote" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            $200
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="User" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            Jack Sparrow
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="booked-items">
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="CalendarCheck" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            10/20 Booked
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tfhb-single-hosts-action tfhb-dropdown">
-                        <Icon name="ListCollapse" size="20" /> 
-                        <div class="tfhb-dropdown-wrap"> 
-                            <!-- route link -->
-                            <a href="#" class="tfhb-dropdown-single">Edit</a>
-                            <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single">Delete</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Eye" size="20" /> 
-                        Preview
-                    </a>
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Share2" size="20" /> 
-                        Share
-                    </a>
-                </div>
-            </div>
-            <div class="tfhb-single-meeting"> 
-                <div class="single-meeting-content-box tfhb-flexbox">
-                    <div class="single-meeting-content">
-                        <h3>Discussion about design system one one meeting for Design people for Design people</h3>
-                        <div class="meeting-user-info">
-                            <ul class="tfhb-flexbox">
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Clock" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            30 minutes
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="UserRound" size="16" /> 
-                                            <Icon name="ArrowRight" size="16" /> 
-                                            <Icon name="UserRound" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            One to One
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Banknote" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            $200
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="User" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            Jack Sparrow
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="booked-items">
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="CalendarCheck" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            10/20 Booked
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tfhb-single-hosts-action tfhb-dropdown">
-                        <Icon name="ListCollapse" size="20" /> 
-                        <div class="tfhb-dropdown-wrap"> 
-                            <!-- route link -->
-                            <a href="#" class="tfhb-dropdown-single">Edit</a>
-                            <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single">Delete</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Eye" size="20" /> 
-                        Preview
-                    </a>
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Share2" size="20" /> 
-                        Share
-                    </a>
-                </div>
-            </div>
-            <div class="tfhb-single-meeting"> 
-                <div class="single-meeting-content-box tfhb-flexbox">
-                    <div class="single-meeting-content">
-                        <h3>Discussion about design system one one meeting for Design people for Design people</h3>
-                        <div class="meeting-user-info">
-                            <ul class="tfhb-flexbox">
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Clock" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            30 minutes
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="UserRound" size="16" /> 
-                                            <Icon name="ArrowRight" size="16" /> 
-                                            <Icon name="UserRound" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            One to One
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Banknote" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            $200
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="User" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            Jack Sparrow
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="booked-items">
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="CalendarCheck" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            10/20 Booked
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tfhb-single-hosts-action tfhb-dropdown">
-                        <Icon name="ListCollapse" size="20" /> 
-                        <div class="tfhb-dropdown-wrap"> 
-                            <!-- route link -->
-                            <a href="#" class="tfhb-dropdown-single">Edit</a>
-                            <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single">Delete</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Eye" size="20" /> 
-                        Preview
-                    </a>
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Share2" size="20" /> 
-                        Share
-                    </a>
-                </div>
-            </div>
-            <div class="tfhb-single-meeting"> 
-                <div class="single-meeting-content-box tfhb-flexbox">
-                    <div class="single-meeting-content">
-                        <h3>Discussion about design system one one meeting for Design people for Design people</h3>
-                        <div class="meeting-user-info">
-                            <ul class="tfhb-flexbox">
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Clock" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            30 minutes
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="UserRound" size="16" /> 
-                                            <Icon name="ArrowRight" size="16" /> 
-                                            <Icon name="UserRound" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            One to One
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="Banknote" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            $200
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="User" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            Jack Sparrow
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="booked-items">
-                                    <div class="tfhb-flexbox">
-                                        <div class="user-info-icon">
-                                            <Icon name="CalendarCheck" size="16" /> 
-                                        </div>
-                                        <div class="user-info-title">
-                                            10/20 Booked
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tfhb-single-hosts-action tfhb-dropdown">
-                        <Icon name="ListCollapse" size="20" /> 
-                        <div class="tfhb-dropdown-wrap"> 
-                            <!-- route link -->
-                            <a href="#" class="tfhb-dropdown-single">Edit</a>
-                            <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single">Delete</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Eye" size="20" /> 
-                        Preview
-                    </a>
-                    <a href="#" class="tfhb-flexbox">
-                        <Icon name="Share2" size="20" /> 
-                        Share
-                    </a>
-                </div>
-            </div>
+            
         </div>
     </div>
 </template>
