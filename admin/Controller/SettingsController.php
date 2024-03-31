@@ -5,6 +5,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\RouteController;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
+ use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  // Use DB 
 use HydraBooking\DB\Availability;
 // exit
@@ -53,6 +54,23 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'DeleteAvailabilitySettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
+
+
+        // Intrigation 
+
+        register_rest_route('hydra-booking/v1', '/settings/integration', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'GetIntegrationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
+        register_rest_route('hydra-booking/v1', '/settings/integration/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateIntegrationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
+
 
         
        
@@ -232,5 +250,34 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'message' => 'Availability Deleted Successfully', 
         );
         return rest_ensure_response($data);
+    }
+
+    // Get Integration Settings
+    public function GetIntegrationSettings(){
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        $data = array(
+            'status' => true, 
+            'integration_settings' => $_tfhb_integration_settings,
+        );
+        return rest_ensure_response($data);
+    }
+
+    // Update Integration Settings.
+    public function UpdateIntegrationSettings (){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        $key = sanitize_text_field($request['key']);
+        $data = $request['value'];
+
+        if($key == 'zoom_meeting'){ 
+
+            $zoom = new ZoomServices(
+                sanitize_text_field($data['account_id']), 
+                sanitize_text_field($data['app_client_id']),  
+                sanitize_text_field($data['app_secret_key'])
+            ); 
+            return rest_ensure_response($zoom->updateZoomSettings($data));
+            
+        }
     }
 } 
