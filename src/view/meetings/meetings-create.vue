@@ -22,13 +22,128 @@ const meetingData = reactive({
         }
     ],
     meeting_category: '',
+    availability_type: 'settings',
+    availability_custom: 
+        {
+        time_slots: [
+            { 
+                day: 'Monday',
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    },   
+                ]
+            },
+            { 
+                day: 'Tuesday', 
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    }
+                ]
+            },
+            { 
+                day: 'Wednesday', 
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    }
+                ]
+            },
+            { 
+                day: 'Thursday', 
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    }
+                ]
+            },
+            { 
+                day: 'Friday', 
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    }
+                ]
+            },
+            { 
+                day: 'Saturday', 
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    }
+                ]
+            },
+            { 
+                day: 'Sunday', 
+                status: 1,
+                times: [
+                    {
+                        start: '09:00',
+                        end: '17:00',
+                    }
+                ]
+            }
+        ],
+        date_slots: [
+            {
+                start: '2022-01-01',
+                end: '2022-01-01',
+            }
+        ]
+    },
+    
 });
 
+// Add more Location
 function addMoreLocations(){
     meetingData.meeting_locations.push({
     location:'',
     address:'',
   })
+}
+
+// Add new time slot
+const addAvailabilityTime = (key) => {
+    meetingData.availability_custom.time_slots[key].times.push({
+        start: '09:00',
+        end: '17:00',
+    });
+}
+
+// Remove time slot
+const removeAvailabilityTime = (key, tkey = null) => {
+    meetingData.availability_custom.time_slots[key].times.splice(tkey, 1);
+}
+
+// Add new date slot
+const addAvailabilityDate = (key) => {
+    meetingData.availability_custom.date_slots.push({
+        start: '2022-01-01',
+        end: '2022-01-01',
+    });
+}
+
+// Remove date slot 
+const removeAvailabilityTDate = (key) => {
+    meetingData.availability_custom.date_slots.splice(key, 1);
+}
+
+// Meeting Type
+const AvailabilityTabs = (type) => {
+    meetingData.availability_type = type
 }
 
 const meetingId = route.params.id;
@@ -47,6 +162,9 @@ const meetingId = route.params.id;
             if(response.data.meeting.meeting_locations){
                 meetingData.meeting_locations = JSON.parse(response.data.meeting.meeting_locations)
             }
+            if(response.data.meeting.hosts){
+                meetingData.hosts = JSON.parse(response.data.meeting.hosts)
+            }
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }
@@ -54,6 +172,7 @@ const meetingId = route.params.id;
         console.log(error);
     } 
 } 
+
 onBeforeMount(() => { 
     fetchMeeting();
 });
@@ -64,6 +183,9 @@ const UpdateMeetingData = async () => {
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/details/update', meetingData);
         if (response.data.status == true) { 
             toast.success(response.data.message); 
+            if("MeetingsCreateDetails"==route.name){
+                router.push({ name: 'MeetingsCreateAvailability' });
+            }
         }else{
             toast.error(response.data.message); 
         }
@@ -99,7 +221,17 @@ const UpdateMeetingData = async () => {
         </nav>
 
         <div class="tfhb-hydra-dasboard-content"> 
-            <router-view :meetingId ="meetingId" :meeting="meetingData" @add-more-location="addMoreLocations" @update-meeting="UpdateMeetingData" />
+            <router-view 
+            :meetingId ="meetingId" 
+            :meeting="meetingData" 
+            @add-more-location="addMoreLocations" 
+            @update-meeting="UpdateMeetingData" 
+            @availability-time="addAvailabilityTime"
+            @availability-time-del="removeAvailabilityTime"
+            @availability-date="addAvailabilityDate"
+            @availability-date-del="removeAvailabilityTDate"
+            @availability-tabs="AvailabilityTabs"
+            />
         </div> 
     </div>
 </template>

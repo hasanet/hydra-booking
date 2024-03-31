@@ -7,6 +7,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\CountryController;
  // Use DB 
 use HydraBooking\DB\Meeting;
+use HydraBooking\DB\Host;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -132,7 +133,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
     }
 
-    // Get Single Host
+    // Get Single Meeting
     public function getMeetingData($request){
         $id = $request['id']; 
         // Check if user is selected
@@ -146,6 +147,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(empty($MeetingData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
+        
+        // Host List 
+        $host = new Host();
+        $HostsList = $host->get();
+        $MeetingData->hosts = wp_json_encode($HostsList);
         
         // Return response
         $data = array(
@@ -186,7 +192,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_category' => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
         ];
 
-        // var_dump($data); exit();
         $meetingUpdate = $meeting->update($data);
         if(!$meetingUpdate['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while updating Meeting'));
