@@ -1,20 +1,28 @@
 <script setup>
-    import { ref, reactive, onBeforeMount, } from 'vue'; 
-    import { useRouter, RouterView,} from 'vue-router' 
-    import Icon from '@/components/icon/LucideIcon.vue'
 
-    // import Form Field 
-    import HbSelect from '@/components/form-fields/HbSelect.vue' 
-    import HbText from '@/components/form-fields/HbText.vue'
-    import HbSwitch from '@/components/form-fields/HbSwitch.vue';
-    import HbPopup from '@/components/widgets/HbPopup.vue';  
-    
-    const zoomPopup = ref(false);
+import { ref, reactive, onBeforeMount, } from 'vue'; 
+import { useRouter, RouterView,} from 'vue-router' 
+import Icon from '@/components/icon/LucideIcon.vue'
 
-    const zoom_integration = reactive(  { 
-        status: 0, 
-        connection_status: 0,   
-    });
+// import Form Field 
+import HbSelect from '@/components/form-fields/HbSelect.vue' 
+import HbText from '@/components/form-fields/HbText.vue'
+import HbSwitch from '@/components/form-fields/HbSwitch.vue';
+import HbPopup from '@/components/widgets/HbPopup.vue';  
+
+const zoomPopup = ref(false);
+
+const zoom_integration = reactive(  { 
+    status: 0, 
+    connection_status: 0,   
+});
+
+const props = defineProps([
+    'zoom_meeting', 
+])
+const emit = defineEmits([ "update-integrations", ]); 
+
+
 </script>
 
 <template>
@@ -24,14 +32,14 @@
             <img :src="$tfhb_url+'/assets/images/Zoom.png'" alt="">
         </span> 
 
-        <h3>Zoom</h3>
+        <h3>Zoom</h3> 
         <p>New standard in online payment</p>
 
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-            <button @click="zoomPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ zoom_integration.connection_status == 1 ? 'connected' : 'connect'  }} <Icon name="ChevronRight" size="15px" /></button>
+            <button @click="zoomPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ zoom_meeting.connection_status == 1 ? 'connected' : 'connect'  }} <Icon name="ChevronRight" size="15px" /></button>
                 <!-- Checkbox swicher -->
 
-                <HbSwitch v-if="zoom_integration.connection_status"  v-model="zoom_integration.status"    />
+                <HbSwitch v-if="zoom_meeting.connection_status" @change="emit('update-integrations', 'zoom_meeting', zoom_meeting)" v-model="zoom_meeting.status"    />
             <!-- Swicher --> 
         </div>
 
@@ -46,28 +54,28 @@
                     Please read the documentation here for step by step guide to know how you can get api credentials from Zoom Account
                 </p>
                 <HbText  
-                    v-model="account_id"  
+                    v-model="zoom_meeting.account_id"  
                     required= "true"  
                     :label="$tfhb_trans['Zoom Account ID']"  
                     selected = "1"
                     :placeholder="$tfhb_trans['Enter Your Account ID']"  
                 /> 
                 <HbText  
-                    v-model="app_client_id"  
+                    v-model="zoom_meeting.app_client_id"  
                     required= "true"  
                     :label="$tfhb_trans['Zoom App Client ID']"  
                     selected = "1"
                     :placeholder="$tfhb_trans['Enter Your App Client ID']"  
                 /> 
                 <HbText  
-                    v-model="app_secret_key"  
+                    v-model="zoom_meeting.app_secret_key"  
                     required= "true"  
                     :label="$tfhb_trans['Zoom App Secret Key']"  
                     selected = "1"
                     type = "password"
                     :placeholder="$tfhb_trans['Enter Your App Secret Key']"  
                 /> 
-                <button class="tfhb-btn boxed-btn" @click="UpdateHostsInformation">{{ $tfhb_trans['Save & Validate'] }}</button>
+                <button class="tfhb-btn boxed-btn" @click.stop="emit('update-integrations', 'zoom_meeting', zoom_meeting)">{{ $tfhb_trans['Save & Validate'] }}</button>
             </template> 
         </HbPopup>
 

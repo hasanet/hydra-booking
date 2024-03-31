@@ -6,7 +6,7 @@ import axios from 'axios'
 import { toast } from "vue3-toastify"; 
 
 // component
-import ZoomIntregration from '@/components/Integrations/ZoomIntegrations.vue';
+import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 
 // import Form Field 
 import HbSelect from '@/components/form-fields/HbSelect.vue' 
@@ -18,8 +18,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 //  Load Time Zone 
 const skeleton = ref(false);
  
-onBeforeMount(() => {  
-});
+ 
 
 // Const for Modal
 const wooPopup = ref(false);
@@ -30,9 +29,65 @@ const Integration = reactive( {
         type: 'payment', 
         status: 1, 
         connection_status: 1,  
-    }
+    },
+    zoom_meeting : {
+        type: 'meeting', 
+        status: 0, 
+        connection_status: 0,
+        account_id: '',
+        app_client_id: '',
+        app_secret_key: '',
+
+    },
 });
 
+//  update Integration
+
+// Fetch generalSettings
+const fetchIntegration = async () => {
+
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/integration');
+        if (response.data.status) { 
+            // console.log(response.data.integration_settings);
+            Integration.zoom_meeting= response.data.integration_settings.zoom_meeting;
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
+const UpdateIntegration = async (key, value) => { 
+    let data = {
+        key: key,
+        value: value
+    }; 
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/integration/update', data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+    
+        if (response.data.status) {    
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+            
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+            });
+        }
+    } catch (error) {
+        toast.error('Action successful', {
+            position: 'bottom-right', // Set the desired position
+        });
+    }
+}
+onBeforeMount(() => {  
+    fetchIntegration();
+});
 
 </script>
 <template>
@@ -80,8 +135,9 @@ const Integration = reactive( {
 
                 </div>  
                 <!-- Woo Integrations  -->
+
                 <!-- zoom intrigation -->
-                <ZoomIntregration />
+                <ZoomIntregration :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
                 <!-- zoom intrigation -->
           
 
