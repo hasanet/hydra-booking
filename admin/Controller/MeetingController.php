@@ -158,48 +158,45 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     }
 
-    // Update Host Information
+    // Update Meeting Information
     public function updateMeeting(){
         $request = json_decode(file_get_contents('php://input'), true);
         // Check if user is selected
-        $host_id = $request['id'];
+        $meeting_id = $request['id'];
         $user_id = $request['user_id']; 
-        if (empty($host_id) || $host_id == 0) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        if (empty($meeting_id) || $meeting_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
-        // Get Host
-        $host = new Host();
-        $HostData = $host->get( $host_id );
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get( $meeting_id );
 
-        if(empty($HostData)) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        if(empty($MeetingData)) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
-        // Update Host
+
+        // Update Meeting
         $data = [ 
             'id' => $request['id'],
-            'first_name' => $request['first_name'],
-            'last_name' => $request['last_name'],
-            'email' => $request['email'],
-            'phone_number' => $request['phone_number'],
-            'about' => $request['about'],
-            'avatar' => $request['avatar'],
-            'featured_image' => $request['featured_image'],
-            'time_zone' => $request['time_zone'],
-            'status' => $request['status'], 
+            'user_id' => $request['user_id'],
+            'title' => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+            'description' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+            'meeting_type' => isset($request['meeting_type']) ? sanitize_text_field($request['meeting_type']) : '',
+            'duration' => isset($request['duration']) ? sanitize_text_field($request['duration']) : '',
+            'meeting_locations' => isset($request['meeting_locations']) ? wp_json_encode($request['meeting_locations']) : '',
+            'meeting_category' => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
         ];
-        $hostUpdate = $host->update($data);
-        if(!$hostUpdate['status']) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Error while updating host'));
+
+        // var_dump($data); exit();
+        $meetingUpdate = $meeting->update($data);
+        if(!$meetingUpdate['status']) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while updating Meeting'));
         }
-        // Update user Option
-        $data['host_id'] = $host_id;
-        update_user_meta($user_id, '_tfhb_host', $data);
-        // Hosts Lists
-        $HostsList = $host->get();
+
         // Return response
         $data = array(
             'status' => true,  
-            'message' => 'Host Updated Successfully', 
+            'message' => 'Meeting Updated Successfully', 
         );
         return rest_ensure_response($data);
     }

@@ -97,6 +97,7 @@ namespace HydraBooking\Admin\Controller;
             'Type level here' => __('Type level here', 'hydra-booking'),
             'Level' => __('Level', 'hydra-booking'),
             'Required' => __('Required', 'hydra-booking'),
+            'Add Another Location' => __('Add Another Location', 'hydra-booking'),
 
             //Booking
             'Add New Booking' => __('Add New Booking', 'hydra-booking'),

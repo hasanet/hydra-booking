@@ -31,7 +31,7 @@ class Meeting {
                 meeting_type VARCHAR(255) NOT NULL,
                 duration VARCHAR(20) NULL,
                 meeting_locations LONGTEXT NULL,
-                meeting_category INT(11) NULL,
+                meeting_category VARCHAR(20) NULL,
                 availability_type VARCHAR(20) NULL,
                 availability_id INT(11) NULL,
                 availability_custom LONGTEXT NULL, 
