@@ -1,6 +1,7 @@
 <script setup>
 import {ref} from 'vue'
 import Icon from '@/components/icon/LucideIcon.vue'
+import HbSelect from '../form-fields/HbSelect.vue';
 const props = defineProps([
     'name',
     'modelValue',
@@ -9,18 +10,19 @@ const props = defineProps([
     'label',
     'width',
     'subtitle',
-    'placeholder',
+    'counter_value',
     'description', 
-    'disabled', 
+    'repater', 
 ])
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:counter_value','limits-frequency-add', 'limits-frequency-remove'])
 const counter_number = ref(1);
-function CounterInc(){
-    counter_number.value ++;
+function CounterInc(key){
+    props.counter_value[key].limit ++;
 }
-function CounterDec(){
-    counter_number.value --;
+function CounterDec(key){
+    props.counter_value[key].limit --;
 }
+
 </script>
 
 <template>
@@ -30,28 +32,31 @@ function CounterDec(){
             <div class="tfhb-single-form-field-wrap">
                 <label v-if="label" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
                 <h4 v-if="subtitle">{{ subtitle }}</h4>
-                <div class="tfhb-flexbox tfhb-gap-0 tfhb-counter-wrap">
+                <div class="tfhb-flexbox tfhb-gap-0 tfhb-counter-wrap tfhb-flexbox-nowrap" v-for="(counter, key)  in counter_value" :key="key">
                     <div class="tfhb-counter tfhb-flexbox">
-                        <div class="tfhb-dec" @click="CounterDec()">
+                        <div class="tfhb-dec" @click="CounterDec(key)">
                             <Icon name="Minus" />
                         </div>
-                        <span>{{counter_number}} Booking</span>
-                        <div class="tfhb-inc" @click="CounterInc()">
+                        <span>{{ counter.limit = counter.limit}} Booking</span>
+                        <div class="tfhb-inc" @click="CounterInc(key)">
                             <Icon name="Plus" />
                         </div>
                     </div>
-                    <select 
-                        :value="props.modelValue" 
-                        :required= "required"
-                        :id="name" 
-                        @input="emit('update:modelValue', $event.target.value)" 
-                        :type="type"
-                        :placeholder="placeholder"
-                    >  
-                        <option value="">Week</option>
-                        <option value="Month">Month</option>
-                        <option value="Years">Years</option>
-                    </select> 
+                    <HbSelect 
+                        width="172px"
+                        v-model="counter.times"  
+                        required= "true"  
+                        selected = "1"
+                        placeholder="Select Time Zone"  
+                        :option = "{'Month': 'Month','Year': 'Year'}" 
+                    /> 
+
+                    <div v-if="repater && key == 0" class="tfhb-availability-schedule-clone-single">
+                        <button class="tfhb-availability-schedule-btn" @click="emit('limits-frequency-add')"><Icon name="Plus" size="20px" /> </button> 
+                    </div>
+                    <div v-if="repater && key != 0" class="tfhb-availability-schedule-clone-single">
+                        <button class="tfhb-availability-schedule-btn" @click="emit('limits-frequency-remove', key)"><Icon name="X" size="20px" /> </button> 
+                    </div>
                 </div>
                 <p v-if="description">{{ description }}</p>
             </div> 

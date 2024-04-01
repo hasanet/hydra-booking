@@ -126,6 +126,12 @@
     .tfhb-justify-normal{
         justify-content: normal !important;
     }
+    .tfhb-align-baseline{
+        align-items: baseline !important;
+    }
+    .tfhb-flexbox-nowrap{
+        flex-wrap: nowrap !important;
+    }
 	.tfhb-admin-card-box {
         padding: 24px;
         border-radius: 8px;
@@ -498,17 +504,20 @@
                 }
             }
             select { 
-                padding: 0px 8px 0px 12px;
-                min-width: 172px;
-                margin-top: 0;
-                border-radius: 0px 4px 4px 0px; 
-                height: 40px;
-                border: 1px solid #F6EEF2;
-                border-left: 0px solid;
+                padding: 0px 8px 0px 12px !important;
+                min-width: 172px !important;
+                margin-top: 0 !important;
+                border-radius: 0px 4px 4px 0px !important; 
+                height: 40px !important;
+                border: 1px solid #F6EEF2 !important;
+                border-left: 0px solid !important;
                 &:focus, &:active {
                     outline: none;
                     box-shadow: none; 
                 }
+            }
+            .tfhb-availability-schedule-clone-single{
+                margin-left: 16px;
             }
         }
     }

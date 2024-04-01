@@ -109,6 +109,23 @@ const meetingData = reactive({
             }
         ]
     },
+    buffer_time_before: '',
+    buffer_time_after: '',
+    booking_frequency: [
+        {
+            limit: 1,
+            times:'Year'
+        }
+    ],
+    meeting_interval: '',
+    recurring_status: 1,
+    recurring_repeat:[
+        {
+            limit: 1,
+            times:'Year'
+        }
+    ],
+    recurring_maximum: ''
     
 });
 
