@@ -20,8 +20,7 @@ const event = reactive({
 
 
 const updateEvent = async () => {
-
- console.log(event.data); 
+ 
 }
 </script>
 

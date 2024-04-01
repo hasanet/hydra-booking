@@ -26,6 +26,7 @@ use HydraBooking\Admin\Controller\TransStrings;
             // 'url' => THB_URL,
             'rest_nonce' => wp_create_nonce( 'wp_rest' ),
             'admin_url' => site_url(),
+            'ajax_url' =>  admin_url('admin-ajax.php'),
             'tfhb_url' => THB_URL,
             'trans' => TransStrings::getTransStrings(),
         ]);
