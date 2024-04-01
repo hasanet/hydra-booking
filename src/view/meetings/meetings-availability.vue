@@ -101,7 +101,6 @@ const Settings_Avalibility_Callback = (e) => {
             :placeholder="$tfhb_trans['Availability title']"   
             v-if="'custom'==meeting.availability_type"
         />
-        {{ meeting.availability_custom }}
         <!-- Settings Data -->
         <div class="tfhb-admin-card-box tfhb-gap-24" v-if="Settings_avalibility && 'settings'==meeting.availability_type">  
             <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
@@ -300,7 +299,7 @@ const Settings_Avalibility_Callback = (e) => {
         
         </div>  
 
-        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="UpdateGeneralSettings">{{ $tfhb_trans['Save & Continue'] }} </button>
+        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
         <!--Bookings -->
     </div>
 </template>

@@ -173,6 +173,12 @@ const meetingId = route.params.id;
             if(response.data.meeting.availability_seetings){
                 meetingData.availability_seetings = response.data.meeting.availability_seetings
             }
+            if(response.data.meeting.availability_custom){
+                meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
+            }
+            meetingData.availability_type = response.data.meeting.availability_type
+            meetingData.availability_id = response.data.meeting.availability_id
+
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }
@@ -193,6 +199,9 @@ const UpdateMeetingData = async () => {
             toast.success(response.data.message); 
             if("MeetingsCreateDetails"==route.name){
                 router.push({ name: 'MeetingsCreateAvailability' });
+            }
+            if("MeetingsCreateAvailability"==route.name){
+                router.push({ name: 'MeetingsCreateLimits' });
             }
         }else{
             toast.error(response.data.message); 

@@ -194,6 +194,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'duration' => isset($request['duration']) ? sanitize_text_field($request['duration']) : '',
             'meeting_locations' => isset($request['meeting_locations']) ? wp_json_encode($request['meeting_locations']) : '',
             'meeting_category' => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
+            'availability_type' => isset($request['availability_type']) ? sanitize_text_field($request['availability_type']) : '',
+            'availability_id' => isset($request['availability_id']) ? sanitize_text_field($request['availability_id']) : '',
+            'availability_custom' => isset($request['availability_custom']) ? wp_json_encode($request['availability_custom']) : '',
         ];
 
         $meetingUpdate = $meeting->update($data);
