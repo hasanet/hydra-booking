@@ -10,7 +10,6 @@ const props = defineProps([
     'placeholder',
     'description', 
     'disabled', 
-    'condition',
 ])
 const emit = defineEmits(['update:modelValue'])
 </script>
@@ -18,7 +17,6 @@ const emit = defineEmits(['update:modelValue'])
 <template>
   <div class="tfhb-single-form-field" :class="name" 
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
-      v-if="condition"
     >
     <div class="tfhb-single-form-field-wrap tfhb-field-input">
          <!--if has label show label with tag else remove tags  -->

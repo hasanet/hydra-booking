@@ -11,6 +11,7 @@ const router = useRouter();
 const meetingData = reactive({
     id: 0,
     user_id: 0,
+    host_id: '',
     title: '',
     description: '',
     meeting_type: '',
@@ -23,8 +24,12 @@ const meetingData = reactive({
     ],
     meeting_category: '',
     availability_type: 'settings',
+    availability_id : '',
     availability_custom: 
         {
+        title: '',
+        time_zone: '',
+        date_status: 0,
         time_slots: [
             { 
                 day: 'Monday',
@@ -104,6 +109,23 @@ const meetingData = reactive({
             }
         ]
     },
+    buffer_time_before: '',
+    buffer_time_after: '',
+    booking_frequency: [
+        {
+            limit: 1,
+            times:'Year'
+        }
+    ],
+    meeting_interval: '',
+    recurring_status: 1,
+    recurring_repeat:[
+        {
+            limit: 1,
+            times:'Year'
+        }
+    ],
+    recurring_maximum: ''
     
 });
 
@@ -165,6 +187,15 @@ const meetingId = route.params.id;
             if(response.data.meeting.hosts){
                 meetingData.hosts = JSON.parse(response.data.meeting.hosts)
             }
+            if(response.data.meeting.availability_seetings){
+                meetingData.availability_seetings = response.data.meeting.availability_seetings
+            }
+            if(response.data.meeting.availability_custom){
+                meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
+            }
+            meetingData.availability_type = response.data.meeting.availability_type
+            meetingData.availability_id = response.data.meeting.availability_id
+
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }
@@ -185,6 +216,9 @@ const UpdateMeetingData = async () => {
             toast.success(response.data.message); 
             if("MeetingsCreateDetails"==route.name){
                 router.push({ name: 'MeetingsCreateAvailability' });
+            }
+            if("MeetingsCreateAvailability"==route.name){
+                router.push({ name: 'MeetingsCreateLimits' });
             }
         }else{
             toast.error(response.data.message); 
