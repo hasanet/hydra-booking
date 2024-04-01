@@ -37,7 +37,7 @@ use HydraBooking\DB\Migrator;
       // print_r($zoom->generateAccessToken());
       // echo "</pre>";
       // exit;
-      
+ 
 
     }
 

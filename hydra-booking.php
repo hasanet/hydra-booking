@@ -31,10 +31,16 @@ class THB_INIT{
 
         add_action('init', array($this, 'init'));
  
-
+        
     }
 
-    public function init() {  
+    public function init() {   
+        // if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+        //     add_action('wp_ajax_woocommerce_ajax_install_plugin', 'wp_ajax_install_plugin'); 
+        // }
+
+        add_action('wp_ajax_contact_form_7_ajax_install_plugin', 'wp_ajax_install_plugin');  
+        // add_action('wp_ajax_nopriv_woocommerce_ajax_install_plugin', 'custom_data');  
 
         // Create a New host Role
         $this->tfhb_create_host_role();
@@ -51,6 +57,10 @@ class THB_INIT{
 
         
     } 
+    public function custom_data(){
+       echo "Hello World";
+         die();
+    }
 
     public function tfhb_create_host_role(){ 
         // checked if role exist

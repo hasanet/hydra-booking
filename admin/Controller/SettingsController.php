@@ -19,6 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // add_action('admin_init', array($this, 'init'));
         
         add_action('rest_api_init', array($this, 'create_endpoint'));
+
+
+        
        
     }
 
@@ -73,6 +76,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         register_rest_route('hydra-booking/v1', '/settings/integration/update', array(
             'methods' => 'POST',
             'callback' => array($this, 'UpdateIntegrationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+        register_rest_route('hydra-booking/v1', '/settings/integration/install-active-plugins', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'installActivePlugins'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
 
@@ -273,6 +281,27 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Get Integration Settings
     public function GetIntegrationSettings(){
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        // Checked woocommerce installed and activated 
+        if(!file_exists(WP_PLUGIN_DIR . '/' . 'woocommerce/woocommerce.php')){
+            $woo_connection_status =  0;
+
+        } else if(!is_plugin_active( 'woocommerce/woocommerce.php')){
+            $woo_connection_status =  0;
+        }else{
+            $woo_connection_status =  1;
+        } 
+
+        if(!isset($_tfhb_integration_settings['woo_payment'])){
+            
+
+            $_tfhb_integration_settings['woo_payment']['type'] =  'type';
+            $_tfhb_integration_settings['woo_payment']['status'] =  0;
+            $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
+        }else{
+            $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
+        }
+
+        // Checked if woo
         $data = array(
             'status' => true, 
             'integration_settings' => $_tfhb_integration_settings,
@@ -282,6 +311,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     // Update Integration Settings.
     public function UpdateIntegrationSettings (){
+        
         $request = json_decode(file_get_contents('php://input'), true);
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
         $key = sanitize_text_field($request['key']);
@@ -296,6 +326,53 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             ); 
             return rest_ensure_response($zoom->updateZoomSettings($data));
             
+        }elseif($key == 'woo_payment'){
+            $_tfhb_integration_settings['woo_payment']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['woo_payment']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_integration_settings['woo_payment']['woo_payment'] =  sanitize_text_field($data['woo_payment']);
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'message' => 'Integration Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }
+    }
+
+
+    // Install Active Plugins
+    public function installActivePlugins(){
+        $request = json_decode(file_get_contents('php://input'), true);
+
+        // activate the plugin
+        $plugin_slug = sanitize_text_field( wp_unslash($_POST['slug']) );
+        $file_name = sanitize_text_field( wp_unslash($_POST['file_name']) );
+        $result = activate_plugin($plugin_slug.'/'.$file_name.'.php');
+
+    
+        //  install plugins
+        // install woocommerce plugins 
+        if( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ){
+            //  install woocommerce plugins
+            $plugins = array(
+                'woocommerce/woocommerce.php',
+            );
+            $install = activate_plugins($plugins);
+            if($install){
+                $data = array(
+                    'status' => true, 
+                    'message' => 'WooCommerce Installed Successfully', 
+                );
+            }else{
+                $data = array(
+                    'status' => false, 
+                    'message' => 'WooCommerce Not Installed', 
+                );
+            }
         }
     }
 } 

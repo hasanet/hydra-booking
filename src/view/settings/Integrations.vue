@@ -7,6 +7,7 @@ import { toast } from "vue3-toastify";
 
 // component
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
+import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
 
 // import Form Field 
 import HbSelect from '@/components/form-fields/HbSelect.vue' 
@@ -27,8 +28,8 @@ const wooPopup = ref(false);
 const Integration = reactive( {
     woo_payment : {
         type: 'payment', 
-        status: 1, 
-        connection_status: 1,  
+        status: 0, 
+        connection_status: 0,  
     },
     zoom_meeting : {
         type: 'meeting', 
@@ -50,7 +51,9 @@ const fetchIntegration = async () => {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/integration');
         if (response.data.status) { 
             // console.log(response.data.integration_settings);
-            Integration.zoom_meeting= response.data.integration_settings.zoom_meeting;
+            Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
+            Integration.woo_payment= response.data.integration_settings.woo_payment ? response.data.integration_settings.woo_payment : Integration.woo_payment;
+ 
         }
     } catch (error) {
         console.log(error);
@@ -92,8 +95,7 @@ onBeforeMount(() => {
 </script>
 <template>
     
-    <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard ">
-{{ Integration }}
+    <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard "> 
         <div  class="tfhb-dashboard-heading ">
             <div class="tfhb-admin-title"> 
                 <h1 >{{ $tfhb_trans['Integrations'] }}</h1> 
@@ -107,33 +109,9 @@ onBeforeMount(() => {
             <div class="tfhb-integrations-wrap tfhb-flexbox">
 
                 <!-- Woo  Integrations  -->
-                <div class="tfhb-integrations-single-block tfhb-admin-card-box ">
-                    <span class="tfhb-integrations-single-block-icon">
-                        <img :src="$tfhb_url+'/assets/images/Woo.png'" alt="">
-                    </span> 
+                
+                <WooIntegrations :woo_payment="Integration.woo_payment" @update-integrations="UpdateIntegration" />
 
-                    <h3 >Woo Payment</h3>
-                    <p>New standard in online payment</p>
-
-
-                    <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-                        <button @click="wooPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ Integration.woo_payment.connection_status == 1 ? 'connected' : 'connect'  }} <Icon name="ChevronRight" size="15px" /></button>
-                         <!-- Checkbox swicher -->
-
-                         <HbSwitch v-if="Integration.woo_payment.connection_status"  v-model="Integration.woo_payment.status"    />
-                        <!-- Swicher --> 
-                    </div>
-
-                    <HbPopup :isOpen="wooPopup" @modal-close="wooPopup = false" max_width="600px" name="first-modal">
-                        <template #header> 
-                            <h1>Woo Payment Integrations</h1>
-                        </template>
-                        <template #content>
-
-                        </template> 
-                    </HbPopup>
-
-                </div>  
                 <!-- Woo Integrations  -->
 
                 <!-- zoom intrigation -->
