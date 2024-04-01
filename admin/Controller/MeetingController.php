@@ -153,7 +153,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $host = new Host();
         $HostsList = $host->get();
         $MeetingData->hosts = wp_json_encode($HostsList);
-        
+
+        // Availability
+        $availability = get_option('_tfhb_availability_settings');
+        $MeetingData->availability_seetings = $availability;
         // Return response
         $data = array(
             'status' => true, 

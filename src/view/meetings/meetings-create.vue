@@ -11,6 +11,7 @@ const router = useRouter();
 const meetingData = reactive({
     id: 0,
     user_id: 0,
+    host_id: '',
     title: '',
     description: '',
     meeting_type: '',
@@ -23,6 +24,7 @@ const meetingData = reactive({
     ],
     meeting_category: '',
     availability_type: 'settings',
+    availability_id : '',
     availability_custom: 
         {
         time_slots: [
@@ -164,6 +166,9 @@ const meetingId = route.params.id;
             }
             if(response.data.meeting.hosts){
                 meetingData.hosts = JSON.parse(response.data.meeting.hosts)
+            }
+            if(response.data.meeting.availability_seetings){
+                meetingData.availability_seetings = response.data.meeting.availability_seetings
             }
         }else{ 
             router.push({ name: 'MeetingsLists' });

@@ -11,7 +11,7 @@ const props = defineProps([
     'description', 
     'option'
 ])
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'tfhb-onchange'])
 </script>
 
 <template> 
@@ -31,6 +31,7 @@ const emit = defineEmits(['update:modelValue'])
               @input="emit('update:modelValue', $event.target.value)" 
               :type="type"
               :placeholder="placeholder"
+              @change="emit('tfhb-onchange', $event)"
           >  
               <option value="">{{ placeholder }}</option>
               <option v-for="(value, key) in option" :key="key" selected :value="key">{{ value }}</option>
