@@ -195,6 +195,20 @@ const meetingId = route.params.id;
             }
             meetingData.availability_type = response.data.meeting.availability_type
             meetingData.availability_id = response.data.meeting.availability_id
+            meetingData.buffer_time_before = response.data.meeting.buffer_time_before
+            meetingData.buffer_time_after = response.data.meeting.buffer_time_after
+            meetingData.meeting_interval = response.data.meeting.meeting_interval
+            if(response.data.meeting.recurring_status){
+                meetingData.recurring_status = response.data.meeting.recurring_status
+            }
+            meetingData.recurring_maximum = response.data.meeting.recurring_maximum
+
+            if(response.data.meeting.recurring_repeat){
+                meetingData.recurring_repeat = JSON.parse(response.data.meeting.recurring_repeat)
+            }
+            if(response.data.meeting.booking_frequency){
+                meetingData.booking_frequency = JSON.parse(response.data.meeting.booking_frequency)
+            }
 
         }else{ 
             router.push({ name: 'MeetingsLists' });
@@ -219,6 +233,9 @@ const UpdateMeetingData = async () => {
             }
             if("MeetingsCreateAvailability"==route.name){
                 router.push({ name: 'MeetingsCreateLimits' });
+            }
+            if("MeetingsCreateLimits"==route.name){
+                router.push({ name: 'MeetingsCreateQuestions' });
             }
         }else{
             toast.error(response.data.message); 

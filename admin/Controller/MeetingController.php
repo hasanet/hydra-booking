@@ -197,6 +197,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'availability_type' => isset($request['availability_type']) ? sanitize_text_field($request['availability_type']) : '',
             'availability_id' => isset($request['availability_id']) ? sanitize_text_field($request['availability_id']) : '',
             'availability_custom' => isset($request['availability_custom']) ? wp_json_encode($request['availability_custom']) : '',
+            'buffer_time_before' => isset($request['buffer_time_before']) ? sanitize_text_field($request['buffer_time_before']) : '',
+            'buffer_time_after' => isset($request['buffer_time_after']) ? sanitize_text_field($request['buffer_time_after']) : '',
+            'booking_frequency' => isset($request['booking_frequency']) ? wp_json_encode($request['booking_frequency']) : '',
+            'meeting_interval' => isset($request['meeting_interval']) ? sanitize_text_field($request['meeting_interval']) : '',
+            'recurring_status' => isset($request['recurring_status']) ? sanitize_text_field($request['recurring_status']) : '',
+            'recurring_repeat' => isset($request['recurring_repeat']) ? wp_json_encode($request['recurring_repeat']) : '',
+            'recurring_maximum' => isset($request['recurring_maximum']) ? sanitize_text_field($request['recurring_maximum']) : '',
         ];
 
         $meetingUpdate = $meeting->update($data);
