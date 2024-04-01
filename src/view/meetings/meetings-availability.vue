@@ -95,14 +95,15 @@ const Settings_Avalibility_Callback = (e) => {
         />
 
         <HbText 
+            v-model="meeting.availability_custom.title"
             required= "true" 
             :label="$tfhb_trans['Choose Schedule']"  
             :placeholder="$tfhb_trans['Availability title']"   
             v-if="'custom'==meeting.availability_type"
         />
-
+        {{ meeting.availability_custom }}
         <!-- Settings Data -->
-        <div class="tfhb-admin-card-box tfhb-gap-24" v-if="Settings_avalibility">  
+        <div class="tfhb-admin-card-box tfhb-gap-24" v-if="Settings_avalibility && 'settings'==meeting.availability_type">  
             <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
                 <div class="tfhb-admin-title"> 
                     <h3 >Weekly hours </h3>  
@@ -261,7 +262,7 @@ const Settings_Avalibility_Callback = (e) => {
                     <div class="tfhb-swicher-wrap  tfhb-flexbox">
                         <!-- Checkbox swicher -->
                         <label class="switch">
-                            <input id="swicher" true-value="1"  type="checkbox">
+                            <input id="swicher" true-value="1" v-model="meeting.availability_custom.date_status" type="checkbox">
                             <span class="slider"></span>
                         </label>
                         <label class="tfhb-schedule-swicher"  for="swicher"> Dates</label>

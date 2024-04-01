@@ -27,6 +27,9 @@ const meetingData = reactive({
     availability_id : '',
     availability_custom: 
         {
+        title: '',
+        time_zone: '',
+        date_status: 0,
         time_slots: [
             { 
                 day: 'Monday',
