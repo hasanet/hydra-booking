@@ -125,7 +125,27 @@ const meetingData = reactive({
             times:'Year'
         }
     ],
-    recurring_maximum: ''
+    recurring_maximum: '',
+    attendee_can_cancel: 1,
+    attendee_can_reschedule: 1,
+    questions_status: 1,
+    questions: [
+        {
+            label: 'Name',
+            type:'Text',
+            required: 1
+        },
+        {
+            label: 'Email',
+            type:'Email',
+            required: 1
+        },
+        {
+            label: 'Address',
+            type:'Text',
+            required: 1
+        }
+    ]
     
 });
 
@@ -209,6 +229,9 @@ const meetingId = route.params.id;
             if(response.data.meeting.booking_frequency){
                 meetingData.booking_frequency = JSON.parse(response.data.meeting.booking_frequency)
             }
+
+            meetingData.attendee_can_cancel = response.data.meeting.attendee_can_cancel
+            meetingData.attendee_can_reschedule = response.data.meeting.attendee_can_reschedule
 
         }else{ 
             router.push({ name: 'MeetingsLists' });

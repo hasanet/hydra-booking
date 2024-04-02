@@ -1,54 +1,40 @@
 <script setup>
 import Icon from '@/components/icon/LucideIcon.vue'
+import HbText from '../form-fields/HbText.vue';
+import HbSwitch from '../form-fields/HbSwitch.vue';
 const props = defineProps([
     'name',
     'modelValue',
-    'required',
-    'type',
-    'label',
     'width',
-    'subtitle',
-    'placeholder',
-    'description', 
-    'disabled', 
+    'question_value',
 ])
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'question-edit', 'question-remove'])
 </script>
 
 <template>
     <div class="tfhb-question-box">
-        <div class="tfhb-single-form-field" :class="name" 
-            :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
-            >
-            <div class="tfhb-single-form-field-wrap">
-                <label v-if="label" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
-                <h4 v-if="subtitle">{{ subtitle }}</h4>
-                <p v-if="description">{{ description }}</p>
+        <div class="tfhb-single-form-field tfhb-flexbox tfhb-gap-24" :style="{ 'width': '100%' }">
+
+            <div class="tfhb-single-form-field-wrap tfhb-full-width" v-for="(question, key)  in question_value" :key="key">
+                <label>{{ question.label }}</label>
                 <div class="tfhb-flexbox tfhb-gap-16 tfhb-field-select">
-                    <select 
-                        :value="props.modelValue" 
-                        :required= "required"
-                        :id="name" 
-                        @input="emit('update:modelValue', $event.target.value)" 
-                        :type="type"
-                        :placeholder="placeholder"
-                    >  
-                        <option value="">{{ placeholder }}</option>
-                        <option v-for="(value, key) in option" :key="key" selected :value="key">{{ value }}</option>
-                    </select> 
-                    <div class="tfhb-swicher-wrap">
-                        <!-- Checkbox swicher -->
-                        <label class="switch">
-                            <input id="swicher" true-value="1" type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
+                    <HbText  
+                        v-model="question.type"
+                        disabled="disabled"
+                    /> 
+                    <HbSwitch 
+                        v-model="question.required"
+                    />
                     <button class="question-edit-btn">
-                        <Icon name="PencilLine" :width="16"/>
+                        <Icon name="PencilLine" :width="16" @click="emit('question-edit', key)"/>
+                    </button>
+                    <button class="question-edit-btn" v-if="key > 2" @click="emit('question-remove', key)">
+                        <Icon name="X" :width="16"/>
                     </button>
                 </div>
                     
             </div> 
+
         </div>
     </div>
 </template>

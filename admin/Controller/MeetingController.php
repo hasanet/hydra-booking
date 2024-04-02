@@ -204,6 +204,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'recurring_status' => isset($request['recurring_status']) ? sanitize_text_field($request['recurring_status']) : '',
             'recurring_repeat' => isset($request['recurring_repeat']) ? wp_json_encode($request['recurring_repeat']) : '',
             'recurring_maximum' => isset($request['recurring_maximum']) ? sanitize_text_field($request['recurring_maximum']) : '',
+            'attendee_can_cancel' => isset($request['attendee_can_cancel']) ? sanitize_text_field($request['attendee_can_cancel']) : '',
+            'attendee_can_reschedule' => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
         ];
 
         $meetingUpdate = $meeting->update($data);

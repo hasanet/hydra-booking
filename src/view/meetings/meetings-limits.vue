@@ -2,7 +2,7 @@
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbCounter from '@/components/meetings/HbCounter.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
-import Icon from '@/components/icon/LucideIcon.vue'
+import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 const emit = defineEmits(["update-meeting", "limits-frequency-add"]); 
 const props = defineProps({
     meetingId: {
@@ -40,7 +40,7 @@ const removeExtraFrequency = (key) => {
             <h2>Meeting Limits</h2> 
             <p>How often attendee can be book</p>
         </div>
-        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-align-baseline">  
+        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-align-baseline tfhb-m-0">  
 
             <!-- Buffer time before meeting -->
             <HbSelect 
@@ -102,7 +102,7 @@ const removeExtraFrequency = (key) => {
             </h2> 
             <p>Set up a repeating schedule</p>
         </div>
-        <div class="tfhb-admin-card-box tfhb-flexbox" v-if="meeting.recurring_status">  
+        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-m-0" v-if="meeting.recurring_status">  
 
             <!-- Meeting interval -->
 
@@ -126,6 +126,19 @@ const removeExtraFrequency = (key) => {
             />
 
         </div>  
+
+        <div class="tfhb-meeting-schedule tfhb-full-width tfhb-flexbox tfhb-gap-16">
+            <HbCheckbox 
+                v-model="meeting.attendee_can_cancel"
+                :label="$tfhb_trans['Attendee can cancel this meeting']"
+                name="attendee_can_cancel"
+            />
+            <HbCheckbox 
+                v-model="meeting.attendee_can_reschedule"
+                :label="$tfhb_trans['Attendee can reschedule this meeting']"
+                name="attendee_can_reschedule"
+            />
+        </div>
 
         <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
         <!--Bookings -->

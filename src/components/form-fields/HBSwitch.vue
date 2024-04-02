@@ -39,7 +39,7 @@ const checkedValue = (e) => {
                         >
                     <span class="slider"></span>
                 </label>
-                <label class="tfhb-schedule-swicher" v-if="label !=''" :for="name"> {{ label }} <span  v-if="required == 'true'"> *</span></label>
+                <label class="tfhb-schedule-swicher" v-if="label" :for="name"> {{ label }} <span  v-if="required == 'true'"> *</span></label>
             </div>
         </div>
     </div>
