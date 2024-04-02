@@ -145,7 +145,76 @@ const meetingData = reactive({
             type:'Text',
             required: 1
         }
-    ]
+    ],
+    notification: {
+        host: {
+            booking_confirmation: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+            booking_cancel: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+            booking_reschedule: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+            booking_reminder: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+        },
+        attendee : {
+            booking_confirmation: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+            },
+            booking_cancel: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+            booking_reschedule: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+            booking_reminder: {
+                status : 0,
+                template : 'default',
+                form : '',
+                subject : '',
+                body : '',
+
+            },
+        }
+    }
     
 });
 
@@ -239,6 +308,10 @@ const meetingId = route.params.id;
 
             if(response.data.meeting.questions){
                 meetingData.questions = JSON.parse(response.data.meeting.questions)
+            }
+
+            if(response.data.meeting.notification){
+                meetingData.notification = JSON.parse(response.data.meeting.notification)
             }
 
         }else{ 

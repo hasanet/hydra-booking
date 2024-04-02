@@ -157,6 +157,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Availability
         $availability = get_option('_tfhb_availability_settings');
         $MeetingData->availability_seetings = $availability;
+
+        // Notification
+        $_tfhb_notification_settings = get_option('_tfhb_notification_settings');
+        $MeetingData->notification = $_tfhb_notification_settings;
+
         // Return response
         $data = array(
             'status' => true, 
