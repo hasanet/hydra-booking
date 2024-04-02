@@ -233,6 +233,14 @@ const meetingId = route.params.id;
             meetingData.attendee_can_cancel = response.data.meeting.attendee_can_cancel
             meetingData.attendee_can_reschedule = response.data.meeting.attendee_can_reschedule
 
+            if(response.data.meeting.questions_status){
+                meetingData.questions_status = response.data.meeting.questions_status
+            }
+
+            if(response.data.meeting.questions){
+                meetingData.questions = JSON.parse(response.data.meeting.questions)
+            }
+
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }
@@ -259,6 +267,9 @@ const UpdateMeetingData = async () => {
             }
             if("MeetingsCreateLimits"==route.name){
                 router.push({ name: 'MeetingsCreateQuestions' });
+            }
+            if("MeetingsCreateQuestions"==route.name){
+                router.push({ name: 'MeetingsCreateNotifications' });
             }
         }else{
             toast.error(response.data.message); 

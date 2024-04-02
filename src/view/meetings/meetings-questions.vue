@@ -88,9 +88,7 @@ function QuestionPopupClose(){
             <p>Create your own booking page questions</p>
         </div>
 
-        
-
-        <div class="tfhb-admin-card-box tfhb-gap-24 tfhb-m-0" v-if="meeting.questions_status">  
+        <div class="tfhb-admin-card-box tfhb-gap-24 tfhb-m-0" v-if="meeting.questions_status!=0">  
 
             <HbQuestion 
                 :question_value="meeting.questions"
@@ -118,7 +116,7 @@ function QuestionPopupClose(){
             </HbPopup>
 
         </div>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="addExtraQuestion()">{{ $tfhb_trans['Save & Continue'] }} </button>
+        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
         <!--Bookings -->
     </div>
 </template>

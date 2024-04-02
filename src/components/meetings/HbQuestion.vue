@@ -16,8 +16,8 @@ const emit = defineEmits(['update:modelValue', 'question-edit', 'question-remove
         <div class="tfhb-single-form-field tfhb-flexbox tfhb-gap-24" :style="{ 'width': '100%' }">
 
             <div class="tfhb-single-form-field-wrap tfhb-full-width" v-for="(question, key)  in question_value" :key="key">
-                <label>{{ question.label }}</label>
-                <div class="tfhb-flexbox tfhb-gap-16 tfhb-field-select">
+                <label v-if="question.label">{{ question.label }}</label>
+                <div class="tfhb-flexbox tfhb-gap-16 tfhb-field-select" v-if="question.label">
                     <HbText  
                         v-model="question.type"
                         disabled="disabled"
