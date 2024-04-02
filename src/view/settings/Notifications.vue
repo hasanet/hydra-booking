@@ -8,20 +8,155 @@ import { toast } from "vue3-toastify";
 
 
 // import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue'
+import HbSelect from '@/components/form-fields/HbSelect.vue' 
+import MailNotifications from '@/components/notifications/MailNotifications.vue'
 
- 
+
 
 //  Load Time Zone 
-const skeleton = ref(false);
- 
-onBeforeMount(() => {  
+const skeleton = ref(true);   
+const host = ref(true);
+const attendee = ref(false);
+
+const Notification = reactive(  { 
+     host : {
+        booking_confirmation: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+        booking_cancel: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+        booking_reschedule: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+        booking_reminder: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+    
+     },
+     attendee : {
+        booking_confirmation: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+        booking_cancel: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+        booking_reschedule: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+        booking_reminder: {
+            status : 0,
+            template : 'default',
+            form : '',
+            subject : '',
+            body : '',
+
+        },
+    
+     }
 });
 
 
+// Update Notification 
+
+const changeTab = (e) => {  
+    // get data-tab attribute value of clicked button
+    const tab = e.target.getAttribute('data-tab'); 
+    if(tab == 'host') {  
+        host.value = true;
+        attendee.value = false;  
+    } else { 
+        host.value = false;
+        attendee.value = true; 
+    }
+
+}
+
+
+// Fetch Notification
+const fetchNotification = async () => {
+
+    skeleton.value = false;
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/notification');
+        if (response.data.status) { 
+            // console.log(response.data.integration_settings);
+            Notification.host = response.data.notification_settings.host ? response.data.notification_settings.host : Notification.host; 
+            Notification.attendee = response.data.notification_settings.attendee ? response.data.notification_settings.attendee : Notification.attendee;
+
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
+const UpdateNotification = async () => {   
+
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/notification/update', Notification, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        if (response.data.status) {    
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+            
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+            });
+        }
+    } catch (error) {
+        toast.error('Action successful', {
+            position: 'bottom-right', // Set the desired position
+        });
+    }
+}
+onBeforeMount(() => {  
+
+    fetchNotification();
+});
+
 </script>
-<template>
-    
+<template> 
     <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard ">
   
         <div  class="tfhb-dashboard-heading ">
@@ -34,44 +169,91 @@ onBeforeMount(() => {
             </div> 
         </div>
         <div class="tfhb-content-wrap">
+            <!-- Gmail -->
             <div class="tfhb-notification-button-tabs tfhb-flexbox tfhb-mb-16">
-                <button class="tfhb-btn boxed-secondary-btn active flex-btn"><Icon name="UserRound" size="15px" /> To host </button>
-                <button class="tfhb-btn boxed-secondary-btn flex-btn"><Icon name="UsersRound" size="15px" /> To Attendee </button>
+                <button @click="changeTab" data-tab="host" class="tfhb-btn tfhb-notification-tabs boxed-secondary-btn flex-btn"  :class="host ? 'active' : ''" ><Icon name="UserRound" size="15px" /> To Host </button>
+                <button @click="changeTab"  data-tab="attendee" class="tfhb-btn tfhb-notification-tabs boxed-secondary-btn flex-btn" :class="attendee ? 'active' : ''"><Icon name="UsersRound" size="15px" /> To Attendee </button>
             </div>
+ 
+            <div v-if="host" class="tfhb-notification-wrap tfhb-notification-attendee tfhb-admin-card-box "> 
+ 
+                <!-- Single Notification  -->
+                <MailNotifications 
+                    title="Send Email to Host" 
+                    label="Booking Confirmation" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.host.booking_confirmation"  
+                /> 
+                <!-- Single Integrations  -->
 
-            <div class="tfhb-notification-wrap tfhb-admin-card-box ">
 
                 <!-- Single Notification  -->
-                <div class="tfhb-notification-single tfhb-flexbox">
-                    <div class="tfhb-swicher-wrap  tfhb-flexbox">
-                        <!-- Checkbox swicher -->
-                        <label class="switch">
-                            <input id="swicher" v-model="date_status" true-value="1"  type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="tfhb-schedule-swicher"  for="swicher">Booking Confirmation</label>
-                        <!-- Checkbox Swicher -->
-                    </div>
-
-                    <button class="tfhb-btn tfhb-edit flex-btn"><Icon name="PencilLine" size="15px" /> Edit </button>
-                </div>
+                <MailNotifications 
+                    title="Send Email to Host" 
+                    label="Booking Cancel" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.host.booking_cancel"  
+                /> 
                 <!-- Single Integrations  -->
 
                 <!-- Single Notification  -->
-                <div class="tfhb-notification-single tfhb-flexbox">
-                    <div class="tfhb-swicher-wrap  tfhb-flexbox">
-                        <!-- Checkbox swicher -->
-                        <label class="switch">
-                            <input id="swicher" v-model="date_status" true-value="1"  type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="tfhb-schedule-swicher"  for="swicher">Booking Cancel</label>
-                        <!-- Checkbox Swicher -->
-                    </div>
-
-                    <button class="tfhb-btn tfhb-edit flex-btn"><Icon name="PencilLine" size="15px" /> Edit </button>
-                </div>
+                <MailNotifications 
+                    title="Send Email to Host" 
+                    label="Booking Reschedule" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.host.booking_reschedule"  
+                /> 
                 <!-- Single Integrations  -->
+
+                <!-- Single Notification  -->
+                <MailNotifications 
+                    title="Send Email to Host" 
+                    label="Booking Reminder" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.host.booking_reminder"  
+                /> 
+                <!-- Single Integrations  -->
+ 
+ 
+            </div> 
+            <div v-if="attendee"  class="tfhb-notification-wrap tfhb-notification-host tfhb-admin-card-box "> 
+
+                <!-- Single Notification  -->
+                <MailNotifications 
+                    title="Send Email to Attendee" 
+                    label="Booking Confirmation" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.attendee.booking_confirmation"  
+                /> 
+                <!-- Single Integrations  -->
+
+
+                <!-- Single Notification  -->
+                <MailNotifications 
+                    title="Send Email to Attendee" 
+                    label="Booking Cancel" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.attendee.booking_cancel"  
+                /> 
+                <!-- Single Integrations  -->
+
+                <!-- Single Notification  -->
+                <MailNotifications 
+                    title="Send Email to Attendee" 
+                    label="Booking Reschedule" 
+                    :data="Notification.attendee.booking_reschedule"  
+                /> 
+                <!-- Single Integrations  -->
+
+                <!-- Single Notification  -->
+                <MailNotifications 
+                    title="Send Email to Attendee" 
+                    label="Booking Reminder" 
+                    @update-notification="UpdateNotification"
+                    :data="Notification.attendee.booking_reminder"  
+                /> 
+                <!-- Single Integrations  -->
+ 
  
             </div> 
 
