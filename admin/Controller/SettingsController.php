@@ -78,16 +78,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'UpdateIntegrationSettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
-        register_rest_route('hydra-booking/v1', '/settings/integration/install-active-plugins', array(
-            'methods' => 'POST',
-            'callback' => array($this, 'installActivePlugins'),
+         
+        // Notification Settings
+        register_rest_route('hydra-booking/v1', '/settings/notification', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'GetNotificationSettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
-
-
-
-        
-       
+        register_rest_route('hydra-booking/v1', '/settings/notification/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateNotificationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        )); 
     }
     // permission_callback
     public function GetGeneralSettings() {
@@ -374,5 +376,53 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 );
             }
         }
+    }
+
+    // Get Notification Settings
+    public function GetNotificationSettings(){
+        $_tfhb_notification_settings = get_option('_tfhb_notification_settings');
+        $data = array(
+            'status' => true, 
+            'notification_settings' => $_tfhb_notification_settings,
+        );
+        return rest_ensure_response($data);
+    }
+
+    // Update Notification Settings
+    public function UpdateNotificationSettings(){
+        $request = json_decode(file_get_contents('php://input'), true);  
+        $data  = get_option('_tfhb_notification_settings');
+
+        //  sanitize Hosts Notification
+        if(isset($request['host'])){
+             foreach ($request['host'] as $key => $value) {
+                $data['host'][$key]['status'] = sanitize_text_field($value['status']);
+                $data['host'][$key]['template'] = sanitize_text_field($value['template']);
+                $data['host'][$key]['form'] = sanitize_text_field($value['form']);
+                $data['host'][$key]['subject'] = sanitize_text_field($value['subject']);
+                $data['host'][$key]['body'] = sanitize_text_field($value['body']);
+            }
+        }
+
+        // sanitize Guest Notification
+        if(isset($request['attendee'])){
+            foreach ($request['attendee'] as $key => $value) {
+                $data['attendee'][$key]['status'] = sanitize_text_field($value['status']);
+                $data['attendee'][$key]['template'] = sanitize_text_field($value['template']);
+                $data['attendee'][$key]['form'] = sanitize_text_field($value['form']);
+                $data['attendee'][$key]['subject'] = sanitize_text_field($value['subject']);
+                $data['attendee'][$key]['body'] = sanitize_text_field($value['body']);
+            }
+        }
+
+        // update option
+        update_option('_tfhb_notification_settings', $data);
+
+        //  woocommerce payment   
+        $data = array(
+            'status' => true,  
+            'message' => 'Notification Settings Updated Successfully',
+        );
+        return rest_ensure_response($data);
     }
 } 

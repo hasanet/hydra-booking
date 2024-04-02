@@ -29,6 +29,13 @@ namespace HydraBooking\Admin\Controller;
             'Bookings will be completed automatically after' =>  __('Bookings will be completed automatically after', 'hydra-booking'),
             'Default status of bookings' =>  __('Default status of bookings', 'hydra-booking'),
             'Minimum time required before Booking/Cancel/Reschedule' =>  __('Minimum time required before Booking/Cancel/Reschedule', 'hydra-booking'),
+            'Select Template' =>  __('Select Template', 'hydra-booking'),
+            'From' =>  __('From', 'hydra-booking'),
+            'Enter From Email' =>  __('Enter From Email', 'hydra-booking'),
+            'Enter Mail Subject' =>  __('Enter Mail Subject', 'hydra-booking'),
+            'Subject' =>  __('Subject', 'hydra-booking'),
+            'Mail Body' =>  __('Mail Body', 'hydra-booking'),
+            'Update' =>  __('Update', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),
