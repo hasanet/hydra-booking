@@ -164,6 +164,28 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $MeetingData->notification = $_tfhb_notification_settings;
         }
 
+        // Integration
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        if(!file_exists(WP_PLUGIN_DIR . '/' . 'woocommerce/woocommerce.php')){
+            $woo_connection_status =  0;
+
+        } else if(!is_plugin_active( 'woocommerce/woocommerce.php')){
+            $woo_connection_status =  0;
+        }else{
+            $woo_connection_status =  1;
+        } 
+
+        if(!isset($_tfhb_integration_settings['woo_payment'])){
+            $_tfhb_integration_settings['woo_payment']['type'] =  'type';
+            $_tfhb_integration_settings['woo_payment']['status'] =  0;
+            $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
+        }else{
+            $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
+        }
+        if(empty($MeetingData->payment_meta)){
+            $MeetingData->payment_meta = $_tfhb_integration_settings;
+        }
+        
         // Return response
         $data = array(
             'status' => true, 
@@ -219,6 +241,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'payment_status' => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
             'meeting_price' => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
             'payment_currency' => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
+            'payment_meta' => isset($request['payment_meta']) ? wp_json_encode($request['payment_meta']) : '',
         ];
 
         $meetingUpdate = $meeting->update($data);

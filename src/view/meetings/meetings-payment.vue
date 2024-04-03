@@ -74,12 +74,8 @@ const changeTab = (e) => {
             <div class="tfhb-content-wrap tfhb-full-width"> 
                 <div class="tfhb-integrations-wrap tfhb-flexbox">
                     <!-- Woo  Integrations  -->
-                    <WooIntegrations :woo_payment="meeting.integration.woo_payment" @update-integrations="UpdateIntegration" />
+                    <WooIntegrations :woo_payment="meeting.payment_meta.woo_payment" @update-integrations="UpdateIntegration" />
                     <!-- Woo Integrations  -->
-
-                    <!-- zoom intrigation -->
-                    <ZoomIntregration :zoom_meeting="meeting.integration.zoom_meeting" @update-integrations="UpdateIntegration" />
-                    <!-- zoom intrigation -->
                 </div> 
             </div>
 

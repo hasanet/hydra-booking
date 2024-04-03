@@ -218,20 +218,11 @@ const meetingData = reactive({
     payment_status: 1,
     meeting_price: '',
     payment_currency: '',
-    integration: {
+    payment_meta: {
         woo_payment : {
             type: 'payment', 
             status: 0, 
             connection_status: 0,  
-        },
-        zoom_meeting : {
-            type: 'meeting', 
-            status: 0, 
-            connection_status: 0,
-            account_id: '',
-            app_client_id: '',
-            app_secret_key: '',
-
         }
     }
 });
@@ -338,7 +329,14 @@ const meetingId = route.params.id;
             }
             meetingData.meeting_price = response.data.meeting.meeting_price
             meetingData.payment_currency = response.data.meeting.payment_currency
-            
+
+            if(response.data.meeting.payment_meta && "string" == typeof response.data.meeting.payment_meta){
+                meetingData.payment_meta = JSON.parse(response.data.meeting.payment_meta)
+            }
+            if(response.data.meeting.payment_meta && "object" == typeof response.data.meeting.payment_meta){
+                meetingData.payment_meta = response.data.meeting.payment_meta
+            }
+
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }
