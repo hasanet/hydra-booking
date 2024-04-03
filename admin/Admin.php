@@ -3,9 +3,10 @@ namespace HydraBooking\Admin;
 
 
 use HydraBooking\Admin\Controller\Enqueue;
-use HydraBooking\Admin\Controller\AdminMenu;
+use HydraBooking\Admin\Controller\AdminMenu; 
 use HydraBooking\Admin\Controller\AvailabilityController;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices;
+use HydraBooking\PostType\PostType_Class;
 //  Load Migrator
 use HydraBooking\DB\Migrator;
 
@@ -25,7 +26,9 @@ use HydraBooking\DB\Migrator;
       // admin menu
       new AdminMenu();
 
-      
+      // Post Type 
+      new PostType_Class();
+
       // availability controller
       new AvailabilityController();
       // activation hooks 
