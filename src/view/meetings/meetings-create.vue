@@ -309,11 +309,13 @@ const meetingId = route.params.id;
             if(response.data.meeting.questions){
                 meetingData.questions = JSON.parse(response.data.meeting.questions)
             }
-
-            if(response.data.meeting.notification){
+            if(response.data.meeting.notification && "string" == typeof response.data.meeting.notification){
                 meetingData.notification = JSON.parse(response.data.meeting.notification)
             }
-
+            if(response.data.meeting.notification && "object" == typeof response.data.meeting.notification){
+                meetingData.notification = response.data.meeting.notification
+            }
+            
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }

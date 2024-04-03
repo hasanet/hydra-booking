@@ -18,7 +18,7 @@ const props = defineProps({
     default: '600px'
   },
 });
-const emit = defineEmits([ "modal-close", ]); 
+const emit = defineEmits([ "modal-close" ]); 
  
 </script>
  

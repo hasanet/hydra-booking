@@ -159,8 +159,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $MeetingData->availability_seetings = $availability;
 
         // Notification
-        $_tfhb_notification_settings = get_option('_tfhb_notification_settings');
-        $MeetingData->notification = $_tfhb_notification_settings;
+        if(empty($MeetingData->notification)){
+            $_tfhb_notification_settings = get_option('_tfhb_notification_settings');
+            $MeetingData->notification = $_tfhb_notification_settings;
+        }
 
         // Return response
         $data = array(
@@ -213,6 +215,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'attendee_can_reschedule' => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
             'questions_status' => isset($request['questions_status']) ? sanitize_text_field($request['questions_status']) : '',
             'questions' => isset($request['questions']) ? wp_json_encode($request['questions']) : '',
+            'notification' => isset($request['notification']) ? wp_json_encode($request['notification']) : '',
         ];
 
         $meetingUpdate = $meeting->update($data);
