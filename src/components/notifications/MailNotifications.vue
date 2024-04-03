@@ -12,6 +12,7 @@ import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbPopup from '@/components/widgets/HbPopup.vue';   
 import HbText from '@/components/form-fields/HbText.vue' 
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
+import HbEditor from '@/components/form-fields/HbEditor.vue';
  
 
 //  Load Time Zone 
@@ -84,6 +85,7 @@ const emit = defineEmits(['update-notification']);
                     selected = "1" 
                     :placeholder="$tfhb_trans['Mail Body']"  
                 /> 
+            <HbEditor />
                 <button class="tfhb-btn boxed-btn" @click.stop="emit('update-notification')">{{ $tfhb_trans['Update'] }}</button>
             </template> 
         </HbPopup>
