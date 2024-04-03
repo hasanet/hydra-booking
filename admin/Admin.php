@@ -6,7 +6,10 @@ use HydraBooking\Admin\Controller\Enqueue;
 use HydraBooking\Admin\Controller\AdminMenu; 
 use HydraBooking\Admin\Controller\AvailabilityController;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices;
-use HydraBooking\PostType\PostType_Class;
+
+use HydraBooking\PostType\Post_Type;
+use HydraBooking\PostType\Meeting\Meeting_CPT;
+
 //  Load Migrator
 use HydraBooking\DB\Migrator;
 
@@ -27,7 +30,7 @@ use HydraBooking\DB\Migrator;
       new AdminMenu();
 
       // Post Type 
-      new PostType_Class();
+      new Meeting_CPT();
 
       // availability controller
       new AvailabilityController();

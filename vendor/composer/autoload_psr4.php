@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'HydraBooking\\Services\\' => array($baseDir . '/includes/services'),
+    'HydraBooking\\PostType\\' => array($baseDir . '/includes/post-type'),
     'HydraBooking\\DB\\' => array($baseDir . '/database'),
     'HydraBooking\\Admin\\' => array($baseDir . '/admin'),
 );

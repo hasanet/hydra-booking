@@ -3,7 +3,7 @@
 namespace HydraBooking\PostType\Meeting;
 defined( 'ABSPATH' ) || exit;
 
-class Meeting_CPT extends \HydraBooking\Admin\Controller\Post_Type {
+class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 
 	private static $instance;
 

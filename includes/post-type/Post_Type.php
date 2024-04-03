@@ -3,20 +3,20 @@ namespace HydraBooking\PostType;
   // exit
   if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-  class PostType_Class {
+  class Post_Type {
 
-    // private static $instance;
+    private static $instance;
 
-	// /**
-	//  * @return static
-	//  */
-	// public static function instance() {
-	// 	if(!self::$instance) {
-	// 		self::$instance = new self();
-	// 	}
+	/**
+	 * @return static
+	 */
+	public static function instance() {
+		if(!self::$instance) {
+			self::$instance = new self();
+		}
 
-	// 	return self::$instance;
-	// }
+		return self::$instance;
+	}
 
     protected $post_args;
 	protected $tax_args;
@@ -26,12 +26,12 @@ namespace HydraBooking\PostType;
 		$this->post_args = $post_args;
 		$this->tax_args  = $tax_args;
         
+		var_dump($this->post_args);
 		$this->tfhb_post_type_register();
 	}
 
 	public function tfhb_post_type_register() {
-		$post_args = $this->post_args;
-        var_dump($post_args);
+		$post_args = $this->post_args; 
 		$labels = array(
 			'name'                  => _x( $post_args['name'], 'hydra-booking post type name', 'hydra-booking' ),
 			'singular_name'         => _x( $post_args['singular_name'], 'singular hydra-booking post type name', 'hydra-booking' ),
