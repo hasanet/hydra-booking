@@ -216,6 +216,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'questions_status' => isset($request['questions_status']) ? sanitize_text_field($request['questions_status']) : '',
             'questions' => isset($request['questions']) ? wp_json_encode($request['questions']) : '',
             'notification' => isset($request['notification']) ? wp_json_encode($request['notification']) : '',
+            'payment_status' => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
+            'meeting_price' => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
+            'payment_currency' => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
         ];
 
         $meetingUpdate = $meeting->update($data);

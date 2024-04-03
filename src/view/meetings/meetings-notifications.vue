@@ -46,7 +46,7 @@ const changeTab = (e) => {
                 <button @click="changeTab"  data-tab="attendee" class="tfhb-btn tfhb-notification-tabs boxed-secondary-btn flex-btn" :class="attendee ? 'active' : ''"><Icon name="UsersRound" size="15px" /> To Attendee </button>
             </div>
  
-            <div v-if="host" class="tfhb-notification-wrap tfhb-notification-attendee tfhb-admin-card-box tfhb-m-0"> 
+            <div v-if="host" class="tfhb-notification-wrap tfhb-notification-attendee tfhb-admin-card-box tfhb-m-0 tfhb-full-width"> 
  
                 <!-- Single Notification  -->
                 <MailNotifications 
@@ -87,7 +87,7 @@ const changeTab = (e) => {
  
  
             </div> 
-            <div v-if="attendee"  class="tfhb-notification-wrap tfhb-notification-host tfhb-admin-card-box tfhb-m-0"> 
+            <div v-if="attendee"  class="tfhb-notification-wrap tfhb-notification-host tfhb-admin-card-box tfhb-m-0 tfhb-full-width"> 
 
                 <!-- Single Notification  -->
                 <MailNotifications 

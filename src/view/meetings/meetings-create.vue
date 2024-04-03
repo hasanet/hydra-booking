@@ -214,8 +214,26 @@ const meetingData = reactive({
 
             },
         }
+    },
+    payment_status: 1,
+    meeting_price: '',
+    payment_currency: '',
+    integration: {
+        woo_payment : {
+            type: 'payment', 
+            status: 0, 
+            connection_status: 0,  
+        },
+        zoom_meeting : {
+            type: 'meeting', 
+            status: 0, 
+            connection_status: 0,
+            account_id: '',
+            app_client_id: '',
+            app_secret_key: '',
+
+        }
     }
-    
 });
 
 // Add more Location
@@ -315,6 +333,11 @@ const meetingId = route.params.id;
             if(response.data.meeting.notification && "object" == typeof response.data.meeting.notification){
                 meetingData.notification = response.data.meeting.notification
             }
+            if(response.data.meeting.payment_status){
+                meetingData.payment_status = response.data.meeting.payment_status
+            }
+            meetingData.meeting_price = response.data.meeting.meeting_price
+            meetingData.payment_currency = response.data.meeting.payment_currency
             
         }else{ 
             router.push({ name: 'MeetingsLists' });
@@ -346,6 +369,12 @@ const UpdateMeetingData = async () => {
             if("MeetingsCreateQuestions"==route.name){
                 router.push({ name: 'MeetingsCreateNotifications' });
             }
+            if("MeetingsCreateNotifications"==route.name){
+                router.push({ name: 'MeetingsCreatePayment' });
+            }
+            if("MeetingsCreatePayment"==route.name){
+                router.push({ name: 'MeetingsLists' });
+            }
         }else{
             toast.error(response.data.message); 
         }
@@ -375,7 +404,7 @@ const UpdateMeetingData = async () => {
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/limits'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/limits' }"> Limits</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> Questions</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/notifications'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> Notifications</router-link></li>  
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> Payment</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/payment'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }"> Payment</router-link></li>  
 
             </ul>  
         </nav>

@@ -108,6 +108,8 @@ namespace HydraBooking\Admin\Controller;
             'Availability title'=> __('Availability title', 'hydra-booking'),
             'Attendee can cancel this meeting' => __('Attendee can cancel this meeting', 'hydra-booking'),
             'Attendee can reschedule this meeting' => __('Attendee can reschedule this meeting', 'hydra-booking'),
+            'Price' => __('Price', 'hydra-booking'),
+            'Save & Preview' => __('Save & Preview', 'hydra-booking'),
 
             //Booking
             'Add New Booking' => __('Add New Booking', 'hydra-booking'),

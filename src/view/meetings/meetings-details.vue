@@ -39,7 +39,7 @@ const props = defineProps({
             :placeholder="$tfhb_trans['Describe about meeting']" 
         /> 
 
-        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-16 tfhb-m-0"> 
+        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-16 tfhb-m-0 tfhb-full-width"> 
             <!-- Duration -->
             <HbSelect 
                 v-model="meeting.duration" 
@@ -56,7 +56,7 @@ const props = defineProps({
             />
         </div>
 
-        <div class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0"> 
+        <div class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0 tfhb-full-width"> 
             <div class="tfhb-flexbox tfhb-gap-16 tfhb-mb-24" v-for="(slocation, index) in meeting.meeting_locations" :key="index">
                 <!-- Location -->
                 <HbSelect 

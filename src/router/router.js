@@ -113,6 +113,11 @@ const routes = [
                         path: 'notifications',
                         name: 'MeetingsCreateNotifications',
                         component: () => import('../view/meetings/meetings-notifications.vue')
+                    },
+                    {
+                        path: 'payment',
+                        name: 'MeetingsCreatePayment',
+                        component: () => import('../view/meetings/meetings-payment.vue')
                     }
                 ]
             }, 
