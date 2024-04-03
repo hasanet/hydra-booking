@@ -213,6 +213,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
 
+        // Get Current User
+        $current_user = wp_get_current_user();
+		// get user id
+		$current_user_id = $current_user->ID;
+        
         // Update Meeting
         $data = [ 
             'id' => $request['id'],
@@ -242,6 +247,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_price' => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
             'payment_currency' => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
             'payment_meta' => isset($request['payment_meta']) ? wp_json_encode($request['payment_meta']) : '',
+            'updated_at' => date('Y-m-d'),
+            'updated_by' => $current_user_id
         ];
 
         $meetingUpdate = $meeting->update($data);
