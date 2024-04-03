@@ -25,8 +25,6 @@ namespace HydraBooking\PostType;
 
 		$this->post_args = $post_args;
 		$this->tax_args  = $tax_args;
-        
-		var_dump($this->post_args);
 		$this->tfhb_post_type_register();
 	}
 
@@ -64,8 +62,8 @@ namespace HydraBooking\PostType;
 			'public'             => true,
 			'show_in_rest'       => true,
 			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
+			'show_ui'            => $post_args['show_ui'],
+			'show_in_menu'       => $post_args['show_in_menu'],
 			'query_var'          => true,
 			'menu_icon'          => $post_args['menu_icon'],
 			'rewrite'            => array( 'slug' => $post_args['rewrite_slug'], 'with_front' => false ),
@@ -77,7 +75,6 @@ namespace HydraBooking\PostType;
 		);
 
 		$args = apply_filters( $post_args['slug'] . '_args', $args );
-
 		register_post_type( $post_args['slug'], $args );
 	}
 

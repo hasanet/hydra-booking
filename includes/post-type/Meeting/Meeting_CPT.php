@@ -29,10 +29,11 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 			'singular_name' => 'Meeting',
 			'slug'          => 'tfhb_meeting',
 			'menu_icon'     => 'dashicons-admin-home',
-			'menu_position' => 26.4,
 			'supports'      => apply_filters( 'tfhb_meeting_supports', array( 'title', 'editor', 'thumbnail', 'comments', 'author' ) ),
-			'capability'    => array( 'tfhb_meeting', 'tfhb_meetings' ),
+			'capability'    => 'post',
 			'rewrite_slug'  => 'tfhb_meeting',
+			'show_ui'  => false,
+			'show_in_menu' => false
 		);
 
 		$tax_args = array(

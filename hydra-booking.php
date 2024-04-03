@@ -30,8 +30,8 @@ class THB_INIT{
         }
 
         add_action('init', array($this, 'init'));
- 
         
+        register_activation_hook( THB_PATH . 'hydra-booking.php', array($this, 'tfhb_rewrite_flush' ));
     }
 
     public function init() {   
@@ -57,6 +57,11 @@ class THB_INIT{
 
         
     } 
+    public function tfhb_rewrite_flush() {
+
+        flush_rewrite_rules();
+    
+    }
     public function custom_data(){
        echo "Hello World";
          die();
