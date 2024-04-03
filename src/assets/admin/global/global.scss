@@ -525,3 +525,24 @@
         }
     }
 }
+
+.tfhb-integrations-wrap{
+    width: 100% !important; 
+    justify-content: normal !important;
+    .tfhb-integrations-single-block{
+        margin: 0;
+        width: calc(30% - 48px);
+        display: flow-root !important;
+        h3 {
+            font-weight: 600;
+            line-height: 1.5;
+        } 
+        .tfhb-integrations-single-block-icon {
+            margin-bottom: 16px !important;
+            display: inline-block;
+        } 
+        .tfhb-integrations-single-block-btn {
+            margin-top: 32px;
+        }
+    } 
+}
