@@ -12,6 +12,7 @@ const meetingData = reactive({
     id: 0,
     user_id: 0,
     host_id: '',
+    post_id: '',
     title: '',
     description: '',
     meeting_type: '',
@@ -274,6 +275,8 @@ const meetingId = route.params.id;
         if (response.data.status == true) { 
             meetingData.id = response.data.meeting.id
             meetingData.user_id = response.data.meeting.user_id
+            meetingData.host_id = response.data.meeting.host_id
+            meetingData.post_id = response.data.meeting.post_id
             meetingData.title = response.data.meeting.title
             meetingData.description = response.data.meeting.description
             meetingData.meeting_type = response.data.meeting.meeting_type

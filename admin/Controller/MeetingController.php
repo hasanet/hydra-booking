@@ -73,9 +73,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		// get user id
 		$current_user_id = $current_user->ID;
         
+        // Create an array to store the post data for meeting the current row
+        $meeting_post_data = array(
+            'post_type'    => 'tfhb_meeting',
+            'post_title'   => esc_html('No Title'),
+            'post_status'  => 'publish',
+            'post_author'  => $current_user_id
+        );
+        $meeting_post_id = wp_insert_post( $meeting_post_data );
+
         $data = [ 
             'user_id' => $current_user_id,
             'meeting_type' => isset($request_data['meeting_type']) ? sanitize_text_field($request_data['meeting_type']) : '', 
+            'post_id' => $meeting_post_id,
             'created_by' => $current_user_id,
             'updated_by' => $current_user_id,
             'created_at' => date('Y-m-d'),
@@ -254,6 +264,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $meetingUpdate = $meeting->update($data);
         if(!$meetingUpdate['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while updating Meeting'));
+        }
+
+        //Updated Meeting post meta
+        if( $MeetingData->post_id ){
+            $meeting_post_data = array(
+                'ID'           => $MeetingData->post_id,
+                'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+                'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+                'post_author'  => $current_user_id,
+                'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
+            );
+            wp_update_post( $meeting_post_data ); 
+
+            //insert post meta
+            update_post_meta( $MeetingData->post_id, 'tfhb_meeting_opt', $data );
         }
 
         // Return response

@@ -26,6 +26,7 @@ class Meeting {
                 slug VARCHAR(255) NULL,
                 host_id INT(11) NULL,
                 user_id INT(11) NOT NULL,
+                post_id INT(11) NOT NULL,
                 title VARCHAR(255) NULL,
                 description LONGTEXT NULL,
                 meeting_type VARCHAR(255) NOT NULL,
