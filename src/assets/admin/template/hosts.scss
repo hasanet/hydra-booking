@@ -1,10 +1,11 @@
 .tfhb-admin-hosts {
+  >.tfhb-dashboard-heading {
+    margin-right: 16px !important;
+  }
   .tfhb-popup {
     .tfhb-popup-wrap {
       max-width: 500px !important;
-      .tfhb-dashboard-heading {
-        margin-right: 0 !important;
-      }
+      
     }
   }
 

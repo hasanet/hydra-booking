@@ -61,7 +61,10 @@ const FilterCatgoryPreview = ref(false);
 
             <!-- Single Chartbox -->
             <div class="tfhb-single-chartbox">
-                <div class="tfhb-single-chartbox-wrap">
+                <div class="tfhb-single-chartbox-wrap gradient-1">
+                    <span class="tfhb-adminchartbox-shape">
+                        <img  :src="$tfhb_url+'/assets/images/shape-1.svg'" alt="">
+                    </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Total Booking</span> 
@@ -178,7 +181,10 @@ const FilterCatgoryPreview = ref(false);
             <!-- Single Chartbox --> 
             <!-- Single Chartbox -->
             <div class="tfhb-single-chartbox">
-                <div class="tfhb-single-chartbox-wrap">
+                <div class="tfhb-single-chartbox-wrap gradient-2">
+                    <span class="tfhb-adminchartbox-shape">
+                        <img  :src="$tfhb_url+'/assets/images/shape-2.svg'" alt="">
+                    </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Total Booking</span> 
@@ -296,7 +302,10 @@ const FilterCatgoryPreview = ref(false);
 
             <!-- Single Chartbox -->
             <div class="tfhb-single-chartbox">
-                <div class="tfhb-single-chartbox-wrap">
+                <div class="tfhb-single-chartbox-wrap gradient-3">
+                    <span class="tfhb-adminchartbox-shape">
+                        <img  :src="$tfhb_url+'/assets/images/shape-3.svg'" alt="">
+                    </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Total Booking</span> 
@@ -413,7 +422,10 @@ const FilterCatgoryPreview = ref(false);
             <!-- Single Chartbox --> 
             <!-- Single Chartbox -->
             <div class="tfhb-single-chartbox">
-                <div class="tfhb-single-chartbox-wrap">
+                <div class="tfhb-single-chartbox-wrap gradient-4">
+                    <span class="tfhb-adminchartbox-shape">
+                        <img  :src="$tfhb_url+'/assets/images/shape-4.svg'" alt="">
+                    </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Total Booking</span> 

@@ -23,6 +23,50 @@
 			margin-bottom: 16px;
 		}
 
+		.tfhb-availability-single-box{
+			width: calc(50% - 12px);
+
+			.tfhb-availability-single-box-wrap {
+				border-radius: 8px;
+				border: 1px solid #F6EEF2;
+				padding: 24px;
+				.tfhb-dashboard-heading {
+					margin-bottom: 16px;
+					border-bottom: .5px solid #F6EEF2;
+					margin-right: 0 !important;
+					.tfhb-admin-title{
+						h3{
+							font-size: 15px !important;
+						font-weight: 400 !important;
+						}
+					}
+				  }
+			  }
+			  .tfhb-availability-single-box-info{
+				margin-bottom: 16px;
+				// last child
+				&:last-child {
+					margin-bottom: 0;
+				}
+				&.tfhb-flexbox {
+
+					justify-content: normal !important;
+					gap: 16px !important; 
+				}
+				span {
+					font-size: 15px !important; 
+					line-height: 24px !important; 
+					width: 90%;
+				  }
+				.fthb-availability-timeslots{
+					p{ 
+						display: inline-block; 
+					}
+				}
+			  }
+			
+		}
+
 
 		.tfhb-integrations-wrap{
 			width: 100% !important; 
@@ -55,7 +99,50 @@
 		
 	}
 
-  
+	.tfhb-availability-popup{   
+		.tfhb-availability-content-wrap{
+			margin-top: 32px;
+			.tfhb-availability-schedule-single  {
+				margin-bottom: 24px;
+				// last child
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+				.tfhb-availability-schedule-wrap{
+					.tfhb-availability-schedule-inner{
+						margin-bottom: 24px;
+						// last child
+						&:last-child {
+							margin-bottom: 0;
+						}
+					}
+				}
+			}
+		} 
+		.tfhb-availability-schedule-btn {
+			border: none;
+			background-color: transparent; 
+		}
+		.tfhb-hydra-dasboard-content{ 
+			position: relative;
+			.tfhb-availability-content-wrap{
+				margin-top: 32px;
+				.tfhb-availability-schedule-single{
+					justify-content: normal !important;
+					input, label, span {
+						margin-top: 0 !important;
+					}
+					.tfhb-availability-schedule-clone-btn {
+						border: none;
+						background-color: transparent; 
+					}
+				}
+			}
+		}
+		
+
+	}
 	.tfhb-hydra-admin-tabs {
 		padding: 32px 16px 32px 16px;
 		border-right: 1px solid #F6EEF2;
@@ -86,30 +173,7 @@
 			}
 		}
 	}
-
-	.tfhb-availability-popup{   
-		.tfhb-availability-content-wrap{
-			margin-top: 32px;
-		}  
-		.tfhb-hydra-dasboard-content{ 
-			position: relative;
-			.tfhb-availability-content-wrap{
-				margin-top: 32px;
-				.tfhb-availability-schedule-single{
-					justify-content: normal !important;
-					input, label, span {
-						margin-top: 0 !important;
-					}
-					.tfhb-availability-schedule-clone-btn {
-						border: none;
-						background-color: transparent; 
-					}
-				}
-			}
-		}
-		
-
-	}
+ 
 }
 
 
