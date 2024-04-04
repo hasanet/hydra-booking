@@ -71,7 +71,6 @@ namespace HydraBooking\PostType;
 			'capability_type'    => $post_args['capability'],
 			'has_archive'        => true,
 			'hierarchical'       => false,
-			'menu_position'      => $post_args['menu_position'],
 			'supports'           => $post_args['supports'],
 		);
 

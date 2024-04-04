@@ -13,6 +13,7 @@ const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false);
 const isModalOpened = ref(false);
+const skeleton = ref(true);
 
 const openModal = () => {
   isModalOpened.value = true;
@@ -28,6 +29,7 @@ const fetchMeetings = async () => {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists');
         if (response.data.status) { 
             meetings.data = response.data.meetings;  
+            skeleton.value = false;
         }
     } catch (error) {
         console.log(error);
@@ -217,7 +219,7 @@ onBeforeMount(() => {
         </div>
     </div>
 
-    <div class="tfhb-meetings-list-content">
+    <div class="tfhb-meetings-list-content" :class="{ 'tfhb-skeleton': skeleton }">
         <div class="tfhb-meetings-list-wrap tfhb-flexbox">
 
             <!-- Single Meeting -->

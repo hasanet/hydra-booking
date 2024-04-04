@@ -137,7 +137,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             //Delete Post
             wp_delete_post($post_id, true);
             //Delete Post Meta
-            delete_post_meta( $post_id, 'tfhb_meeting_opt' ); 
+            delete_post_meta( $post_id, '__tfhb_meeting_opt' ); 
         }
 
         // Meeting Lists
@@ -285,7 +285,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             wp_update_post( $meeting_post_data ); 
 
             //Updated post meta
-            update_post_meta( $MeetingData->post_id, 'tfhb_meeting_opt', $data );
+            update_post_meta( $MeetingData->post_id, '__tfhb_meeting_opt', $data );
         }
 
         // Return response

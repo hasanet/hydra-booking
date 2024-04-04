@@ -7,6 +7,7 @@ import { toast } from "vue3-toastify";
 
 const route = useRoute();
 const router = useRouter();
+const skeleton = ref(true);
 
 const meetingData = reactive({
     id: 0,
@@ -340,6 +341,7 @@ const meetingId = route.params.id;
                 meetingData.payment_meta = response.data.meeting.payment_meta
             }
 
+            skeleton.value = false
         }else{ 
             router.push({ name: 'MeetingsLists' });
         }
@@ -386,7 +388,7 @@ const UpdateMeetingData = async () => {
 </script>
 
 <template>
-    <div class="tfhb-meeting-create">
+    <div class="tfhb-meeting-create" :class="{ 'tfhb-skeleton': skeleton }">
         <div class="tfhb-meeting-create-notice tfhb-mb-32">
             <div class="tfhb-meeting-heading tfhb-flexbox">
                 <Icon name="ArrowLeft" size="20px" /> 
