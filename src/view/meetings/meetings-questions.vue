@@ -3,6 +3,8 @@ import {reactive, ref} from 'vue'
 import HbQuestion from '@/components/meetings/HbQuestion.vue'
 import HbQuestionForm from '@/components/meetings/HbQuestionForm.vue'
 import Icon from '@/components/icon/LucideIcon.vue'
+import HbSwitch from '@/components/form-fields/HbSwitch.vue'
+import HbPopup from '@/components/widgets/HbPopup.vue'; 
 
 const emit = defineEmits(["update-meeting", "limits-frequency-add"]); 
 const props = defineProps({
@@ -16,6 +18,50 @@ const props = defineProps({
     },
 
 });
+
+const QuestionPopup = ref(false);
+// Extra Qestion Data
+const questions_data = reactive({});
+// Remove removeExtraQuestion
+const removeExtraQuestion = (key) => {
+    props.meeting.questions.splice(key, 1);
+}
+function EditExtraQuestion(key){
+    props.meeting.questions.forEach((question, qkey) => {
+        if (qkey === key) {
+            questions_data.key = key;
+            questions_data.label = question.label;
+            questions_data.type = question.type;
+            questions_data.required = question.required;
+            QuestionPopup.value = true;
+        }
+    });
+}
+// Popup Saved addExtraQuestion
+function addExtraQuestion(){
+    props.meeting.questions[questions_data.key].label = questions_data.label
+    props.meeting.questions[questions_data.key].type = questions_data.type
+    props.meeting.questions[questions_data.key].required = questions_data.required
+    QuestionPopup.value = false;
+}
+// Add New Question
+function QuestionPopupAdd(){
+    props.meeting.questions.push({
+        label: '',
+        type:'',
+        required: 1
+    });
+    const lastIndexOfQuestion = props.meeting.questions.length - 1;
+    questions_data.key = lastIndexOfQuestion;
+    questions_data.label = '';
+    questions_data.type = '';
+    questions_data.required = '';
+    QuestionPopup.value = true;
+}
+// Popup close
+function QuestionPopupClose(){
+    QuestionPopup.value = false;
+}
 
 </script>
 
