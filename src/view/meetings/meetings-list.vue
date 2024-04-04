@@ -220,7 +220,7 @@ onBeforeMount(() => {
     </div>
 
     <div class="tfhb-meetings-list-content" :class="{ 'tfhb-skeleton': skeleton }">
-        <div class="tfhb-meetings-list-wrap tfhb-flexbox">
+        <div class="tfhb-meetings-list-wrap tfhb-flexbox tfhb-justify-normal">
 
             <!-- Single Meeting -->
             <div class="tfhb-single-meeting" v-for="(smeeting, key) in meetings.data"> 
