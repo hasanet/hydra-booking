@@ -120,26 +120,33 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function DeleteMeeting(){
         $request = json_decode(file_get_contents('php://input'), true);
         // Check if user is selected
-        $host_id = $request['id'];
-        $user_id = $request['user_id']; 
-        if (empty($host_id) || $host_id == 0) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        $meeting_id = $request['id'];
+        $post_id = $request['post_id']; 
+        if (empty($meeting_id) || $meeting_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
-        // Delete Host
-        $host = new Host();
-        $hostDelete = $host->delete($host_id);
-        if(!$hostDelete) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Error while deleting host'));
+        // Delete Meeting
+        $meeting = new Meeting();
+        $meetingDelete = $meeting->delete($meeting_id);
+        if(!$meetingDelete) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while deleting meeting'));
         }
-        // Update user Option
-        delete_user_meta($user_id, '_tfhb_host');
-        // Hosts Lists
-        $HostsList = $host->get();
+
+        // Delete Post and Post Meta
+        if ( !empty($post_id) ) {
+            //Delete Post
+            wp_delete_post($post_id, true);
+            //Delete Post Meta
+            delete_post_meta( $post_id, 'tfhb_meeting_opt' ); 
+        }
+
+        // Meeting Lists
+        $MeetingsList = $meeting->get();
         // Return response
         $data = array(
             'status' => true, 
-            'hosts' => $HostsList,  
-            'message' => 'Host Deleted Successfully', 
+            'meetings' => $MeetingsList,  
+            'message' => 'Meeting Deleted Successfully', 
         );
         return rest_ensure_response($data);
     }

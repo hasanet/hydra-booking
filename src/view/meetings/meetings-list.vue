@@ -64,6 +64,26 @@ const CreateMeeting = async (type) => {
     }   
 }
 
+
+// Delete Meeting 
+const deleteMeeting = async ($id, $post_id) => { 
+    let deleteMeeting = {
+        id: $id,
+        post_id: $post_id
+    }
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/delete', deleteMeeting, {
+               
+        } );
+        if (response.data.status) { 
+            meetings.data = response.data.meetings;  
+            toast.success(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 onBeforeMount(() => { 
     fetchMeetings();
 });
@@ -282,7 +302,7 @@ onBeforeMount(() => {
                             <!-- route link -->
                             <router-link :to="{ name: 'MeetingsCreate', params: { id: smeeting.id } }" class="tfhb-dropdown-single">Edit</router-link>
                             
-                            <span class="tfhb-dropdown-single">Delete</span>
+                            <span class="tfhb-dropdown-single" @click="deleteMeeting(smeeting.id, smeeting.post_id)">Delete</span>
                         </div>
                     </div>
                 </div>
