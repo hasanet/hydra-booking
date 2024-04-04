@@ -26,7 +26,7 @@ const BookingDetailsPopup = ref(true);
     </div> 
 </div>
 
-<HbPopup :isOpen="BookingDetailsPopup" @modal-close="BookingDetailsPopup = false" max_width="750px" name="first-modal">
+<HbPopup :isOpen="BookingDetailsPopup" @modal-close="BookingDetailsPopup = false" max_width="750px" name="first-modal" gap="32px">
     <template #header> 
         <h3>Discussion about design system</h3>
     </template>
