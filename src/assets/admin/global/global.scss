@@ -84,8 +84,14 @@
     .tfhb-p-24{
         padding: 24px !important;
     }
-
-    //Padding
+    .tfhb-pt-0{
+        padding-top: 0px !important;
+    }
+    .tfhb-pb-0{
+        padding-bottom: 0px !important;
+    }
+    
+    //no-wrap
     .tfhb-no-flexbox{
         display: flow-root !important;
     }
@@ -112,6 +118,9 @@
         gap: 0px !important;
     }
 
+    .tfhb-border-none{
+        border: 0px solid;
+    }
     .tfhb-full-width{
         width: 100% !important;
     }
