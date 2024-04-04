@@ -32,26 +32,23 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 			'supports'      => apply_filters( 'tfhb_meeting_supports', array( 'title', 'editor', 'thumbnail', 'comments', 'author' ) ),
 			'capability'    => 'post',
 			'rewrite_slug'  => 'tfhb_meeting',
-			'show_ui'  => true,
-			'show_in_menu' => true
+			'show_ui'  => false,
+			'show_in_menu' => false
 		);
 
 		$tax_args = array(
 			array(
-				'name'          => 'Locations',
-				'singular_name' => 'Location',
-				'taxonomy'      => 'apartment_location',
-				'rewrite_slug'  => apply_filters( 'tfhb_meeting_location_slug', 'apartment-location' ),
-				'capability'  => array(
-					'assign_terms' => 'edit_tfhb_meeting',
-					'edit_terms'   => 'edit_tfhb_meeting',
-				),
+				'name'          => 'Categories',
+				'singular_name' => 'Category',
+				'taxonomy'      => 'meeting_category',
+				'rewrite_slug'  => apply_filters( 'tfhb_meeting_category_slug', 'meeting-category' ),
+				'show_ui'  => false,
+				'show_in_menu' => false
 			),
 		);
 
 		parent::__construct( $meeting_args, $tax_args );
 
-		// add_action( 'init', array( $this, 'tf_post_type_taxonomy_register' ) );
 	}
 
 }

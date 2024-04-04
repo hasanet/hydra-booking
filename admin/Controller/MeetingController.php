@@ -284,7 +284,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
             wp_update_post( $meeting_post_data ); 
 
-            //insert post meta
+            //Updated post meta
             update_post_meta( $MeetingData->post_id, 'tfhb_meeting_opt', $data );
         }
 
