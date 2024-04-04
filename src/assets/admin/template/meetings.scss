@@ -1,4 +1,16 @@
 .tfhb-admin-meetings{
+    >.tfhb-dashboard-heading {
+        margin-right: 16px !important;
+      }
+      .tfhb-availability-schedule-wrap{
+        .tfhb-availability-schedule-inner{
+            margin-bottom: 24px;
+            // last child
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
     .tfhb-filter-box{
         gap: 16px !important;
         .tfhb-filter-btn{

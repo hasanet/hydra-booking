@@ -1,5 +1,5 @@
-<script setup>
-import Editor from '@tinymce/tinymce-vue';
+<script setup>  
+import Editor from 'primevue/editor';
 const props = defineProps([
     'name',
     'modelValue',
@@ -13,6 +13,10 @@ const props = defineProps([
     'disabled', 
 ])
 const emit = defineEmits(['update:modelValue'])
+const changeEditor = (value) => {
+  alert(1);
+    emit('update:modelValue', value)
+}
 </script>
 
 <template>
@@ -21,28 +25,21 @@ const emit = defineEmits(['update:modelValue'])
     >
     <div class="tfhb-single-form-field-wrap tfhb-field-input">
          <!--if has label show label with tag else remove tags  -->
-         
+         {{ props.modelValue }}
         <label v-if="label" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
         <h4 v-if="subtitle">{{ subtitle }}</h4>
-        <p v-if="description">{{ description }}</p>
-        
-        <editor
-            api-key="no-api-key"
-            :init="{
-                height: 500,
-                menubar: false,
-                plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste code help wordcount'
-                ],
-                toolbar:
-                'undo redo | formatselect | bold italic backcolor | \
-                alignleft aligncenter alignright alignjustify | \
-                bullist numlist outdent indent | removeformat | help'
-            }"
+        <p v-if="description">{{ description }}</p> 
+        <Editor  
+          :v-model="props.modelValue"  
+          :required= "required"
+          :name= "name"
+          :id="name" 
+          @change="changeEditor" 
+          :type="type || 'text'"
+          :placeholder="placeholder"
+          :disabled="disabled"
+          editorStyle="height: 250px" 
         />
-             
     </div> 
   </div>
    

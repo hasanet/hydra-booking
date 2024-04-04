@@ -118,6 +118,17 @@
         gap: 0px !important;
     }
 
+
+    .tfhb-mail-shortcode-badge {
+        background-color: #FAF5F7;
+        padding: 4px 8px 4px 8px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .tfhb-mail-shortcode-badge:hover {
+        background-color: #FEE6F0;
+    }
+
     .tfhb-border-none{
         border: 0px solid;
     }
@@ -328,7 +339,7 @@
     .tfhb-dashboard-heading {  
         // height: 60px;  
         border-radius: 4px; 
-        margin-right: 16px;
+        // margin-right: 16px;
         h2 {
             font-size: 24px;
             font-weight: 600;
@@ -390,9 +401,6 @@
 		height: 100%;
 		background-color: #ffffff63;
 		z-index: 99;
-		.tfhb-availability-content-wrap{
-			margin-top: 32px;
-		}
 		
 		.tfhb-popup-wrap {
 			max-width: 800px;

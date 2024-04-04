@@ -400,7 +400,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 $data['host'][$key]['template'] = sanitize_text_field($value['template']);
                 $data['host'][$key]['form'] = sanitize_text_field($value['form']);
                 $data['host'][$key]['subject'] = sanitize_text_field($value['subject']);
-                $data['host'][$key]['body'] = sanitize_text_field($value['body']);
+                $data['host'][$key]['body'] = wp_kses_post($value['body']);
             }
         }
 
@@ -411,7 +411,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 $data['attendee'][$key]['template'] = sanitize_text_field($value['template']);
                 $data['attendee'][$key]['form'] = sanitize_text_field($value['form']);
                 $data['attendee'][$key]['subject'] = sanitize_text_field($value['subject']);
-                $data['attendee'][$key]['body'] = sanitize_text_field($value['body']);
+                $data['attendee'][$key]['body'] = wp_kses_post($value['body']);
             }
         }
 
