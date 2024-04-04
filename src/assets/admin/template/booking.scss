@@ -186,3 +186,29 @@
         }
     }
 }
+
+// Booking Details Quick View Design
+.tfhb-attendee-info{
+    border-bottom: 1px solid #F6EEF2; 
+    .tfhb-attendee-box{
+        .tfhb-attendee-name{
+            width: calc(33.333% - 16px);
+            h4{
+                color: #3F2731 !important;
+                font-size: 13px;
+                font-style: normal;
+                font-weight: 400 !important;
+                line-height: 20px; /* 153.846% */
+                margin: 0 0 12px 0 !important;
+            }
+            p{
+                color: #765664 !important;
+                font-size: 15px !important;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; /* 160% */
+                margin: 0 !important;
+            }
+        }
+    }
+}

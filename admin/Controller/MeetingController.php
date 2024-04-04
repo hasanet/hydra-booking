@@ -73,9 +73,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		// get user id
 		$current_user_id = $current_user->ID;
         
+        // Create an array to store the post data for meeting the current row
+        $meeting_post_data = array(
+            'post_type'    => 'tfhb_meeting',
+            'post_title'   => esc_html('No Title'),
+            'post_status'  => 'publish',
+            'post_author'  => $current_user_id
+        );
+        $meeting_post_id = wp_insert_post( $meeting_post_data );
+
         $data = [ 
             'user_id' => $current_user_id,
             'meeting_type' => isset($request_data['meeting_type']) ? sanitize_text_field($request_data['meeting_type']) : '', 
+            'post_id' => $meeting_post_id,
             'created_by' => $current_user_id,
             'updated_by' => $current_user_id,
             'created_at' => date('Y-m-d'),
@@ -110,26 +120,33 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function DeleteMeeting(){
         $request = json_decode(file_get_contents('php://input'), true);
         // Check if user is selected
-        $host_id = $request['id'];
-        $user_id = $request['user_id']; 
-        if (empty($host_id) || $host_id == 0) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        $meeting_id = $request['id'];
+        $post_id = $request['post_id']; 
+        if (empty($meeting_id) || $meeting_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
-        // Delete Host
-        $host = new Host();
-        $hostDelete = $host->delete($host_id);
-        if(!$hostDelete) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Error while deleting host'));
+        // Delete Meeting
+        $meeting = new Meeting();
+        $meetingDelete = $meeting->delete($meeting_id);
+        if(!$meetingDelete) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while deleting meeting'));
         }
-        // Update user Option
-        delete_user_meta($user_id, '_tfhb_host');
-        // Hosts Lists
-        $HostsList = $host->get();
+
+        // Delete Post and Post Meta
+        if ( !empty($post_id) ) {
+            //Delete Post
+            wp_delete_post($post_id, true);
+            //Delete Post Meta
+            delete_post_meta( $post_id, '__tfhb_meeting_opt' ); 
+        }
+
+        // Meeting Lists
+        $MeetingsList = $meeting->get();
         // Return response
         $data = array(
             'status' => true, 
-            'hosts' => $HostsList,  
-            'message' => 'Host Deleted Successfully', 
+            'meetings' => $MeetingsList,  
+            'message' => 'Meeting Deleted Successfully', 
         );
         return rest_ensure_response($data);
     }
@@ -254,6 +271,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $meetingUpdate = $meeting->update($data);
         if(!$meetingUpdate['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while updating Meeting'));
+        }
+
+        //Updated Meeting post meta
+        if( $MeetingData->post_id ){
+            $meeting_post_data = array(
+                'ID'           => $MeetingData->post_id,
+                'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+                'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+                'post_author'  => $current_user_id,
+                'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
+            );
+            wp_update_post( $meeting_post_data ); 
+
+            //Updated post meta
+            update_post_meta( $MeetingData->post_id, '__tfhb_meeting_opt', $data );
         }
 
         // Return response

@@ -13,6 +13,7 @@ const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false);
 const isModalOpened = ref(false);
+const skeleton = ref(true);
 
 const openModal = () => {
   isModalOpened.value = true;
@@ -28,6 +29,7 @@ const fetchMeetings = async () => {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists');
         if (response.data.status) { 
             meetings.data = response.data.meetings;  
+            skeleton.value = false;
         }
     } catch (error) {
         console.log(error);
@@ -62,6 +64,26 @@ const CreateMeeting = async (type) => {
     } catch (error) {
         console.log(error);
     }   
+}
+
+
+// Delete Meeting 
+const deleteMeeting = async ($id, $post_id) => { 
+    let deleteMeeting = {
+        id: $id,
+        post_id: $post_id
+    }
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/delete', deleteMeeting, {
+               
+        } );
+        if (response.data.status) { 
+            meetings.data = response.data.meetings;  
+            toast.success(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 onBeforeMount(() => { 
@@ -197,7 +219,7 @@ onBeforeMount(() => {
         </div>
     </div>
 
-    <div class="tfhb-meetings-list-content">
+    <div class="tfhb-meetings-list-content" :class="{ 'tfhb-skeleton': skeleton }">
         <div class="tfhb-meetings-list-wrap tfhb-flexbox">
 
             <!-- Single Meeting -->
@@ -282,7 +304,7 @@ onBeforeMount(() => {
                             <!-- route link -->
                             <router-link :to="{ name: 'MeetingsCreate', params: { id: smeeting.id } }" class="tfhb-dropdown-single">Edit</router-link>
                             
-                            <span class="tfhb-dropdown-single">Delete</span>
+                            <span class="tfhb-dropdown-single" @click="deleteMeeting(smeeting.id, smeeting.post_id)">Delete</span>
                         </div>
                     </div>
                 </div>

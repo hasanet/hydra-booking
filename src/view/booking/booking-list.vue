@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbSelect from '@/components/form-fields/HbSelect.vue';
+import HbPopup from '@/components/widgets/HbPopup.vue'; 
+const BookingDetailsPopup = ref(true);
 </script>
 <template>
 
@@ -23,6 +25,78 @@ import HbSelect from '@/components/form-fields/HbSelect.vue';
         <router-link to="/meetings/create" class="tfhb-btn boxed-btn flex-btn"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</router-link>
     </div> 
 </div>
+
+<HbPopup :isOpen="BookingDetailsPopup" @modal-close="BookingDetailsPopup = false" max_width="750px" name="first-modal" gap="32px">
+    <template #header> 
+        <h3>Discussion about design system</h3>
+    </template>
+
+    <template #content> 
+
+        <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16">
+            <h3 class="tfhb-m-0 tfhb-full-width">Attendee</h3>
+            <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
+                <div class="tfhb-attendee-name">
+                    <h4>Name</h4>
+                    <p>John Snow</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>E-mail</h4>
+                    <p>john@gmail.com</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>Phone</h4>
+                    <p>+88058464654</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>Address</h4>
+                    <p>4517 Washington Ave. Manchester, Kentucky 39495</p>
+                </div>
+                <div class="tfhb-attendee-name" style="width: calc(66% - 4px);">
+                    <h4>Notes</h4>
+                    <p>I found a 2007 study on effects of hand sanitizers on blood alcohol level in adults. The 12 subjects alcohol level in adults. The 12 </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16">
+            <h3 class="tfhb-m-0 tfhb-full-width">Host</h3>
+            <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
+                <div class="tfhb-attendee-name">
+                    <h4>Name</h4>
+                    <p>John Snow</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>E-mail</h4>
+                    <p>john@gmail.com</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>Time zone</h4>
+                    <p>Asia/Dhaka</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16 tfhb-border-none">
+            <h3 class="tfhb-m-0 tfhb-full-width">Meeting</h3>
+            <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-pb-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
+                <div class="tfhb-attendee-name">
+                    <h4>Time</h4>
+                    <p>11:00 pm - 12:00 am</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>Date</h4>
+                    <p>12 Sep, 24</p>
+                </div>
+                <div class="tfhb-attendee-name">
+                    <h4>Location</h4>
+                    <p>Google meet</p>
+                </div>
+            </div>
+        </div>
+
+    </template> 
+</HbPopup>
 
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">

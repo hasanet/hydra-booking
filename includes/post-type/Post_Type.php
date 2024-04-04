@@ -26,6 +26,7 @@ namespace HydraBooking\PostType;
 		$this->post_args = $post_args;
 		$this->tax_args  = $tax_args;
 		$this->tfhb_post_type_register();
+		$this->tfhb_post_type_taxonomy_register();
 	}
 
 	public function tfhb_post_type_register() {
@@ -70,7 +71,6 @@ namespace HydraBooking\PostType;
 			'capability_type'    => $post_args['capability'],
 			'has_archive'        => true,
 			'hierarchical'       => false,
-			// 'menu_position'      => $post_args['menu_position'],
 			'supports'           => $post_args['supports'],
 		);
 
@@ -112,8 +112,8 @@ namespace HydraBooking\PostType;
 				'public'                => true,
 				'publicly_queryable'    => true,
 				'hierarchical'          => true,
-				'show_ui'               => true,
-				'show_in_menu'          => true,
+				'show_ui'               => $tax_args['show_ui'],
+				'show_in_menu'          => $tax_args['show_in_menu'],
 				'show_in_nav_menus'     => true,
 				'query_var'             => true,
 				'rewrite'               => array( 'slug' => $tax_args['rewrite_slug'], 'with_front' => false ),
@@ -122,7 +122,6 @@ namespace HydraBooking\PostType;
 				'rest_base'             => $tax_args['taxonomy'],
 				'rest_controller_class' => 'WP_REST_Terms_Controller',
 				'show_in_quick_edit'    => true,
-				'capabilities'          => $tax_args['capability'],
 			);
 			$tfhb_tax_args = apply_filters( 'tfhb_' . $tax_args['taxonomy'] . '_args', $tfhb_tax_args );
 
