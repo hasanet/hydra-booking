@@ -4,6 +4,8 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
 import { toast } from "vue3-toastify"; 
+import useValidators from '@/store/validator'
+const { errors } = useValidators();
 
 const route = useRoute();
 const router = useRouter();
@@ -356,6 +358,12 @@ onBeforeMount(() => {
 
 
 const UpdateMeetingData = async () => {
+    // console.log(errors);
+    // if(errors){
+    //     toast.error('Fill Up The Required Fields'); 
+
+    //     return
+    // }
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/details/update', meetingData);
         if (response.data.status == true) { 

@@ -7,6 +7,7 @@ import HbTextarea from '@/components/form-fields/HbTextarea.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
 
 const emit = defineEmits(["add-more-location", "update-meeting"]); 
 const props = defineProps({
@@ -21,7 +22,6 @@ const props = defineProps({
 
 });
 
-const { errors, isEmpty } = useValidators();
 const validateInput = (fieldName) => {
     const fieldValueKey = fieldName;
     isEmpty(fieldName, props.meeting[fieldValueKey]);
@@ -29,7 +29,6 @@ const validateInput = (fieldName) => {
 
 const validateSelect = (fieldName) => {
     const fieldValueKey = fieldName;
-    console.log(fieldValueKey);
     isEmpty(fieldName, props.meeting[fieldValueKey]);
 };
 
@@ -45,7 +44,7 @@ const validateSelect = (fieldName) => {
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
             @keyup="() => validateInput('title')"
-            @click="() => validateInput('title')"
+            @blur="() => validateInput('title')"
             :errors="errors.title"
         /> 
         <HbTextarea  
@@ -55,7 +54,7 @@ const validateSelect = (fieldName) => {
             :label="$tfhb_trans['Description']"  
             :placeholder="$tfhb_trans['Describe about meeting']"
             @keyup="() => validateInput('description')"
-            @click="() => validateInput('description')"
+            @blur="() => validateInput('description')"
             :errors="errors.description"
         /> 
 
@@ -70,7 +69,7 @@ const validateSelect = (fieldName) => {
                 placeholder="Select Time Format"  
                 :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
                 @change="() => validateSelect('duration')"
-                @click="() => validateSelect('duration')"
+                @blur="() => validateSelect('duration')"
                 :errors="errors.duration"
             />
             <HbSwitch 
