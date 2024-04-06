@@ -6,6 +6,7 @@ import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
+import useValidators from '@/store/validator'
 
 const emit = defineEmits(["add-more-location", "update-meeting"]); 
 const props = defineProps({
@@ -20,6 +21,11 @@ const props = defineProps({
 
 });
 
+const { errors, isEmpty } = useValidators();
+const validateInput = () => {
+    isEmpty("title", props.meeting.title);
+};
+
 </script>
 
 <template>
@@ -30,7 +36,12 @@ const props = defineProps({
             :label="$tfhb_trans['Meeting title']"  
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
+            @keyup="validateInput"
+            @blur="validateInput"
         /> 
+        <div class="ui basic label pointing red" v-if="errors.title">
+            {{ errors.title }}
+          </div>
         <HbTextarea  
             v-model="meeting.description" 
             required= "true"  
