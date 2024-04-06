@@ -29,6 +29,7 @@ const emit = defineEmits(['update:modelValue', 'tfhb-onchange'])
               :value="props.modelValue" 
               :required= "required"
               :id="name" 
+              :name="name" 
               @input="emit('update:modelValue', $event.target.value)" 
               :type="type"
               :placeholder="placeholder"

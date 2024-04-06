@@ -22,13 +22,15 @@ const props = defineProps({
 });
 
 const { errors, isEmpty } = useValidators();
-const validateInput = () => {
-    isEmpty("title", props.meeting.title);
+const validateInput = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, props.meeting[fieldValueKey]);
 };
 
-const validateSelect = () => {
-    console.log('testing');
-    isEmpty("duration", props.meeting.duration);
+const validateSelect = (fieldName) => {
+    const fieldValueKey = fieldName;
+    console.log(fieldValueKey);
+    isEmpty(fieldName, props.meeting[fieldValueKey]);
 };
 
 </script>
@@ -39,18 +41,22 @@ const validateSelect = () => {
             v-model="meeting.title" 
             required= "true"  
             :label="$tfhb_trans['Meeting title']"  
+            name="title"
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
-            @keyup="validateInput"
-            @blur="validateInput"
+            @keyup="() => validateInput('title')"
+            @click="() => validateInput('title')"
             :errors="errors.title"
         /> 
         <HbTextarea  
             v-model="meeting.description" 
             required= "true"  
+            name="description"
             :label="$tfhb_trans['Description']"  
-            selected = "1"
-            :placeholder="$tfhb_trans['Describe about meeting']" 
+            :placeholder="$tfhb_trans['Describe about meeting']"
+            @keyup="() => validateInput('description')"
+            @click="() => validateInput('description')"
+            :errors="errors.description"
         /> 
 
         <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-16 tfhb-m-0 tfhb-full-width"> 
@@ -60,10 +66,11 @@ const validateSelect = () => {
                 required= "true" 
                 :label="$tfhb_trans['Duration']"  
                 :selected = "1"
+                name="duration"
                 placeholder="Select Time Format"  
                 :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
-                @change="validateSelect"
-                @blur="validateSelect"
+                @change="() => validateSelect('duration')"
+                @click="() => validateSelect('duration')"
                 :errors="errors.duration"
             />
             <HbSwitch 

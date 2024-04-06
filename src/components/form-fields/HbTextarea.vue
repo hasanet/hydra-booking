@@ -7,6 +7,7 @@ const props = defineProps([
     'subtitle',
     'placeholder',
     'description', 
+    'errors'
 ])
 const emit = defineEmits(['update:modelValue'])
 </script>
@@ -22,8 +23,10 @@ const emit = defineEmits(['update:modelValue'])
         :value="props.modelValue" 
         :required= "required"
         :id="name" 
+        :name="name" 
         @input="emit('update:modelValue', $event.target.value)"  
         :placeholder="placeholder"
+        :class="errors ? 'tfhb-required' : ''"
         >{{ props.modelValue }}</textarea>
     </div>
   </div>
