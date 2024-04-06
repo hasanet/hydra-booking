@@ -38,10 +38,8 @@ const validateInput = () => {
             :placeholder="$tfhb_trans['Type meeting title']" 
             @keyup="validateInput"
             @blur="validateInput"
+            :errors="errors.title"
         /> 
-        <div class="ui basic label pointing red" v-if="errors.title">
-            {{ errors.title }}
-          </div>
         <HbTextarea  
             v-model="meeting.description" 
             required= "true"  

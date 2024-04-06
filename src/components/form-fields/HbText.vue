@@ -10,6 +10,7 @@ const props = defineProps([
     'placeholder',
     'description', 
     'disabled', 
+    'errors'
 ])
 const emit = defineEmits(['update:modelValue'])
 </script>
@@ -34,7 +35,7 @@ const emit = defineEmits(['update:modelValue'])
           :type="type || 'text'"
           :placeholder="placeholder"
           :disabled="disabled"
-          
+          :class="errors ? 'tfhb-required' : ''"
         /> 
              
     </div> 
