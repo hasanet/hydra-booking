@@ -26,6 +26,11 @@ const validateInput = () => {
     isEmpty("title", props.meeting.title);
 };
 
+const validateSelect = () => {
+    console.log('testing');
+    isEmpty("duration", props.meeting.duration);
+};
+
 </script>
 
 <template>
@@ -57,6 +62,9 @@ const validateInput = () => {
                 :selected = "1"
                 placeholder="Select Time Format"  
                 :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
+                @change="validateSelect"
+                @blur="validateSelect"
+                :errors="errors.duration"
             />
             <HbSwitch 
                 type="checkbox" 
