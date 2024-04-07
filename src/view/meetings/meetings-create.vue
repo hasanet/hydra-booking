@@ -6,6 +6,7 @@ import axios from 'axios'
 import { toast } from "vue3-toastify"; 
 import useValidators from '@/store/validator'
 const { errors } = useValidators();
+const error = reactive({})
 
 const route = useRoute();
 const router = useRouter();
@@ -357,14 +358,23 @@ onBeforeMount(() => {
 });
 
 
-const UpdateMeetingData = async () => {
+const UpdateMeetingData = async (validator_field) => {
 
+    // Errors Added
+    validator_field.forEach(field => {
+        if(!meetingData[field]){
+            errors[field] = 'Required this field';
+        }
+    });
+
+    // Errors Checked
     const isEmpty = Object.keys(errors).length === 0;
     if(!isEmpty){
         toast.error('Fill Up The Required Fields'); 
         return
     }
-    
+
+    // Api Submission
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/details/update', meetingData);
         if (response.data.status == true) { 

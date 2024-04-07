@@ -119,7 +119,7 @@ const validateSelect = (fieldName) => {
             :option = "{'12_hours': 'Design System', '24_hours': '10 minutes'}" 
         />
 
-        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
+        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['title', 'description', 'duration'])">{{ $tfhb_trans['Save & Continue'] }} </button>
         <!--Bookings -->
     </div>
 </template>
