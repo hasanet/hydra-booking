@@ -50,17 +50,15 @@
           right: 0;
           bottom: 0;
           height: 80%;
-          width: auto;
           margin: 0 !important;
           display: inline-block;
           z-index: 1;
-          width: 53%;
+          text-align: right;
           img {
             max-height: 100%;
             margin-bottom: 0 !important;
           } 
         }
-        .tfhb-adminchartbox-shape 
         .tfhb-single-cartbox-inner, .cartbox-meta {
           z-index: 1;
           position: relative;
