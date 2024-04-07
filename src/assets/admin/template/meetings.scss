@@ -184,23 +184,26 @@
                                     line-height: 20px;
                                 }
                             }
-                            &.booked-items{
-                                border-radius: 16px;
-                                background: #FEE6F0;
-                                padding: 4px 8px;
-                                box-sizing: border-box;
-                                width: 114px;
-                                .user-info-icon{
-                                    svg{
-                                        color: #F62881;
+                            &.tfhb-booked-items{
+                                width: 100%;
+                                .booked-items{
+                                    border-radius: 16px;
+                                    background: #FEE6F0;
+                                    padding: 4px 8px;
+                                    box-sizing: border-box;
+                                    width: 114px;
+                                    .user-info-icon{
+                                        svg{
+                                            color: #F62881;
+                                        }
                                     }
-                                }
-                                .user-info-title{
-                                    color: #F62881;
-                                    font-size: 11px;
-                                    font-style: normal;
-                                    font-weight: 400;
-                                    line-height: 16px; /* 145.455% */
+                                    .user-info-title{
+                                        color: #F62881;
+                                        font-size: 11px;
+                                        font-style: normal;
+                                        font-weight: 400;
+                                        line-height: 16px; /* 145.455% */
+                                    }
                                 }
                             }
                         }
@@ -224,6 +227,11 @@
                     font-weight: 400;
                     line-height: 20px; /* 153.846% */
                     gap: 8px !important;
+                    transition: .3s all ease;
+                    &:hover{
+                        background:#F62881;
+                        color: #FFFFFF;
+                    }
                 }
             }
         }
@@ -237,6 +245,26 @@
         padding: 32px; 
         width: 80%;
         margin: 0 auto;
+        .tfhb-booking-tabs.tfhb-meeting-tabs{
+            ul{
+                li{
+                    display: flex;
+                    padding: 8px 12px 8px 12px !important;
+                    font-size: 15px;
+                    align-items: center;
+                    gap: 8px;
+                    border-radius: 4px;
+                    color: #8f707d;
+                    font-weight: 400;
+                    &.active {
+                        background-color: #fee6f0;
+                        box-shadow: 0px 1px 2px 0px #28101a0f;
+                        box-shadow: 0px 1px 3px 0px #28101a1a;
+                        color: #f62881;
+                    }
+                }
+            }
+        }
         .tfhb-meeting-create-notice{
             .tfhb-meeting-heading{
                 justify-content: normal !important;

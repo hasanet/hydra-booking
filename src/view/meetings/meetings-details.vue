@@ -44,7 +44,7 @@ const validateSelect = (fieldName) => {
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
             @keyup="() => validateInput('title')"
-            @blur="() => validateInput('title')"
+            @click="() => validateInput('title')"
             :errors="errors.title"
         /> 
         <HbTextarea  
@@ -54,7 +54,7 @@ const validateSelect = (fieldName) => {
             :label="$tfhb_trans['Description']"  
             :placeholder="$tfhb_trans['Describe about meeting']"
             @keyup="() => validateInput('description')"
-            @blur="() => validateInput('description')"
+            @click="() => validateInput('description')"
             :errors="errors.description"
         /> 
 
@@ -69,7 +69,7 @@ const validateSelect = (fieldName) => {
                 placeholder="Select Time Format"  
                 :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
                 @change="() => validateSelect('duration')"
-                @blur="() => validateSelect('duration')"
+                @click="() => validateSelect('duration')"
                 :errors="errors.duration"
             />
             <HbSwitch 
@@ -118,8 +118,9 @@ const validateSelect = (fieldName) => {
             placeholder="Select Category"  
             :option = "{'12_hours': 'Design System', '24_hours': '10 minutes'}" 
         />
-
-        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
+        <div class="tfhb-submission-btn">
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['title', 'description', 'duration'])">{{ $tfhb_trans['Save & Continue'] }} </button>
+        </div>
         <!--Bookings -->
     </div>
 </template>

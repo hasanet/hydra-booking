@@ -6,6 +6,7 @@ import axios from 'axios'
 import { toast } from "vue3-toastify"; 
 import useValidators from '@/store/validator'
 const { errors } = useValidators();
+const error = reactive({})
 
 const route = useRoute();
 const router = useRouter();
@@ -357,13 +358,25 @@ onBeforeMount(() => {
 });
 
 
-const UpdateMeetingData = async () => {
-    // console.log(errors);
-    // if(errors){
-    //     toast.error('Fill Up The Required Fields'); 
+const UpdateMeetingData = async (validator_field) => {
 
-    //     return
-    // }
+    // Errors Added
+    if(validator_field){
+        validator_field.forEach(field => {
+            if(!meetingData[field]){
+                errors[field] = 'Required this field';
+            }
+        });
+    }
+
+    // Errors Checked
+    const isEmpty = Object.keys(errors).length === 0;
+    if(!isEmpty){
+        toast.error('Fill Up The Required Fields'); 
+        return
+    }
+
+    // Api Submission
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/details/update', meetingData);
         if (response.data.status == true) { 
@@ -406,16 +419,16 @@ const UpdateMeetingData = async () => {
                 Create and manage booking/appointment form
             </div>
         </div>
-        <nav class="tfhb-booking-tabs tfhb-mb-32"> 
+        <nav class="tfhb-booking-tabs tfhb-meeting-tabs tfhb-mb-32"> 
             <ul>
                 <!-- to route example like meetings/create/13/details -->
                 
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/details'" exact :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/details' }"> Details</router-link></li> 
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/availability'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/availability' }"> Availability</router-link></li>  
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/limits'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/limits' }"> Limits</router-link></li>  
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> Questions</router-link></li>  
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/notifications'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> Notifications</router-link></li>  
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/payment'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }"> Payment</router-link></li>  
+                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/details' }"> Details</li> 
+                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/availability' }">Availability</li>  
+                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/limits' }">Limits</li>  
+                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> Questions</li>  
+                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> Notifications</li>  
+                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }">Payment</li>  
 
             </ul>  
         </nav>
