@@ -358,12 +358,13 @@ onBeforeMount(() => {
 
 
 const UpdateMeetingData = async () => {
-    // console.log(errors);
-    // if(errors){
-    //     toast.error('Fill Up The Required Fields'); 
 
-    //     return
-    // }
+    const isEmpty = Object.keys(errors).length === 0;
+    if(!isEmpty){
+        toast.error('Fill Up The Required Fields'); 
+        return
+    }
+    
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/details/update', meetingData);
         if (response.data.status == true) { 
