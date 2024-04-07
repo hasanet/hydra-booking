@@ -227,6 +227,11 @@
                     font-weight: 400;
                     line-height: 20px; /* 153.846% */
                     gap: 8px !important;
+                    transition: .3s all ease;
+                    &:hover{
+                        background:#F62881;
+                        color: #FFFFFF;
+                    }
                 }
             }
         }
