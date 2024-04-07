@@ -281,8 +281,8 @@ onBeforeMount(() => {
                                         </div>
                                     </div>
                                 </li>
-                                <li class="booked-items">
-                                    <div class="tfhb-flexbox">
+                                <li class="tfhb-booked-items">
+                                    <div class="tfhb-flexbox booked-items">
                                         <div class="user-info-icon">
                                             <Icon name="CalendarCheck" size="16" /> 
                                         </div>
