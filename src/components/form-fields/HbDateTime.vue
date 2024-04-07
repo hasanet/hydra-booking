@@ -39,7 +39,7 @@ const config = ref(props.config || {});
         <h4 v-if="subtitle">{{ subtitle }}</h4>
         <p v-if="description">{{ description }}</p>
         
-        <flatPickr :value="props.modelValue" :config="config" />
+        <flatPickr  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" />
     
         <span class="tfhb-flat-icon"><Icon v-if="icon" :name="icon" size="20" /> </span>
              

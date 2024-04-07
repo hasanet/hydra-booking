@@ -82,6 +82,7 @@ const addAvailabilityDate = (key) => {
             <div  class="tfhb-dashboard-heading ">
                 <div class="tfhb-admin-title"> 
                     <h2 >Add New Availability  </h2>   
+                    {{ availabilityDataSingle }}
                 </div>
                 <div class="thb-admin-btn"> 
                     <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 

@@ -111,14 +111,15 @@ const changeTab = (e) => {
 // Fetch Notification
 const fetchNotification = async () => {
 
-    skeleton.value = false;
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/notification');
         if (response.data.status) { 
             // console.log(response.data.integration_settings);
             Notification.host = response.data.notification_settings.host ? response.data.notification_settings.host : Notification.host; 
             Notification.attendee = response.data.notification_settings.attendee ? response.data.notification_settings.attendee : Notification.attendee;
-
+            
+            
+            skeleton.value = false;
         }
     } catch (error) {
         console.log(error);

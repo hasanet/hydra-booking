@@ -52,6 +52,12 @@ namespace HydraBooking\Admin\Controller;
             'Enter Your App Client ID' =>  __('Enter Your App Client ID', 'hydra-booking'),
             'Zoom App Secret Key' =>  __('Zoom App Secret Key', 'hydra-booking'),
             'Enter Your App Secret Key' =>  __('Enter Your App Secret Key', 'hydra-booking'),
+            'Client ID' =>  __('Client ID', 'hydra-booking'),
+            'Enter Client ID' =>  __('Enter Client ID', 'hydra-booking'),
+            'Secret Key' =>  __('Secret Key', 'hydra-booking'),
+            'Enter Secret Key' =>  __('Enter Secret Key', 'hydra-booking'),
+            'Redirect Url' =>  __('Redirect Url', 'hydra-booking'),
+            'Enter Redirect Url' =>  __('Enter Redirect Url', 'hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 

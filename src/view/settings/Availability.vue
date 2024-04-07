@@ -13,7 +13,7 @@ const AvailabilityGet = reactive({
   data: [],
 });
 const availabilityDataSingle = reactive({}) 
-const skeleton = ref(false);
+const skeleton = ref(true);
 // 
 
 
@@ -126,6 +126,9 @@ const fetchAvailabilitySettings = async () => {
       if (response.data.status) { 
           timeZone.value = response.data.time_zone;     
           AvailabilityGet.data = response.data.availability; 
+
+
+          skeleton.value = false;
       }
   } catch (error) {
       console.log(error);

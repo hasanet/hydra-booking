@@ -8,6 +8,7 @@ import { toast } from "vue3-toastify";
 // component
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
+import GoogleCalendarIntegrations from '@/components/integrations/GoogleCalendarIntegrations.vue'; 
 
 // import Form Field 
 import HbSelect from '@/components/form-fields/HbSelect.vue' 
@@ -17,7 +18,7 @@ import HbPopup from '@/components/widgets/HbPopup.vue';
 import Icon from '@/components/icon/LucideIcon.vue' 
 
 //  Load Time Zone 
-const skeleton = ref(false);
+const skeleton = ref(true);
  
  
 
@@ -40,6 +41,15 @@ const Integration = reactive( {
         app_secret_key: '',
 
     },
+    google_calendar : {
+        type: 'meeting', 
+        status: 0, 
+        connection_status: 0,
+        client_id: '',
+        secret_key: '',
+        redirect_url: '',
+
+    },
 });
 
 //  update Integration
@@ -54,6 +64,8 @@ const fetchIntegration = async () => {
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
             Integration.woo_payment= response.data.integration_settings.woo_payment ? response.data.integration_settings.woo_payment : Integration.woo_payment;
  
+
+            skeleton.value = false;
         }
     } catch (error) {
         console.log(error);
@@ -116,6 +128,10 @@ onBeforeMount(() => {
 
                 <!-- zoom intrigation -->
                 <ZoomIntregration :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
+                <!-- zoom intrigation -->
+
+                <!-- zoom intrigation -->
+                <GoogleCalendarIntegrations :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
                 <!-- zoom intrigation -->
           
 
