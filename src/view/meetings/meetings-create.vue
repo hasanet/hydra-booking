@@ -361,11 +361,13 @@ onBeforeMount(() => {
 const UpdateMeetingData = async (validator_field) => {
 
     // Errors Added
-    validator_field.forEach(field => {
-        if(!meetingData[field]){
-            errors[field] = 'Required this field';
-        }
-    });
+    if(validator_field){
+        validator_field.forEach(field => {
+            if(!meetingData[field]){
+                errors[field] = 'Required this field';
+            }
+        });
+    }
 
     // Errors Checked
     const isEmpty = Object.keys(errors).length === 0;

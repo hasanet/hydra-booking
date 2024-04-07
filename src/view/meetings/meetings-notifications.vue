@@ -130,7 +130,9 @@ const changeTab = (e) => {
 
         </div> 
 
-        <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
+        <div class="tfhb-submission-btn">
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
+        </div>
         <!--Bookings -->
     </div>
 </template>
