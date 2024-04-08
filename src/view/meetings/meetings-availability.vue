@@ -5,6 +5,8 @@ import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
+import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
 
 const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting"]); 
 const props = defineProps({
@@ -60,6 +62,10 @@ const Settings_Avalibility_Callback = (e) => {
     }
 }
 
+const validateSelect = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, props.meeting[fieldValueKey]);
+};
 
 </script>
 
@@ -71,9 +77,12 @@ const Settings_Avalibility_Callback = (e) => {
             v-model="meeting.host_id"
             required= "true" 
             :label="$tfhb_trans['Select Host']"  
-            :selected = "1"
+            name="host_id"
             :placeholder="$tfhb_trans['Select Host']"  
             :option = "transformedHostData" 
+            @change="() => validateSelect('host_id')"
+            @click="() => validateSelect('host_id')"
+            :errors="errors.host_id"
         />
 
         <div class="tfhb-availaility-tabs">
@@ -299,7 +308,7 @@ const Settings_Avalibility_Callback = (e) => {
         
         </div>  
         <div class="tfhb-submission-btn">
-            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting')">{{ $tfhb_trans['Save & Continue'] }} </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['host_id'])">{{ $tfhb_trans['Save & Continue'] }} </button>
         </div>
         <!--Bookings -->
     </div>
