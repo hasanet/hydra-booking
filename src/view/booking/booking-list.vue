@@ -116,7 +116,12 @@ const BookingDetailsPopup = ref(true);
         <tbody>
             <tr>
                 <td>
-                    <input type="checkbox">
+                    <div class="checkbox-lists">
+                        <label>
+                            <input type="checkbox">   
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                 </td>
                 <td>
                     24 May, 2020
@@ -169,7 +174,12 @@ const BookingDetailsPopup = ref(true);
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox">
+                    <div class="checkbox-lists">
+                        <label>
+                            <input type="checkbox">   
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                 </td>
                 <td>
                     24 May, 2020
@@ -222,7 +232,12 @@ const BookingDetailsPopup = ref(true);
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox">
+                    <div class="checkbox-lists">
+                        <label>
+                            <input type="checkbox">   
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                 </td>
                 <td>
                     24 May, 2020

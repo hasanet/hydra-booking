@@ -25,15 +25,19 @@ const checkedValue = (e) => {
     >
     <div class="tfhb-single-form-field-wrap tfhb-field-checkbox">
         <div class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
-            <input 
-            :id="name" 
-            :v-model="props.modelValue"  
-            @change="checkedValue" 
-            :name="name"  
-            :checked="props.modelValue == 1 ? true : false"
-            type="checkbox"
-            /> 
-            <label v-if="label" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
+            
+            <label v-if="label" :for="name">
+                <input 
+                :id="name" 
+                :v-model="props.modelValue"  
+                @change="checkedValue" 
+                :name="name"  
+                :checked="props.modelValue == 1 ? true : false"
+                type="checkbox"
+                />     
+                <span class="checkmark"></span>
+                {{ label }} <span  v-if="required == 'true'"> *</span> 
+            </label>
         </div>
     </div> 
   </div>
