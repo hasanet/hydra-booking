@@ -134,6 +134,7 @@ class Booking {
 
         $table_name = $wpdb->prefix . $this->table;
         $meeting_table = $wpdb->prefix . 'tfhb_meetings';
+        $host_table = $wpdb->prefix . 'tfhb_hosts';
         
         if($id){
             $sql = "SELECT * FROM $table_name WHERE id = $id";
@@ -142,8 +143,26 @@ class Booking {
                 $wpdb->prepare( $sql )
             );
         }else{
-            $sql = "SELECT meeting_id,first_name,last_name,email,phone,location_details,$table_name.status,$table_name.created_at,host_id,title,duration FROM $table_name INNER JOIN $meeting_table
-            ON $table_name.meeting_id=$meeting_table.id";
+            $sql = "SELECT 
+            $table_name.meeting_id,
+            $table_name.first_name AS attendee_first_name,
+            $table_name.last_name AS attendee_last_name,
+            $table_name.email AS attendee_email,
+            $table_name.phone AS attendee_phone,
+            $table_name.location_details,
+            $table_name.status AS booking_status,
+            $table_name.created_at AS booking_created_at,
+            $meeting_table.host_id,
+            $meeting_table.title,
+            $meeting_table.duration,
+            $host_table.first_name AS host_first_name,
+            $host_table.last_name AS host_last_name,
+            $host_table.email AS host_email
+            FROM $table_name 
+            INNER JOIN $meeting_table
+            ON $table_name.meeting_id=$meeting_table.id
+            INNER JOIN $host_table
+            ON $meeting_table.host_id=$host_table.id";
 
             $data = $wpdb->get_results( $sql ); 
         }
