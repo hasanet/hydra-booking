@@ -1,11 +1,13 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
+import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
 import HbSelect from '@/components/form-fields/HbSelect.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
 import AutoComplete from 'primevue/autocomplete';
+import { toast } from "vue3-toastify"; 
 
 const booking_data = reactive({
     meeting: '',
@@ -21,11 +23,58 @@ const search = (event) => {
 }
 
 const BookingDetailsPopup = ref(false);
-const BackendBooking = ref(true);
+const BackendBooking = ref(false);
 
-const Tfhb_BackendBooking = () => ({
+const Tfhb_BackendBooking = async () => {
 
-})
+    // Api Submission
+    try { 
+
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/create', booking_data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        // Api Response
+        if (response.data.status) {  
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });  
+            BackendBooking.value = false;
+            booking_data.meeting = '';
+            booking_data.name = '';
+            booking_data.phone = '';
+            booking_data.email = '';
+            booking_data.address = '';
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
+const bookings = reactive({}); 
+const fetchBookings = async () => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists');
+        if (response.data.status) { 
+            bookings.data = response.data.bookings;  
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+} 
+
+onBeforeMount(() => { 
+    fetchBookings();
+});
 
 </script>
 <template>
@@ -44,7 +93,7 @@ const Tfhb_BackendBooking = () => ({
             placeholder="Status"  
             :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
         />
-        <router-link to="/meetings/create" class="tfhb-btn boxed-btn flex-btn"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</router-link>
+        <button class="tfhb-btn boxed-btn flex-btn" @click="BackendBooking = true"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</button>
     </div> 
 </div>
 
@@ -121,7 +170,7 @@ const Tfhb_BackendBooking = () => ({
 </HbPopup>
 
 <!-- Backend Booking Popup Start -->
-{{booking_data }}
+
 <HbPopup :isOpen="BackendBooking" @modal-close="BackendBooking = false" max_width="400px" name="first-modal" gap="24px">
     <template #header> 
         <h3>Add New Booking</h3>
@@ -165,7 +214,7 @@ const Tfhb_BackendBooking = () => ({
 </HbPopup>
 
 <!-- Backend Booking Popup End -->
-
+{{ bookings }}
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
         <thead>

@@ -33,7 +33,7 @@ class Booking {
                 slot_minutes LONGTEXT NULL, 
                 first_name VARCHAR(50) NULL,
                 last_name VARCHAR(50) NULL,
-                emaill VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
                 phone VARCHAR(100) NOT NULL,
                 message LONGTEXT NULL,
                 country VARCHAR(20) NULL,
@@ -42,12 +42,12 @@ class Booking {
                 other_info LONGTEXT NULL,
                 location_details LONGTEXT NOT NULL,
                 cancelled_by INT(11) NULL,
-                status INT(11) NOT NULL, 
+                status VARCHAR(50) NOT NULL, 
                 booking_type VARCHAR(20) NULL,
                 payment_method VARCHAR(20) NOT NULL,
                 payment_status VARCHAR(20) NOT NULL,
-                created_at DATE NOT NULL,
-                updated_at DATE NOT NULL, 
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
                 PRIMARY KEY (id)
             ) $charset_collate";
             
@@ -70,7 +70,7 @@ class Booking {
     }
 
      /**
-     * Create the database availability. 
+     * Create the database Booking. 
      */
     public function add($request) {
         
@@ -78,7 +78,7 @@ class Booking {
 
         $table_name = $wpdb->prefix . $this->table;
 
-        // insert availability
+        // insert Booking
         $result =  $wpdb->insert(
             $table_name,
             $request
@@ -96,7 +96,7 @@ class Booking {
 
     }
      /**
-     * Update the database availability. 
+     * Update the database Booking. 
      */ 
 
     public function update($request) {
@@ -107,7 +107,7 @@ class Booking {
 
         $id = $request['id'];
         unset($request['id']);
-        // Update availability
+        // Update Booking
         $result =  $wpdb->update(
             $table_name,
             $request,
@@ -126,13 +126,14 @@ class Booking {
 
     }
      /**
-     * Get all  availability Data. 
+     * Get all  Booking Data. 
      */
     public function get($id = null) {
         
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
+        $meeting_table = $wpdb->prefix . 'tfhb_meetings';
         
         if($id){
             $sql = "SELECT * FROM $table_name WHERE id = $id";
@@ -141,11 +142,10 @@ class Booking {
                 $wpdb->prepare( $sql )
             );
         }else{
-            $sql = "SELECT * FROM $table_name";
+            $sql = "SELECT meeting_id,first_name,last_name,email,phone,location_details,$table_name.status,$table_name.created_at,host_id,title,duration FROM $table_name INNER JOIN $meeting_table
+            ON $table_name.meeting_id=$meeting_table.id";
 
-            $data = $wpdb->get_results(
-                $wpdb->prepare( $sql )
-            ); 
+            $data = $wpdb->get_results( $sql ); 
         }
 
         

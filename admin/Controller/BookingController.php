@@ -48,14 +48,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Booking List
     public function getBookingsData() { 
 
-        // Meeting Lists 
-        $meeting = new Meeting();
-        $MeetingsList = $meeting->get();
+        // Booking Lists 
+        $booking = new Booking();
+        $bookingsList = $booking->get();
 
         // Return response
         $data = array(
             'status' => true, 
-            'meetings' => $MeetingsList,  
+            'bookings' => $bookingsList,  
             'message' => 'Booking Data Successfully Retrieve!', 
         );
         return rest_ensure_response($data);
@@ -64,23 +64,35 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Create Booking
     public function CreateBooking() { 
         
-        // Check if user is already a meeting
-        $meeting = new Meeting();
-        // Insert meeting
-        $meetingInsert = $meeting->add($data);
-        if(!$meetingInsert['status']) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Error while creating meeting'));
-        }
-        $meetings_id = $meetingInsert['insert_id'];
-    
-        // meetings Lists 
-        $meetingsList = $meeting->get();
+        $request = json_decode(file_get_contents('php://input'), true);
 
+        $data = [ 
+            'meeting_id' => isset($request['meeting']) ? $request['meeting'] : '',
+            'first_name' => isset($request['name']) ? $request['name'] : '',
+            'email' => isset($request['email']) ? $request['email'] : '',
+            'phone' => isset($request['phone']) ? $request['phone'] : '',
+            'location_details' => isset($request['address']) ? $request['address'] : '',
+            'payment_method' => 'backend',
+            'payment_status' => 'pending',
+            'status'    => 'pending'
+        ];
+
+        // Check if user is already a booking
+        $booking = new Booking();
+        // Insert booking
+        $bookingInsert = $booking->add($data);
+        if(!$bookingInsert['status']) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while creating Booking'));
+        }
+        $booking_id = $bookingInsert['insert_id'];
+
+        // booking Lists 
+        $booking_List = $booking->get();
         // Return response
         $data = array(
             'status' => true, 
-            'meetings' => $meetingsList,  
-            'id' => $meetings_id,  
+            'booking' => $booking_List,  
+            'id' => $booking_id,  
             'message' => 'Booking Created Successfully', 
         );
         
