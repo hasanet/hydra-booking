@@ -231,7 +231,7 @@ onBeforeMount(() => {
         </thead>
 
         <tbody>
-            <tr>
+            <tr v-for="(book, key) in bookings.data" :key="key">
                 <td>
                     <div class="checkbox-lists">
                         <label>
@@ -241,22 +241,22 @@ onBeforeMount(() => {
                     </div>
                 </td>
                 <td>
-                    24 May, 2020
-                    <span>03:48 am</span>
+                    {{ book.booking_created_at }}
+                    <span>{{ book.booking_created_at }}</span>
                 </td>
                 <td>
-                    Australian Accessibility Conference
+                    {{ book.title }}
                 </td>
                 <td>
-                    Ralph Edwards
-                    <span>sara.cruz@example.com</span>
+                    {{ book.host_first_name }} {{ book.host_last_name }}
+                    <span>{{ book.host_email }}</span>
                 </td>
                 <td>
-                    Guy Hawkins
-                    <span>sara.cruz@example.com</span>
+                    {{ book.attendee_first_name }} {{ book.attendee_last_name }}
+                    <span>{{ book.attendee_email }}</span>
                 </td>
                 <td>
-                    30 minutes
+                    {{ book.duration }}
                 </td>
                 <td>
                     <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
@@ -289,122 +289,7 @@ onBeforeMount(() => {
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <div class="checkbox-lists">
-                        <label>
-                            <input type="checkbox">   
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    24 May, 2020
-                    <span>03:48 am</span>
-                </td>
-                <td>
-                    Australian Accessibility Conference
-                </td>
-                <td>
-                    Ralph Edwards
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    Guy Hawkins
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    30 minutes
-                </td>
-                <td>
-                    <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
-                        <div class="status approved">
-                            pending
-                        </div>
-                        <div class="tfhb-status-bar">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 13.334L5 8.33398H15L10 13.334Z" fill="#765664"/>
-                            </svg>
-                            <div class="tfhb-status-popup">
-                                <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li>Approved</li>
-                                    <li class="pending">Pending</li>
-                                    <li class="schedule">Re-schedule</li>
-                                    <li class="canceled">Canceled</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="tfhb-details-action tfhb-flexbox tfhb-justify-normal tfhb-gap-16">
-                        <a href="">
-                            <Icon name="Eye" width="20" />
-                        </a>
-                        <a href="">
-                            <Icon name="Settings" width="20" />
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="checkbox-lists">
-                        <label>
-                            <input type="checkbox">   
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    24 May, 2020
-                    <span>03:48 am</span>
-                </td>
-                <td>
-                    Australian Accessibility Conference
-                </td>
-                <td>
-                    Ralph Edwards
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    Guy Hawkins
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    30 minutes
-                </td>
-                <td>
-                    <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
-                        <div class="status canceled">
-                            pending
-                        </div>
-                        <div class="tfhb-status-bar">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 13.334L5 8.33398H15L10 13.334Z" fill="#765664"/>
-                            </svg>
-                            <div class="tfhb-status-popup">
-                                <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li>Approved</li>
-                                    <li class="pending">Pending</li>
-                                    <li class="schedule">Re-schedule</li>
-                                    <li class="canceled">Canceled</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="tfhb-details-action tfhb-flexbox tfhb-justify-normal tfhb-gap-16">
-                        <a href="">
-                            <Icon name="Eye" width="20" />
-                        </a>
-                        <a href="">
-                            <Icon name="Settings" width="20" />
-                        </a>
-                    </div>
-                </td>
-            </tr>
+            
         </tbody>
     </table>
 
