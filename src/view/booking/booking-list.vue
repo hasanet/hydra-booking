@@ -1,10 +1,32 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
 import Icon from '@/components/icon/LucideIcon.vue'
+import HbText from '@/components/form-fields/HbText.vue';
 import HbSelect from '@/components/form-fields/HbSelect.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
-const BookingDetailsPopup = ref(true);
+import AutoComplete from 'primevue/autocomplete';
+
+const booking_data = reactive({
+    meeting: '',
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+});
+const defaultItems = [...Array(10).keys()].map(item => 'default-' + item);
+const meeting_items = ref(defaultItems);
+const search = (event) => {
+    meeting_items.value = event.query ? defaultItems.filter(item => item.includes(event.query)) : defaultItems;
+}
+
+const BookingDetailsPopup = ref(false);
+const BackendBooking = ref(true);
+
+const Tfhb_BackendBooking = () => ({
+
+})
+
 </script>
 <template>
 
@@ -97,6 +119,52 @@ const BookingDetailsPopup = ref(true);
 
     </template> 
 </HbPopup>
+
+<!-- Backend Booking Popup Start -->
+{{booking_data }}
+<HbPopup :isOpen="BackendBooking" @modal-close="BackendBooking = false" max_width="400px" name="first-modal" gap="24px">
+    <template #header> 
+        <h3>Add New Booking</h3>
+    </template>
+
+    <template #content> 
+        
+        <AutoComplete v-model="booking_data.meeting" :suggestions="meeting_items" @complete="search" placeholder="Search by Meeting title..." />
+
+        <HbText  
+            v-model="booking_data.name"
+            required= "true"  
+            :label="$tfhb_trans['Attendee']"  
+        /> 
+        <HbText  
+            v-model="booking_data.email"
+            required= "true"  
+            :label="$tfhb_trans['Attendee Email']"  
+        /> 
+        <HbText  
+            v-model="booking_data.phone"
+            required= "true"  
+            :label="$tfhb_trans['Attendee Phone']"  
+        />
+        <HbText  
+            v-model="booking_data.address"
+            required= "true"  
+            :label="$tfhb_trans['Attendee Address']"  
+        /> 
+
+        <div class="tfhb-button-group tfhb-flexbox tfhb-gap-16">
+            <button class="tfhb-btn boxed-btn secondary-btn tfhb-flexbox" @click="BackendBooking = false">
+                {{ $tfhb_trans['Cancel'] }}
+            </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="Tfhb_BackendBooking()">
+                {{ $tfhb_trans['Save'] }}
+            </button>
+        </div>
+    </template> 
+
+</HbPopup>
+
+<!-- Backend Booking Popup End -->
 
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
