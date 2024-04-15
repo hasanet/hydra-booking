@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'DeleteMeeting'),
         ));  
-        // Get Single Host based on id
+        // Get Single Meeting based on id
         register_rest_route('hydra-booking/v1', '/meetings/(?P<id>[0-9]+)', array(
             'methods' => 'GET',
             'callback' => array($this, 'getMeetingData'),
@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true, 
             'meetings' => $MeetingsList,  
-            'message' => 'General Settings Updated Successfully', 
+            'message' => 'Meeting Data Successfully Retrieve!',
         );
         return rest_ensure_response($data);
     }  
@@ -116,7 +116,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
     }
 
-    // Delete Host
+    // Delete Meeting
     public function DeleteMeeting(){
         $request = json_decode(file_get_contents('php://input'), true);
         // Check if user is selected
