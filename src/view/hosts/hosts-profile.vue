@@ -26,6 +26,7 @@ const hostData = reactive({
 const time_zone = reactive({});
 
 const hostId = route.params.id;
+
  // Fetch generalSettings
  const fetchHost = async () => {
 

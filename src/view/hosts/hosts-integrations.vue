@@ -1,16 +1,125 @@
 <script setup>
-import { reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
+import { ref, reactive, onBeforeMount } from 'vue';
+import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
-import Icon from '@/components/icon/LucideIcon.vue'
+import Icon from '@/components/icon/LucideIcon.vue' 
+import { toast } from "vue3-toastify"; 
+
 // Get Current Route url
 const currentRoute = useRouter().currentRoute.value.path;
+import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 
+const route = useRoute();
+//  Load Time Zone 
+const skeleton = ref(true);
+const props = defineProps({
+    hostId: {
+        type: Number,
+        required: true
+    },
+    host: {
+        type: Object,
+        required: true
+    },
+    time_zone:{}
+
+});
+
+const Integration = reactive( {
+    woo_payment : {
+        type: 'payment', 
+        status: 0, 
+        connection_status: 0,  
+    },
+    zoom_meeting : {
+        type: 'meeting', 
+        status: 0, 
+        connection_status: 0,
+        account_id: '',
+        app_client_id: '',
+        app_secret_key: '',
+
+    },
+    google_calendar : {
+        type: 'meeting', 
+        status: 0, 
+        connection_status: 0,
+        client_id: '',
+        secret_key: '',
+        redirect_url: '',
+
+    },
+});
  
+
+ // Fetch generalSettings
+const fetchIntegration = async () => { 
+    let data = {
+        id: route.params.id,
+        user_id: props.host.user_id,
+    };  
+    try { 
+
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/integration', data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        if (response.data.status) {  
+            console.log(response.data);
+            Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
+            
+
+            skeleton.value = false;
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
+const UpdateIntegration = async (key, value) => { 
+    let data = {
+        key: key,
+        value: value,
+        id: route.params.id,
+        user_id: props.host.user_id,
+    };  
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/integration/update', data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        if (response.data.status) {    
+            console.log(response.data);
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+            
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+            });
+        }
+    } catch (error) {
+        toast.error('Action successful', {
+            position: 'bottom-right', // Set the desired position
+        });
+    }
+}
+onBeforeMount(() => {  
+    fetchIntegration();
+});
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box"> 
+    <div class="tfhb-admin-card-box "> 
+       
+        <!-- Woo  Integrations  --> 
+        <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
+
         <div class="tfhb-admin-card-box tfhb-flexbox">   
             <div class="tfhb-admin-cartbox-cotent tfhb-flexbox">
                 <svg width="56" height="32" viewBox="0 0 56 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +153,8 @@ const currentRoute = useRouter().currentRoute.value.path;
                     <!-- Swicher -->
                 </div>
             </div>
-         </div> 
+         </div>
+
         <div class="tfhb-admin-card-box tfhb-flexbox">   
             <div class="tfhb-admin-cartbox-cotent tfhb-flexbox">
                 <svg width="56" height="32" viewBox="0 0 56 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -72,6 +182,7 @@ const currentRoute = useRouter().currentRoute.value.path;
                  
             </div>
          </div> 
+
         <div class="tfhb-admin-card-box tfhb-flexbox">   
             <div class="tfhb-admin-cartbox-cotent tfhb-flexbox">
                 <svg width="56" height="32" viewBox="0 0 56 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -99,6 +210,7 @@ const currentRoute = useRouter().currentRoute.value.path;
                  
             </div>
          </div> 
+        
         <div class="tfhb-admin-card-box tfhb-flexbox">   
             <div class="tfhb-admin-cartbox-cotent tfhb-flexbox">
                 <svg width="56" height="32" viewBox="0 0 56 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +238,7 @@ const currentRoute = useRouter().currentRoute.value.path;
                  
             </div>
          </div> 
+
     </div> 
 </template>
 

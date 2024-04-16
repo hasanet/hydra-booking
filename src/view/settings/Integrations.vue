@@ -60,9 +60,11 @@ const fetchIntegration = async () => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/integration');
         if (response.data.status) { 
+            
             // console.log(response.data.integration_settings);
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
             Integration.woo_payment= response.data.integration_settings.woo_payment ? response.data.integration_settings.woo_payment : Integration.woo_payment;
+            Integration.google_calendar= response.data.integration_settings.google_calendar ? response.data.integration_settings.google_calendar : Integration.google_calendar;
  
 
             skeleton.value = false;
@@ -84,6 +86,7 @@ const UpdateIntegration = async (key, value) => {
         } );
     
         if (response.data.status) {    
+            
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,

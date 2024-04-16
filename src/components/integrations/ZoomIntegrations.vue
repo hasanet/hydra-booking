@@ -6,8 +6,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 
 // import Form Field 
 import HbSelect from '@/components/form-fields/HbSelect.vue' 
-import HbText from '@/components/form-fields/HbText.vue'
-import HbSwitch from '@/components/form-fields/HbSwitch.vue';
+import HbText from '@/components/form-fields/HbText.vue' 
 import HbPopup from '@/components/widgets/HbPopup.vue';  
 
 const zoomPopup = ref(false);
@@ -18,6 +17,8 @@ const zoom_integration = reactive(  {
 });
 
 const props = defineProps([
+    'class', 
+    'display', 
     'zoom_meeting', 
 ])
 const emit = defineEmits([ "update-integrations", ]); 
@@ -27,14 +28,17 @@ const emit = defineEmits([ "update-integrations", ]);
 
 <template>
       <!-- Zoom Integrations  -->
-      <div class="tfhb-integrations-single-block tfhb-admin-card-box ">
-        <span class="tfhb-integrations-single-block-icon">
-            <img :src="$tfhb_url+'/assets/images/Zoom.png'" alt="">
-        </span> 
+      <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box ">
+         <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
+            <span class="tfhb-integrations-single-block-icon">
+                <img :src="$tfhb_url+'/assets/images/Zoom.png'" alt="">
+            </span> 
 
-        <h3>Zoom</h3> 
-        <p>New standard in online payment</p>
-
+            <div class="cartbox-text">
+                <h3>Zoom</h3> 
+                <p>New standard in online payment</p>
+            </div>
+        </div>
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
             <button @click="zoomPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ zoom_meeting.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
