@@ -68,6 +68,8 @@ class THB_INIT{
     }
 
     public function tfhb_create_host_role(){ 
+        // remove role 
+        // remove_role('tfhb_host');
         // checked if role exist
           if( get_role('tfhb_host') ){
             return;
@@ -83,7 +85,8 @@ class THB_INIT{
             'edit_themes' => false, // false denies this capability. User can’t edit your theme
             'install_plugins' => false, // User cant add new plugins
             'update_plugin' => false, // User can’t update any plugins
-            'update_core' => false // user cant perform core updates
+            'update_core' => false, // user cant perform core updates  
+            'manage_options' => true,
         ));
       }
 

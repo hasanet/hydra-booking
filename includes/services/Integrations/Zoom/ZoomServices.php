@@ -90,6 +90,62 @@ Class ZoomServices {
        
 
         if(isset($response['error'])){
+
+            $data = array(
+                'status' => false, 
+                'message' => $response['reason'], 
+            );
+
+            return $data;
+
+        }else{
+
+            $_tfhb_integration_settings['zoom_meeting'] = $zoom_meeting;
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+            $data = array(
+                'status' => true, 
+                'message' => 'Zoom Integration Settings Updated Successfully', 
+            );
+            return $data;
+        }  
+    } 
+
+    // Update Zoom Settings in the database.
+    public function updateHostsZoomSettings($data = null, $user_id = null) {  
+
+        if($data == null || $user_id == null){ 
+            return array(
+                'status' => false, 
+                'message' => 'Invalid Data', 
+            );
+        }
+
+        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
+        
+         // return error message if data is not set
+         if( !isset($data['account_id']) || !isset($data['app_client_id']) || !isset($data['app_secret_key'])){
+            
+            $data = array(
+                'status' => false, 
+                'message' => 'Invalid Data',
+            );
+            return $data;
+        }
+
+        $zoom_meeting['type'] = sanitize_text_field($data['meeting']);
+        $zoom_meeting['status'] = sanitize_text_field($data['status']);
+        $zoom_meeting['connection_status'] = 1;
+        $zoom_meeting['account_id'] = sanitize_text_field($data['account_id']);
+        $zoom_meeting['app_client_id'] = sanitize_text_field($data['app_client_id']);
+        $zoom_meeting['app_secret_key'] = sanitize_text_field($data['app_secret_key']);
+
+        $response = $this->generateAccessToken(); 
+       
+
+        if(isset($response['error'])){
             $data = array(
                 'status' => false, 
                 'message' => $response['reason'], 
@@ -97,10 +153,10 @@ Class ZoomServices {
             return $data;
         }else{ 
 
-            $_tfhb_integration_settings['zoom_meeting'] = $zoom_meeting;
+            $_tfhb_host_integration_settings['zoom_meeting'] = $zoom_meeting;
 
-            // update option
-            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+            // update user meta
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
 
             $data = array(
                 'status' => true, 

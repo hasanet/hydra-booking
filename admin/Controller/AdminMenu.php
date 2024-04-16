@@ -15,7 +15,8 @@ namespace HydraBooking\Admin\Controller;
         add_menu_page(
             esc_html__('Hydra Booking', 'thb-hydra-booking'),
             esc_html__('Hydra Booking', 'thb-hydra-booking'),
-            'manage_options',
+            'manage_options', 
+            // array($this, 'hydra_booking_access'),
             'hydra-booking',
             array($this, 'hydra_booking_page'),
             'dashicons-calendar-alt',
@@ -75,7 +76,11 @@ namespace HydraBooking\Admin\Controller;
     public function hydra_booking_page() {
         echo '<div id="tfhb-admin-app"></div>';
     }
-    
+    public function hydra_booking_access(){
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+    }
 
 }
  

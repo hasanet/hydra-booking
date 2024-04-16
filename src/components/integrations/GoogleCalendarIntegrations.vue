@@ -26,7 +26,7 @@ const emit = defineEmits([ "update-integrations", ]);
       <!-- Zoom Integrations  -->
       <div class="tfhb-integrations-single-block tfhb-admin-card-box ">
         <span class="tfhb-integrations-single-block-icon">
-            <img :src="$tfhb_url+'/assets/images/Zoom.png'" alt="">
+            <img :src="$tfhb_url+'/assets/images/google-calendar.png'" alt="">
         </span> 
 
         <h3>Google Calender</h3> 
@@ -42,6 +42,7 @@ const emit = defineEmits([ "update-integrations", ]);
 
         <HbPopup :isOpen="gCalPopup" @modal-close="gCalPopup = false" max_width="600px" name="first-modal">
             <template #header> 
+                <!-- {{ google_calendar }} -->
                 <h2>Add Google Calendar</h2>
                 
             </template>
@@ -65,7 +66,7 @@ const emit = defineEmits([ "update-integrations", ]);
                     :placeholder="$tfhb_trans['Enter Secret Key']"  
                 /> 
                 <HbText  
-                    v-model="google_calendar.app_secret_key"  
+                    v-model="google_calendar.redirect_url"  
                     required= "true"  
                     :label="$tfhb_trans['Redirect Url']"  
                     selected = "1" 

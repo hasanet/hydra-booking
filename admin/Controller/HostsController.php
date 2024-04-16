@@ -5,6 +5,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\RouteController;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
+ use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  // Use DB 
 use HydraBooking\DB\Host;
 // exit
@@ -51,7 +52,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'updateHostInformation'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
-        ));   
+        ));    
+
+        // Intrigation 
+
+        register_rest_route('hydra-booking/v1', '/hosts/integration', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'GetIntegrationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
+        register_rest_route('hydra-booking/v1', '/hosts/integration/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateIntegrationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+            
        
     }
     // permission_callback
@@ -266,4 +282,85 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }
+
+
+    // Get Integration Settings
+    public function GetIntegrationSettings(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        
+        // Get Host Data 
+        $host_id = $request['id'];  
+        $host = new Host();
+        $hostData = $host->get( $host_id );
+        $user_id = $hostData->user_id;
+
+        $_tfhb_host_integration_settings =  get_user_meta($user_id, '_tfhb_host_integration_settings', true);
+        
+
+        // Checked if woo
+        $data = array(
+            'status' => true,  
+            'integration_settings' => $_tfhb_host_integration_settings,
+        );
+        return rest_ensure_response($data);
+    }
+
+    // Update Integration Settings.
+    public function UpdateIntegrationSettings (){
+        
+        $request = json_decode(file_get_contents('php://input'), true);
+        $key = sanitize_text_field($request['key']);
+        $data = $request['value'];
+        $host_id = $request['id'];
+        $user_id = $request['user_id'];
+        
+        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
+        
+        if($key == 'zoom_meeting'){ 
+
+            $zoom = new ZoomServices(
+                sanitize_text_field($data['account_id']), 
+                sanitize_text_field($data['app_client_id']),  
+                sanitize_text_field($data['app_secret_key'])
+            ); 
+            return rest_ensure_response($zoom->updateHostsZoomSettings($data, $user_id));
+            
+        }elseif($key == 'woo_payment'){
+            $_tfhb_integration_settings['woo_payment']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['woo_payment']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_integration_settings['woo_payment']['woo_payment'] =  sanitize_text_field($data['woo_payment']);
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'message' => 'Integration Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'google_calendar'){
+            $_tfhb_integration_settings['google_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['google_calendar']['status'] =  sanitize_text_field($data['status']); 
+            $_tfhb_integration_settings['google_calendar']['client_id'] =  sanitize_text_field($data['client_id']); 
+            $_tfhb_integration_settings['google_calendar']['secret_key'] =  sanitize_text_field($data['secret_key']); 
+            $_tfhb_integration_settings['google_calendar']['redirect_url'] =  sanitize_text_field($data['redirect_url']); 
+            $_tfhb_integration_settings['google_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']); 
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+            $option = get_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'option' => $user_id,  
+                'message' => 'Google Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }
+    }
+    
+    
 } 
