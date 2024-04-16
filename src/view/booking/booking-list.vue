@@ -119,6 +119,11 @@ const UpdateMeetingStatus = async (id, status) => {
     }   
 }
 
+const singleBookingData = ref('');
+const Tfhb_Booking_View = async (data) => {   
+    singleBookingData.value = data;
+    BookingDetailsPopup.value = true;
+}
 </script>
 <template>
 
@@ -140,6 +145,8 @@ const UpdateMeetingStatus = async (id, status) => {
     </div> 
 </div>
 
+<!-- Booking Quick View Start -->
+
 <HbPopup :isOpen="BookingDetailsPopup" @modal-close="BookingDetailsPopup = false" max_width="750px" name="first-modal" gap="32px">
     <template #header> 
         <h3>Discussion about design system</h3>
@@ -150,25 +157,25 @@ const UpdateMeetingStatus = async (id, status) => {
         <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16">
             <h3 class="tfhb-m-0 tfhb-full-width">Attendee</h3>
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_first_name">
                     <h4>Name</h4>
-                    <p>John Snow</p>
+                    <p>{{ singleBookingData.attendee_first_name }} {{ singleBookingData.attendee_last_name }}</p>
                 </div>
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_email">
                     <h4>E-mail</h4>
-                    <p>john@gmail.com</p>
+                    <p>{{ singleBookingData.attendee_email }}</p>
                 </div>
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_phone">
                     <h4>Phone</h4>
-                    <p>+88058464654</p>
+                    <p>{{ singleBookingData.attendee_phone }}</p>
                 </div>
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.location_details">
                     <h4>Address</h4>
-                    <p>4517 Washington Ave. Manchester, Kentucky 39495</p>
+                    <p>{{ singleBookingData.location_details }}</p>
                 </div>
-                <div class="tfhb-attendee-name" style="width: calc(66% - 4px);">
+                <div class="tfhb-attendee-name" style="width: calc(66% - 4px);" v-if="singleBookingData.message">
                     <h4>Notes</h4>
-                    <p>I found a 2007 study on effects of hand sanitizers on blood alcohol level in adults. The 12 subjects alcohol level in adults. The 12 </p>
+                    <p>{{ singleBookingData.message }}</p>
                 </div>
             </div>
         </div>
@@ -176,17 +183,17 @@ const UpdateMeetingStatus = async (id, status) => {
         <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16">
             <h3 class="tfhb-m-0 tfhb-full-width">Host</h3>
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.host_first_name">
                     <h4>Name</h4>
-                    <p>John Snow</p>
+                    <p>{{ singleBookingData.host_first_name }} {{ singleBookingData.host_last_name }}</p>
                 </div>
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.host_email">
                     <h4>E-mail</h4>
-                    <p>john@gmail.com</p>
+                    <p>{{ singleBookingData.host_email }}</p>
                 </div>
-                <div class="tfhb-attendee-name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.host_time_zone">
                     <h4>Time zone</h4>
-                    <p>Asia/Dhaka</p>
+                    <p>{{ singleBookingData.host_time_zone }}</p>
                 </div>
             </div>
         </div>
@@ -211,6 +218,8 @@ const UpdateMeetingStatus = async (id, status) => {
 
     </template> 
 </HbPopup>
+
+<!-- Booking Quick View End -->
 
 <!-- Backend Booking Popup Start -->
 
@@ -327,9 +336,9 @@ const UpdateMeetingStatus = async (id, status) => {
                 </td>
                 <td>
                     <div class="tfhb-details-action tfhb-flexbox tfhb-justify-normal tfhb-gap-16">
-                        <a href="">
+                        <span @click.stop="Tfhb_Booking_View(book)">
                             <Icon name="Eye" width="20" />
-                        </a>
+                        </span>
                         <a href="">
                             <Icon name="Settings" width="20" />
                         </a>

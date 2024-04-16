@@ -150,15 +150,18 @@ class Booking {
             $table_name.last_name AS attendee_last_name,
             $table_name.email AS attendee_email,
             $table_name.phone AS attendee_phone,
+            $table_name.message,
             $table_name.location_details,
             $table_name.status AS booking_status,
             $table_name.created_at AS booking_created_at,
             $meeting_table.host_id,
             $meeting_table.title,
             $meeting_table.duration,
+            $meeting_table.meeting_locations,
             $host_table.first_name AS host_first_name,
             $host_table.last_name AS host_last_name,
-            $host_table.email AS host_email
+            $host_table.email AS host_email,
+            $host_table.time_zone AS host_time_zone
             FROM $table_name 
             INNER JOIN $meeting_table
             ON $table_name.meeting_id=$meeting_table.id
