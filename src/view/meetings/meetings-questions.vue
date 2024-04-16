@@ -32,6 +32,7 @@ function EditExtraQuestion(key){
             questions_data.key = key;
             questions_data.label = question.label;
             questions_data.type = question.type;
+            questions_data.placeholder = question.placeholder;
             questions_data.required = question.required;
             QuestionPopup.value = true;
         }
@@ -41,6 +42,7 @@ function EditExtraQuestion(key){
 function addExtraQuestion(){
     props.meeting.questions[questions_data.key].label = questions_data.label
     props.meeting.questions[questions_data.key].type = questions_data.type
+    props.meeting.questions[questions_data.key].placeholder = questions_data.placeholder
     props.meeting.questions[questions_data.key].required = questions_data.required
     QuestionPopup.value = false;
 }
@@ -49,12 +51,14 @@ function QuestionPopupAdd(){
     props.meeting.questions.push({
         label: '',
         type:'',
+        placeholder:'',
         required: 1
     });
     const lastIndexOfQuestion = props.meeting.questions.length - 1;
     questions_data.key = lastIndexOfQuestion;
     questions_data.label = '';
     questions_data.type = '';
+    questions_data.placeholder = '';
     questions_data.required = '';
     QuestionPopup.value = true;
 }
@@ -66,8 +70,7 @@ function QuestionPopupClose(){
 </script>
 
 <template>
-    <div class="meeting-create-details tfhb-gap-24">
-
+    <div class="meeting-create-details tfhb-gap-24"> 
         <div class="tfhb-admin-title" >
             <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
                 Meeting Questions for Attendee

@@ -49,8 +49,18 @@ const removeExtraFrequency = (key) => {
                 :label="$tfhb_trans['Buffer time before meeting']"  
                 width="50"
                 :selected = "1"
-                placeholder="Buffer time after meeting"  
-                :option = "{'12_hours': '12 hours', '24_hours': '24 hours'}" 
+                placeholder="No buffer time"  
+                :option = "{
+                    '5': '5 Minutes',  
+                    '10': '10 Minutes',  
+                    '15': '15 Minutes',  
+                    '20': '20 Minutes',  
+                    '30': '30 Minutes',  
+                    '45': '45 Minutes',  
+                    '60': '60 Minutes',  
+                    '90': '90 Minutes',  
+                    '120': '120 Minutes',   
+                }" 
             />
             <!-- Buffer time before meeting --> 
             <!-- Buffer time after meeting -->
@@ -60,9 +70,18 @@ const removeExtraFrequency = (key) => {
                 :label="$tfhb_trans['Buffer time after meeting']"   
                 width="50"
                 selected = "1"
-                placeholder="Buffer time after meeting"  
-                :option = "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
-                
+                placeholder="No buffer time"  
+                :option = "{
+                    '5': '5 Minutes',  
+                    '10': '10 Minutes',  
+                    '15': '15 Minutes',  
+                    '20': '20 Minutes',  
+                    '30': '30 Minutes',  
+                    '45': '45 Minutes',  
+                    '60': '60 Minutes',  
+                    '90': '90 Minutes',  
+                    '120': '120 Minutes',   
+                }" 
             />
             <!-- Buffer time after meeting -->
 
@@ -86,8 +105,17 @@ const removeExtraFrequency = (key) => {
                 width="50"
                 selected = "1"
                 :placeholder="$tfhb_trans['Use meeting length (default)']"
-                :option = "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
-                
+                :option = "{
+                    '5': '5 Minutes',  
+                    '10': '10 Minutes',  
+                    '15': '15 Minutes',  
+                    '20': '20 Minutes',  
+                    '30': '30 Minutes',  
+                    '45': '45 Minutes',  
+                    '60': '60 Minutes',  
+                    '90': '90 Minutes',  
+                    '120': '120 Minutes',   
+                }" 
             />
         
         </div>  

@@ -66,12 +66,30 @@ const validateSelect = (fieldName) => {
                 :label="$tfhb_trans['Duration']"  
                 :selected = "1"
                 name="duration"
-                placeholder="Select Time Format"  
-                :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
+                placeholder="Select Meetings Duration"  
+                :option = "{
+                    '15': '15 minutes', 
+                    '30': '30 minutes',
+                    '45': '45 minutes',
+                    '60': '60 minutes',
+                    'custom': 'Custom'
+                    }" 
                 @change="() => validateSelect('duration')"
                 @click="() => validateSelect('duration')"
                 :errors="errors.duration"
             />
+            <!-- Duration -->
+            <!-- Custom Duration -->
+            <HbText  
+                v-model="meeting.custom_duration"  
+                :label="$tfhb_trans['Custom Duration']"  
+                name="title"
+                type="number"
+                selected = "1"
+                :placeholder="$tfhb_trans['Type Custom Duration']"  
+                v-if="'custom'==meeting.duration"
+            /> 
+             <!-- Custom Duration -->
             <HbSwitch 
                 type="checkbox" 
                 required= "true" 
@@ -88,7 +106,14 @@ const validateSelect = (fieldName) => {
                     :label="$tfhb_trans['Location']"  
                     :selected = "1"
                     :placeholder="$tfhb_trans['Location']" 
-                    :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
+                    :option = "{
+                        'zoom': 'Zoom', 
+                        'attendee_address': 'In Person (Attendee Address)',
+                        'organizer_address': 'In Person (Organizer Address)',
+                        'attendee_phone': 'Attendee Phone Number',
+                        'organizer_phone': 'Organizer Phone Number',
+                        'online_meeting': 'Online Meeting',
+                        }" 
                     :width= "50"
                 />
                 <!-- Address -->
@@ -97,9 +122,11 @@ const validateSelect = (fieldName) => {
                     required= "true"  
                     :label="$tfhb_trans['Address']"  
                     selected = "1"
-                    :placeholder="$tfhb_trans['Type Address']" 
+                    :placeholder="'Type Location Address'" 
                     :width= "50"
+                    v-if="'organizer_address'==slocation.location || 'organizer_phone'==slocation.location || 'online_meeting'==slocation.location"
                 /> 
+ 
             </div>
             <div class="tfhb-add-new-question">
                 <div class="new-location tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" @click="emit('add-more-location')">

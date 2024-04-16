@@ -202,11 +202,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(empty($MeetingData->payment_meta)){
             $MeetingData->payment_meta = $_tfhb_integration_settings;
         }
+
+        // Time Zone 
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
         
         // Return response
         $data = array(
             'status' => true, 
             'meeting' => $MeetingData,  
+            'time_zone' => $time_zone,  
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -243,6 +248,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'description' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
             'meeting_type' => isset($request['meeting_type']) ? sanitize_text_field($request['meeting_type']) : '',
             'duration' => isset($request['duration']) ? sanitize_text_field($request['duration']) : '',
+            'custom_duration' => isset($request['custom_duration']) ? sanitize_text_field($request['custom_duration']) : '',
             'meeting_locations' => isset($request['meeting_locations']) ? wp_json_encode($request['meeting_locations']) : '',
             'meeting_category' => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
             'availability_type' => isset($request['availability_type']) ? sanitize_text_field($request['availability_type']) : '',

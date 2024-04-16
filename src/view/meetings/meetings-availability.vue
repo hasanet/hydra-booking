@@ -18,6 +18,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    timeZone: {
+        type: Object,
+        required: true
+    },
 
 });
 const transformedHostData = {};
@@ -109,7 +113,19 @@ const validateSelect = (fieldName) => {
             :label="$tfhb_trans['Choose Schedule']"  
             :placeholder="$tfhb_trans['Availability title']"   
             v-if="'custom'==meeting.availability_type"
-        />
+        /> 
+        <!-- Time Zone -->
+        <HbSelect 
+            
+            v-model="meeting.availability_custom.time_zone"  
+            required= "true"  
+            :label="$tfhb_trans['Time zone']"  
+            selected = "1"
+            placeholder="Select Time Zone"  
+            :option = "props.timeZone" 
+            v-if="'custom'==meeting.availability_type"
+        /> 
+        <!-- Time Zone --> 
         <!-- Settings Data -->
         <div class="tfhb-admin-card-box tfhb-gap-24" v-if="Settings_avalibility && 'settings'==meeting.availability_type">  
             <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
@@ -208,7 +224,7 @@ const validateSelect = (fieldName) => {
                     <h3 >Weekly hours </h3>  
                 </div>
                 <div class="thb-admin-btn right"> 
-                    <span>Asia/Dhaka</span> 
+                    <span>{{ meeting.availability_custom.time_zone }}</span> 
                 </div> 
             </div>
             

@@ -30,6 +30,12 @@ const props = defineProps({
         :label="$tfhb_trans['Level']"  
         :placeholder="$tfhb_trans['Type level here']" 
     /> 
+    <HbText  
+        v-model="questions_data.placeholder"
+        required= "true"  
+        :label="$tfhb_trans['Placeholder']"  
+        :placeholder="$tfhb_trans['Type Placeholder here']" 
+    /> 
     <HbSwitch  
         v-model="questions_data.required"
         :label="$tfhb_trans['Required']"  

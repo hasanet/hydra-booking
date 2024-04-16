@@ -11,6 +11,7 @@ const error = reactive({})
 const route = useRoute();
 const router = useRouter();
 const skeleton = ref(true);
+const timeZone = reactive({});
 
 const meetingData = reactive({
     id: 0,
@@ -21,6 +22,7 @@ const meetingData = reactive({
     description: '',
     meeting_type: '',
     duration: '',
+    custom_duration: 5,
     meeting_locations: [
         {
         location:'',
@@ -136,18 +138,21 @@ const meetingData = reactive({
     questions_status: 1,
     questions: [
         {
-            label: 'Name',
+            label: 'name',
             type:'Text',
+            placeholder:'Name',
             required: 1
         },
         {
-            label: 'Email',
+            label: 'email',
             type:'Email',
+            placeholder:'Email',
             required: 1
         },
         {
-            label: 'Address',
-            type:'Text',
+            label: 'address',
+            type:'Text', 
+            placeholder:'Address',
             required: 1
         }
     ],
@@ -277,6 +282,9 @@ const meetingId = route.params.id;
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/'+meetingId);
         if (response.data.status == true) { 
+            // Time Zone = 
+            timeZone.value = response.data.time_zone;  
+
             meetingData.id = response.data.meeting.id
             meetingData.user_id = response.data.meeting.user_id
             meetingData.host_id = response.data.meeting.host_id
@@ -285,6 +293,7 @@ const meetingId = route.params.id;
             meetingData.description = response.data.meeting.description
             meetingData.meeting_type = response.data.meeting.meeting_type
             meetingData.duration = response.data.meeting.duration
+            meetingData.custom_duration = response.data.meeting.custom_duration
             meetingData.meeting_category = response.data.meeting.meeting_category
             if(response.data.meeting.meeting_locations){
                 meetingData.meeting_locations = JSON.parse(response.data.meeting.meeting_locations)
@@ -439,6 +448,7 @@ const UpdateMeetingData = async (validator_field) => {
             <router-view 
             :meetingId ="meetingId" 
             :meeting="meetingData" 
+            :timeZone="timeZone.value" 
             @add-more-location="addMoreLocations" 
             @update-meeting="UpdateMeetingData" 
             @availability-time="addAvailabilityTime"
