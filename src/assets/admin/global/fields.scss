@@ -64,27 +64,31 @@
         }
         &.tfhb-field-checkbox{
             input[type="checkbox"]{
-                background-color: #F6EEF2;
-                width: 20px;
+                display: none;
+            }
+            .checkmark {
+                position: absolute;
+                top: 0px;
+                left: 0px;
                 height: 20px;
+                width: 20px;
+                background-color: #F6EEF2;
                 border-radius: 5px;
-                border: 0px solid;
-                margin: 0px;
-                position: relative;
-                box-shadow: none;
-                &:focus{
-                    outline: none;
-                    box-shadow: none;
-                }
-                &::before{
-                    background-color: #F62881;
-                    height: 100%;
-                    width: 100%;
-                    left: 3px;
-                    top: 2px;
+                border: 1px solid #F6EEF2;
+                margin: 0 !important;
+                &:after {
+                    content: "";
                     position: absolute;
-                    border-radius: 5px;
-                    color: #fff;
+                    left: 6px;
+                    top: 2px;
+                    width: 5px;
+                    height: 10px;
+                    border: solid #F6EEF2;
+                    border-width: 0 3px 3px 0;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                    display: none;
                 }
             }
             label{
@@ -94,6 +98,15 @@
                 font-weight: 400;
                 line-height: 24px !important;
                 margin: 0 !important;
+                position: relative;
+                padding-left: 38px;
+                input:checked~.checkmark {
+                    background-color: #F62881;
+                    border: 1px solid #F62881;
+                }
+                input:checked~.checkmark:after {
+                    display: block;
+                }
             }
         }
         .tfhb-swicher-wrap{

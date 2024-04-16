@@ -5,6 +5,7 @@ use HydraBooking\Admin\Controller\AvailabilityController;
 use HydraBooking\Admin\Controller\SettingsController;
 use HydraBooking\Admin\Controller\HostsController;
 use HydraBooking\Admin\Controller\MeetingController;
+use HydraBooking\Admin\Controller\BookingController;
 
 // Use DB 
 use HydraBooking\DB\Availability;
@@ -16,12 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     // constaract
     public function __construct() {  
-        
-        // availability controller
         $this->create(new AvailabilityController(), 'create_endpoint');
         $this->create(new SettingsController(), 'create_endpoint');
         $this->create(new HostsController(), 'create_endpoint');
         $this->create(new MeetingController(), 'create_endpoint');
+        $this->create(new BookingController(), 'create_endpoint');
     }
 
     public function create($class, $function){

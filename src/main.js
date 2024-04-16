@@ -1,12 +1,14 @@
 import './assets/main.scss' 
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router/router.js'    
+import router from './router/router.js'   
+import PrimeVue from "primevue/config"; 
 const tfhb_trans = tfhb_core_apps.trans || {};  
 const tfhb_url =  tfhb_core_apps.tfhb_url || '';      
  
 
 const tfhbApps = createApp(App).use(router); 
+tfhbApps.use(PrimeVue);
  
 // tfhbApps.component("toast", toast);
 tfhbApps.config.globalProperties.$tfhb_trans = tfhb_trans;

@@ -298,7 +298,9 @@ const meetingId = route.params.id;
             if(response.data.meeting.availability_custom){
                 meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
             }
-            meetingData.availability_type = response.data.meeting.availability_type
+            if(response.data.meeting.availability_type){
+                meetingData.availability_type = response.data.meeting.availability_type
+            }
             meetingData.availability_id = response.data.meeting.availability_id
             meetingData.buffer_time_before = response.data.meeting.buffer_time_before
             meetingData.buffer_time_after = response.data.meeting.buffer_time_after

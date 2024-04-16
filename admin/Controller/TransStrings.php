@@ -126,6 +126,12 @@ namespace HydraBooking\Admin\Controller;
             'Duration' => __('Duration', 'hydra-booking'),
             'Status' => __('Status', 'hydra-booking'),
             'Action' => __('Action', 'hydra-booking'),
+            'Meeting Name' => __('Meeting Name', 'hydra-booking'),
+            'Attendee Phone' => __('Attendee Phone', 'hydra-booking'),
+            'Attendee Email' => __('Attendee Email', 'hydra-booking'),
+            'Attendee Address' => __('Attendee Address', 'hydra-booking'),
+            'Cancel' => __('Cancel', 'hydra-booking'),
+            'Search by Meeting title...' => __('Search by Meeting title...', 'hydra-booking'),
         );
      } 
 

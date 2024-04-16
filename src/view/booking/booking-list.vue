@@ -1,10 +1,81 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
+import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
+import HbText from '@/components/form-fields/HbText.vue';
 import HbSelect from '@/components/form-fields/HbSelect.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
-const BookingDetailsPopup = ref(true);
+import AutoComplete from 'primevue/autocomplete';
+import { toast } from "vue3-toastify"; 
+
+const booking_data = reactive({
+    meeting: '',
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+});
+const defaultItems = [...Array(10).keys()].map(item => 'default-' + item);
+const meeting_items = ref(defaultItems);
+const search = (event) => {
+    meeting_items.value = event.query ? defaultItems.filter(item => item.includes(event.query)) : defaultItems;
+}
+
+const BookingDetailsPopup = ref(false);
+const BackendBooking = ref(false);
+
+const Tfhb_BackendBooking = async () => {
+
+    // Api Submission
+    try { 
+
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/create', booking_data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        // Api Response
+        if (response.data.status) {  
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });  
+            BackendBooking.value = false;
+            booking_data.meeting = '';
+            booking_data.name = '';
+            booking_data.phone = '';
+            booking_data.email = '';
+            booking_data.address = '';
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
+const bookings = reactive({}); 
+const fetchBookings = async () => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists');
+        if (response.data.status) { 
+            bookings.data = response.data.bookings;  
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+} 
+
+onBeforeMount(() => { 
+    fetchBookings();
+});
+
 </script>
 <template>
 
@@ -22,7 +93,7 @@ const BookingDetailsPopup = ref(true);
             placeholder="Status"  
             :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
         />
-        <router-link to="/meetings/create" class="tfhb-btn boxed-btn flex-btn"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</router-link>
+        <button class="tfhb-btn boxed-btn flex-btn" @click="BackendBooking = true"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</button>
     </div> 
 </div>
 
@@ -98,6 +169,52 @@ const BookingDetailsPopup = ref(true);
     </template> 
 </HbPopup>
 
+<!-- Backend Booking Popup Start -->
+
+<HbPopup :isOpen="BackendBooking" @modal-close="BackendBooking = false" max_width="400px" name="first-modal" gap="24px">
+    <template #header> 
+        <h3>Add New Booking</h3>
+    </template>
+
+    <template #content> 
+        
+        <AutoComplete v-model="booking_data.meeting" :suggestions="meeting_items" @complete="search" placeholder="Search by Meeting title..." />
+
+        <HbText  
+            v-model="booking_data.name"
+            required= "true"  
+            :label="$tfhb_trans['Attendee']"  
+        /> 
+        <HbText  
+            v-model="booking_data.email"
+            required= "true"  
+            :label="$tfhb_trans['Attendee Email']"  
+        /> 
+        <HbText  
+            v-model="booking_data.phone"
+            required= "true"  
+            :label="$tfhb_trans['Attendee Phone']"  
+        />
+        <HbText  
+            v-model="booking_data.address"
+            required= "true"  
+            :label="$tfhb_trans['Attendee Address']"  
+        /> 
+
+        <div class="tfhb-button-group tfhb-flexbox tfhb-gap-16">
+            <button class="tfhb-btn boxed-btn secondary-btn tfhb-flexbox" @click="BackendBooking = false">
+                {{ $tfhb_trans['Cancel'] }}
+            </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="Tfhb_BackendBooking()">
+                {{ $tfhb_trans['Save'] }}
+            </button>
+        </div>
+    </template> 
+
+</HbPopup>
+
+<!-- Backend Booking Popup End -->
+{{ bookings }}
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
         <thead>
@@ -114,27 +231,32 @@ const BookingDetailsPopup = ref(true);
         </thead>
 
         <tbody>
-            <tr>
+            <tr v-for="(book, key) in bookings.data" :key="key">
                 <td>
-                    <input type="checkbox">
+                    <div class="checkbox-lists">
+                        <label>
+                            <input type="checkbox">   
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                 </td>
                 <td>
-                    24 May, 2020
-                    <span>03:48 am</span>
+                    {{ book.booking_created_at }}
+                    <span>{{ book.booking_created_at }}</span>
                 </td>
                 <td>
-                    Australian Accessibility Conference
+                    {{ book.title }}
                 </td>
                 <td>
-                    Ralph Edwards
-                    <span>sara.cruz@example.com</span>
+                    {{ book.host_first_name }} {{ book.host_last_name }}
+                    <span>{{ book.host_email }}</span>
                 </td>
                 <td>
-                    Guy Hawkins
-                    <span>sara.cruz@example.com</span>
+                    {{ book.attendee_first_name }} {{ book.attendee_last_name }}
+                    <span>{{ book.attendee_email }}</span>
                 </td>
                 <td>
-                    30 minutes
+                    {{ book.duration }}
                 </td>
                 <td>
                     <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
@@ -167,112 +289,7 @@ const BookingDetailsPopup = ref(true);
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <input type="checkbox">
-                </td>
-                <td>
-                    24 May, 2020
-                    <span>03:48 am</span>
-                </td>
-                <td>
-                    Australian Accessibility Conference
-                </td>
-                <td>
-                    Ralph Edwards
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    Guy Hawkins
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    30 minutes
-                </td>
-                <td>
-                    <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
-                        <div class="status approved">
-                            pending
-                        </div>
-                        <div class="tfhb-status-bar">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 13.334L5 8.33398H15L10 13.334Z" fill="#765664"/>
-                            </svg>
-                            <div class="tfhb-status-popup">
-                                <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li>Approved</li>
-                                    <li class="pending">Pending</li>
-                                    <li class="schedule">Re-schedule</li>
-                                    <li class="canceled">Canceled</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="tfhb-details-action tfhb-flexbox tfhb-justify-normal tfhb-gap-16">
-                        <a href="">
-                            <Icon name="Eye" width="20" />
-                        </a>
-                        <a href="">
-                            <Icon name="Settings" width="20" />
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="checkbox">
-                </td>
-                <td>
-                    24 May, 2020
-                    <span>03:48 am</span>
-                </td>
-                <td>
-                    Australian Accessibility Conference
-                </td>
-                <td>
-                    Ralph Edwards
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    Guy Hawkins
-                    <span>sara.cruz@example.com</span>
-                </td>
-                <td>
-                    30 minutes
-                </td>
-                <td>
-                    <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
-                        <div class="status canceled">
-                            pending
-                        </div>
-                        <div class="tfhb-status-bar">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 13.334L5 8.33398H15L10 13.334Z" fill="#765664"/>
-                            </svg>
-                            <div class="tfhb-status-popup">
-                                <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li>Approved</li>
-                                    <li class="pending">Pending</li>
-                                    <li class="schedule">Re-schedule</li>
-                                    <li class="canceled">Canceled</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="tfhb-details-action tfhb-flexbox tfhb-justify-normal tfhb-gap-16">
-                        <a href="">
-                            <Icon name="Eye" width="20" />
-                        </a>
-                        <a href="">
-                            <Icon name="Settings" width="20" />
-                        </a>
-                    </div>
-                </td>
-            </tr>
+            
         </tbody>
     </table>
 

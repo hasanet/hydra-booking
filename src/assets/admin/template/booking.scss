@@ -34,28 +34,44 @@
                     line-height: 24px;
                     border: 0px solid;
                     border-bottom: 1px solid #F6EEF2;
-                    input[type="checkbox"]{
-                        background-color: #F6EEF2;
-                        width: 20px;
-                        height: 20px;
-                        border-radius: 5px;
-                        border: 0px solid;
-                        margin: 0px;
-                        position: relative;
-                        box-shadow: none;
-                        &:focus{
-                            outline: none;
-                            box-shadow: none;
+                    .checkbox-lists{
+                        label{
+                            
+                            .checkmark {
+                                position: relative;
+                                top: 0px;
+                                left: 0px;
+                                height: 20px;
+                                width: 20px;
+                                background-color: #F6EEF2;
+                                border-radius: 5px;
+                                border: 1px solid #F6EEF2;
+                                margin: 0 !important;
+                                &:after {
+                                    content: "";
+                                    position: absolute;
+                                    left: 6px;
+                                    top: 2px;
+                                    width: 5px;
+                                    height: 10px;
+                                    border: solid #F6EEF2;
+                                    border-width: 0 3px 3px 0;
+                                    -webkit-transform: rotate(45deg);
+                                    -ms-transform: rotate(45deg);
+                                    transform: rotate(45deg);
+                                    display: none;
+                                }
+                            }
+                            input:checked~.checkmark {
+                                background-color: #F62881;
+                                border: 1px solid #F62881;
+                            }
+                            input:checked~.checkmark:after {
+                                display: block;
+                            }
                         }
-                        &::before{
-                            background-color: #F62881;
-                            height: 100%;
-                            width: 100%;
-                            left: 3px;
-                            top: 2px;
-                            position: absolute;
-                            border-radius: 5px;
-                            color: #fff;
+                        input[type="checkbox"]{
+                            display: none;
                         }
                     }
                     span{
