@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'GET',
             'callback' => array($this, 'getBookingData'),
         ));
-        register_rest_route('hydra-booking/v1', '/booking/details/update', array(
+        register_rest_route('hydra-booking/v1', '/booking/update', array(
             'methods' => 'POST',
             'callback' => array($this, 'updateBooking'),
         ));   
@@ -128,10 +128,28 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     // Update Booking Information
     public function updateBooking(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $booking_id = $request['id'];
+        if (empty($booking_id) || $booking_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Booking'));
+        }
 
+        $data = [ 
+            'id' => $request['id'],
+            'status' => isset($request['status']) ? sanitize_text_field($request['status']) : ''
+        ];
+
+        $booking = new Booking();
+        // Booking Update
+        $bookingUpdate = $booking->update($data);
+
+        // Booking Lists 
+        $booking_List = $booking->get();
+        
         // Return response
         $data = array(
             'status' => true,  
+            'booking' => $booking_List, 
             'message' => 'Booking Updated Successfully', 
         );
         return rest_ensure_response($data);
