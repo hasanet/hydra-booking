@@ -8,6 +8,8 @@ import HbSelect from '@/components/form-fields/HbSelect.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
 import AutoComplete from 'primevue/autocomplete';
 import { toast } from "vue3-toastify"; 
+import useDateFormat from '@/store/dateformat'
+const { Tfhb_Date, Tfhb_Time } = useDateFormat();
 
 const booking_data = reactive({
     meeting: '',
@@ -241,8 +243,8 @@ onBeforeMount(() => {
                     </div>
                 </td>
                 <td>
-                    {{ book.booking_created_at }}
-                    <span>{{ book.booking_created_at }}</span>
+                    {{ Tfhb_Date(book.booking_created_at) }}
+                    <span>{{ Tfhb_Time(book.booking_created_at) }}</span>
                 </td>
                 <td>
                     {{ book.title }}
