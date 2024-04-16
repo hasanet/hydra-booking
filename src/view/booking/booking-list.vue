@@ -2,6 +2,7 @@
 import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
 import axios from 'axios'  
+import 'primevue/resources/themes/aura-light-green/theme.css'
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
 import HbSelect from '@/components/form-fields/HbSelect.vue';
@@ -11,6 +12,8 @@ import { toast } from "vue3-toastify";
 import useDateFormat from '@/store/dateformat'
 const { Tfhb_Date, Tfhb_Time } = useDateFormat();
 
+import { Meeting } from '@/store/meetings'
+
 const booking_data = reactive({
     meeting: '',
     name: '',
@@ -18,14 +21,11 @@ const booking_data = reactive({
     email: '',
     address: '',
 });
-const defaultItems = [...Array(10).keys()].map(item => 'default-' + item);
-const meeting_items = ref(defaultItems);
-const search = (event) => {
-    meeting_items.value = event.query ? defaultItems.filter(item => item.includes(event.query)) : defaultItems;
-}
 
 const BookingDetailsPopup = ref(false);
 const BackendBooking = ref(false);
+const bookings = reactive({});
+const meetings = reactive({}); 
 
 const Tfhb_BackendBooking = async () => {
 
@@ -40,6 +40,7 @@ const Tfhb_BackendBooking = async () => {
 
         // Api Response
         if (response.data.status) {  
+            bookings.data = response.data.booking;  
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
@@ -61,8 +62,7 @@ const Tfhb_BackendBooking = async () => {
         console.log(error);
     } 
 }
-
-const bookings = reactive({}); 
+ 
 const fetchBookings = async () => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists');
@@ -76,7 +76,16 @@ const fetchBookings = async () => {
 
 onBeforeMount(() => { 
     fetchBookings();
+    Meeting.fetchMeetings();
 });
+
+// Auto Suggetions Meetings
+const defaultItems = [...Array(10).keys()].map(item => 'default-' + item);
+const meeting_items = ref(defaultItems);
+const search = (event) => {
+    meeting_items.value = event.query ? defaultItems.filter(item => item.includes(event.query)) : defaultItems;
+}
+
 
 </script>
 <template>
@@ -180,7 +189,10 @@ onBeforeMount(() => {
 
     <template #content> 
         
-        <AutoComplete v-model="booking_data.meeting" :suggestions="meeting_items" @complete="search" placeholder="Search by Meeting title..." />
+        <div class="tfhb-meeting-title">
+            <label>{{ $tfhb_trans['Meeting Name'] }} *</label>
+            <AutoComplete v-model="booking_data.meeting" :suggestions="meeting_items" @complete="search" placeholder="Search by Meeting title..." />
+        </div>
 
         <HbText  
             v-model="booking_data.name"
@@ -216,7 +228,8 @@ onBeforeMount(() => {
 </HbPopup>
 
 <!-- Backend Booking Popup End -->
-{{ bookings }}
+{{Meeting}}
+
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
         <thead>
