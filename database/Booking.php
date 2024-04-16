@@ -144,6 +144,7 @@ class Booking {
             );
         }else{
             $sql = "SELECT 
+            $table_name.id,
             $table_name.meeting_id,
             $table_name.first_name AS attendee_first_name,
             $table_name.last_name AS attendee_last_name,

@@ -27,8 +27,8 @@ const BackendBooking = ref(false);
 const bookings = reactive({});
 const meetings = reactive({}); 
 
+// Add New Booking
 const Tfhb_BackendBooking = async () => {
-
     // Api Submission
     try { 
 
@@ -62,7 +62,8 @@ const Tfhb_BackendBooking = async () => {
         console.log(error);
     } 
 }
- 
+
+// Booking Data Fatching
 const fetchBookings = async () => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists');
@@ -86,6 +87,37 @@ const search = (event) => {
     meeting_items.value = event.query ? defaultItems.filter(item => item.includes(event.query)) : defaultItems;
 }
 
+
+// Booking Status Changed
+const meeting_status = reactive({});
+const UpdateMeetingStatus = async (id, status) => {    
+    meeting_status.id = id
+    meeting_status.status = status
+   try { 
+        // axisos sent dataHeader Nonce Data
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/update', meeting_status, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        if (response.data.status) {  
+            bookings.data = response.data.booking; 
+            console.log(response.data.booking);
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });   
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }   
+}
 
 </script>
 <template>
@@ -228,7 +260,7 @@ const search = (event) => {
 </HbPopup>
 
 <!-- Backend Booking Popup End -->
-{{Meeting}}
+{{bookings}}
 
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
@@ -250,7 +282,7 @@ const search = (event) => {
                 <td>
                     <div class="checkbox-lists">
                         <label>
-                            <input type="checkbox">   
+                            <input type="checkbox" :value="book.id">   
                             <span class="checkmark"></span>
                         </label>
                     </div>
@@ -275,8 +307,8 @@ const search = (event) => {
                 </td>
                 <td>
                     <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
-                        <div class="status">
-                            pending
+                        <div class="status" :class="book.booking_status">
+                            {{ book.booking_status }}
                         </div>
                         <div class="tfhb-status-bar">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -284,10 +316,10 @@ const search = (event) => {
                             </svg>
                             <div class="tfhb-status-popup">
                                 <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li>Approved</li>
-                                    <li class="pending">Pending</li>
-                                    <li class="schedule">Re-schedule</li>
-                                    <li class="canceled">Canceled</li>
+                                    <li @click="UpdateMeetingStatus(book.id, 'approved')">Approved</li>
+                                    <li class="pending" @click="UpdateMeetingStatus(book.id, 'pending')">Pending</li>
+                                    <li class="schedule" @click="UpdateMeetingStatus(book.id, 'schedule')">Re-schedule</li>
+                                    <li class="canceled" @click="UpdateMeetingStatus(book.id, 'canceled')">Canceled</li>
                                 </ul>
                             </div>
                         </div>
