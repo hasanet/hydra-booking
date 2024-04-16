@@ -149,7 +149,7 @@ const Tfhb_Booking_View = async (data) => {
 
 <HbPopup :isOpen="BookingDetailsPopup" @modal-close="BookingDetailsPopup = false" max_width="750px" name="first-modal" gap="32px">
     <template #header> 
-        <h3>Discussion about design system</h3>
+        <h3>{{ singleBookingData.title }}</h3>
     </template>
 
     <template #content> 
@@ -269,7 +269,6 @@ const Tfhb_Booking_View = async (data) => {
 </HbPopup>
 
 <!-- Backend Booking Popup End -->
-{{bookings}}
 
 <div class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
