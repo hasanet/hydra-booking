@@ -33,7 +33,7 @@ class THB_INIT{
         new HydraBooking\Hooks\ActivationHooks();  
 
         // Deactivation Hooks
-        new HydraBooking\Hooks\DeactivationHooks();
+        new HydraBooking\Hooks\DeactivationHooks(); 
 
         add_action('init', array($this, 'init'));
 
