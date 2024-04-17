@@ -141,6 +141,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                         <li class="tfhb-flexbox">
                             <label for="checkbox1">
                                 <input type="checkbox" id="checkbox1">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -150,6 +151,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                         <li class="tfhb-flexbox">
                             <label for="checkbox2">
                                 <input type="checkbox" id="checkbox2">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -159,6 +161,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                         <li class="tfhb-flexbox">
                             <label for="checkbox3">
                                 <input type="checkbox" id="checkbox3">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -178,6 +181,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                         <li class="tfhb-flexbox">
                             <label for="checkbox1">
                                 <input type="checkbox" id="checkbox1">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -187,6 +191,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                         <li class="tfhb-flexbox">
                             <label for="checkbox2">
                                 <input type="checkbox" id="checkbox2">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -196,6 +201,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                         <li class="tfhb-flexbox">
                             <label for="checkbox3">
                                 <input type="checkbox" id="checkbox3">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
