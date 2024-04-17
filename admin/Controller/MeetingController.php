@@ -46,6 +46,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'updateMeeting'),
         ));   
+
+        register_rest_route('hydra-booking/v1', '/meetings/filter', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'filterMeetings'),
+            'args' => array(
+                'title' => array(
+                    'sanitize_callback' => 'sanitize_text_field',
+                )
+            ),
+        ));
        
     }
     // Meeting List
@@ -63,6 +73,23 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }  
+
+    // Meeting Filter 
+    public function filterMeetings($request) {
+        $title = $request->get_param('title');
+    
+        // Meeting Lists 
+        $meeting = new Meeting();
+        $MeetingsList = $meeting->get('',$title);
+
+        // Return response
+        $data = array(
+            'status' => true, 
+            'meetings' => $MeetingsList,  
+            'message' => 'Meeting Data Successfully Retrieve!',
+        );
+        return rest_ensure_response($data);
+    }
 
     // Create meetings
     public function CreateMeeting() { 

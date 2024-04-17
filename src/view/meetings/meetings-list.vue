@@ -89,6 +89,26 @@ const deleteMeeting = async ($id, $post_id) => {
 onBeforeMount(() => { 
     fetchMeetings();
 });
+
+const Tfhb_Meeting_Filter = async (e) =>{
+    skeleton.value = true;
+    try {
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
+            params: {
+                title: e.target.value,
+            },
+        });
+        
+        if (response.data.status) { 
+            meetings.data = response.data.meetings;  
+            skeleton.value = false;
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 </script>
 <template>
 
@@ -99,7 +119,7 @@ onBeforeMount(() => {
                 Filter
             </div>
             <div class="tfhb-header-filters">
-                <input type="text" placeholder="Search by meeting title" /> 
+                <input type="text" @keyup="Tfhb_Meeting_Filter" placeholder="Search by meeting title" /> 
                 <span><Icon name="Search" size="20" /></span>
             </div>
         </div>

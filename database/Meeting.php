@@ -139,7 +139,7 @@ class Meeting {
      /**
      * Get all  meeting Data. 
      */
-    public function get($id = null) {
+    public function get($id = null, $title = null) {
         
         global $wpdb;
 
@@ -151,6 +151,10 @@ class Meeting {
             $data = $wpdb->get_row(
                 $wpdb->prepare( $sql )
             );
+        }elseif($title){
+            // Corrected SQL query for searching by title
+            $sql = "SELECT * FROM $table_name WHERE title LIKE %s";
+            $data = $wpdb->get_results($wpdb->prepare($sql, '%' . $title . '%'));
         }else{
             $sql = "SELECT * FROM $table_name";
 
