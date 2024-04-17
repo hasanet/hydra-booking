@@ -70,7 +70,45 @@
                                 font-weight: 400 !important;
                                 line-height: 24px !important;
                                 margin: 0 !important;
+                                position: relative;
+                                padding-left: 28px;
+                                .checkmark {
+                                    position: absolute;
+                                    top: 2px;
+                                    left: 0px;
+                                    height: 20px;
+                                    width: 20px;
+                                    background-color: #F6EEF2;
+                                    border-radius: 5px;
+                                    border: 1px solid #F6EEF2;
+                                    margin: 0 !important;
+                                    &:after {
+                                        content: "";
+                                        position: absolute;
+                                        left: 6px;
+                                        top: 2px;
+                                        width: 5px;
+                                        height: 10px;
+                                        border: solid #F6EEF2;
+                                        border-width: 0 3px 3px 0;
+                                        -webkit-transform: rotate(45deg);
+                                        -ms-transform: rotate(45deg);
+                                        transform: rotate(45deg);
+                                        display: none;
+                                    }
+                                }
+                                input:checked~.checkmark {
+                                    background-color: #F62881;
+                                    border: 1px solid #F62881;
+                                }
+                                input:checked~.checkmark:after {
+                                    display: block;
+                                }
                             }
+                            input[type="checkbox"]{
+                                display: none;
+                            }
+
                             .tfhb-category-items{
                                 border-radius: 16px;
                                 background: #FAF5F7;

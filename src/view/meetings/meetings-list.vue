@@ -6,6 +6,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import CreateMeetingPopup from '@/components/meetings/CreateMeetingPopup.vue';
 import { toast } from "vue3-toastify"; 
+import { Host } from '@/store/hosts'
 
 const router = useRouter();
 
@@ -88,7 +89,28 @@ const deleteMeeting = async ($id, $post_id) => {
 
 onBeforeMount(() => { 
     fetchMeetings();
+    Host.fetchHosts();
 });
+
+const Tfhb_Meeting_Filter = async (e) =>{
+    skeleton.value = true;
+    try {
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
+            params: {
+                title: e.target.value,
+            },
+        });
+        
+        if (response.data.status) { 
+            meetings.data = response.data.meetings;  
+            skeleton.value = false;
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 </script>
 <template>
 
@@ -99,7 +121,7 @@ onBeforeMount(() => {
                 Filter
             </div>
             <div class="tfhb-header-filters">
-                <input type="text" placeholder="Search by meeting title" /> 
+                <input type="text" @keyup="Tfhb_Meeting_Filter" placeholder="Search by meeting title" /> 
                 <span><Icon name="Search" size="20" /></span>
             </div>
         </div>
@@ -118,28 +140,11 @@ onBeforeMount(() => {
                 </div>
                 <div class="tfhb-filter-category-box" v-show="FilterHostPreview">
                     <ul class="tfhb-flexbox">
-                        <li class="tfhb-flexbox">
+                        <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
                             <label for="checkbox1">
-                                <input type="checkbox" id="checkbox1">
-                                Darrell Steward
-                            </label>
-                            <div class="tfhb-category-items">
-                                25
-                            </div>
-                        </li>
-                        <li class="tfhb-flexbox">
-                            <label for="checkbox2">
-                                <input type="checkbox" id="checkbox2">
-                                Darrell Steward
-                            </label>
-                            <div class="tfhb-category-items">
-                                25
-                            </div>
-                        </li>
-                        <li class="tfhb-flexbox">
-                            <label for="checkbox3">
-                                <input type="checkbox" id="checkbox3">
-                                Darrell Steward
+                                <input type="checkbox" id="checkbox1" :value="shost.id">
+                                <span class="checkmark"></span>
+                                {{ shost.first_name }} {{ shost.last_name }}
                             </label>
                             <div class="tfhb-category-items">
                                 25
@@ -158,6 +163,7 @@ onBeforeMount(() => {
                         <li class="tfhb-flexbox">
                             <label for="checkbox1">
                                 <input type="checkbox" id="checkbox1">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -167,6 +173,7 @@ onBeforeMount(() => {
                         <li class="tfhb-flexbox">
                             <label for="checkbox2">
                                 <input type="checkbox" id="checkbox2">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
@@ -176,6 +183,7 @@ onBeforeMount(() => {
                         <li class="tfhb-flexbox">
                             <label for="checkbox3">
                                 <input type="checkbox" id="checkbox3">
+                                <span class="checkmark"></span>
                                 Darrell Steward
                             </label>
                             <div class="tfhb-category-items">
