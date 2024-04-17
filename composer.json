@@ -8,7 +8,8 @@
             "HydraBooking\\Admin\\": "admin/",
             "HydraBooking\\DB\\": "database/",
             "HydraBooking\\Services\\": "includes/services/",
-            "HydraBooking\\PostType\\": "includes/post-type/"
+            "HydraBooking\\PostType\\": "includes/post-type/",
+            "HydraBooking\\Hooks\\": "includes/hooks/"
         }
     }
 }

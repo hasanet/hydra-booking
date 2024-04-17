@@ -21,7 +21,7 @@ class THB_INIT{
         // DEFINE PATH 
         define('THB_PATH', plugin_dir_path(__FILE__));
         define('THB_URL', plugin_dir_url(__FILE__));
-        define('THB_VERSION', '1.0.0'); 
+        define('THB_VERSION', '1.0.0');  
 
         // Load Vendor Auto Load
         if(file_exists(THB_PATH . '/vendor/autoload.php')) {
@@ -29,22 +29,20 @@ class THB_INIT{
             require_once THB_PATH . '/vendor/autoload.php'; 
         }
 
+        // Activation Hooks
+        new HydraBooking\Hooks\ActivationHooks();  
+
+        // Deactivation Hooks
+        new HydraBooking\Hooks\DeactivationHooks();
+
         add_action('init', array($this, 'init'));
-        
-        register_activation_hook( THB_PATH . 'hydra-booking.php', array($this, 'tfhb_rewrite_flush' ));
-    }
 
-    public function init() {   
-        // if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-        //     add_action('wp_ajax_woocommerce_ajax_install_plugin', 'wp_ajax_install_plugin'); 
-        // }
 
-        add_action('wp_ajax_contact_form_7_ajax_install_plugin', 'wp_ajax_install_plugin');  
-        // add_action('wp_ajax_nopriv_woocommerce_ajax_install_plugin', 'custom_data');  
+   }
 
-        // Create a New host Role
-        $this->tfhb_create_host_role();
-        new HydraBooking\Admin\Controller\RouteController(); 
+    public function init() {    
+        // Create a New host Role 
+        new HydraBooking\Admin\Controller\RouteController();   
         
         if(is_admin()) {
             
@@ -53,43 +51,10 @@ class THB_INIT{
         } else {
             // Load Frontend Class
             // new HydraBooking\Frontend\Frontend(); 
-        }
-
-        
-    } 
-    public function tfhb_rewrite_flush() {
-
-        flush_rewrite_rules();
-    
-    }
-    public function custom_data(){
-       echo "Hello World";
-         die();
-    }
-
-    public function tfhb_create_host_role(){ 
-        // remove role 
-        // remove_role('tfhb_host');
-        // checked if role exist
-          if( get_role('tfhb_host') ){
-            return;
-          }
-          add_role('tfhb_host', 'Hydra Host', array(
-            'read' => true, // true allows this capability
-            'edit_posts' => true, // Allows user to edit their own posts
-            'edit_pages' => true, // Allows user to edit pages
-            'edit_others_posts' => true, // Allows user to edit others posts not just their own
-            'create_posts' => true, // Allows user to create new posts
-            'manage_categories' => true, // Allows user to manage post categories
-            'publish_posts' => true, // Allows the user to publish, otherwise posts stays in draft mode
-            'edit_themes' => false, // false denies this capability. User can’t edit your theme
-            'install_plugins' => false, // User cant add new plugins
-            'update_plugin' => false, // User can’t update any plugins
-            'update_core' => false, // user cant perform core updates  
-            'manage_options' => true,
-        ));
-      }
-
+        } 
+    }  
+ 
+ 
 
     
 }

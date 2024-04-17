@@ -3,19 +3,32 @@ namespace HydraBooking\Admin\Controller;
   // exit
   if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+ //  Use Namespace
+ use HydraBooking\Admin\Controller\AuthController;
+ 
+
   class AdminMenu {
+
+    private $auth;
 
     // constaract
     public function __construct() { 
+
+        $this->auth = new AuthController(); 
         add_action('admin_menu', array($this, 'admin_menu'));
+        
     }
 
 
     public function admin_menu() {
+
+        // Get User Role
+        $userRole = $this->auth->userRole();
+
         add_menu_page(
             esc_html__('Hydra Booking', 'thb-hydra-booking'),
             esc_html__('Hydra Booking', 'thb-hydra-booking'),
-            'manage_options', 
+            'tfhb_manage_options', 
             // array($this, 'hydra_booking_access'),
             'hydra-booking',
             array($this, 'hydra_booking_page'),
@@ -27,7 +40,7 @@ namespace HydraBooking\Admin\Controller;
             "hydra-booking",
             esc_html__("Dashboard", "dashboardpress"),
             esc_html__("Dashboard", "dashboardpress"),
-            "manage_options",
+            "tfhb_manage_options",
             "hydra-booking#",
             array($this, "hydra_booking_page")
         );
@@ -36,27 +49,29 @@ namespace HydraBooking\Admin\Controller;
             array(
                 'id' => 'meetings',
                 'Title' => esc_html__('Meetings', 'thb-hydra-booking'),
-                'capability' => 'manage_options', 
+                'capability' => 'tfhb_manage_options', 
             ), 
             array(
                 'id' => 'booking',
                 'Title' => esc_html__('Booking', 'thb-hydra-booking'),
-                'capability' => 'manage_options', 
+                'capability' => 'tfhb_manage_options', 
             ), 
             array(
                 'id' => 'hosts',
                 'Title' => esc_html__('Hosts', 'thb-hydra-booking'),
-                'capability' => 'manage_options', 
-            ), 
+                'capability' => 'tfhb_manage_options', 
+            ),  
             array(
                 'id' => 'settings',
                 'Title' => esc_html__('Settings', 'thb-hydra-booking'),
-                'capability' => 'manage_options', 
-            ), 
+                'capability' => 'tfhb_manage_settings', 
+            ),
           
         );
+         
         // Loop through array and create sub menu
         foreach ($sub_menu as $menu) {
+
             $menu_id = $menu['id'];
             add_submenu_page(
                 'hydra-booking',
