@@ -82,12 +82,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // getMeetingsCategories List
     public function getMeetingsCategories() { 
 
-        $terms = get_terms( array(
-            'taxonomy' => 'meeting_category', // Taxonomy name
-            'hide_empty' => false,
-        ) );
-
-        var_dump($terms);
+        global $wpdb;
+        $taxonomy = 'meeting_category';
+        $terms = $wpdb->get_results( "
+            SELECT t.*
+            FROM {$wpdb->terms} AS t
+            INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+            WHERE tt.taxonomy = '{$taxonomy}'
+        " );
         $term_array = array();
         foreach ( $terms as $term ) {
             $term_array[] = array(
@@ -95,7 +97,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'name' => $term->name
             );
         }
-        exit();
+
         // Return response
         $data = array(
             'status' => true, 
@@ -107,11 +109,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     // Meeting Filter 
     public function filterMeetings($request) {
-        $title = $request->get_param('title');
-    
+        $filterData = $request->get_param('filterData');
         // Meeting Lists 
         $meeting = new Meeting();
-        $MeetingsList = $meeting->get('',$title);
+        $MeetingsList = $meeting->get('',$filterData);
 
         // Return response
         $data = array(

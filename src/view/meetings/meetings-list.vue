@@ -110,7 +110,10 @@ onBeforeMount(() => {
 // Filtering
 const filterData = reactive({
     title: '',
-    fhosts: []
+    fhosts: [],
+    fcategory: [],
+    startDate: '',
+    endDate: ''
 })
 const Tfhb_Meeting_Filter = async (e) =>{
     filterData.title=e.target.value;
@@ -118,7 +121,27 @@ const Tfhb_Meeting_Filter = async (e) =>{
     try {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
             params: {
-                title: filterData.title,
+                filterData
+            },
+        });
+        
+        if (response.data.status) { 
+            meetings.data = response.data.meetings;  
+            skeleton.value = false;
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+const Tfhb_Meeting_Select_Filter = async (e) =>{
+
+    skeleton.value = true;
+    try {
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
+            params: {
+                filterData
             },
         });
         
@@ -135,7 +158,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
 </script>
 <template>
 {{ filterData }}
-{{ meetingCategory }}
+
     <div class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="tfhb-filter-box tfhb-flexbox">
             <div class="tfhb-filter-btn tfhb-flexbox" @click="FilterPreview=!FilterPreview" :class="FilterPreview ? 'active' : ''">
@@ -164,7 +187,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
                             <label>
-                                <input type="checkbox" :value="shost.id" v-model="filterData.fhosts">
+                                <input type="checkbox" :value="shost.id" v-model="filterData.fhosts" @change="Tfhb_Meeting_Select_Filter">
                                 <span class="checkmark"></span>
                                 {{ shost.first_name }} {{ shost.last_name }}
                             </label>
@@ -182,31 +205,11 @@ const Tfhb_Meeting_Filter = async (e) =>{
                 </div>
                 <div class="tfhb-filter-category-box" v-show="FilterCatgoryPreview">
                     <ul class="tfhb-flexbox">
-                        <li class="tfhb-flexbox">
-                            <label for="checkbox1">
-                                <input type="checkbox" id="checkbox1">
+                        <li class="tfhb-flexbox" v-for="(mcategory, key) in meetingCategory.data" :key="key">
+                            <label>
+                                <input type="checkbox" :value="mcategory.id" v-model="filterData.fcategory" @change="Tfhb_Meeting_Select_Filter">
                                 <span class="checkmark"></span>
-                                Darrell Steward
-                            </label>
-                            <div class="tfhb-category-items">
-                                25
-                            </div>
-                        </li>
-                        <li class="tfhb-flexbox">
-                            <label for="checkbox2">
-                                <input type="checkbox" id="checkbox2">
-                                <span class="checkmark"></span>
-                                Darrell Steward
-                            </label>
-                            <div class="tfhb-category-items">
-                                25
-                            </div>
-                        </li>
-                        <li class="tfhb-flexbox">
-                            <label for="checkbox3">
-                                <input type="checkbox" id="checkbox3">
-                                <span class="checkmark"></span>
-                                Darrell Steward
+                                {{ mcategory.name }}
                             </label>
                             <div class="tfhb-category-items">
                                 25
@@ -219,7 +222,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
             <div class="tfhb-filter-dates tfhb-flexbox">
                 <div class="tfhb-filter-start-date">
                     <HbDateTime 
-                        selected = "1"
+                        v-model="filterData.startDate"
                         width="45"
                         enableTime='true'
                         placeholder="From"   
@@ -231,7 +234,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
                 </div>
                 <div class="tfhb-filter-end-date">
                     <HbDateTime 
-                        selected = "1"
+                        v-model="filterData.endDate"
                         width="45"
                         enableTime='true'
                         placeholder="To"   
@@ -241,7 +244,7 @@ const Tfhb_Meeting_Filter = async (e) =>{
             </div>
 
         </div>
-        <div class="tfhb-reset-btn">
+        <div class="tfhb-reset-btn" v-if="filterData.fcategory.length > 0 || filterData.fhosts.length > 0 || filterData.title">
             <a href="#" class="tfhb-flexbox">
                 <Icon name="RefreshCw" size="20" /> 
                 Reset Filter

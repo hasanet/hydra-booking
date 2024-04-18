@@ -139,7 +139,7 @@ class Meeting {
      /**
      * Get all  meeting Data. 
      */
-    public function get($id = null, $title = null) {
+    public function get($id = null, $filterData = null) {
         
         global $wpdb;
 
@@ -151,10 +151,29 @@ class Meeting {
             $data = $wpdb->get_row(
                 $wpdb->prepare( $sql )
             );
-        }elseif($title){
-            // Corrected SQL query for searching by title
-            $sql = "SELECT * FROM $table_name WHERE title LIKE %s";
-            $data = $wpdb->get_results($wpdb->prepare($sql, '%' . $title . '%'));
+        }elseif($filterData){
+
+            $sql = "SELECT * FROM $table_name WHERE";
+
+            if (!empty($filterData['title'])) {
+                $title = '%' . $filterData['title'] . '%'; // Wrap title with % for LIKE comparison
+                $sql .= $wpdb->prepare(" title LIKE %s", $title);
+            }
+            
+            if (isset($filterData['fhosts'])) {
+                $host_ids = implode(',', array_map('intval', $filterData['fhosts'])); 
+                $sql .= !empty($filterData['title']) ? " AND" : "";
+                $sql .= " host_id IN ($host_ids)";
+            }
+            
+            if (isset($filterData['fcategory'])) {
+                $category_ids = implode(',', array_map('intval', $filterData['fcategory'])); 
+                $sql .= (!empty($filterData['title']) || isset($filterData['fhosts'])) ? " AND" : "";
+                $sql .= " meeting_category IN ($category_ids)";
+            }
+            
+            $data = $wpdb->get_results($sql);
+
         }else{
             $sql = "SELECT * FROM $table_name";
 
