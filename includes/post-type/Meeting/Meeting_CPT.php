@@ -32,8 +32,8 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 			'supports'      => apply_filters( 'tfhb_meeting_supports', array( 'title', 'editor', 'thumbnail', 'comments', 'author' ) ),
 			'capability'    => 'post',
 			'rewrite_slug'  => 'tfhb_meeting',
-			'show_ui'  => false,
-			'show_in_menu' => false
+			'show_ui'  => true,
+			'show_in_menu' => true
 		);
 
 		$tax_args = array(
@@ -41,9 +41,9 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 				'name'          => 'Categories',
 				'singular_name' => 'Category',
 				'taxonomy'      => 'meeting_category',
-				'rewrite_slug'  => apply_filters( 'tfhb_meeting_category_slug', 'meeting-category' ),
-				'show_ui'  => false,
-				'show_in_menu' => false
+				'rewrite_slug'  => apply_filters( 'meeting_category_slug', 'meeting-category' ),
+				'show_ui'  => true,
+				'show_in_menu' => true
 			),
 		);
 

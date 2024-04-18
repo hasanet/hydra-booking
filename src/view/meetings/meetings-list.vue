@@ -87,17 +87,38 @@ const deleteMeeting = async ($id, $post_id) => {
     }
 }
 
+// Fetch Meetings Category
+const meetingCategory = reactive({}); 
+const fetchMeetingCategory = async () => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/categories');
+        if (response.data.status) { 
+            meetingCategory.data = response.data.category;  
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+} 
+
+
 onBeforeMount(() => { 
     fetchMeetings();
+    fetchMeetingCategory();
     Host.fetchHosts();
 });
 
+// Filtering
+const filterData = reactive({
+    title: '',
+    fhosts: []
+})
 const Tfhb_Meeting_Filter = async (e) =>{
+    filterData.title=e.target.value;
     skeleton.value = true;
     try {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
             params: {
-                title: e.target.value,
+                title: filterData.title,
             },
         });
         
@@ -113,7 +134,8 @@ const Tfhb_Meeting_Filter = async (e) =>{
 
 </script>
 <template>
-
+{{ filterData }}
+{{ meetingCategory }}
     <div class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="tfhb-filter-box tfhb-flexbox">
             <div class="tfhb-filter-btn tfhb-flexbox" @click="FilterPreview=!FilterPreview" :class="FilterPreview ? 'active' : ''">
@@ -141,8 +163,8 @@ const Tfhb_Meeting_Filter = async (e) =>{
                 <div class="tfhb-filter-category-box" v-show="FilterHostPreview">
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
-                            <label for="checkbox1">
-                                <input type="checkbox" id="checkbox1" :value="shost.id">
+                            <label>
+                                <input type="checkbox" :value="shost.id" v-model="filterData.fhosts">
                                 <span class="checkmark"></span>
                                 {{ shost.first_name }} {{ shost.last_name }}
                             </label>

@@ -70,7 +70,7 @@ namespace HydraBooking\PostType;
 			'rewrite'            => array( 'slug' => $post_args['rewrite_slug'], 'with_front' => false ),
 			'capability_type'    => $post_args['capability'],
 			'has_archive'        => true,
-			'hierarchical'       => false,
+			'hierarchical'       => true,
 			'supports'           => $post_args['supports'],
 		);
 

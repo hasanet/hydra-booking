@@ -56,6 +56,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 )
             ),
         ));
+
+        register_rest_route('hydra-booking/v1', '/meetings/categories', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'getMeetingsCategories'),
+        )); 
        
     }
     // Meeting List
@@ -70,6 +75,32 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true, 
             'meetings' => $MeetingsList,  
             'message' => 'Meeting Data Successfully Retrieve!',
+        );
+        return rest_ensure_response($data);
+    }  
+
+    // getMeetingsCategories List
+    public function getMeetingsCategories() { 
+
+        $terms = get_terms( array(
+            'taxonomy' => 'meeting_category', // Taxonomy name
+            'hide_empty' => false,
+        ) );
+
+        var_dump($terms);
+        $term_array = array();
+        foreach ( $terms as $term ) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name
+            );
+        }
+        exit();
+        // Return response
+        $data = array(
+            'status' => true, 
+            'category' => $term_array,  
+            'message' => 'Meeting Category Data Successfully Retrieve!',
         );
         return rest_ensure_response($data);
     }  
