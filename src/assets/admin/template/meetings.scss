@@ -283,30 +283,35 @@
         padding: 32px; 
         width: 80%;
         margin: 0 auto;
-        .tfhb-booking-tabs.tfhb-meeting-tabs{
-            ul{
-                li{
-                    display: flex;
-                    padding: 8px 12px 8px 12px !important;
-                    font-size: 15px;
-                    align-items: center;
-                    gap: 8px;
-                    border-radius: 4px;
-                    color: #8f707d;
-                    font-weight: 400;
-                    &.active {
-                        background-color: #fee6f0;
-                        box-shadow: 0px 1px 2px 0px #28101a0f;
-                        box-shadow: 0px 1px 3px 0px #28101a1a;
-                        color: #f62881;
-                    }
-                }
-            }
-        }
+        // .tfhb-booking-tabs.tfhb-meeting-tabs{
+        //     ul{
+        //         li{
+        //             display: flex;
+        //             padding: 8px 12px 8px 12px !important;
+        //             font-size: 15px;
+        //             align-items: center;
+        //             gap: 8px;
+        //             border-radius: 4px;
+        //             color: #8f707d;
+        //             font-weight: 400;
+        //             &.active {
+        //                 background-color: #fee6f0;
+        //                 box-shadow: 0px 1px 2px 0px #28101a0f;
+        //                 box-shadow: 0px 1px 3px 0px #28101a1a;
+        //                 color: #f62881;
+        //             }
+        //         }
+        //     }
+        // }
         .tfhb-meeting-create-notice{
             .tfhb-meeting-heading{
                 justify-content: normal !important;
                 gap: 2px !important;
+                .prev-navigator{
+                    svg{
+                        cursor: pointer;
+                    }
+                }
                 h3{
                     font-size: 17px;
                     font-style: normal;

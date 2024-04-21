@@ -417,13 +417,36 @@ const UpdateMeetingData = async (validator_field) => {
         console.log(error);
     } 
 }
+
+const TfhbPrevNavigator = () => {
+    if("MeetingsCreateDetails"==route.name){
+        router.push({ name: 'MeetingsLists' });
+    }
+    if("MeetingsCreateAvailability"==route.name){
+        router.push({ name: 'MeetingsCreateDetails' });
+    }
+    if("MeetingsCreateLimits"==route.name){
+        router.push({ name: 'MeetingsCreateAvailability' });
+    }
+    if("MeetingsCreateQuestions"==route.name){
+        router.push({ name: 'MeetingsCreateLimits' });
+    }
+    if("MeetingsCreateNotifications"==route.name){
+        router.push({ name: 'MeetingsCreateQuestions' });
+    }
+    if("MeetingsCreatePayment"==route.name){
+        router.push({ name: 'MeetingsCreateNotifications' });
+    }
+}
 </script>
 
 <template>
     <div class="tfhb-meeting-create" :class="{ 'tfhb-skeleton': skeleton }">
         <div class="tfhb-meeting-create-notice tfhb-mb-32">
             <div class="tfhb-meeting-heading tfhb-flexbox">
-                <Icon name="ArrowLeft" size="20px" /> 
+                <div class="prev-navigator" @click="TfhbPrevNavigator()">
+                    <Icon name="ArrowLeft" size="20px" /> 
+                </div>
                 <h3>Create One-to-One booking type</h3>
             </div>
             <div class="tfhb-meeting-subtitle">
@@ -434,12 +457,12 @@ const UpdateMeetingData = async (validator_field) => {
             <ul>
                 <!-- to route example like meetings/create/13/details -->
                 
-                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/details' }"> Details</li> 
-                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/availability' }">Availability</li>  
-                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/limits' }">Limits</li>  
-                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> Questions</li>  
-                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> Notifications</li>  
-                <li :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }">Payment</li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/details'" exact :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/details' }">Details</router-link></li> 
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/availability'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/availability' }">Availability</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/limits'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/limits' }">Limits</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> Questions</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/notifications'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> Notifications</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/payment'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }">Payment</router-link></li>  
 
             </ul>  
         </nav>
