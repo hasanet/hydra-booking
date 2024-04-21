@@ -67,7 +67,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'UpdateIntegrationSettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
-            
+        
+        register_rest_route('hydra-booking/v1', '/hosts/filter', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'filterHosts'),
+            'args' => array(
+                'title' => array(
+                    'sanitize_callback' => 'sanitize_text_field',
+                )
+            ),
+        ));
        
     }
     // permission_callback
@@ -93,6 +102,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }  
+
+    // Host Filter 
+    public function filterHosts($request) {
+        $filterData = $request->get_param('filterData');
+        // Hosts Lists 
+        $host = new Host();
+        $HostsList = $host->get('', $filterData);
+
+        // Return response
+        $data = array(
+            'status' => true, 
+            'hosts' => $HostsList,  
+            'message' => 'Host Data Successfully Retrieve!',
+        );
+        return rest_ensure_response($data);
+    }
 
     // Create Hosts
     public function CreateHosts() { 

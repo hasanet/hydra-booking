@@ -6,47 +6,25 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import { User } from 'lucide-vue-next';
 import { toast } from "vue3-toastify";
 
-const hosts = reactive({}); 
- // Fetch generalSettings
-const fetchHosts = async () => {
-
-    try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/lists');
-        if (response.data.status) { 
-            hosts.data = response.data.hosts;  
-        }
-    } catch (error) {
-        console.log(error);
-    } 
-} 
-// Delete Hosts 
-const deleteHost = async ($id, $user_id) => { 
-    let deleteHost = {
-        id: $id,
-        user_id: $user_id
+const emit = defineEmits(["delete-host"]); 
+const props = defineProps({
+    host_list: {
+        type: Object,
+        required: true
+    },
+    host_skeleton: {
+        type: Boolean,
+        required: true
     }
-    try { 
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/delete', deleteHost, {
-               
-        } );
-        if (response.data.status) { 
-            hosts.data = response.data.hosts;  
-            toast.success(response.data.message); 
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-onBeforeMount(() => { 
-    fetchHosts();
 });
-</script>
 
+</script>
 <template>
-    <div class="tfhb-hosts-list-content">
-        <div class="tfhb-hosts-list-wrap tfhb-flexbox"> 
+
+    <div class="tfhb-hosts-list-content" >
+        <div class="tfhb-hosts-list-wrap tfhb-flexbox" :class="{ 'tfhb-skeleton': host_skeleton }"> 
             <!-- Single Hosts -->
-            <div   v-for="(host, key) in hosts.data"  class="tfhb-single-hosts"> 
+            <div   v-for="(host, key) in host_list"  class="tfhb-single-hosts"> 
                 <div class="tfhb-single-hosts-wrap ">
                     <span class="tfhb-hosts-status" v-if="host.status == 1">Active</span> 
                     <span class="tfhb-hosts-status" v-else>Inactive</span>
@@ -71,7 +49,7 @@ onBeforeMount(() => {
                             <!-- route link -->
                             <router-link :to="{ name: 'HostsProfile', params: { id: host.id } }" class="tfhb-dropdown-single">Edit</router-link>
                             <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single" @click="deleteHost(host.id, host.user_id)">Delete</span>
+                            <span class="tfhb-dropdown-single" @click="emit('delete-host', host.id, host.user_id)">Delete</span>
                         </div>
                     </div>
                 </div> 
