@@ -5,6 +5,7 @@ import Booking from '../view/booking/booking.vue';
 import Settings from '../view/settings/Settings.vue';
 import Hosts from '../view/hosts/hosts.vue';
 import Meetings from '../view/meetings/meetings.vue';
+import { AuthData } from '@/store/auth';
 
 // Event 
 
@@ -14,12 +15,15 @@ const routes = [
     // For example:
     {
         path: '/',
+        name: 'dashboard', 
         component: Dashboard
     },  
     {
         path: '/booking',
-        name: 'booking',
+        name: 'booking', 
+        meta: { Capabilities: 'tfhb_manage_options' },
         component: Booking,
+        Capabilities: 'tfhb_manage_options',
         redirect: { name: 'BookingLists' },
         children: [ 
             {
@@ -34,6 +38,7 @@ const routes = [
         path: '/hosts',
         name: 'hosts',
         component: Hosts,
+        meta: { Capabilities: 'tfhb_manage_options' },
         redirect: { name: 'HostsLists' },
         children: [ 
             {
@@ -74,6 +79,7 @@ const routes = [
         path: '/meetings',
         name: 'meetings',
         component: Meetings,
+        meta: { Capabilities: 'tfhb_manage_options' },
         redirect: { name: 'MeetingsLists' },
         children: [ 
             {
@@ -129,6 +135,7 @@ const routes = [
     {
         path: '/settings',
         component: Settings,
+        meta: { Capabilities: 'tfhb_manage_settings' },
         redirect: { name: 'SettingsGeneral' },
         children: [ 
             {
@@ -166,6 +173,41 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+});
+
+
+// Navigation guards to check authentication status
+router.beforeEach(async (to, from, next) => { 
+    if (to.meta.Capabilities === undefined) {
+        // If no capabilities are defined for the route, proceed to the next route
+        next();
+        return;
+    }
+
+    try {
+        // Fetch user authentication data based on capabilities
+        await AuthData.fetchAuth();
+
+        // Check if the user has the required capabilities for the route
+        const hasCapabilities = AuthData.Capabilities(to.meta.Capabilities);
+    
+        
+        if (hasCapabilities) {
+            // User has the required capabilities, continue to the next route
+            next();
+        } else {
+            // User is not authenticated
+            // Redirect to the home page or display an alert
+            alert('Sorry, you are not allowed to access this page.');
+            next('/');
+        }
+    } catch (error) {
+        // Handle error if fetching authentication data fails
+        console.error('Error fetching authentication data:', error);
+        // Redirect to the home page or display an alert
+        alert('An error occurred while fetching authentication data.');
+        next('/');
+    }
 });
 
 export default router;
