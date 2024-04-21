@@ -151,8 +151,7 @@ class Meeting {
             $data = $wpdb->get_row(
                 $wpdb->prepare( $sql )
             );
-        }elseif($filterData){
-
+        }elseif(!empty($filterData['title']) || !empty($filterData['fhosts']) || !empty($filterData['fcategory']) ){
             $sql = "SELECT * FROM $table_name WHERE";
 
             if (!empty($filterData['title'])) {

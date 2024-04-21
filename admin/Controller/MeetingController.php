@@ -304,6 +304,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'id' => $request['id'],
             'user_id' => $request['user_id'],
             'title' => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+            'host_id' => isset($request['host_id']) ? sanitize_key($request['host_id']) : '',
             'description' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
             'meeting_type' => isset($request['meeting_type']) ? sanitize_text_field($request['meeting_type']) : '',
             'duration' => isset($request['duration']) ? sanitize_text_field($request['duration']) : '',

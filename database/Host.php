@@ -115,7 +115,7 @@ class Host {
      /**
      * Get all  availability Data. 
      */
-    public function get($where = null) {
+    public function get($where = null, $filterData = '') {
         
         global $wpdb;
 
@@ -139,6 +139,11 @@ class Host {
             $data = $wpdb->get_row(
                 $wpdb->prepare( "SELECT * FROM $table_name WHERE id = $where" )
             ); 
+        }elseif(!empty($filterData['name'])){
+            // Corrected SQL query for searching by name
+            $sql = "SELECT * FROM $table_name WHERE concat(first_name, last_name) LIKE %s";
+            $data = $wpdb->get_results($wpdb->prepare($sql, '%' . $filterData['name'] . '%'));
+
         }else{
             $sql = "SELECT * FROM $table_name";
 
