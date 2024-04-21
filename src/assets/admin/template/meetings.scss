@@ -461,6 +461,13 @@
         }
     }
 
+    .tfhb-meeting-location{
+        width: calc(100% - 32px);
+    }
+    .tfhb-meeting-location-removed{
+        margin-top: 24px;
+        cursor: pointer;
+    }
     .tfhb-meeting-currency{
         input{
             width: calc(100% - 128px);

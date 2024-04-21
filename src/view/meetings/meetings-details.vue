@@ -9,7 +9,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import useValidators from '@/store/validator'
 const { errors, isEmpty } = useValidators();
 
-const emit = defineEmits(["add-more-location", "update-meeting"]); 
+const emit = defineEmits(["add-more-location", "remove-meeting-location", "update-meeting"]); 
 const props = defineProps({
     meetingId: {
         type: Number,
@@ -99,34 +99,38 @@ const validateSelect = (fieldName) => {
 
         <div class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0 tfhb-full-width"> 
             <div class="tfhb-flexbox tfhb-gap-16 tfhb-mb-24" v-for="(slocation, index) in meeting.meeting_locations" :key="index">
-                <!-- Location -->
-                <HbSelect 
-                    v-model="slocation.location" 
-                    required= "true" 
-                    :label="$tfhb_trans['Location']"  
-                    :selected = "1"
-                    :placeholder="$tfhb_trans['Location']" 
-                    :option = "{
-                        'zoom': 'Zoom', 
-                        'attendee_address': 'In Person (Attendee Address)',
-                        'organizer_address': 'In Person (Organizer Address)',
-                        'attendee_phone': 'Attendee Phone Number',
-                        'organizer_phone': 'Organizer Phone Number',
-                        'online_meeting': 'Online Meeting',
-                        }" 
-                    :width= "50"
-                />
-                <!-- Address -->
-                <HbText  
-                    v-model="slocation.address" 
-                    required= "true"  
-                    :label="$tfhb_trans['Address']"  
-                    selected = "1"
-                    :placeholder="'Type Location Address'" 
-                    :width= "50"
-                    v-if="'organizer_address'==slocation.location || 'organizer_phone'==slocation.location || 'online_meeting'==slocation.location"
-                /> 
- 
+                <div class="tfhb-meeting-location tfhb-flexbox tfhb-gap-16" :style="meeting.meeting_locations.length<2 ?'width:100%' : '' ">
+                    <!-- Location -->
+                    <HbSelect 
+                        v-model="slocation.location" 
+                        required= "true" 
+                        :label="$tfhb_trans['Location']"  
+                        :selected = "1"
+                        :placeholder="$tfhb_trans['Location']" 
+                        :option = "{
+                            'zoom': 'Zoom', 
+                            'attendee_address': 'In Person (Attendee Address)',
+                            'organizer_address': 'In Person (Organizer Address)',
+                            'attendee_phone': 'Attendee Phone Number',
+                            'organizer_phone': 'Organizer Phone Number',
+                            'online_meeting': 'Online Meeting',
+                            }" 
+                        :width= "50"
+                    />
+                    <!-- Address -->
+                    <HbText  
+                        v-model="slocation.address" 
+                        required= "true"  
+                        :label="$tfhb_trans['Address']"  
+                        selected = "1"
+                        :placeholder="'Type Location Address'" 
+                        :width= "50"
+                        v-if="'organizer_address'==slocation.location || 'organizer_phone'==slocation.location || 'online_meeting'==slocation.location"
+                    /> 
+                </div>
+                <div class="tfhb-meeting-location-removed" v-if="meeting.meeting_locations.length>1" @click="emit('remove-meeting-location', index)">
+                    <Icon name="Trash" :width="16" />
+                </div>
             </div>
             <div class="tfhb-add-new-question">
                 <div class="new-location tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" @click="emit('add-more-location')">

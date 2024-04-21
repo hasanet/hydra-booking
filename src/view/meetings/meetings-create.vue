@@ -244,6 +244,10 @@ function addMoreLocations(){
     address:'',
   })
 }
+// Remove Location
+const removeLocations = (key) => {
+    meetingData.meeting_locations.splice(key, 1);
+}
 
 // Add new time slot
 const addAvailabilityTime = (key) => {
@@ -473,6 +477,7 @@ const TfhbPrevNavigator = () => {
             :meeting="meetingData" 
             :timeZone="timeZone.value" 
             @add-more-location="addMoreLocations" 
+            @remove-meeting-location="removeLocations" 
             @update-meeting="UpdateMeetingData" 
             @availability-time="addAvailabilityTime"
             @availability-time-del="removeAvailabilityTime"
