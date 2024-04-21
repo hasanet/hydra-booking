@@ -55,9 +55,9 @@ const routes = [
                         component: () => import('../view/hosts/hosts-information.vue')
                     }, 
                     {
-                        path: 'meeting',
-                        name: 'HostsProfileMeeting',
-                        component: () => import('../view/hosts/hosts-meeting.vue')
+                        path: 'availability',
+                        name: 'HostsAvailability',
+                        component: () => import('../view/hosts/hosts-availability.vue')
                     }, 
                     {
                         path: 'integrations',
