@@ -137,7 +137,7 @@ class Host {
             );
         }elseif($where != null){ 
             $data = $wpdb->get_row(
-                $wpdb->prepare( "SELECT * FROM $table_name WHERE id = $where" )
+                $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = $where" )
             ); 
         }elseif(!empty($filterData['name'])){
             // Corrected SQL query for searching by name

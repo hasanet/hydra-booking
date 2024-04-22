@@ -99,7 +99,7 @@ const setChartOptions = () => {
     <div class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="thb-admin-title">
             <h1>Data</h1>
-            <p>One-liner description</p>
+            <p>One-liner description</p> 
         </div>  
         <div class="tfhb-dropdown tfhb-mega-dropdown">
             <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading"> Today  <Icon name="ChevronUp" size="15" /> </span>

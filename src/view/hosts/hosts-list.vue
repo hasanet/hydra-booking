@@ -47,7 +47,7 @@ const props = defineProps({
                         <Icon name="ListCollapse" size="20px" /> 
                         <div class="tfhb-dropdown-wrap"> 
                             <!-- route link -->
-                            <router-link :to="{ name: 'HostsProfile', params: { id: host.id } }" class="tfhb-dropdown-single">Edit</router-link>
+                            <router-link :to="{ name: 'HostsProfile', params: { id: host.user_id } }" class="tfhb-dropdown-single">Edit</router-link>
                             <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
                             <span class="tfhb-dropdown-single" @click="emit('delete-host', host.id, host.user_id)">Delete</span>
                         </div>

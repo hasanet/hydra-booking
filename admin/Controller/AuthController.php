@@ -26,7 +26,7 @@ class AuthController {
     $data = array(
       'status' => true, 
       'user' => array(
-        'id' => 1,
+        'id' => $user_id,
         'role' => $user_role,
         'caps' => $user_caps,
       ),  
