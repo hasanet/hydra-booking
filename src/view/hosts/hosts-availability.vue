@@ -1,9 +1,22 @@
 <script setup>
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
+import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import AvailabilityPopupSingle from '@/components/availability/AvailabilityPopupSingle.vue';
+import AvailabilitySingle from '@/components/availability/AvailabilitySingle.vue';
+import { toast } from "vue3-toastify"; 
+const route = useRoute();
+const props = defineProps({
+    hostId: {
+        type: Number,
+        required: true
+    },
+    host: {
+        type: Object,
+        required: true
+    },
+});
 
 
 const isModalOpened = ref(false);
@@ -13,13 +26,14 @@ const AvailabilityGet = reactive({
 });
 const availabilityDataSingle = reactive({}) 
 const skeleton = ref(true);
-// 
 
 
 const openModal = () => {
   availabilityDataSingle.value = {
+    host: props.hostId,
+    user_id: props.host.user_id,
     key: 0,
-    id: 0,
+    id: '',
     title: '',
     time_zone: '',
     date_status: 0,
@@ -109,10 +123,74 @@ const closeModal = () => {
   isModalOpened.value = false;
 };
 
+const fetchAvailabilitySettings = async () => {
+
+    let data = {
+        id: props.host.user_id
+    };  
+
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability', data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+        
+        if (response.data.status) {    
+            AvailabilityGet.data = response.data.availability; 
+            timeZone.value = response.data.time_zone;     
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
+onBeforeMount(() => { 
+  fetchAvailabilitySettings();
+});
+
+// Edit availability
+const EditAvailabilitySettings = async (key, id, availability ) => { 
+  availabilityDataSingle.value = availability;
+  availabilityDataSingle.value.id = key;
+  availabilityDataSingle.value.host = props.hostId;
+  isModalOpened.value = true;
+}
+
+// Fetch generalSettings pass value update avaulability
+const fetchAvailabilitySettingsUpdate = async (data) => {
+  AvailabilityGet.data = data; 
+}
+
+// Fetch generalSettings pass value update avaulability
+const deleteAvailabilitySettings = async (key, id, user_id ) => { 
+  const deleteAvailability = {
+    key: key,
+    id: id,
+    user_id: user_id
+  }
+  try { 
+      const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/delete', deleteAvailability, {
+             
+      } );
+      if (response.data.status) { 
+        AvailabilityGet.data = response.data.availability; 
+          toast.success(response.data.message); 
+      }
+  } catch (error) {
+      console.log(error);
+  }
+}
 
 </script>
 
 <template>
+    {{ AvailabilityGet.data }}
 <div class="tfhb-host-availability">
     <div class="tfhb-dashboard-heading">
         <div class="tfhb-admin-title"> 
@@ -125,7 +203,10 @@ const closeModal = () => {
     </div>
 
     <div class="tfhb-content-wrap tfhb-flexbox">
-        <AvailabilityPopupSingle v-if="isModalOpened" :timeZone="timeZone.value" :availabilityDataSingle="availabilityDataSingle.value" :isOpen="isModalOpened" @modal-close="closeModal"  @update-availability="fetchAvailabilitySettingsUpdate" />
+
+        <AvailabilitySingle  v-for="(availability, key) in AvailabilityGet.data" :availability="availability" :key="key"  @edit-availability="EditAvailabilitySettings(key, availability.id, availability)" @delete-availability="deleteAvailabilitySettings(key, availability.id, host.user_id)" />
+
+        <AvailabilityPopupSingle v-if="isModalOpened" :timeZone="timeZone.value" :availabilityDataSingle="availabilityDataSingle.value" :isOpen="isModalOpened" @modal-close="closeModal" :is_host="true" @update-availability="fetchAvailabilitySettingsUpdate" />
     </div>
 </div>
 </template>
