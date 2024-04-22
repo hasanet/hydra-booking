@@ -74,7 +74,7 @@ onBeforeMount(() => {
                 <!-- to route example like hosts/profile/13/information -->
                 
                 <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/information'" exact :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/information' }"> <Icon name="UserRound" /> Information</router-link></li> 
-                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/meeting'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/meeting' }"> <Icon name="Clock" /> Meeting</router-link></li>  
+                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/availability'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/availability' }"> <Icon name="Clock" /> Availability</router-link></li>  
                 <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> <Icon name="Unplug" /> Integrations</router-link></li>  
 
             </ul>  

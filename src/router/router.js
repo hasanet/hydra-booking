@@ -65,10 +65,10 @@ const routes = [
                         component: () => import('../view/hosts/hosts-information.vue')
                     }, 
                     {
-                        path: 'meeting',
-                        name: 'HostsProfileMeeting',
+                        path: 'availability',
+                        name: 'HostsAvailability',
                         meta: { Capabilities: 'tfhb_manage_options' },
-                        component: () => import('../view/hosts/hosts-meeting.vue')
+                        component: () => import('../view/hosts/hosts-availability.vue')
                     }, 
                     {
                         path: 'integrations',
