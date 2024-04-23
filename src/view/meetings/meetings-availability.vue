@@ -1,11 +1,13 @@
 <script setup>
-import {ref} from 'vue'
+import {ref, onBeforeMount} from 'vue'
 import axios from 'axios'  
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
 import useValidators from '@/store/validator'
+import { Host } from '@/store/hosts';
+import { Availability } from '@/store/availability';
 const { errors, isEmpty } = useValidators();
 
 const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting"]); 
@@ -24,31 +26,9 @@ const props = defineProps({
     },
 
 });
-const transformedHostData = {};
-if ( props.meeting.hosts) {
-    props.meeting.hosts.forEach(host => {
-        const userId = host.user_id;
-        const firstName = host.first_name;
-        transformedHostData[userId] = firstName;
-    });
-} else {
-    console.error("Error: props.meeting.hosts is not defined or is undefined");
-}
-
-const Availability_Id = {};
-if ( props.meeting.availability_seetings ) {
-    props.meeting.availability_seetings.forEach((availability, key) => {
-        const Title = availability.title;
-        Availability_Id[key] = Title;
-    });
-} else {
-    console.error("Error: props.meeting.availability_seetings is not defined or is undefined");
-}
-
-const Settings_avalibility = ref();
-
 
 // Fetch generalSettings
+const Settings_avalibility = ref();
 const fetchAvailabilitySettings = async (setting) => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+setting); 
@@ -71,6 +51,12 @@ const validateSelect = (fieldName) => {
     isEmpty(fieldName, props.meeting[fieldValueKey]);
 };
 
+// Mount
+onBeforeMount(() => { 
+    Host.fetchHosts();
+    Availability.fetchAvailability();
+});
+
 </script>
 
 <template>
@@ -83,7 +69,7 @@ const validateSelect = (fieldName) => {
             :label="$tfhb_trans['Select Host']"  
             name="host_id"
             :placeholder="$tfhb_trans['Select Host']"  
-            :option = "transformedHostData" 
+            :option = "Host.hosts" 
             @change="() => validateSelect('host_id')"
             @click="() => validateSelect('host_id')"
             :errors="errors.host_id"
@@ -102,7 +88,7 @@ const validateSelect = (fieldName) => {
             :label="$tfhb_trans['Choose Schedule']"  
             :selected = "1"
             :placeholder="$tfhb_trans['Choose Schedule']"   
-            :option = "Availability_Id" 
+            :option = "Availability.availabilities" 
             v-if="'settings'==meeting.availability_type"
             @tfhb-onchange="Settings_Avalibility_Callback"
         />

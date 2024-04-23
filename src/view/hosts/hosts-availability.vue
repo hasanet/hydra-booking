@@ -5,7 +5,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import AvailabilityPopupSingle from '@/components/availability/AvailabilityPopupSingle.vue';
 import AvailabilitySingle from '@/components/availability/AvailabilitySingle.vue';
 import { toast } from "vue3-toastify"; 
-import { hostInfo, fetchHost } from '@/store/availability';
+import { Host } from '@/store/hosts';
 
 const props = defineProps({
     hostId: {
@@ -126,7 +126,7 @@ const closeModal = () => {
 const fetchAvailabilitySettings = async () => {
 
     let data = {
-        id: hostInfo.value
+        id: Host.hostInfo
     };  
 
     try { 
@@ -151,7 +151,7 @@ const fetchAvailabilitySettings = async () => {
 }
 
 onBeforeMount(() => { 
-    fetchHost(props.hostId).then(() => {
+    Host.fetchHost(props.hostId).then(() => {
         fetchAvailabilitySettings();
     });
 });

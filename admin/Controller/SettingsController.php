@@ -149,10 +149,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function GetSingleAvailabilitySettings($request) {
         $id = $request['id']; 
         $availability = get_option('_tfhb_availability_settings');
-        $availability = $availability[$id];
+
+        $filteredAvailability = array_filter($availability, function($item) use ($id) {
+            return $item['id'] == $id;
+        });
+    
+        // If you expect only one result, you can extract the first item from the filtered array
+        $singleAvailability = reset($filteredAvailability);
         $data = array(
             'status' => true, 
-            'availability' => $availability,
+            'availability' => $singleAvailability,
         );
         return rest_ensure_response($data);
     }
