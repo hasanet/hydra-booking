@@ -137,7 +137,7 @@ const addAvailabilityDate = (key) => {
                             <span>{{props.availabilityDataSingle.time_zone}}</span> 
                         </div> 
                     </div>
-                    <div v-for="(time_slot, key) in props.availabilityDataSingle.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
+                    <div v-for="(time_slot, key) in props.availabilityDataSingle.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
                         <div class="tfhb-swicher-wrap  tfhb-flexbox">
                             <!-- Checkbox swicher -->
                             <label class="switch">
@@ -197,7 +197,7 @@ const addAvailabilityDate = (key) => {
                             <h3 >Yearly dates </h3>  
                         </div> 
                     </div>
-                    <div class="tfhb-availability-schedule-single tfhb-flexbox">
+                    <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
                         <div class="tfhb-swicher-wrap  tfhb-flexbox">
                             <!-- Checkbox swicher -->
                             <label class="switch">

@@ -123,7 +123,7 @@ onBeforeMount(() => {
                 </div> 
             </div>
             
-            <div v-for="(time_slot, key) in Settings_avalibility.availability.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
+            <div v-for="(time_slot, key) in Settings_avalibility.availability.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
                 <div class="tfhb-swicher-wrap  tfhb-flexbox">
                     <!-- Checkbox swicher -->
                     <label class="switch">
@@ -165,8 +165,8 @@ onBeforeMount(() => {
                 <div class="tfhb-admin-title"> 
                     <h3 >Yearly dates </h3>  
                 </div>
-                <div class="tfhb-availability-schedule-single tfhb-flexbox">
-                    <div class="tfhb-swicher-wrap  tfhb-flexbox">
+                <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+                    <div class="tfhb-swicher-wrap tfhb-flexbox">
                         <!-- Checkbox swicher -->
                         <label class="switch">
                             <input id="swicher" true-value="1" type="checkbox" v-bind:checked="Settings_avalibility.availability.date_status =='1'">
@@ -214,8 +214,8 @@ onBeforeMount(() => {
                 </div> 
             </div>
             
-            <div v-for="(time_slot, key) in meeting.availability_custom.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
-                <div class="tfhb-swicher-wrap  tfhb-flexbox">
+            <div v-for="(time_slot, key) in meeting.availability_custom.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+                <div class="tfhb-swicher-wrap tfhb-flexbox">
                     <!-- Checkbox swicher -->
                     <label class="switch">
                         <input id="swicher" v-model="time_slot.status" true-value="1" type="checkbox">
@@ -268,8 +268,8 @@ onBeforeMount(() => {
                 <div class="tfhb-admin-title"> 
                     <h3 >Yearly dates </h3>  
                 </div>
-                <div class="tfhb-availability-schedule-single tfhb-flexbox">
-                    <div class="tfhb-swicher-wrap  tfhb-flexbox">
+                <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+                    <div class="tfhb-swicher-wrap tfhb-flexbox">
                         <!-- Checkbox swicher -->
                         <label class="switch">
                             <input id="swicher" true-value="1" v-model="meeting.availability_custom.date_status" type="checkbox">
