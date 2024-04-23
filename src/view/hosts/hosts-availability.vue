@@ -1,12 +1,12 @@
 <script setup>
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import AvailabilityPopupSingle from '@/components/availability/AvailabilityPopupSingle.vue';
 import AvailabilitySingle from '@/components/availability/AvailabilitySingle.vue';
 import { toast } from "vue3-toastify"; 
-const route = useRoute();
+import { hostInfo, fetchHost } from '@/store/availability';
+
 const props = defineProps({
     hostId: {
         type: Number,
@@ -126,7 +126,7 @@ const closeModal = () => {
 const fetchAvailabilitySettings = async () => {
 
     let data = {
-        id: props.host.user_id
+        id: hostInfo.value
     };  
 
     try { 
@@ -151,8 +151,9 @@ const fetchAvailabilitySettings = async () => {
 }
 
 onBeforeMount(() => { 
-// Availability.fetchHost();
-  fetchAvailabilitySettings();
+    fetchHost(props.hostId).then(() => {
+        fetchAvailabilitySettings();
+    });
 });
 
 // Edit availability
