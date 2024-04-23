@@ -216,6 +216,9 @@ const addAvailabilityDate = (key) => {
                                         width="45"
                                         enableTime='true'
                                         placeholder="Type your schedule title"   
+                                        :config="{
+                                            mode: 'multiple',
+                                        }"
                                     /> 
                                     <Icon name="MoveRight" size="20px" /> 
                                     <HbDateTime  
