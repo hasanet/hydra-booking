@@ -13,6 +13,7 @@ const props = defineProps({
   isOpen: Boolean,
   availabilityDataSingle: {},
   timeZone: {}, 
+  is_host: Boolean,
 });
 const emit = defineEmits(["update:availabilityData", "modal-close", "update-availability"]); 
 
@@ -21,24 +22,40 @@ const emit = defineEmits(["update:availabilityData", "modal-close", "update-avai
 // Update Availability Settings
 const UpdateAvailabilitySettings = async () => {   
     try { 
-        // axisos sent dataHeader Nonce Data
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/update', props.availabilityDataSingle, {
-            headers: {
-                'X-WP-Nonce': tfhb_core_apps.rest_nonce
-            } 
-        } );
-      
-        if (response.data.status) {    
- 
-            // close the popup
-            emit('modal-close');
-            emit('update-availability', response.data.availability);
-            toast.success(response.data.message, {
-                position: 'bottom-right', // Set the desired position
-                "autoClose": 1500,
-            }); 
+        if(props.is_host){
+            const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/update', props.availabilityDataSingle, {
+                headers: {
+                    'X-WP-Nonce': tfhb_core_apps.rest_nonce
+                } 
+            } );
+            if (response.data.status) {    
             
+                // close the popup
+                emit('modal-close');
+                emit('update-availability', response.data.availability);
+                toast.success(response.data.message, {
+                    position: 'bottom-right', // Set the desired position
+                    "autoClose": 1500,
+                }); 
+            }
+        }else{
+            const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/update', props.availabilityDataSingle, {
+                headers: {
+                    'X-WP-Nonce': tfhb_core_apps.rest_nonce
+                } 
+            } );
+            if (response.data.status) {    
+            
+                // close the popup
+                emit('modal-close');
+                emit('update-availability', response.data.availability);
+                toast.success(response.data.message, {
+                    position: 'bottom-right', // Set the desired position
+                    "autoClose": 1500,
+                }); 
+            }
         }
+        
     } catch (error) {
         toast.error('Action successful', {
             position: 'bottom-right', // Set the desired position
@@ -120,7 +137,7 @@ const addAvailabilityDate = (key) => {
                             <span>{{props.availabilityDataSingle.time_zone}}</span> 
                         </div> 
                     </div>
-                    <div v-for="(time_slot, key) in props.availabilityDataSingle.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox">
+                    <div v-for="(time_slot, key) in props.availabilityDataSingle.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
                         <div class="tfhb-swicher-wrap  tfhb-flexbox">
                             <!-- Checkbox swicher -->
                             <label class="switch">
@@ -180,7 +197,7 @@ const addAvailabilityDate = (key) => {
                             <h3 >Yearly dates </h3>  
                         </div> 
                     </div>
-                    <div class="tfhb-availability-schedule-single tfhb-flexbox">
+                    <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
                         <div class="tfhb-swicher-wrap  tfhb-flexbox">
                             <!-- Checkbox swicher -->
                             <label class="switch">
@@ -199,6 +216,9 @@ const addAvailabilityDate = (key) => {
                                         width="45"
                                         enableTime='true'
                                         placeholder="Type your schedule title"   
+                                        :config="{
+                                            mode: 'multiple',
+                                        }"
                                     /> 
                                     <Icon name="MoveRight" size="20px" /> 
                                     <HbDateTime  
@@ -221,7 +241,7 @@ const addAvailabilityDate = (key) => {
                 
                 </div>  
                 <!-- Create Or Update Availability -->
-                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ $tfhb_trans['Update General Settings'] }}</button>
+                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? 'Save Availability' : $tfhb_trans['Update General Settings'] }}</button>
             </div>
         </div>
    </div>

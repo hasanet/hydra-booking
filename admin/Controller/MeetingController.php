@@ -224,15 +224,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(empty($MeetingData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
-        
-        // Host List 
-        $host = new Host();
-        $HostsList = $host->get();
-        $MeetingData->hosts = wp_json_encode($HostsList);
-
-        // Availability
-        $availability = get_option('_tfhb_availability_settings');
-        $MeetingData->availability_seetings = $availability;
 
         // Notification
         if(empty($MeetingData->notification)){

@@ -58,7 +58,7 @@ const hostId = route.params.id;
 onBeforeMount(() => { 
     fetchHost();
 });
- 
+    
 </script>
 
 <template>

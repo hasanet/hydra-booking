@@ -45,7 +45,7 @@ const editAvailability = () => {
                 {{ day.status == 1 ? day.day + ' (' + day.times[0].start + ' - ' + day.times[0].end + ') ,' : '' }} 
             </p></span>
         </div>
-        <div class="tfhb-availability-single-box-info tfhb-flexbox">
+        <div class="tfhb-availability-single-box-info tfhb-flexbox" v-if="availability.time_zone">
             <Icon name="MapPin" size="20px" /> 
             <span >{{availability.time_zone}}</span>
         </div>

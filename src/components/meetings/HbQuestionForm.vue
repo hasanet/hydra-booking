@@ -21,7 +21,16 @@ const props = defineProps({
         :label="$tfhb_trans['Field type']"  
         :selected = "1"
         :placeholder="$tfhb_trans['Field type']" 
-        :option = "{'Textarea': 'Textarea', 'Text': 'Text'}" 
+        :option = "{
+            'text': 'Text', 
+            'email': 'Email', 
+            'textarea': 'Textarea', 
+            'number': 'Number', 
+            'radio': 'Radio', 
+            'select': 'Select', 
+            'checkbox': 'Checkbox', 
+            'date': 'Date'
+        }" 
     />
 
     <HbText  

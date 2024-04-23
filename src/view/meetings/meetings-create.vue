@@ -302,12 +302,7 @@ const meetingId = route.params.id;
             if(response.data.meeting.meeting_locations){
                 meetingData.meeting_locations = JSON.parse(response.data.meeting.meeting_locations)
             }
-            if(response.data.meeting.hosts){
-                meetingData.hosts = JSON.parse(response.data.meeting.hosts)
-            }
-            if(response.data.meeting.availability_seetings){
-                meetingData.availability_seetings = response.data.meeting.availability_seetings
-            }
+            
             if(response.data.meeting.availability_custom){
                 meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
             }
