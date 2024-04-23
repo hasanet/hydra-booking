@@ -8,6 +8,7 @@ import { toast } from "vue3-toastify";
 // Get Current Route url
 const currentRoute = useRouter().currentRoute.value.path;
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
+import GoogleCalendarIntegrations from '@/components/hosts/GoogleCalendarIntegrations.vue';
 
 const route = useRoute();
 //  Load Time Zone 
@@ -46,6 +47,7 @@ const Integration = reactive( {
         connection_status: 0,
         client_id: '',
         secret_key: '',
+        access_token: '',
         redirect_url: '',
 
     },
@@ -66,9 +68,9 @@ const fetchIntegration = async () => {
             } 
         } );
 
-        if (response.data.status) {  
-            console.log(response.data);
+        if (response.data.status) {   
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
+            Integration.google_calendar= response.data.integration_settings.google_calendar ? response.data.integration_settings.google_calendar : Integration.google_calendar;
             
 
             skeleton.value = false;
@@ -91,8 +93,7 @@ const UpdateIntegration = async (key, value) => {
             } 
         } );
 
-        if (response.data.status) {    
-            console.log(response.data);
+        if (response.data.status) {     
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
@@ -116,9 +117,12 @@ onBeforeMount(() => {
 
 <template>
     <div class="tfhb-admin-card-box "> 
-       
+       {{ Integration.google_calendar }}
         <!-- Woo  Integrations  --> 
         <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
+
+        <!-- Host Integration -->
+        <GoogleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
 
         <div class="tfhb-admin-card-box tfhb-flexbox">   
             <div class="tfhb-admin-cartbox-cotent tfhb-flexbox">
