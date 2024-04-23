@@ -151,6 +151,7 @@ const fetchAvailabilitySettings = async () => {
 }
 
 onBeforeMount(() => { 
+// Availability.fetchHost();
   fetchAvailabilitySettings();
 });
 
@@ -190,7 +191,6 @@ const deleteAvailabilitySettings = async (key, id, user_id ) => {
 </script>
 
 <template>
-    {{ AvailabilityGet.data }}
 <div class="tfhb-host-availability">
     <div class="tfhb-dashboard-heading">
         <div class="tfhb-admin-title"> 

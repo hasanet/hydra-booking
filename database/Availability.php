@@ -23,6 +23,7 @@ class Availability{
         if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT,
+                host VARCHAR(100) NULL,
                 title VARCHAR(100) NOT NULL,
                 time_zone VARCHAR(50) NOT NULL,
                 override VARCHAR(255) NOT NULL,

@@ -68,6 +68,7 @@ const routes = [
                         path: 'availability',
                         name: 'HostsAvailability',
                         meta: { Capabilities: 'tfhb_manage_options' },
+                        props: true,
                         component: () => import('../view/hosts/hosts-availability.vue')
                     }, 
                     {
