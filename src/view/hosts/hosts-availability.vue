@@ -237,6 +237,128 @@ const Settings_Avalibility_Callback = (e) => {
         @tfhb-onchange="Settings_Avalibility_Callback"
     />
 
+    <!-- Settings Data -->
+    <div class="tfhb-admin-card-box tfhb-gap-24 tfhb-mt-24" v-if="Settings_avalibility && 'settings'==host.availability_type">  
+        <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
+            <div class="tfhb-admin-title"> 
+                <h3 >Weekly hours </h3>  
+            </div>
+            <div class="thb-admin-btn right"> 
+                <span>{{ Settings_avalibility.availability.time_zone }}</span> 
+            </div> 
+        </div>
+        
+        <div v-for="(time_slot, key) in Settings_avalibility.availability.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+            <div class="tfhb-swicher-wrap  tfhb-flexbox">
+                <label class="tfhb-schedule-swicher" for="swicher"> {{time_slot.day}}</label>
+                <!-- Swicher -->
+            </div>
+            <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
+                <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
+                    <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                        
+                        <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                            <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
+                                <span class="tfhb-flat-icon"><!--v-if-->
+                                </span>
+                            </div>
+                        </div>
+
+                        <Icon name="MoveRight" size="20px" /> 
+
+                        <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                            <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
+                                <span class="tfhb-flat-icon"><!--v-if-->
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+            <div class="tfhb-availability-schedule-wrap tfhb-full-width">
+                <div v-for="(date_slot, key) in Settings_avalibility.availability.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
+                    <div class="tfhb-dates tfhb-full-width">
+                        <p>What dates are you available / unavailable?</p>
+                        <div class="tfhb-flexbox">
+                            <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-full-width">
+                                <div class="tfhb-single-form-field tfhb-full-width">
+                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                        <input type="text" data-input="true" class="flatpickr-input" :value="date_slot.date" readonly="readonly">
+                                        <span class="tfhb-flat-icon"><!--v-if-->
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="!date_slot.available"> 
+                        <p>What hours are you available?</p>
+                        <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
+                            <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                                <HbDateTime  
+                                    v-model="time.start"    
+                                    selected = "1" 
+                                    :config="{
+                                        enableTime: true,
+                                        noCalendar: true,
+                                        dateFormat: 'H:i',
+                                        defaultDate: time.start
+                                    }"
+                                    width="45"
+                                    placeholder="Type your schedule title"   
+                                /> 
+                                <Icon name="MoveRight" size="20px" /> 
+                                <HbDateTime  
+                                    v-model="time.end"   
+                                    :label="$tfhb_trans['End']"  
+                                    selected = "1"
+                                    :config="{
+                                        enableTime: true,
+                                        noCalendar: true,
+                                        dateFormat: 'H:i',
+                                        defaultDate: time.end
+                                    }"
+                                    width="45"
+                                    placeholder="Type your schedule title"   
+                                /> 
+
+                            </div>
+                            <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
+                                <button class="tfhb-availability-schedule-btn" @click="addOverridesTime(key)"><Icon name="Plus" size="20px" /> </button> 
+                            </div>
+                            <div v-else class="tfhb-availability-schedule-clone-single">
+                                <button class="tfhb-availability-schedule-btn" @click="removeOverridesTime(key, tkey)"><Icon name="X" size="20px" /> </button> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="tfhb-mark-unavailable tfhb-full-width">
+                        <HbCheckbox 
+                            v-model="date_slot.available"
+                            :label="$tfhb_trans['Mark to Unavailable']"
+                            :name="'mark_unavailable'+key"
+                        />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>  
+
+
     <div class="tfhb-dashboard-heading" v-if="'custom'==host.availability_type">
         <div class="tfhb-admin-title"> 
             <h3 >{{ $tfhb_trans['Availability'] }}</h3> 
