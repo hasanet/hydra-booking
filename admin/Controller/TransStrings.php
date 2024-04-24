@@ -36,6 +36,7 @@ namespace HydraBooking\Admin\Controller;
             'Subject' =>  __('Subject', 'hydra-booking'),
             'Mail Body' =>  __('Mail Body', 'hydra-booking'),
             'Update' =>  __('Update', 'hydra-booking'),
+            'Mark to Unavailable' => __('Mark to Unavailable', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),

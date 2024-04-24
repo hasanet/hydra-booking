@@ -97,10 +97,6 @@ const openModal = () => {
         }
     ],
     date_slots: [
-        {
-            start: '2022-01-01',
-            end: '2022-01-01',
-        }
     ]
   };
   isModalOpened.value = true;
@@ -171,7 +167,6 @@ onBeforeMount(() => {
 </script>
 <template>
      <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard ">
-  
     <div  class="tfhb-dashboard-heading ">
         <div class="tfhb-admin-title"> 
             <h1 >{{ $tfhb_trans['Availability'] }}</h1> 
