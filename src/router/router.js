@@ -161,6 +161,21 @@ const routes = [
                 component: () => import('../view/settings/General.vue')
             },
             {
+                path: 'hosts-settings',
+                name: 'HostsSettings',
+                meta: { Capabilities: 'tfhb_manage_settings' },
+                component: () => import('../view/settings/HostsSettings.vue'),
+                redirect: { name: 'HostsSettingsInformationBuilder' },
+                children: [ 
+                    {
+                        path: 'information-builder',
+                        name: 'HostsSettingsInformationBuilder',
+                        meta: { Capabilities: 'tfhb_manage_settings' },
+                        component: () => import('@/components/settings/HostsInformationBuilder.vue')
+                    }
+                ]
+            },
+            {
                 path: 'availability',
                 name: 'SettingsAvailability',
                 meta: { Capabilities: 'tfhb_manage_settings' },

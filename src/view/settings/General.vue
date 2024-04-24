@@ -9,8 +9,11 @@ import { toast } from "vue3-toastify";
 
 // import Form Field 
 import HbSelect from '@/components/form-fields/HbSelect.vue'
+import HbText from '@/components/form-fields/HbText.vue'
+import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 
 const generalSettings = reactive({
+  admin_email: '{{wp.admin_email}}',
   time_zone: '',
   time_format: '',
   week_start_from: '',
@@ -18,6 +21,7 @@ const generalSettings = reactive({
   country: '',
   after_booking_completed: '',
   booking_status: '',
+  reschedule_status: '',
   allowed_reschedule_before_meeting_start: '', 
 });
 
@@ -43,6 +47,7 @@ const fetchGeneralSettings = async () => {
             generalSettings.country = response.data.general_settings.country;
             generalSettings.after_booking_completed = response.data.general_settings.after_booking_completed;
             generalSettings.booking_status = response.data.general_settings.booking_status;
+            generalSettings.reschedule_status = response.data.general_settings.reschedule_status;
             generalSettings.allowed_reschedule_before_meeting_start = response.data.general_settings.allowed_reschedule_before_meeting_start;
 
 
@@ -99,6 +104,17 @@ onBeforeMount(() => {
                 <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
             </div>
             <div class="tfhb-admin-card-box tfhb-flexbox">  
+
+                <!-- Time Zone -->
+                <HbText  
+                    v-model="generalSettings.admin_email"  
+                    required= "true"  
+                    :label="$tfhb_trans['First name']"  
+                    selected = "1"
+                    :placeholder="$tfhb_trans['Type your first name']" 
+                    width="50"
+                /> 
+
                 <!-- Time Zone -->
                 <HbSelect 
                     
@@ -158,7 +174,8 @@ onBeforeMount(() => {
                 <HbSelect 
                     
                     v-model="generalSettings.country"  
-                    required= "true" 
+                    required= "true"
+                    width="50"
                     :label="$tfhb_trans['Select country for phone code']"   
                     selected = "1"
                     placeholder="Select Country"  
@@ -195,22 +212,7 @@ onBeforeMount(() => {
                 /> 
                 <!-- Bookings will be completed automatically after -->
 
-                <!-- Default status of bookings -->
-                <HbSelect 
-                    
-                    v-model="generalSettings.booking_status"  
-                    required= "true"  
-                    :label="$tfhb_trans['Default status of bookings']" 
-                    width="50"
-                    selected = "1"
-                    placeholder="Select status"  
-                    :option = "{
-                        'pending': 'Pending',  
-                        'published': 'Published',   
-                        'draft': 'Draft',   
-                    }"  
-                />
-                <!-- Default status of bookings --> 
+               
                 
                 <!-- Minimum time required before Booking/Cancel/Reschedule -->
                 <HbSelect 
@@ -219,6 +221,7 @@ onBeforeMount(() => {
                     required= "true" 
                     :label="$tfhb_trans['Minimum time required before Booking/Cancel/Reschedule']"  
                     selected = "1"
+                    width="50"
                     placeholder="Select Time"  
                     :option = "{
                         '5': '5 Minutes',  
@@ -231,6 +234,23 @@ onBeforeMount(() => {
                     }" 
                 />
                 <!-- Minimum time required before Booking/Cancel/Reschedule -->
+
+                 <!-- Default status of bookings Approved if checkbox is checked --> 
+
+                <HbSwitch 
+                    v-model="generalSettings.booking_status"
+                    
+                    :label="$tfhb_trans['Approved bookings by default.']"  
+                />
+               
+                <!-- Default status of bookings --> 
+
+                 <!-- Default status of bookings -->
+                 <HbSwitch 
+                    v-model="generalSettings.reschedule_status"
+                    :label="$tfhb_trans[ 'Approved reschedule by default.']"  
+                />
+                <!-- Default status of bookings --> 
                  
             </div>  
 
