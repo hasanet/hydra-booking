@@ -32,6 +32,8 @@ class Host {
                 avatar VARCHAR(255) NOT NULL, 
                 featured_image VARCHAR(255) NOT NULL, 
                 time_zone VARCHAR(255) NOT NULL, 
+                availability_type VARCHAR(11) NULL, 
+                availability_id INT(11) NULL, 
                 status VARCHAR(11) NOT NULL,
                 created_at DATE NOT NULL,
                 updated_at DATE NOT NULL, 

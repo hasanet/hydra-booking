@@ -6,8 +6,9 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbImageBox from '@/components/form-fields/HbImageBox.vue'
-import { toast } from "vue3-toastify";
 import { Upload } from 'lucide-vue-next';
+const emit = defineEmits(["save-host-info"]); 
+
 // Get Current Route url 
 const props = defineProps({
     hostId: {
@@ -21,18 +22,7 @@ const props = defineProps({
     time_zone:{}
 
 });
-const UpdateHostsInformation = async () => {
-    try { 
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/information/update', props.host);
-        if (response.data.status == true) { 
-            toast.success(response.data.message); 
-        }else{
-            toast.error(response.data.message); 
-        }
-    } catch (error) {
-        console.log(error);
-    } 
-}
+
 const imageChange = (attachment) => {  
     const image = document.querySelector('.'+props.name+'_display'); 
     image.src = attachment.url; 
@@ -91,7 +81,7 @@ const UploadImage = () => {
             disabled="true"
         /> 
         <HbText  
-            v-model="host.mobile"  
+            v-model="host.phone_number"  
             required= "true"  
             :label="$tfhb_trans['Mobile']"  
             selected = "1"
@@ -106,11 +96,11 @@ const UploadImage = () => {
             :label="$tfhb_trans['Time zone']"  
             selected = "1"
             placeholder="Select Time Zone"  
-            :option = "props.time_zone" 
+            :option = "time_zone" 
         /> 
     <!-- Time Zone -->
         <!--  Update Hosts Information -->
-        <button class="tfhb-btn boxed-btn" @click="UpdateHostsInformation">{{ $tfhb_trans['Save'] }}</button>
+        <button class="tfhb-btn boxed-btn" @click="emit('save-host-info')">{{ $tfhb_trans['Save'] }}</button>
     </div>  
 </template>
 
