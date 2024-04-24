@@ -33,8 +33,7 @@ const UpdateHostsInformation = async () => {
         console.log(error);
     } 
 }
-const imageChange = (attachment) => { 
-  console.log(attachment);
+const imageChange = (attachment) => {  
     const image = document.querySelector('.'+props.name+'_display'); 
     image.src = attachment.url; 
     // props.modelValue = attachment.url; 

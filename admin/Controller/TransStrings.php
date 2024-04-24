@@ -11,6 +11,8 @@ namespace HydraBooking\Admin\Controller;
             'View Documentation' =>  __('View Documentation', 'hydra-booking'),
             'Save' =>  __('Save', 'hydra-booking'),
             'Save & Validate' =>  __('Save & Validate', 'hydra-booking'),
+            'Statistics' =>  __('Statistics', 'hydra-booking'),
+            'This Week' =>  __('This Week', 'hydra-booking'),
             
             // General Settings
             'General' =>  __('General', 'hydra-booking'),

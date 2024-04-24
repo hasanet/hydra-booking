@@ -26,27 +26,32 @@ const setChartData = () => {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
             {
-                label: 'First Dataset',
-                data: [65, 59, 80, 81, 56, 55, 40],
-                fill: false,
-                tension: 0.4,
-                borderColor: documentStyle.getPropertyValue('--cyan-500')
-            },
-            {
-                label: 'Second Dataset',
-                data: [28, 48, 40, 19, 86, 27, 90],
-                fill: false,
-                borderDash: [5, 5],
-                tension: 0.4,
-                borderColor: documentStyle.getPropertyValue('--orange-500')
-            },
-            {
-                label: 'Third Dataset',
-                data: [12, 51, 62, 33, 21, 62, 45],
+                label: 'Booked',
+                data: [65, 59, 80, 81, 56, 55, 40, 200],
                 fill: true,
-                borderColor: documentStyle.getPropertyValue('--gray-500'),
                 tension: 0.4,
-                backgroundColor: 'rgba(107, 114, 128, 0.2)'
+                borderColor: '#F62881', 
+                pointBackgroundColor: '#F62881', 
+                backgroundColor: '#D9568F15'
+            },
+            {
+                label: 'Canceled',
+                data: [28, 48, 40, 19, 86, 27, 90, 100],
+                fill: true,
+                // borderDash: [5, 5],
+                tension: 0.4,
+                borderColor: '#C40859',
+                pointBackgroundColor: '#C40859', 
+                backgroundColor: '#C4085915'
+            },
+            {
+                label: 'Completed',
+                data: [12, 51, 62, 33, 21, 62, 45, 100],
+                fill: true,
+                borderColor: '#5E082D',
+                pointBackgroundColor: '#5E082D', 
+                tension: 0.4,
+                backgroundColor: '#5E082D15'
             }
         ]
     };
@@ -58,19 +63,28 @@ const setChartOptions = () => {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     return {
-        maintainAspectRatio: false,
-        aspectRatio: 0.6,
+        maintainAspectRatio: true,
+        aspectRatio: 3,
         plugins: {
             legend: {
+                display: true,
                 labels: {
-                    color: textColor
+                    color: textColor,
+                    usePointStyle: true, 
+                    padding: 20,
+                    height: 5,
+                    width: 5
                 }
+                
+                
             }
         },
         scales: {
             x: {
                 ticks: {
-                    color: textColorSecondary
+                    color: textColorSecondary,
+                 
+                    
                 },
                 grid: {
                     color: surfaceBorder
@@ -78,10 +92,11 @@ const setChartOptions = () => {
             },
             y: {
                 ticks: {
+                   
                     color: textColorSecondary
                 },
-                grid: {
-                    color: surfaceBorder
+                grid: { 
+                    color: '#F6EEF2'
                 }
             }
         }
@@ -626,15 +641,8 @@ const setChartOptions = () => {
                 
         </div>
 
-        <!-- Cart statistic -->
-        <div class="tfhb-chart-statistic-wrap tfhb-dashboard-notice-box"> 
-            <div class="tfhb-dashboard-notice-box-wrap" >
-                
-                <Chart type="line" :data="chartData" :options="chartOptions" />
-    
-            </div>
-        </div>
-        <!--  -->
+        
+        <!-- Notice Box -->
         <div class="tfhb-flexbox tfhb-dashboard-notice-box tfhb-gap-24">
 
             <div class="tfhb-dashboard-notice-box-inner">
@@ -747,6 +755,33 @@ const setChartOptions = () => {
                 </div>
             </div>
 
+        </div>
+
+        <!-- Cart statistic -->
+        <div class="tfhb-chart-statistic-wrap tfhb-dashboard-notice-box"> 
+            <div class="tfhb-dashboard-notice-box-wrap" >
+                <div  class="tfhb-dashboard-heading tfhb-flexbox">
+                    <div class="tfhb-admin-title"> 
+                        <h3 >{{ $tfhb_trans['Statistics'] }}</h3>  
+                    </div>
+                    <div class="thb-admin-btn right"> 
+                        <div class="tfhb-dropdown  ">
+                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"> {{ $tfhb_trans['This Week'] }}  <Icon name="ChevronDown" size="15px" /> </a>
+                            <div class="tfhb-dropdown-wrap"> 
+                                <!-- route link -->
+                                <span class="tfhb-dropdown-single">Today</span>
+                                <span class="tfhb-dropdown-single">This week</span> 
+                                <span class="tfhb-dropdown-single">This month</span> 
+                                <span class="tfhb-dropdown-single">Last 3 months</span> 
+                                
+                            </div>
+                        </div> 
+                    </div> 
+                </div>
+                
+                <Chart type="line" :data="chartData" :options="chartOptions" />
+    
+            </div>
         </div>
     </div> 
 </div> 

@@ -19,9 +19,7 @@ const props = defineProps([
     'class', 
     'display', 
 ])
-const emit = defineEmits([ "update-integrations", ]); 
-
-
+const emit = defineEmits([ "update-integrations", ]);  
 </script>
  
 <template>
@@ -40,10 +38,10 @@ const emit = defineEmits([ "update-integrations", ]);
         </div>
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
             <button @click="gCalPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ google_calendar.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
-                <!-- Checkbox swicher -->
-
-                <HbSwitch v-if="google_calendar.connection_status" @change="emit('update-integrations', 'google_calendar', google_calendar)" v-model="google_calendar.status"    />
-            <!-- Swicher --> 
+             <!-- a tag for get access token  -->
+            <a  v-if="google_calendar.status"  :href="'https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&redirect_uri='+google_calendar.redirect_url+'&response_type=code&client_id='+google_calendar.client_id+'&access_type=online'" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a>
+               
+            
         </div>
 
         <HbPopup :isOpen="gCalPopup" @modal-close="gCalPopup = false" max_width="600px" name="first-modal">
