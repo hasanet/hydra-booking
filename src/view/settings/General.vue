@@ -239,7 +239,7 @@ onBeforeMount(() => {
 
                 <HbSwitch 
                     v-model="generalSettings.booking_status"
-                    
+                    width="100"
                     :label="$tfhb_trans['Approved bookings by default.']"  
                 />
                
@@ -248,6 +248,7 @@ onBeforeMount(() => {
                  <!-- Default status of bookings -->
                  <HbSwitch 
                     v-model="generalSettings.reschedule_status"
+                    width="100"
                     :label="$tfhb_trans[ 'Approved reschedule by default.']"  
                 />
                 <!-- Default status of bookings --> 

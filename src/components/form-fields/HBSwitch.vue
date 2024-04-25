@@ -8,6 +8,7 @@ const props = defineProps([
         'subtitle',
         'placeholder',
         'description', 
+        'width', 
 ])
 const emit = defineEmits(['update:modelValue'])
 
@@ -24,7 +25,7 @@ const checkedValue = (e) => {
 <template>
     
     <div class="tfhb-single-form-field" :class="name" 
-      :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
+      :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : 'auto' }" 
     >
         <div class="tfhb-single-form-field-wrap tfhb-field-swicher">
             <div class="tfhb-swicher-wrap tfhb-flexbox">

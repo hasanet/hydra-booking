@@ -1,7 +1,7 @@
 <script setup>
 import {reactive, ref} from 'vue'
-import HbQuestion from '@/components/meetings/HbQuestion.vue'
-import HbQuestionForm from '@/components/meetings/HbQuestionForm.vue'
+import HbQuestion from '@/components/widgets/HbQuestion.vue'
+import HbQuestionForm from '@/components/widgets/HbQuestionForm.vue'
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue'
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
@@ -75,8 +75,7 @@ function QuestionPopupClose(){
             <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
                 Meeting Questions for Attendee
                 <HbSwitch 
-                    v-model="meeting.questions_status"
-                    width="50"
+                    v-model="meeting.questions_status" 
                 />
             </h2> 
             <p>Create your own booking page questions</p>
@@ -86,6 +85,7 @@ function QuestionPopupClose(){
 
             <HbQuestion 
                 :question_value="meeting.questions"
+                :skip_remove="2"
                 @question-edit="EditExtraQuestion"
                 @question-remove="removeExtraQuestion"
             />

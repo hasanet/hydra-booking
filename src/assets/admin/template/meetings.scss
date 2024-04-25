@@ -360,38 +360,7 @@
                     cursor: pointer;
                 }
             }
-            .tfhb-question-box{
-                width: 100%;
-                .tfhb-flexbox{
-                    flex-wrap: nowrap !important;
-                    select{
-                        padding: 0px 8px 0px 12px;
-                        min-width: calc(100% - 88px);
-                        margin-top: 4px;
-                        border-radius: 4px;
-                        height: 40px;
-                        border: 1px solid #F6EEF2;
-                        &:focus, &:active {
-                            outline: none;
-                            box-shadow: none; 
-                        }
-                    }
-                    button{
-                        border-radius: 4px;
-                        border: 1px solid #F6EEF2;
-                        background: #FFF;
-                        height: 24px;
-                        width: 24px;
-                        padding: 4px; 
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                }
-                .tfhb-single-form-field.tfhb-flexbox{
-                    flex-wrap: wrap !important;
-                }
-            }
+         
         }
     }
     .tfhb-question-popup{

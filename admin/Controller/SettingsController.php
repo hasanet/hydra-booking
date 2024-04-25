@@ -62,9 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         register_rest_route('hydra-booking/v1', '/settings/availability/(?P<id>[0-9]+)', array(
             'methods' => 'GET',
             'callback' => array($this, 'GetSingleAvailabilitySettings'),
-        ));
-
-
+        )); 
         // Intrigation 
 
         register_rest_route('hydra-booking/v1', '/settings/integration', array(
@@ -90,7 +88,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'UpdateNotificationSettings'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         )); 
-    }
+
+
+        // Hosts Settings.
+        register_rest_route('hydra-booking/v1', '/settings/hosts-settings', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'GetHostsSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+        register_rest_route('hydra-booking/v1', '/settings/hosts-settings/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateGetHostsSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
+     }
     // permission_callback
     public function GetGeneralSettings() {
         $DateTimeZone = new DateTimeController('UTC');
@@ -455,6 +467,55 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'message' => 'Notification Settings Updated Successfully',
+        );
+        return rest_ensure_response($data);
+    }
+
+    /**
+     * Get Hosts Settings
+     */
+    public function GetHostsSettings(){
+
+
+        $_tfhb_hosts_settings = get_option('_tfhb_hosts_settings');
+        
+        $data = array(
+            'status' => true, 
+            'message' => 'Hosts Settings', 
+            'hosts_settings' => $_tfhb_hosts_settings,
+        );
+        return rest_ensure_response($data);
+    }
+
+    /**
+     * Update Hosts Settings.
+     */
+    public function UpdateGetHostsSettings(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $_tfhb_hosts_settings = get_option('_tfhb_hosts_settings'); 
+
+        // delete option
+        // delete_option('_tfhb_hosts_settings');
+
+        if(isset($request['hosts_settings']['others_information']['enable_others_information']) && isset($request['hosts_settings']['others_information']['fields'])){
+            $_tfhb_hosts_settings['others_information']['enable_others_information'] = sanitize_text_field($request['hosts_settings']['others_information']['enable_others_information']);
+            foreach ($request['hosts_settings']['others_information']['fields'] as $key => $value) {
+                $_tfhb_hosts_settings['others_information']['fields'][$key]['label'] = sanitize_text_field($value['label']); 
+                $_tfhb_hosts_settings['others_information']['fields'][$key]['type'] = sanitize_text_field($value['type']);
+                $_tfhb_hosts_settings['others_information']['fields'][$key]['placeholder'] = sanitize_text_field($value['placeholder']);
+                $_tfhb_hosts_settings['others_information']['fields'][$key]['required'] = sanitize_text_field($value['required']);
+            }
+        }
+
+         
+        // // update option
+        update_option('_tfhb_hosts_settings', $_tfhb_hosts_settings);
+
+        //  woocommerce payment   
+        $data = array(
+            'status' => true,  
+            'message' => 'Hosts Settings Updated Successfully',
+            'data' => $_tfhb_hosts_settings
         );
         return rest_ensure_response($data);
     }
