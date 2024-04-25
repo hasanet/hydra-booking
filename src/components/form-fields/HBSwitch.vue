@@ -23,8 +23,10 @@ const checkedValue = (e) => {
 
 <template>
     
-    <div class="tfhb-single-form-field">
-        <div class="tfhb-single-form-field-wrap">
+    <div class="tfhb-single-form-field" :class="name" 
+      :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
+    >
+        <div class="tfhb-single-form-field-wrap tfhb-field-swicher">
             <div class="tfhb-swicher-wrap tfhb-flexbox">
                 <!-- Checkbox swicher -->
                 <!--   @change="checkedValue" -->
@@ -37,7 +39,7 @@ const checkedValue = (e) => {
                         :name="name"  
                         :checked="props.modelValue == 1 ? true : false"
                         >
-                    <span class="slider"></span>
+                    <div class="slider"></div>
                 </label>
                 <label class="tfhb-schedule-swicher" v-if="label" :for="name"> {{ label }} <span  v-if="required == 'true'"> *</span></label>
             </div>

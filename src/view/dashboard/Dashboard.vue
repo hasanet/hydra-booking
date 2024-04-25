@@ -284,7 +284,7 @@ const setChartOptions = () => {
                     </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
-                            <span class="cartbox-title">Total Booking</span> 
+                            <span class="cartbox-title">Total Earnings</span> 
                             <span class="cartbox-value ">0</span>
                             
                         </div>
@@ -405,7 +405,7 @@ const setChartOptions = () => {
                     </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
-                            <span class="cartbox-title">Total Booking</span> 
+                            <span class="cartbox-title">Completed Bookings</span> 
                             <span class="cartbox-value ">0</span>
                             
                         </div>
@@ -525,7 +525,7 @@ const setChartOptions = () => {
                     </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
-                            <span class="cartbox-title">Total Booking</span> 
+                            <span class="cartbox-title">Canceled Bookings</span> 
                             <span class="cartbox-value ">0</span>
                             
                         </div>

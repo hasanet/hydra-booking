@@ -31,6 +31,7 @@ const updateEvent = async () => {
             <nav class="tfhb-hydra-admin-tabs tfhb-hydra-settings"> 
                 <ul>
                     <li><router-link to="/settings/general" exact :class="{ 'active': $route.path === '/settings/general' }"> <Icon name="SlidersHorizontal" /> General</router-link></li> 
+                    <li><router-link to="/settings/hosts-settings" exact :class="{ 'active': $route.path === '/settings/hosts-settings' }"> <Icon name="SlidersHorizontal" /> Host Settings</router-link></li> 
                     <li><router-link to="/settings/availability" :class="{ 'active': $route.path === '/settings/availability' }"> <Icon name="Clock" /> Availability</router-link></li> 
                     <li><router-link to="/settings/notifications" :class="{ 'active': $route.path === '/settings/notifications' }"> <Icon name="BellDot" /> Notifications</router-link></li>
                     <li><router-link to="/settings/integrations" :class="{ 'active': $route.path === '/settings/integrations' }"> <Icon name="Unplug" /> Integrations</router-link></li>
