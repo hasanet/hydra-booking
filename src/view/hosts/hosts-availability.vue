@@ -126,12 +126,30 @@ const closeModal = () => {
   isModalOpened.value = false;
 };
 
-const fetchAvailabilitySettings = async () => {
+// Fetch  Use existing availability
+const Settings_avalibility = ref();
+const fetchAvailabilitySingle = async (setting) => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+setting); 
+        if (response.data.status) { 
+            Settings_avalibility.value = response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
 
+const Settings_Avalibility_Callback = (e) => {
+    if(e.target.value){
+        fetchAvailabilitySingle(e.target.value);
+    }
+}
+
+// Fetch  Use Custom availability
+const fetchAvailabilitySettings = async () => {
     let data = {
         id: Host.hostInfo
     };  
-
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability', data, {
             headers: {
@@ -156,6 +174,7 @@ const fetchAvailabilitySettings = async () => {
 onBeforeMount(() => { 
     Host.fetchHost(props.hostId).then(() => {
         fetchAvailabilitySettings();
+        fetchDefaultAvailabilitySingle(props.host.availability_id);
     });
     Availability.fetchAvailability();
 });
@@ -195,9 +214,8 @@ const deleteAvailabilitySettings = async (key, id, user_id ) => {
   }
 }
 
-// Fetch generalSettings
-const Settings_avalibility = ref();
-const fetchAvailabilitySingle = async (setting) => {
+// Default Availability
+const fetchDefaultAvailabilitySingle = async (setting) => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+setting); 
         if (response.data.status) { 
@@ -206,12 +224,6 @@ const fetchAvailabilitySingle = async (setting) => {
     } catch (error) {
         console.log(error);
     } 
-}
-
-const Settings_Avalibility_Callback = (e) => {
-    if(e.target.value){
-        fetchAvailabilitySingle(e.target.value);
-    }
 }
 
 </script>
@@ -236,6 +248,119 @@ const Settings_Avalibility_Callback = (e) => {
         v-if="'settings'==host.availability_type"
         @tfhb-onchange="Settings_Avalibility_Callback"
     />
+
+    <!-- Settings Data -->
+    <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-24 tfhb-mt-24" v-if="Settings_avalibility && 'settings'==host.availability_type">  
+        <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox tfhb-full-width">
+            <div class="tfhb-admin-title"> 
+                <h3 >Weekly hours </h3>  
+            </div>
+            <div class="thb-admin-btn right"> 
+                <span>{{ Settings_avalibility.availability.time_zone }}</span> 
+            </div> 
+        </div>
+        
+        <div v-for="(time_slot, key) in Settings_avalibility.availability.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline tfhb-full-width">
+            <div class="tfhb-swicher-wrap  tfhb-flexbox">
+                <label class="tfhb-schedule-swicher" for="swicher"> {{time_slot.day}}</label>
+                <!-- Swicher -->
+            </div>
+            <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
+                <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
+                    <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                        
+                        <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                            <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
+                                <span class="tfhb-flat-icon"><!--v-if-->
+                                </span>
+                            </div>
+                        </div>
+
+                        <Icon name="MoveRight" size="20px" /> 
+
+                        <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                            <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
+                                <span class="tfhb-flat-icon"><!--v-if-->
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline tfhb-full-width">
+            <div class="tfhb-availability-schedule-wrap tfhb-full-width">
+                <div v-for="(date_slot, key) in Settings_avalibility.availability.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
+                    <div class="tfhb-dates tfhb-full-width">
+                        <p>What dates are you available / unavailable?</p>
+                        <div class="tfhb-flexbox">
+                            <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-full-width">
+                                <div class="tfhb-single-form-field tfhb-full-width">
+                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                        <input type="text" data-input="true" class="flatpickr-input" :value="date_slot.date" readonly="readonly">
+                                        <span class="tfhb-flat-icon"><!--v-if-->
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="!date_slot.available"> 
+                        <p>What hours are you available?</p>
+                        <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
+                            <div class="tfhb-availability-schedule-time tfhb-flexbox">
+
+                                <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                        <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
+                                        <span class="tfhb-flat-icon"><!--v-if-->
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <Icon name="MoveRight" size="20px" /> 
+
+                                <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                        <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
+                                        <span class="tfhb-flat-icon"><!--v-if-->
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="tfhb-mark-unavailable tfhb-full-width">
+                        <div class="tfhb-single-form-field mark_unavailable" style="width: 100%;">
+                            <div class="tfhb-single-form-field-wrap tfhb-field-checkbox">
+                                <div class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
+                                    <label for="mark_unavailable">
+                                        <input id="mark_unavailable" name="mark_unavailable" type="checkbox" :checked="date_slot.available ? true : false" disabled>
+                                        <span class="checkmark"></span> Mark to Unavailable <!--v-if-->
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>  
+
 
     <div class="tfhb-dashboard-heading" v-if="'custom'==host.availability_type">
         <div class="tfhb-admin-title"> 

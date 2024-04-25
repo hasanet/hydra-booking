@@ -68,6 +68,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
 
+        register_rest_route('hydra-booking/v1', '/hosts/availability/single', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'GetSingleAvailabilitySettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
         register_rest_route('hydra-booking/v1', '/hosts/availability/delete', array(
             'methods' => 'POST',
             'callback' => array($this, 'DeleteAvailabilitySettings'),
@@ -382,6 +388,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true,  
             'time_zone' => $time_zone,
             'availability' => $_tfhb_host_availability_settings['availability'],
+        );
+        return rest_ensure_response($data);
+    }
+
+    // Get Single Availability Settings
+    public function GetSingleAvailabilitySettings() {
+        $request = json_decode(file_get_contents('php://input'), true);
+
+        // Get Single Host Data 
+        $_tfhb_host_availability_settings =  get_user_meta($request['user_id'], '_tfhb_host', true);
+        $data = array(
+            'status' => true,  
+            'availability' => $_tfhb_host_availability_settings['availability'][$request['availability_id']],
         );
         return rest_ensure_response($data);
     }

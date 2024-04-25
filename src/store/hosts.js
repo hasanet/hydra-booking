@@ -15,7 +15,7 @@ const Host = reactive({
             const hostsData = await response.json();
             // Create an object where each key-value pair corresponds to a host's user_id and their combined name
             this.hosts = hostsData.hosts.reduce((acc, host) => {
-                acc[host.user_id] = host.first_name + ' ' + host.last_name;
+                acc[host.id] = host.first_name + ' ' + host.last_name;
                 return acc;
             }, {});
         } catch (error) {
