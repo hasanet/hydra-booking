@@ -54,6 +54,10 @@ const UploadImage = () => {
             </div>
         </div> 
     </div>
+    <div class="tfhb-admin-title" >
+        <h2>{{ $tfhb_trans['Information Builder'] }}    </h2> 
+        <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
+    </div>
     <div class="tfhb-admin-card-box tfhb-flexbox">  
         <HbText  
             v-model="host.first_name"  
@@ -80,6 +84,17 @@ const UploadImage = () => {
             width="50"
             disabled="true"
         /> 
+        <!-- Time Zone -->
+        <HbSelect 
+            
+            v-model="host.time_zone"  
+            required= "true"  
+            :label="$tfhb_trans['Time zone']"  
+            selected = "1"
+            placeholder="Select Time Zone"  
+            :option = "time_zone" 
+            width="50" 
+        /> 
         <HbText  
             v-model="host.phone_number"  
             required= "true"  
@@ -88,20 +103,13 @@ const UploadImage = () => {
             :placeholder="$tfhb_trans['Type your mobile no']" 
             width="50" 
         />  
-         <!-- Time Zone -->
-         <HbSelect 
-            
-            v-model="host.time_zone"  
-            required= "true"  
-            :label="$tfhb_trans['Time zone']"  
-            selected = "1"
-            placeholder="Select Time Zone"  
-            :option = "time_zone" 
-        /> 
+         
     <!-- Time Zone -->
-        <!--  Update Hosts Information -->
-        <button class="tfhb-btn boxed-btn" @click="emit('save-host-info')">{{ $tfhb_trans['Save'] }}</button>
     </div>  
+
+
+    <!--  Update Hosts Information -->
+    <button class="tfhb-btn boxed-btn" @click="emit('save-host-info')">{{ $tfhb_trans['Save'] }}</button>
 </template>
 
 

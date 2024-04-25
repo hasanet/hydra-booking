@@ -67,16 +67,16 @@ const questions_data =  reactive({});
 
 <template> 
         <div class="tfhb-admin-title" >
-                <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">{{ $tfhb_trans['Information Builder'] }}  
-                    <HbSwitch 
-                        v-model="hostsSettings.others_information.enable_others_information" 
-                    />
-                </h2> 
-                <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
-            </div>
+            <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">{{ $tfhb_trans['Information Builder'] }}  
+                <HbSwitch 
+                    v-model="hostsSettings.others_information.enable_others_information" 
+                />
+            </h2> 
+            <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
+        </div>
         <div class="tfhb-admin-card-box  tfhb-gap-24 tfhb-m-0"  >  
             
-            <div v-if="hostsSettings.others_information.enable_others_information || hostsSettings.others_information.fields" class="tfhb-host-info-builder-wrap  tfhb-mb-16" >
+            <div v-if="hostsSettings.others_information.enable_others_information && hostsSettings.others_information.fields !=''" class="tfhb-host-info-builder-wrap  tfhb-mb-16" >
                 <HbQuestion 
                     :question_value="hostsSettings.others_information.fields"
                     :skip_remove="-1"
