@@ -110,10 +110,6 @@ const meetingData = reactive({
             }
         ],
         date_slots: [
-            {
-                start: '2022-01-01',
-                end: '2022-01-01',
-            }
         ]
     },
     buffer_time_before: '',
@@ -265,14 +261,33 @@ const removeAvailabilityTime = (key, tkey = null) => {
 // Add new date slot
 const addAvailabilityDate = (key) => {
     meetingData.availability_custom.date_slots.push({
-        start: '2022-01-01',
-        end: '2022-01-01',
+        date: '',
+        available: '',
+        times: [
+            {
+                start: '09:00',
+                end: '17:00',
+            }
+        ]
     });
 }
 
 // Remove date slot 
 const removeAvailabilityTDate = (key) => {
     meetingData.availability_custom.date_slots.splice(key, 1);
+}
+
+//add Overrides Time
+const addOverridesTime = (key) => {
+    meetingData.availability_custom.date_slots[key].times.push({
+        start: '09:00',
+        end: '17:00',
+    });
+}
+
+// Remove Overrides time slot
+const removeOverridesTime = (key, tkey = null) => {
+    meetingData.availability_custom.date_slots[key].times.splice(tkey, 1);
 }
 
 // Meeting Type
@@ -479,6 +494,8 @@ const TfhbPrevNavigator = () => {
             @availability-date="addAvailabilityDate"
             @availability-date-del="removeAvailabilityTDate"
             @availability-tabs="AvailabilityTabs"
+            @add-overrides-time="addOverridesTime"
+            @remove-overrides-time="removeOverridesTime"
             />
         </div> 
     </div>

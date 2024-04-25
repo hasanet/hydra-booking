@@ -5,12 +5,13 @@ import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
+import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import useValidators from '@/store/validator'
 import { Host } from '@/store/hosts';
 import { Availability } from '@/store/availability';
 const { errors, isEmpty } = useValidators();
 
-const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting"]); 
+const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting", "add-overrides-time", "remove-overrides-time"]); 
 const props = defineProps({
     meetingId: {
         type: Number,
@@ -264,46 +265,89 @@ onBeforeMount(() => {
                 </div>
             </div>
 
-            <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
-                <div class="tfhb-admin-title"> 
-                    <h3 >Yearly dates </h3>  
-                </div>
-                <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
-                    <div class="tfhb-swicher-wrap tfhb-flexbox">
-                        <!-- Checkbox swicher -->
-                        <label class="switch">
-                            <input id="swicher" true-value="1" v-model="meeting.availability_custom.date_status" type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="tfhb-schedule-swicher"  for="swicher"> Dates</label>
-                        <!-- Swicher -->
+            <!-- Date Overrides -->
+            <div  class="tfhb-dashboard-heading ">
+                <div class="tfhb-admin-title tfhb-flexbox"> 
+                    <h3>Add date overrides </h3>  
+                    <div class="tfhb-availability-schedule-clone-single">
+                        <button class="tfhb-availability-schedule-btn" @click="emit('availability-date',key)"><Icon name="Plus" size="20" /> </button> 
                     </div>
-                    <div class="tfhb-availability-schedule-wrap ">
-                        <div v-for="(date_slot, key) in meeting.availability_custom.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                            <div  class="tfhb-availability-schedule-time tfhb-flexbox">
-                                <HbDateTime  
-                                    v-model="date_slot.start"    
-                                    selected = "1"
-                                    width="45"
-                                    enableTime='true'
-                                    placeholder="Type your schedule title"   
-                                /> 
-                                <Icon name="MoveRight" size="20px" /> 
-                                <HbDateTime  
-                                    v-model="date_slot.end"    
-                                    selected = "1"
-                                    width="45"
-                                    placeholder="Type your schedule title"   
-                                /> 
-
-                            </div>
-                            <div v-if="key == 0" class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-btn" @click="emit('availability-date',key)"><Icon name="Plus" size="20" /> </button> 
-                            </div>
-                            <div v-else class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-btn" @click="emit('availability-date-del',key)"><Icon name="X" size="20" />   </button> 
+                </div> 
+            </div>
+            <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+                <div class="tfhb-availability-schedule-wrap tfhb-full-width">
+                    <div v-for="(date_slot, key) in meeting.availability_custom.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
+                        <div class="tfhb-dates tfhb-full-width">
+                            <p>What dates are you available / unavailable?</p>
+                            <div class="tfhb-flexbox">
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox" style="width:calc(100% - 52px)">
+                                    <HbDateTime  
+                                        v-model="date_slot.date"    
+                                        selected = "1"
+                                        enableTime='true'
+                                        placeholder="Type your schedule title"   
+                                        :config="{
+                                            mode: 'multiple',
+                                        }"
+                                    /> 
+                                </div>
+                                
+                                <div class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="emit('availability-date-del',key)"><Icon name="X" size="20" />   </button> 
+                                </div>
                             </div>
                         </div>
+
+                        <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="date_slot.available!=1"> 
+                            <p>What hours are you available?</p>
+                            <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                                    <HbDateTime  
+                                        v-model="time.start"    
+                                        selected = "1" 
+                                        :config="{
+                                            enableTime: true,
+                                            noCalendar: true,
+                                            dateFormat: 'H:i',
+                                            defaultDate: time.start
+                                        }"
+                                        width="45"
+                                        placeholder="Type your schedule title"   
+                                    /> 
+                                    <Icon name="MoveRight" size="20px" /> 
+                                    <HbDateTime  
+                                        v-model="time.end"   
+                                        :label="$tfhb_trans['End']"  
+                                        selected = "1"
+                                        :config="{
+                                            enableTime: true,
+                                            noCalendar: true,
+                                            dateFormat: 'H:i',
+                                            defaultDate: time.end
+                                        }"
+                                        width="45"
+                                        placeholder="Type your schedule title"   
+                                    /> 
+
+                                </div>
+                                <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="emit('add-overrides-time',key)"><Icon name="Plus" size="20px" /> </button> 
+                                </div>
+                                <div v-else class="tfhb-availability-schedule-clone-single">
+                                    <button class="tfhb-availability-schedule-btn" @click="emit('remove-overrides-time', key, tkey)"><Icon name="X" size="20px" /> </button> 
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="tfhb-mark-unavailable tfhb-full-width">
+                            <HbCheckbox 
+                                v-model="date_slot.available"
+                                :label="$tfhb_trans['Mark to Unavailable']"
+                                :name="'mark_unavailable'+key"
+                            />
+                        </div>
+
                     </div>
                 </div>
             </div>
