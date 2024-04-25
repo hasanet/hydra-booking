@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onBeforeMount} from 'vue'
+import {ref, onBeforeMount, reactive} from 'vue'
 import axios from 'axios'  
 import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
@@ -8,7 +8,6 @@ import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import useValidators from '@/store/validator'
 import { Host } from '@/store/hosts';
-import { Availability } from '@/store/availability';
 const { errors, isEmpty } = useValidators();
 
 const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting", "add-overrides-time", "remove-overrides-time"]); 
@@ -28,11 +27,19 @@ const props = defineProps({
 
 });
 
-// Fetch generalSettings
+// Fetch Single Availability while Schdeule on change 
 const Settings_avalibility = ref();
-const fetchAvailabilitySettings = async (setting) => {
+const fetchAvailabilitySettings = async (availability_id) => {
+    let data = {
+        user_id: props.meeting.user_id,
+        availability_id: availability_id
+    };  
     try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+setting); 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/single', data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
         if (response.data.status) { 
             Settings_avalibility.value = response.data;
         }
@@ -40,7 +47,6 @@ const fetchAvailabilitySettings = async (setting) => {
         console.log(error);
     } 
 }
-
 const Settings_Avalibility_Callback = (e) => {
     if(e.target.value){
         fetchAvailabilitySettings(e.target.value);
@@ -52,10 +58,57 @@ const validateSelect = (fieldName) => {
     isEmpty(fieldName, props.meeting[fieldValueKey]);
 };
 
+// Host Wise Availability
+const HostAvailabilities = reactive({});
+const fetchHostAvailability = async (host) => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/'+host); 
+        
+        // Clear existing data before updating
+        for (const key in HostAvailabilities) {
+            delete HostAvailabilities[key];
+        }
+
+        response.data.host.availability.forEach((available, key) => {
+            HostAvailabilities[key] = available.title;
+        });
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
+const Host_Avalibility_Callback = (e) => {
+    if(e.target.value){
+        fetchHostAvailability(e.target.value);
+    }
+}
+
+// Host Default Availability
+const fetchSingleAvailabilitySettings = async (user_id, availability_id) => {
+    let data = {
+        user_id: user_id,
+        availability_id: availability_id
+    };  
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/single', data, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+        if (response.data.status) {    
+            Settings_avalibility.value = response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
 // Mount
 onBeforeMount(() => { 
-    Host.fetchHosts();
-    Availability.fetchAvailability();
+    Host.fetchHosts().then(() => {
+        fetchHostAvailability(props.meeting.host_id);
+        fetchSingleAvailabilitySettings(props.meeting.user_id, props.meeting.availability_id);
+    });
 });
 
 </script>
@@ -74,6 +127,7 @@ onBeforeMount(() => {
             @change="() => validateSelect('host_id')"
             @click="() => validateSelect('host_id')"
             :errors="errors.host_id"
+            @tfhb-onchange="Host_Avalibility_Callback"
         />
 
         <div class="tfhb-availaility-tabs">
@@ -89,7 +143,7 @@ onBeforeMount(() => {
             :label="$tfhb_trans['Choose Schedule']"  
             :selected = "1"
             :placeholder="$tfhb_trans['Choose Schedule']"   
-            :option = "Availability.availabilities" 
+            :option="HostAvailabilities"
             v-if="'settings'==meeting.availability_type"
             @tfhb-onchange="Settings_Avalibility_Callback"
         />
@@ -126,11 +180,6 @@ onBeforeMount(() => {
             
             <div v-for="(time_slot, key) in Settings_avalibility.availability.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
                 <div class="tfhb-swicher-wrap  tfhb-flexbox">
-                    <!-- Checkbox swicher -->
-                    <label class="switch">
-                        <input id="swicher" true-value="1" type="checkbox" v-bind:checked="time_slot.status =='1'">
-                        <span class="slider"></span>
-                    </label>
                     <label class="tfhb-schedule-swicher" for="swicher"> {{time_slot.day}}</label>
                     <!-- Swicher -->
                 </div>
@@ -162,42 +211,67 @@ onBeforeMount(() => {
                 </div>
             </div>
 
-            <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
-                <div class="tfhb-admin-title"> 
-                    <h3 >Yearly dates </h3>  
-                </div>
-                <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
-                    <div class="tfhb-swicher-wrap tfhb-flexbox">
-                        <!-- Checkbox swicher -->
-                        <label class="switch">
-                            <input id="swicher" true-value="1" type="checkbox" v-bind:checked="Settings_avalibility.availability.date_status =='1'">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="tfhb-schedule-swicher"  for="swicher"> Dates</label>
-                        <!-- Swicher -->
-                    </div>
-                    <div class="tfhb-availability-schedule-wrap ">
-                        <div v-for="(date_slot, key) in Settings_avalibility.availability.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                            <div  class="tfhb-availability-schedule-time tfhb-flexbox">
-                                <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
-                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
-                                        <input type="text" data-input="true" class="flatpickr-input" :value="date_slot.start" readonly="readonly">
-                                        <span class="tfhb-flat-icon"><!--v-if-->
-                                        </span>
+            <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline tfhb-full-width">
+                <div class="tfhb-availability-schedule-wrap tfhb-full-width">
+                    <div v-for="(date_slot, key) in Settings_avalibility.availability.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
+                        <div class="tfhb-dates tfhb-full-width">
+                            <p>What dates are you available / unavailable?</p>
+                            <div class="tfhb-flexbox">
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-full-width">
+                                    <div class="tfhb-single-form-field tfhb-full-width">
+                                        <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                            <input type="text" data-input="true" class="flatpickr-input" :value="date_slot.date" readonly="readonly">
+                                            <span class="tfhb-flat-icon"><!--v-if-->
+                                            </span>
+                                        </div>
                                     </div>
+                                    
                                 </div>
+                                
+                            </div>
+                        </div>
 
-                                <Icon name="MoveRight" size="20px" /> 
+                        <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="!date_slot.available"> 
+                            <p>What hours are you available?</p>
+                            <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox">
 
-                                <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
-                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
-                                        <input type="text" data-input="true" class="flatpickr-input" :value="date_slot.end" readonly="readonly">
-                                        <span class="tfhb-flat-icon"><!--v-if-->
-                                        </span>
+                                    <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                                        <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                            <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
+                                            <span class="tfhb-flat-icon"><!--v-if-->
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <Icon name="MoveRight" size="20px" /> 
+
+                                    <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
+                                        <div class="tfhb-single-form-field-wrap tfhb-field-date">
+                                            <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
+                                            <span class="tfhb-flat-icon"><!--v-if-->
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="tfhb-mark-unavailable tfhb-full-width">
+                            <div class="tfhb-single-form-field mark_unavailable" style="width: 100%;">
+                                <div class="tfhb-single-form-field-wrap tfhb-field-checkbox">
+                                    <div class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
+                                        <label for="mark_unavailable">
+                                            <input id="mark_unavailable" name="mark_unavailable" type="checkbox" :checked="date_slot.available ? true : false" disabled>
+                                            <span class="checkmark"></span> Mark to Unavailable <!--v-if-->
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
