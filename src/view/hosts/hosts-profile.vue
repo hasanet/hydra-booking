@@ -2,6 +2,7 @@
 import { reactive, onBeforeMount, ref } from 'vue';
 import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
+import { toast } from "vue3-toastify";
 import Icon from '@/components/icon/LucideIcon.vue'
 
 // Get Current Route url 
@@ -12,20 +13,41 @@ const hostData = reactive({
     id: 0,
     user_id: 0,
     first_name: '',
-    first_name: '',
+    last_name: '',
     email: '',
-    phone_number: '',
     phone_number: '',
     about: '',
     avatar: '',
     featured_image: '',
     time_zone: '',
+    availability_type: 'settings',
+    availability_id: '',
+    availability: [],
     status: '',
 
 });
-const time_zone = reactive({});
-
+const time_zones = reactive({});
 const hostId = route.params.id;
+
+// availability type
+const AvailabilityTabs = (type) => {
+    hostData.availability_type = type
+}
+
+// Save and Update Host Info
+const UpdateHostsInformation = async () => {
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/information/update', hostData);
+        if (response.data.status == true) { 
+            toast.success(response.data.message); 
+        }else{
+            toast.error(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
 
  // Fetch generalSettings
  const fetchHost = async () => {
@@ -33,7 +55,6 @@ const hostId = route.params.id;
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/'+hostId);
         if (response.data.status == true) { 
-            // console.log(response.data.host)
             hostData.id = response.data.host.id;
             hostData.user_id = response.data.host.user_id;
             hostData.first_name = response.data.host.first_name;
@@ -44,8 +65,12 @@ const hostId = route.params.id;
             hostData.avatar = response.data.host.avatar;
             hostData.featured_image = response.data.host.featured_image;
             hostData.status = response.data.host.status;
+            hostData.time_zone = response.data.host.time_zone;
+            hostData.availability = response.data.host.availability;
+            hostData.availability_type = response.data.host.availability_type;
+            hostData.availability_id = response.data.host.availability_id;
             skeleton.value = false;
-            time_zone.data = response.data.time_zone; 
+            time_zones.data = response.data.time_zone; 
         }else{ 
             // return to redirect back route 
             router.push({ name: 'HostsLists' });
@@ -62,6 +87,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
+
     <!-- {{ tfhbClass }} --> 
     <div :class="{ 'tfhb-skeleton': skeleton }" class="tfhb-hydra-wrap tfhbb-host-profile-page ">    
         <div  class="tfhb-dashboard-heading ">
@@ -80,7 +106,13 @@ onBeforeMount(() => {
             </ul>  
         </nav>
         <div class="tfhb-hydra-dasboard-content">      
-            <router-view :hostId ="hostId" :host="hostData" :time_zone="time_zone.data"/>
+            <router-view 
+            :hostId ="hostId" 
+            :host="hostData" 
+            :time_zone="time_zones.data" 
+            @availability-tabs="AvailabilityTabs"
+            @save-host-info="UpdateHostsInformation"
+            />
             
         </div> 
     </div> 

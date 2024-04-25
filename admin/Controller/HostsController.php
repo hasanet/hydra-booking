@@ -265,6 +265,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $host = new Host();
         $HostData = $host->get( $id );
 
+        $_tfhb_host_availability_settings =  get_user_meta($HostData->user_id, '_tfhb_host', true);
+        if(!empty($_tfhb_host_availability_settings['availability'])){
+            $HostData->availability = $_tfhb_host_availability_settings['availability'];
+        }
         if(empty($HostData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
@@ -308,6 +312,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'about' => $request['about'],
             'avatar' => $request['avatar'],
             'featured_image' => $request['featured_image'],
+            'availability_type' => $request['availability_type'],
+            'availability_id' => $request['availability_id'],
             'time_zone' => $request['time_zone'],
             'status' => $request['status'], 
         ];
@@ -317,6 +323,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
         // Update user Option
         $data['host_id'] = $host_id;
+        $data['availability'] = $request['availability'];
         update_user_meta($user_id, '_tfhb_host', $data);
         // Hosts Lists
         $HostsList = $host->get();
@@ -437,8 +444,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Date Slots
         foreach ($request['date_slots'] as $key => $value) {
-            $availability['date_slots'][$key]['start'] = sanitize_text_field($value['start']);
-            $availability['date_slots'][$key]['end'] =  sanitize_text_field($value['end']);
+
+            $availability['date_slots'][$key]['date'] = sanitize_text_field($value['date']);
+            $availability['date_slots'][$key]['available'] =  sanitize_text_field($value['available']);
+
+             foreach ($value['times'] as $key2 => $value2) {
+                $availability['date_slots'][$key]['times'][$key2]['start'] = sanitize_text_field($value2['start']);
+                $availability['date_slots'][$key]['times'][$key2]['end'] = sanitize_text_field($value2['end']);
+             }
  
         }
         
