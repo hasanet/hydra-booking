@@ -197,50 +197,53 @@
                 align-items: baseline !important;
                 border-bottom: 0.5px solid #F6EEF2;
                 padding-bottom: 24px;
-                h3{
-                    font-size: 15px;
-                    font-style: normal;
-                    font-weight: 400 !important;
-                    line-height: 24px;
-                    margin: 0 !important;
-                    width: calc(100% - 20px) !important;
-                }
-                .meeting-user-info{
-                    margin-top: 8px;
-                    ul{
-                        gap: 8px 32px !important;
-                        li{
-                            width: calc(50% - 16px);
-                            .tfhb-flexbox{
-                                gap: 8px !important;
-                                justify-content: unset !important;
-                                .user-info-title{
-                                    color: #765664;
-                                    font-size: 13px;
-                                    font-style: normal;
-                                    font-weight: 400;
-                                    line-height: 20px;
-                                }
-                            }
-                            &.tfhb-booked-items{
-                                width: 100%;
-                                .booked-items{
-                                    border-radius: 16px;
-                                    background: #FEE6F0;
-                                    padding: 4px 8px;
-                                    box-sizing: border-box;
-                                    width: 114px;
-                                    .user-info-icon{
-                                        svg{
-                                            color: #F62881;
-                                        }
-                                    }
+                .single-meeting-content{
+                    width: calc(100% - 20px);
+                    h3{
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 400 !important;
+                        line-height: 24px;
+                        margin: 0 !important;
+                        width: calc(100% - 20px) !important;
+                    }
+                    .meeting-user-info{
+                        margin-top: 8px;
+                        ul{
+                            gap: 8px 32px !important;
+                            li{
+                                width: calc(50% - 16px);
+                                .tfhb-flexbox{
+                                    gap: 8px !important;
+                                    justify-content: unset !important;
                                     .user-info-title{
-                                        color: #F62881;
-                                        font-size: 11px;
+                                        color: #765664;
+                                        font-size: 13px;
                                         font-style: normal;
                                         font-weight: 400;
-                                        line-height: 16px; /* 145.455% */
+                                        line-height: 20px;
+                                    }
+                                }
+                                &.tfhb-booked-items{
+                                    width: 100%;
+                                    .booked-items{
+                                        border-radius: 16px;
+                                        background: #FEE6F0;
+                                        padding: 4px 8px;
+                                        box-sizing: border-box;
+                                        width: 114px;
+                                        .user-info-icon{
+                                            svg{
+                                                color: #F62881;
+                                            }
+                                        }
+                                        .user-info-title{
+                                            color: #F62881;
+                                            font-size: 11px;
+                                            font-style: normal;
+                                            font-weight: 400;
+                                            line-height: 16px; /* 145.455% */
+                                        }
                                     }
                                 }
                             }
