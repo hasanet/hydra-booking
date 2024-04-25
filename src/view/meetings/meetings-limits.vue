@@ -40,7 +40,7 @@ const removeExtraFrequency = (key) => {
             <h2>Meeting Limits</h2> 
             <p>How often attendee can be book</p>
         </div>
-        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-align-baseline tfhb-m-0">  
+        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-align-baseline tfhb-m-0 tfhb-full-width">  
 
             <!-- Buffer time before meeting -->
             <HbSelect 
