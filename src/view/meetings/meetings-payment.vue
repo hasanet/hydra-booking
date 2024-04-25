@@ -48,7 +48,6 @@ const changeTab = (e) => {
                     Payment for this Meeting
                     <HbSwitch 
                         v-model="meeting.payment_status"
-                        width="50"
                     />
                 </h2> 
                 <p>You can enable or disable payment for this meeting by toggle switch</p>

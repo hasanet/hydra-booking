@@ -125,7 +125,6 @@ const removeExtraFrequency = (key) => {
                 Recurring Event
                 <HbSwitch 
                     v-model="meeting.recurring_status"
-                    width="50"
                 />
             </h2> 
             <p>Set up a repeating schedule</p>
