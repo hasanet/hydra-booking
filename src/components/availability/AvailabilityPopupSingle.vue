@@ -243,7 +243,7 @@ const removeOverridesTime = (key, tkey = null) => {
                                     </div>
                                 </div>
 
-                                <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="!date_slot.available"> 
+                                <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="date_slot.available!=1"> 
                                     <p>What hours are you available?</p>
                                     <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
                                         <div class="tfhb-availability-schedule-time tfhb-flexbox">
