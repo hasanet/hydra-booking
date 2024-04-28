@@ -187,9 +187,9 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
                             <label>
-                                <input type="checkbox" :value="shost.id" v-model="filterData.fhosts" @change="Tfhb_Meeting_Select_Filter">
+                                <input type="checkbox" :value="key" v-model="filterData.fhosts" @change="Tfhb_Meeting_Select_Filter">
                                 <span class="checkmark"></span>
-                                {{ shost.first_name }} {{ shost.last_name }}
+                                {{ shost }}
                             </label>
                             <div class="tfhb-category-items">
                                 25
