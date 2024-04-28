@@ -172,6 +172,12 @@ const routes = [
                         name: 'HostsSettingsInformationBuilder',
                         meta: { Capabilities: 'tfhb_manage_settings' },
                         component: () => import('@/components/settings/HostsInformationBuilder.vue')
+                    },
+                    {
+                        path: 'permission',
+                        name: 'HostsSettingsPermission',
+                        meta: { Capabilities: 'tfhb_manage_settings' },
+                        component: () => import('@/components/settings/hostsPermission.vue')
                     }
                 ]
             },
