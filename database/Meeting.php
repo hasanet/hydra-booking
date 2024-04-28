@@ -144,14 +144,14 @@ class Meeting {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
-        
+
         if($id){
             $sql = "SELECT * FROM $table_name WHERE id = $id";
 
             $data = $wpdb->get_row(
                 $wpdb->prepare( $sql )
             );
-        }elseif(!empty($filterData['title']) || !empty($filterData['fhosts']) || !empty($filterData['fcategory']) ){
+        }elseif(!empty($filterData['title']) || !empty($filterData['fhosts']) || !empty($filterData['fcategory']) || (!empty($filterData['startDate']) && !empty($filterData['endDate'])) ){
             $sql = "SELECT * FROM $table_name WHERE";
 
             if (!empty($filterData['title'])) {
@@ -170,7 +170,14 @@ class Meeting {
                 $sql .= (!empty($filterData['title']) || isset($filterData['fhosts'])) ? " AND" : "";
                 $sql .= " meeting_category IN ($category_ids)";
             }
-            
+
+            if (!empty($filterData['startDate']) && !empty($filterData['endDate'])) {
+                // Escape and format dates for SQL query
+                $startDate = date('Y-m-d', strtotime($filterData['startDate']));
+                $endDate = date('Y-m-d', strtotime($filterData['endDate']));
+                $sql .= " JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$startDate'), '$') AND JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$endDate'), '$')";
+            }
+            // var_dump($sql);
             $data = $wpdb->get_results($sql);
 
         }else{
