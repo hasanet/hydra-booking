@@ -766,7 +766,7 @@ const setChartOptions = () => {
                     </div>
                     <div class="thb-admin-btn right"> 
                         <div class="tfhb-dropdown  ">
-                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"> {{ $tfhb_trans['This Week'] }}  <Icon name="ChevronDown" size="15px" /> </a>
+                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"> {{ $tfhb_trans['This Week'] }}  <Icon name="ChevronDown" size="15" /> </a>
                             <div class="tfhb-dropdown-wrap"> 
                                 <!-- route link -->
                                 <span class="tfhb-dropdown-single">Today</span>

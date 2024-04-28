@@ -368,7 +368,7 @@ const fetchDefaultAvailabilitySingle = async (setting) => {
             <p>{{ $tfhb_trans['Set up booking times when you are available'] }}</p>
         </div>
         <div class="thb-admin-btn right"> 
-            <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="15px" /> {{ $tfhb_trans[' Add New Availability'] }}</button> 
+            <button class="tfhb-btn boxed-btn flex-btn" @click="openModal"><Icon name="PlusCircle" size="15" /> {{ $tfhb_trans[' Add New Availability'] }}</button> 
         </div> 
     </div>
 

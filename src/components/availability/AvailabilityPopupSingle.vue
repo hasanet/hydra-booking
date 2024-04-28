@@ -181,7 +181,7 @@ const removeOverridesTime = (key, tkey = null) => {
                                         width="45"
                                         placeholder="Type your schedule title"   
                                     /> 
-                                    <Icon name="MoveRight" size="20px" /> 
+                                    <Icon name="MoveRight" size="20" /> 
                                     <HbDateTime  
                                         v-model="time.end"   
                                         :label="$tfhb_trans['End']"  
@@ -259,7 +259,7 @@ const removeOverridesTime = (key, tkey = null) => {
                                                 width="45"
                                                 placeholder="Type your schedule title"   
                                             /> 
-                                            <Icon name="MoveRight" size="20px" /> 
+                                            <Icon name="MoveRight" size="20" /> 
                                             <HbDateTime  
                                                 v-model="time.end"   
                                                 :label="$tfhb_trans['End']"  

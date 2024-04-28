@@ -27,7 +27,7 @@ const CreateHosts = () => {
                     <h2>{{$tfhb_trans['Add New Host']}}</h2>   
                 </div>
                 <div class="thb-admin-btn right"> 
-                    <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
+                    <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20" /> </button> 
                 </div> 
             </div>
             <div class="tfhb-content-wrap tfhb-flexbox">  

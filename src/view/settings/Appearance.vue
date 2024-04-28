@@ -14,7 +14,7 @@ const router = useRouter();
                 <p>Manage your time zone settings and bookings</p>
             </div>
             <div class="thb-admin-btn right"> 
-                <a href="#" target="_blank" class="tfhb-btn">View Documentation <Icon name="ArrowUpRight" size="15px" /></a>
+                <a href="#" target="_blank" class="tfhb-btn">View Documentation <Icon name="ArrowUpRight" size="15" /></a>
             </div> 
         </div>
         <div class="thb-content-wrap">

@@ -270,6 +270,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Get Host
         $host = new Host();
         $HostData = $host->get( $id );
+       
 
         $_tfhb_host_availability_settings =  get_user_meta($HostData->user_id, '_tfhb_host', true);
         if(!empty($_tfhb_host_availability_settings['availability'])){
@@ -278,14 +279,23 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(empty($HostData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
+        if(!empty($HostData->others_information)){
+            $HostData->others_information = json_decode($HostData->others_information);
+        }
+        
         
         $DateTimeZone = new \DateTimeZone('UTC');
         $time_zone = $DateTimeZone->listIdentifiers();
+
+        // Hosts Global Settings.
+        $_tfhb_hosts_settings = get_option('_tfhb_hosts_settings'); 
+
         // Return response
         $data = array(
             'status' => true, 
             'host' => $HostData,  
-            'time_zone' => $time_zone,  
+            'time_zone' => $time_zone,
+            'hosts_settings' => $_tfhb_hosts_settings,
             'message' => 'Host Data',
         );
         return rest_ensure_response($data);
@@ -295,9 +305,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Update Host Information
     public function updateHostInformation(){
         $request = json_decode(file_get_contents('php://input'), true);
+
+        // return rest_ensure_response($request['others_information']);
         // Check if user is selected
-        $host_id = $request['id'];
-        $user_id = $request['user_id']; 
+        // $host_id = $request['id'];
+        $host_id = $request['user_id']; 
         if (empty($host_id) || $host_id == 0) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
@@ -319,6 +331,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'avatar' => $request['avatar'],
             'featured_image' => $request['featured_image'],
             'availability_type' => $request['availability_type'],
+            'others_information' => json_encode($request['others_information']),
             'availability_id' => $request['availability_id'],
             'time_zone' => $request['time_zone'],
             'status' => $request['status'], 
@@ -330,7 +343,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Update user Option
         $data['host_id'] = $host_id;
         $data['availability'] = $request['availability'];
-        update_user_meta($user_id, '_tfhb_host', $data);
+        update_user_meta($host_id, '_tfhb_host', $data);
         // Hosts Lists
         $HostsList = $host->get();
         // Return response

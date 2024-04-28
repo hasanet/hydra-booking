@@ -35,7 +35,7 @@ const emit = defineEmits([ "modal-close" ]);
                     <slot name="header"> default header </slot>
                 </div>
                 <div class="thb-admin-btn"> 
-                    <span class="tfhb-popup-close tfhb-cursor-pointer" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </span> 
+                    <span class="tfhb-popup-close tfhb-cursor-pointer" @click.stop="emit('modal-close')"><Icon name="X" size="20" /> </span> 
                 </div> 
             </div>
             <div class="tfhb-content-wrap tfhb-flexbox" :style="{ 'gap': gap }">  

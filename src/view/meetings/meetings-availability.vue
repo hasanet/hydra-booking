@@ -313,7 +313,7 @@ onBeforeMount(() => {
                                 width="45"
                                 placeholder="Type your schedule title"   
                             /> 
-                            <Icon name="MoveRight" size="20px" /> 
+                            <Icon name="MoveRight" size="20" /> 
                             <HbDateTime  
                                 v-model="time.end"  
                                 :label="$tfhb_trans['End']"  
@@ -329,10 +329,10 @@ onBeforeMount(() => {
 
                         </div>
                         <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
-                            <button class="tfhb-availability-schedule-btn" @click="emit('availability-time',key)"><Icon name="Plus" size="20px" /> </button> 
+                            <button class="tfhb-availability-schedule-btn" @click="emit('availability-time',key)"><Icon name="Plus" size="20" /> </button> 
                         </div>
                         <div v-else class="tfhb-availability-schedule-clone-single">
-                            <button class="tfhb-availability-schedule-btn" @click="emit('availability-time-del',key, tkey)"><Icon name="X" size="20px" /> </button> 
+                            <button class="tfhb-availability-schedule-btn" @click="emit('availability-time-del',key, tkey)"><Icon name="X" size="20" /> </button> 
                         </div>
                     </div>
                     
@@ -388,7 +388,7 @@ onBeforeMount(() => {
                                         width="45"
                                         placeholder="Type your schedule title"   
                                     /> 
-                                    <Icon name="MoveRight" size="20px" /> 
+                                    <Icon name="MoveRight" size="20" /> 
                                     <HbDateTime  
                                         v-model="time.end"   
                                         :label="$tfhb_trans['End']"  
@@ -405,10 +405,10 @@ onBeforeMount(() => {
 
                                 </div>
                                 <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
-                                    <button class="tfhb-availability-schedule-btn" @click="emit('add-overrides-time',key)"><Icon name="Plus" size="20px" /> </button> 
+                                    <button class="tfhb-availability-schedule-btn" @click="emit('add-overrides-time',key)"><Icon name="Plus" size="20" /> </button> 
                                 </div>
                                 <div v-else class="tfhb-availability-schedule-clone-single">
-                                    <button class="tfhb-availability-schedule-btn" @click="emit('remove-overrides-time', key, tkey)"><Icon name="X" size="20px" /> </button> 
+                                    <button class="tfhb-availability-schedule-btn" @click="emit('remove-overrides-time', key, tkey)"><Icon name="X" size="20" /> </button> 
                                 </div>
                             </div>
                             

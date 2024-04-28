@@ -21,6 +21,8 @@ namespace HydraBooking\Admin\Controller;
             'General Settings' =>  __('General Settings', 'hydra-booking'),
             'Host Settings' =>  __('Host Settings', 'hydra-booking'),
             'Information Builder' =>  __('Information Builder', 'hydra-booking'),
+            'General Information' =>  __('General Information', 'hydra-booking'),
+            'Others Information' =>  __('Others Information', 'hydra-booking'),
             'Manage your time zone settings and bookings' =>  __('Manage your time zone settings and bookings', 'hydra-booking'),
             'Date and Time' =>  __('Date and Time', 'hydra-booking'),
             'Date and Time Settings' =>  __('Date and Time Settings', 'hydra-booking'),

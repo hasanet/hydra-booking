@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onBeforeMount } from 'vue';
+import { reactive, onBeforeMount, ref } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
 import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -19,14 +19,25 @@ const props = defineProps({
         type: Object,
         required: true
     },
-    time_zone:{}
+    time_zone:{},
+    hosts_settings: {
+        type: Object,
+        default: {
+            others_information:{
+                enable_others_information: false,
+                fields: {},
+            }
+        },
+        required: true
+    }, 
 
-});
+}); 
+ 
 
 const imageChange = (attachment) => {  
-    const image = document.querySelector('.'+props.name+'_display'); 
+    const image = document.querySelector('.avatar_display'); 
     image.src = attachment.url; 
-    // props.modelValue = attachment.url; 
+    props.host.avatar = attachment.url; 
 }
 const UploadImage = () => {   
     wp.media.editor.send.attachment = (props, attachment) => { 
@@ -35,15 +46,15 @@ const UploadImage = () => {
     };  
     wp.media.editor.open(); 
 }
+ 
 
 </script>
 
-<template>
+<template>  
     <div class="tfhb-admin-card-box">   
-
         <div class="tfhb-single-form-field-wrap tfhb-flexbox">
             <div class="tfhb-field-image" > 
-                <img  :class="name+'_display'"  :src="host.avatar">
+                <img  class='avatar_display'  :src="host.avatar">
                 <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">Change</button> 
                 <input  type="text"  :v-model="host.avatar"   /> 
 
@@ -55,8 +66,7 @@ const UploadImage = () => {
         </div> 
     </div>
     <div class="tfhb-admin-title" >
-        <h2>{{ $tfhb_trans['Information Builder'] }}    </h2> 
-        <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
+        <h2>{{ $tfhb_trans['General Information'] }}    </h2>  
     </div>
     <div class="tfhb-admin-card-box tfhb-flexbox">  
         <HbText  
@@ -105,6 +115,20 @@ const UploadImage = () => {
         />  
          
     <!-- Time Zone -->
+    </div>  
+    <div v-if="hosts_settings.others_information.enable_others_information == true"  class="tfhb-admin-title" >
+        <h2>{{ $tfhb_trans['Others Information'] }}    </h2>  
+    </div>
+    <div v-if="hosts_settings.others_information.enable_others_information == true && hosts_settings.others_information.fields" class="tfhb-admin-card-box tfhb-flexbox">  
+       <div class="tfhb-host-single-information" v-for="(field, index) in hosts_settings.others_information.fields" :key="index">  
+            <HbText  
+                v-model="host.others_information[field.label]"  
+                :required= "field.required == 1 ? 'true' : 'false'"  
+                :label="field.placeholder"   
+                :placeholder="field.placeholder"  
+            />
+
+       </div>
     </div>  
 
 
