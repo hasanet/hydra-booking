@@ -44,7 +44,7 @@ const props = defineProps({
                     </div>
                     <!-- <button class="tfhb-single-hosts-action"><Icon name="ListCollapse" size="20" /></button> -->
                     <div class="tfhb-single-hosts-action tfhb-dropdown">
-                        <Icon name="ListCollapse" size="20px" /> 
+                        <img :src="$tfhb_url+'/assets/images/more-vertical.svg'" alt="">
                         <div class="tfhb-dropdown-wrap"> 
                             <!-- route link -->
                             <router-link :to="{ name: 'HostsProfile', params: { id: host.user_id } }" class="tfhb-dropdown-single">Edit</router-link>
