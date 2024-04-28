@@ -64,7 +64,7 @@ const copyShortcode = (value) => {
 
         </div>
 
-        <button class="tfhb-btn tfhb-edit flex-btn" @click="isPopup = true" ><Icon name="PencilLine" size="15px" /> Edit </button>
+        <button class="tfhb-btn tfhb-edit flex-btn" @click="isPopup = true" ><Icon name="PencilLine" size="15" /> Edit </button>
 
         <HbPopup :isOpen="isPopup" @modal-close="isPopup = false" max_width="700px" name="first-modal">
             <template #header> 

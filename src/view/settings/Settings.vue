@@ -11,7 +11,7 @@ const event = reactive({
     data : {
         title: 'Hello World',
         description: 'This is a First Event',
-        duration: '20',
+        duration: '2s0',
         location: 'online',
         host: 'sydur',
     }

@@ -459,7 +459,7 @@ const TfhbPrevNavigator = () => {
         <div class="tfhb-meeting-create-notice tfhb-mb-32">
             <div class="tfhb-meeting-heading tfhb-flexbox">
                 <div class="prev-navigator" @click="TfhbPrevNavigator()">
-                    <Icon name="ArrowLeft" size="20px" /> 
+                    <Icon name="ArrowLeft" size="20" /> 
                 </div>
                 <h3>Create One-to-One booking type</h3>
             </div>

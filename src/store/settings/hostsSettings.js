@@ -44,10 +44,8 @@ const hostsSettings = reactive({
                 } 
             } );
     
-            if (response.data.status) { 
-                alert(1);
-                console.log(response.data)
-                // toast.success(response.data.message);
+            if (response.data.status) {   
+                toast.success(response.data.message);
             }
         } catch (error) {
 
