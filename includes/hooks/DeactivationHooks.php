@@ -32,6 +32,8 @@ class DeactivationHooks{
         $role->remove_cap( 'tfhb_manage_booking' );
         $role->remove_cap( 'tfhb_manage_settings' ); 
         $role->remove_cap( 'tfhb_manage_hosts' );
+        $role->remove_cap( 'tfhb_manage_custom_availability' );
+        $role->remove_cap( 'tfhb_manage_integrations' );
     }
     
 }

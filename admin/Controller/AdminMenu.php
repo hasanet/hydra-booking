@@ -23,8 +23,8 @@ namespace HydraBooking\Admin\Controller;
     public function admin_menu() {
 
         // Get User Role
-        $userRole = $this->auth->userRole();
-
+        // $userRole = $this->auth->userAllCaps();
+         
         add_menu_page(
             esc_html__('Hydra Booking', 'thb-hydra-booking'),
             esc_html__('Hydra Booking', 'thb-hydra-booking'),
@@ -40,7 +40,7 @@ namespace HydraBooking\Admin\Controller;
             "hydra-booking",
             esc_html__("Dashboard", "dashboardpress"),
             esc_html__("Dashboard", "dashboardpress"),
-            "tfhb_manage_options",
+            "tfhb_manage_dashboard",
             "hydra-booking#",
             array($this, "hydra_booking_page")
         );
@@ -49,17 +49,17 @@ namespace HydraBooking\Admin\Controller;
             array(
                 'id' => 'meetings',
                 'Title' => esc_html__('Meetings', 'thb-hydra-booking'),
-                'capability' => 'tfhb_manage_options', 
+                'capability' => 'tfhb_manage_meetings', 
             ), 
             array(
                 'id' => 'booking',
                 'Title' => esc_html__('Booking', 'thb-hydra-booking'),
-                'capability' => 'tfhb_manage_options', 
+                'capability' => 'tfhb_manage_booking', 
             ), 
             array(
                 'id' => 'hosts',
                 'Title' => esc_html__('Hosts', 'thb-hydra-booking'),
-                'capability' => 'tfhb_manage_options', 
+                'capability' => 'tfhb_manage_hosts', 
             ),  
             array(
                 'id' => 'settings',

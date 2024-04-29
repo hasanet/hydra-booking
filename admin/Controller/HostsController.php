@@ -58,8 +58,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         register_rest_route('hydra-booking/v1', '/hosts/availability/update', array(
             'methods' => 'POST',
-            'callback' => array($this, 'UpdateAvailabilitySettings'),
-            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+            'callback' => array($this, 'UpdateAvailabilitySettings'), 
+            'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
 
         register_rest_route('hydra-booking/v1', '/hosts/availability', array(
@@ -85,13 +85,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         register_rest_route('hydra-booking/v1', '/hosts/integration', array(
             'methods' => 'POST',
             'callback' => array($this, 'GetIntegrationSettings'),
-            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+            'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
 
         register_rest_route('hydra-booking/v1', '/hosts/integration/update', array(
             'methods' => 'POST',
             'callback' => array($this, 'UpdateIntegrationSettings'),
-            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+            'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
         
         register_rest_route('hydra-booking/v1', '/hosts/filter', array(
@@ -440,6 +440,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Update Availability Settings.
     public function UpdateAvailabilitySettings(){
         $request = json_decode(file_get_contents('php://input'), true);
+ 
         // senitaized
         if(!isset($request['host'])){
             // response
@@ -447,9 +448,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'status' => false,  
                 'message' => 'Something Went Wrong, Please Try Again Later.',  
             );
-            return rest_ensure_response($data);
         }
-
+ 
         $_tfhb_host_info = get_user_meta($request['user_id'], '_tfhb_host', true);
         $tfhb_host_availability = !empty($_tfhb_host_info['availability']) ? $_tfhb_host_info['availability'] : [];
 

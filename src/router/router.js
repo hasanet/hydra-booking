@@ -74,7 +74,7 @@ const routes = [
                     {
                         path: 'integrations',
                         name: 'HostsProfileIntegrations',
-                        meta: { Capabilities: 'tfhb_manage_options' },
+                        meta: { Capabilities: 'tfhb_manage_integrations' },
                         component: () => import('../view/hosts/hosts-integrations.vue')
                     }, 
                 ]
@@ -220,7 +220,7 @@ const router = createRouter({
 // Navigation guards to check authentication status
 router.beforeEach(async (to, from, next) => { 
 
-  
+//   alert('to.meta.Capabilities: ' + to.meta.Capabilities);
     if (to.meta.Capabilities === undefined) {
         // If no capabilities are defined for the route, proceed to the next route
         next();
@@ -232,12 +232,10 @@ router.beforeEach(async (to, from, next) => {
         await AuthData.fetchAuth();
 
         // Check if the user has the required capabilities for the route
-        const hasCapabilities = AuthData.Capabilities(to.meta.Capabilities);  
-        
-        
+        const hasCapabilities = AuthData.Capabilities(to.meta.Capabilities);   
         if (hasCapabilities) {
             // Host Route for if use is host 
-            if(  user_role == 'tfhb_host' && to.name == 'HostsLists' ){  
+            if(  user_role == 'tfhb_host' && to.name == 'HostsLists' ){
                 // next({ name: 'HostsProfile', params: { id: user_id } }); 
                 next({ name: 'HostsProfile', params: { id: user_id } });
         

@@ -54,9 +54,18 @@ class AuthController {
     
   }
   public function userAllCaps( ) {    
-    
+     
     $user = wp_get_current_user();
     return $user->allcaps;
+    
+  }
+
+  // Update Host Role Capabilities
+  public function updateHostRoleCapabilities($role, $caps) {     
+    $role = get_role($role);
+    foreach ($caps as $cap => $status) {
+      $role->add_cap($cap, $status);
+    }
     
   }
  

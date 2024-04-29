@@ -230,11 +230,11 @@ const fetchDefaultAvailabilitySingle = async (setting) => {
 
 <template>
 <div class="tfhb-host-availability">
-
+ 
     <div class="tfhb-availaility-tabs tfhb-mb-24">
         <ul class="tfhb-flexbox tfhb-gap-16 tfhb-justify-normal">
             <li class="tfhb-flexbox tfhb-gap-8" :class="'settings'==host.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'settings')"><Icon name="Heart" :width="20" /> Use existing availability</li>
-            <li class="tfhb-flexbox tfhb-gap-8" :class="'custom'==host.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'custom')"><Icon name="PencilLine" :width="20" /> Custom availability</li>
+            <li v-if="true == $user.caps.tfhb_manage_custom_availability" class="tfhb-flexbox tfhb-gap-8" :class="'custom'==host.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'custom')"><Icon name="PencilLine" :width="20" /> Custom availability</li>
         </ul>
     </div>
 
@@ -362,7 +362,7 @@ const fetchDefaultAvailabilitySingle = async (setting) => {
     </div>  
 
 
-    <div class="tfhb-dashboard-heading" v-if="'custom'==host.availability_type">
+    <div class="tfhb-dashboard-heading" v-if="'custom'==host.availability_type && true == $user.caps.tfhb_manage_custom_availability">
         <div class="tfhb-admin-title"> 
             <h3 >{{ $tfhb_trans['Availability'] }}</h3> 
             <p>{{ $tfhb_trans['Set up booking times when you are available'] }}</p>

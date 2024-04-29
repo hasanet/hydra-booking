@@ -23,10 +23,10 @@ const updateHosts = async () => {
 }
 </script>
 <template> 
-    <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard "> 
-        <div  class="tfhb-dashboard-heading ">
-            <div class="tfhb-admin-title"> 
-                <h1 >{{ $tfhb_trans[' Host Settings'] }}</h1> 
+    <div :class="{ 'tfhb-skeleton': hostsSettings.skeleton }" class="thb-host-dashboard "> 
+        <div  class="tfhb-dashboard-heading tfhb-mb-16">
+            <div class="tfhb-admin-title "> 
+                <h1 >{{ $tfhb_trans['Host Settings'] }}</h1> 
                 <p>{{ $tfhb_trans['One-liner description'] }}</p>
             </div>
             <div class="thb-admin-btn right"> 

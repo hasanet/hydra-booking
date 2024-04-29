@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from "vue3-toastify"; 
 
 const hostsSettings = reactive({
+    skeleton: true,
     settings: {
         others_information: {
             enable_others_information: false, 
@@ -12,9 +13,9 @@ const hostsSettings = reactive({
             tfhb_manage_dashboard: true,
             tfhb_manage_meetings: true,
             tfhb_manage_booking: true,
-            tfhb_manage_settings: true, 
-            tfhb_manage_custom_availability: true,
-            tfhb_manage_integrations: true,
+            tfhb_manage_settings: false, 
+            tfhb_manage_custom_availability: false,
+            tfhb_manage_integrations: false,
 
         }
     }, 
@@ -34,6 +35,7 @@ const hostsSettings = reactive({
                     this.settings.others_information.enable_others_information = response.data.hosts_settings.others_information.enable_others_information;
                     this.settings.others_information.fields = response.data.hosts_settings.others_information.fields;
                     this.settings.permission = response.data.hosts_settings.permission;
+                    this.skeleton = false;
                 }
                  
             }

@@ -25,6 +25,7 @@ use HydraBooking\Admin\Controller\AuthController;
         $user_auth = array(
             'id' => $user->userID(),
             'role' =>  $user->userRole(), 
+            'caps' =>  $user->userAllCaps(),
         ); 
 
         wp_enqueue_script('thb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);

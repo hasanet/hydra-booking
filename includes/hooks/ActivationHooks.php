@@ -40,12 +40,15 @@ class ActivationHooks{
             'update_core' => false, // user cant perform core updates  
             'manage_options' => true,
 
+            // Custom Capabilities
             'tfhb_manage_options' => true, // true allows this capability.
             'tfhb_manage_dashboard' => true, // true allows this capability.
             'tfhb_manage_meetings' => true, // true allows this capability.
             'tfhb_manage_booking' => true, // true allows this capability.
             'tfhb_manage_settings' => false, // true allows this capability.
             'tfhb_manage_hosts' => true, // true allows this capability.
+            'tfhb_manage_custom_availability' => true, // true allows this capability.
+            'tfhb_manage_integrations' => true, // true allows this capability.
         ));
     }
 
@@ -59,6 +62,9 @@ class ActivationHooks{
         $role->add_cap( 'tfhb_manage_booking' );
         $role->add_cap( 'tfhb_manage_settings' ); 
         $role->add_cap( 'tfhb_manage_hosts' );
+        $role->add_cap( 'tfhb_manage_custom_availability' );
+        $role->add_cap( 'tfhb_manage_integrations' );
+
     }
     
 }

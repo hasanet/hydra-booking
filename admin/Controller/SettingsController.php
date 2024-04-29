@@ -5,6 +5,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\RouteController;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
+ use HydraBooking\Admin\Controller\AuthController;
  use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  // Use DB 
 use HydraBooking\DB\Availability;
@@ -508,12 +509,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
 
         if(isset($request['hosts_settings']['permission'])){
-            $_tfhb_hosts_settings['permission']['tfhb_manage_dashboard'] = sanitize_text_field($request['hosts_settings']['permission']['tfhb_manage_dashboard']);
-            $_tfhb_hosts_settings['permission']['tfhb_manage_meetings'] = sanitize_text_field($request['hosts_settings']['permission']['tfhb_manage_meetings']);
-            $_tfhb_hosts_settings['permission']['tfhb_manage_booking'] = sanitize_text_field($request['hosts_settings']['permission']['tfhb_manage_booking']);
-            $_tfhb_hosts_settings['permission']['tfhb_manage_settings'] = sanitize_text_field($request['hosts_settings']['permission']['tfhb_manage_settings']);
-            $_tfhb_hosts_settings['permission']['tfhb_manage_custom_availability'] = sanitize_text_field($request['hosts_settings']['permission']['tfhb_manage_custom_availability']);
-            $_tfhb_hosts_settings['permission']['tfhb_manage_integrations'] = sanitize_text_field($request['hosts_settings']['permission']['tfhb_manage_integrations']); 
+            $_tfhb_hosts_settings['permission']['tfhb_manage_dashboard'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_dashboard']);
+            $_tfhb_hosts_settings['permission']['tfhb_manage_meetings'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_meetings']);
+            $_tfhb_hosts_settings['permission']['tfhb_manage_booking'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_booking']);
+            $_tfhb_hosts_settings['permission']['tfhb_manage_settings'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_settings']);
+            $_tfhb_hosts_settings['permission']['tfhb_manage_custom_availability'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_custom_availability']);
+            $_tfhb_hosts_settings['permission']['tfhb_manage_integrations'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_integrations']); 
+
+            // update role capabilities
+            $AuthController = new AuthController();
+            $AuthController->updateHostRoleCapabilities('tfhb_host', $_tfhb_hosts_settings['permission']); 
         }
 
          

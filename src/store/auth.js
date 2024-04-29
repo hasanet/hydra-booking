@@ -35,7 +35,7 @@ const AuthData = reactive({
         //     console.error('Error fetching Hosts:', error);
         // }
     },
-    Capabilities(cap) { 
+    Capabilities(cap) {  
         if( cap == ''){
             return true;
         }

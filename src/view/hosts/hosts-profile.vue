@@ -71,7 +71,7 @@ const UpdateHostsInformation = async () => {
             hostData.availability = response.data.host.availability;
             hostData.availability_type = response.data.host.availability_type;
             hostData.availability_id = response.data.host.availability_id;
-            hostData.others_information = response.data.host.others_information;
+            hostData.others_information = response.data.host.others_information != null ? response.data.host.others_information : {};
             skeleton.value = false;
             time_zones.data = response.data.time_zone; 
             hosts_settings.data = response.data.hosts_settings; 
@@ -105,7 +105,7 @@ onBeforeMount(() => {
                 
                 <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/information'" exact :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/information' }"> <Icon name="UserRound" /> Information</router-link></li> 
                 <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/availability'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/availability' }"> <Icon name="Clock" /> Availability</router-link></li>  
-                <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> <Icon name="Unplug" /> Integrations</router-link></li>  
+                <li v-if="true == $user.caps.tfhb_manage_integrations"><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> <Icon name="Unplug" /> Integrations</router-link></li>  
 
             </ul>  
         </nav>

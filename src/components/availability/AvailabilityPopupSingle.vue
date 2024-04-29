@@ -26,7 +26,8 @@ const UpdateAvailabilitySettings = async () => {
         if(props.is_host){
             const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/update', props.availabilityDataSingle, {
                 headers: {
-                    'X-WP-Nonce': tfhb_core_apps.rest_nonce
+                    'X-WP-Nonce': tfhb_core_apps.rest_nonce,
+                    'capability': 'tfhb_manage_custom_availability'
                 } 
             } );
             if (response.data.status) {    
@@ -58,7 +59,7 @@ const UpdateAvailabilitySettings = async () => {
         }
         
     } catch (error) {
-        toast.error('Action successful', {
+        toast.error(error.message, {
             position: 'bottom-right', // Set the desired position
         });
     }
