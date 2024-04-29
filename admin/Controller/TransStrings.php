@@ -45,6 +45,12 @@ namespace HydraBooking\Admin\Controller;
             'Mail Body' =>  __('Mail Body', 'hydra-booking'),
             'Update' =>  __('Update', 'hydra-booking'),
             'Mark to Unavailable' => __('Mark to Unavailable', 'hydra-booking'),
+            'Host Can Manage Dashboard' => __('Host Can Manage Dashboard', 'hydra-booking'),
+            'Host Can Manage Meetings' => __('Host Can Manage Meetings', 'hydra-booking'),
+            'Host Can Manage Booking' => __('Host Can Manage Booking', 'hydra-booking'),
+            'Host Can Manage Settings' => __('Host Can Manage Settings', 'hydra-booking'),
+            'Host Can Manage Custom Availability' => __('Host Can Manage Custom Availability', 'hydra-booking'),
+            'Host Can Manage Integrations' => __('Host Can Manage Integrations', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),
