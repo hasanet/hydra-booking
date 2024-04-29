@@ -1,13 +1,15 @@
 <script setup>
 import { ref, reactive, onBeforeMount, } from 'vue';  
 import Icon from '@/components/icon/LucideIcon.vue' 
+import { useRouter, RouterView } from 'vue-router' 
+const router = useRouter();
 
 const meeting = reactive({});
 const emit = defineEmits(["modal-close", "meetings-create"]); 
 
-const TfhbMeetingType = (type) => {
+const TfhbMeetingType = (type, router) => {
     meeting.meeting_type = type;
-    emit('meetings-create', meeting);
+    emit('meetings-create', meeting, router);
 }
 
 
@@ -24,7 +26,7 @@ const TfhbMeetingType = (type) => {
                 </div>
             </div>
             <div class="tfhb-meeting-person-type">
-                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24" @click="TfhbMeetingType('one-to-one')">
+                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24" @click="TfhbMeetingType('one-to-one', router)">
                     <div class="tfhb-meeting-type-content">
                         <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-8">
                             <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-4">
@@ -42,7 +44,7 @@ const TfhbMeetingType = (type) => {
                 </div>
             </div>
             <div class="tfhb-meeting-person-type">
-                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24" @click="TfhbMeetingType('one-to-group')">
+                <div class="tfhb-meeting-type-card tfhb-flexbox tfhb-gap-32 tfhb-p-24" @click="TfhbMeetingType('one-to-group', router)">
                     <div class="tfhb-meeting-type-content">
                         <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-8">
                             <div class="tfhb-flexbox tfhb-justify-normal tfhb-gap-4">
