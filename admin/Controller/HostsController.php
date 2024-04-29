@@ -448,6 +448,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'status' => false,  
                 'message' => 'Something Went Wrong, Please Try Again Later.',  
             );
+            return rest_ensure_response($data);
         }
  
         $_tfhb_host_info = get_user_meta($request['user_id'], '_tfhb_host', true);

@@ -116,10 +116,10 @@ const UploadImage = () => {
          
     <!-- Time Zone -->
     </div>  
-    <div v-if="hosts_settings.others_information.enable_others_information == true"  class="tfhb-admin-title" >
+    <div v-if="hosts_settings.others_information && hosts_settings.others_information.enable_others_information == true"  class="tfhb-admin-title" >
         <h2>{{ $tfhb_trans['Others Information'] }}    </h2>  
     </div>
-    <div v-if="hosts_settings.others_information.enable_others_information == true && hosts_settings.others_information.fields" class="tfhb-admin-card-box tfhb-flexbox">  
+    <div v-if="hosts_settings.others_information && hosts_settings.others_information.enable_others_information == true && hosts_settings.others_information.fields" class="tfhb-admin-card-box tfhb-flexbox">  
        <div class="tfhb-host-single-information" v-for="(field, index) in hosts_settings.others_information.fields" :key="index">  
             <HbText  
                 v-model="host.others_information[field.label]"  
