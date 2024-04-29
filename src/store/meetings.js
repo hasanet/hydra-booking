@@ -6,7 +6,7 @@ import axios from 'axios'
 const Meeting = reactive({
     meetings: [],
     meetingCategory: [],
-    
+
     // Meeting List
     async fetchMeetings() {
         const apiUrl = tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists';
