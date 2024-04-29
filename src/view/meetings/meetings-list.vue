@@ -1,14 +1,11 @@
 <script setup>
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
 import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import CreateMeetingPopup from '@/components/meetings/CreateMeetingPopup.vue';
-import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts'
-
-const router = useRouter();
+import { Meeting } from '@/store/meetings'
 
 const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
@@ -23,88 +20,10 @@ const closeModal = () => {
   isModalOpened.value = false;
 };
 
-// Fetch Meetings List
-const meetings = reactive({}); 
-const fetchMeetings = async () => {
-    try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists');
-        if (response.data.status) { 
-            meetings.data = response.data.meetings;  
-            skeleton.value = false;
-        }
-    } catch (error) {
-        console.log(error);
-    } 
-} 
-
-// Meeting_data
-const meeting = reactive({});
-const CreateMeeting = async (type) => {    
-   meeting.data = type
-   try { 
-        // axisos sent dataHeader Nonce Data
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/create', meeting, {
-            headers: {
-                'X-WP-Nonce': tfhb_core_apps.rest_nonce
-            } 
-        } );
-
-        if (response.data.status) {  
-            toast.success(response.data.message, {
-                position: 'bottom-right', // Set the desired position
-                "autoClose": 1500,
-            });  
-            closeModal(); 
-            router.push({ name: 'MeetingsCreate', params: { id: response.data.id} });
-        }else{
-            toast.error(response.data.message, {
-                position: 'bottom-right', // Set the desired position
-                "autoClose": 1500,
-            });
-        }
-    } catch (error) {
-        console.log(error);
-    }   
-}
-
-
-// Delete Meeting 
-const deleteMeeting = async ($id, $post_id) => { 
-    let deleteMeeting = {
-        id: $id,
-        post_id: $post_id
-    }
-    try { 
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/delete', deleteMeeting, {
-               
-        } );
-        if (response.data.status) { 
-            meetings.data = response.data.meetings;  
-            toast.success(response.data.message); 
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-// Fetch Meetings Category
-const meetingCategory = reactive({}); 
-const fetchMeetingCategory = async () => {
-    try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/categories');
-        if (response.data.status) { 
-            meetingCategory.data = response.data.category;  
-        }
-    } catch (error) {
-        console.log(error);
-    } 
-} 
-
-
 onBeforeMount(() => { 
-    fetchMeetings();
-    fetchMeetingCategory();
     Host.fetchHosts();
+    Meeting.fetchMeetings();
+    Meeting.fetchMeetingCategory()
 });
 
 // Filtering
@@ -115,45 +34,7 @@ const filterData = reactive({
     startDate: '',
     endDate: ''
 })
-const Tfhb_Meeting_Filter = async (e) =>{
-    filterData.title=e.target.value;
-    skeleton.value = true;
-    try {
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
-            params: {
-                filterData
-            },
-        });
-        
-        if (response.data.status) { 
-            meetings.data = response.data.meetings;  
-            skeleton.value = false;
-        }
 
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-const Tfhb_Meeting_Select_Filter = async (e) =>{
-
-    skeleton.value = true;
-    try {
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/filter', {
-            params: {
-                filterData
-            },
-        });
-        
-        if (response.data.status) { 
-            meetings.data = response.data.meetings;  
-            skeleton.value = false;
-        }
-
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
 
 </script>
 <template>
@@ -166,7 +47,7 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
                 Filter
             </div>
             <div class="tfhb-header-filters">
-                <input type="text" @keyup="Tfhb_Meeting_Filter" placeholder="Search by meeting title" /> 
+                <input type="text" v-model="filterData.title" @keyup="Meeting.Tfhb_Meeting_Filter(filterData)" placeholder="Search by meeting title" /> 
                 <span><Icon name="Search" size="20" /></span>
             </div>
         </div>
@@ -175,7 +56,7 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
         </div> 
     </div>
 
-    <CreateMeetingPopup v-if="isModalOpened" @modal-close="closeModal" @meetings-create="CreateMeeting"  />
+    <CreateMeetingPopup v-if="isModalOpened" @modal-close="closeModal" @meetings-create="Meeting.CreatePopupMeeting"  />
 
     <div class="tfhb-filter-box-content tfhb-mt-32" v-show="FilterPreview">
         <div class="tfhb-filter-form">
@@ -187,7 +68,7 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
                             <label>
-                                <input type="checkbox" :value="key" v-model="filterData.fhosts" @change="Tfhb_Meeting_Select_Filter">
+                                <input type="checkbox" :value="key" v-model="filterData.fhosts" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
                                 <span class="checkmark"></span>
                                 {{ shost }}
                             </label>
@@ -205,9 +86,9 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
                 </div>
                 <div class="tfhb-filter-category-box" v-show="FilterCatgoryPreview">
                     <ul class="tfhb-flexbox">
-                        <li class="tfhb-flexbox" v-for="(mcategory, key) in meetingCategory.data" :key="key">
+                        <li class="tfhb-flexbox" v-for="(mcategory, key) in Meeting.meetingCategory.data" :key="key">
                             <label>
-                                <input type="checkbox" :value="mcategory.id" v-model="filterData.fcategory" @change="Tfhb_Meeting_Select_Filter">
+                                <input type="checkbox" :value="mcategory.id" v-model="filterData.fcategory" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
                                 <span class="checkmark"></span>
                                 {{ mcategory.name }}
                             </label>
@@ -252,11 +133,11 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
         </div>
     </div>
 
-    <div class="tfhb-meetings-list-content" :class="{ 'tfhb-skeleton': skeleton }">
+    <div class="tfhb-meetings-list-content" v-if="Meeting.meetings.length > 0">
         <div class="tfhb-meetings-list-wrap tfhb-flexbox tfhb-justify-normal">
 
             <!-- Single Meeting -->
-            <div class="tfhb-single-meeting" v-for="(smeeting, key) in meetings.data"> 
+            <div class="tfhb-single-meeting" v-for="(smeeting, key) in Meeting.meetings"> 
                 <div class="single-meeting-content-box tfhb-flexbox">
                     <div class="single-meeting-content">
                         <h3> {{ smeeting.title ? smeeting.title : 'No Title' }} </h3>
@@ -333,7 +214,7 @@ const Tfhb_Meeting_Select_Filter = async (e) =>{
                             <!-- route link -->
                             <router-link :to="{ name: 'MeetingsCreate', params: { id: smeeting.id } }" class="tfhb-dropdown-single">Edit</router-link>
                             
-                            <span class="tfhb-dropdown-single" @click="deleteMeeting(smeeting.id, smeeting.post_id)">Delete</span>
+                            <span class="tfhb-dropdown-single" @click="Meeting.deleteMeeting(smeeting.id, smeeting.post_id)">Delete</span>
                         </div>
                     </div>
                 </div>
