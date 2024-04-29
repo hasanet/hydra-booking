@@ -32,7 +32,7 @@ class ComposerStaticInitf230e5d46c73a3bfe303ee4885dd24a1
         ),
         'HydraBooking\\DB\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/database',
+            0 => __DIR__ . '/../..' . '/includes/database',
         ),
         'HydraBooking\\Admin\\' => 
         array (

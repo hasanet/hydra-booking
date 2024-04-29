@@ -6,7 +6,7 @@
     "autoload": {
         "psr-4": {
             "HydraBooking\\Admin\\": "admin/",
-            "HydraBooking\\DB\\": "database/",
+            "HydraBooking\\DB\\": "includes/database/",
             "HydraBooking\\Services\\": "includes/services/",
             "HydraBooking\\PostType\\": "includes/post-type/",
             "HydraBooking\\Hooks\\": "includes/hooks/"
