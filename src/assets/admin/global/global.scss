@@ -34,7 +34,7 @@
     h5,
     h6 {
         font-weight: 600;
-        color: #3F2731;
+        color: $ui800;
         margin: 4px 0;
     }
 
@@ -44,12 +44,12 @@
         font-weight: 400;
         font-size: 13px;
         line-height: 20px;
-        color: #765664;
+        color: $ui600;
         margin: 4px 0;
     }
 
     label {
-        color: #3F2731;
+        color: $ui800;
     }
 
     h1 {
@@ -132,13 +132,13 @@
         margin-bottom: 16px;
     }
     .tfhb-mail-shortcode-badge {
-        background-color: #FAF5F7;
+        background-color: $ui25;
         padding: 4px 8px 4px 8px;
         border-radius: 8px;
         cursor: pointer;
     }
     .tfhb-mail-shortcode-badge:hover {
-        background-color: #FEE6F0;
+        background-color: $primaryi50;
     }
 
     .tfhb-border-none{
@@ -170,12 +170,12 @@
 	.tfhb-admin-card-box {
         padding: 24px;
         border-radius: 8px;
-        border: 1px solid #F6EEF2;
+        border: 1px solid $ui50;
         margin-bottom: 32px;
     }
     .tfhb-booking-tabs {
-        background: #faf5f7;
-        border: 1px solid #f6eef2;
+        background: $ui25;
+        border: 1px solid $ui50;
         border-radius: 8px;
         padding: 6px;
         margin-bottom: 24px;
@@ -192,13 +192,13 @@
               align-items: center;
               gap: 8px;
               border-radius: 4px;
-              color: #8f707d;
+              color: $ui500;
               font-weight: 400;
               &.active {
-                background-color: #fee6f0;
+                background-color: $primaryi50;
                 box-shadow: 0px 1px 2px 0px #28101a0f;
                 box-shadow: 0px 1px 3px 0px #28101a1a;
-                color: #f62881;
+                color: $primaryi;
               }
             }
           }
@@ -224,7 +224,7 @@
                 padding: 8px 24px 8px 24px;
                 background-color: #fff;
                 border-radius: 8px;
-                border: 1px solid #F6EEF2;
+                border: 1px solid $ui50;
                 font-size: 15px !important;
               }
               .tfhb-calender-move-icon {
@@ -238,7 +238,7 @@
             right:  0;
             width: 120px;
             box-shadow: 0px 15px 30px 0px #28101A1A;
-            background-color: #FAF5F7;
+            background-color: $ui25;
             padding: 2px;
             border-radius: 6px;
             display: flex;
@@ -260,7 +260,7 @@
                 background-color: #fff;
                 margin: 0 !important;
                 &:hover {
-                    background-color: #FAF5F7;
+                    background-color: $ui25;
                 }
                 .tfhb-filter-dates{
 
@@ -299,7 +299,7 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background-color: #E3CFD7;
+                background-color: $ui150;
                 -webkit-transition: .4s;
                 transition: .4s;
                 border-radius: 10px;
@@ -311,7 +311,7 @@
                     width: 14px;
                     left: 4px;
                     bottom: 3px;
-                    background-color: #FFFFFF;
+                    background-color: #ffffff;
                     -webkit-transition: .4s;
                     transition: .4s;
                     border-radius: 50%;
@@ -319,7 +319,7 @@
                 
             }
             input:checked + .slider {
-                background-color: #F62881;
+                background-color: $primaryi;
             }
             input:focus + .slider {
                 box-shadow: none;
@@ -368,7 +368,7 @@
                     select{
                         margin: 0px !important;
                         border-radius: 8px;
-                        border: 1px solid #F6EEF2;
+                        border: 1px solid $ui50;
                     }
                 }
             }
@@ -417,7 +417,7 @@
 		.tfhb-popup-wrap {
 			max-width: 800px;
 			padding: 24px;
-			background-color: #FFFFFF;
+			background-color: #ffffff;
 			box-shadow: 0px 8px 30px 0px rgba(40, 16, 26, 0.1019607843); 
 			overflow: auto;
 			margin: 50px auto; 
@@ -442,7 +442,7 @@
         position: relative;
         input {
           padding: 8px 32px 8px 12px;
-          border: 1px solid #f6eef2;
+          border: 1px solid $ui50;
           background-color: #ffffff;
           border-radius: 8px;
           width: 100%;
@@ -459,7 +459,7 @@
           right: 10px;
           top: 9px;
           margin: 0 !important;
-          color: #765664 !important;
+          color: $ui600 !important;
         }
       }
 
@@ -476,13 +476,13 @@
                 .tfhb-single-notification {
                     align-items: normal !important;
                     padding: 16px;
-                    border: 1px solid #F6EEF2;
+                    border: 1px solid $ui50;
                     margin-bottom: 16px;
                     border-radius: 12px;
                     transition: 0.5s;
                     &:hover {
-                        background: #FAF5F7;
-                        border-color: #F6EEF2;
+                        background: $ui25;
+                        border-color: $ui50;
                     }
                     .tfhb-single-notification-img {
                         width: 32px;
@@ -523,10 +523,10 @@
             margin-top: 4px;
             .tfhb-counter{
                 border-radius: 4px 0px 0px 4px;
-                border-top: 1px solid #F6EEF2;
-                border-bottom: 1px solid #F6EEF2;
-                border-left: 1px solid #F6EEF2;
-                background: #FAF5F7;
+                border-top: 1px solid $ui50;
+                border-bottom: 1px solid $ui50;
+                border-left: 1px solid $ui50;
+                background: $ui25;
                 height: 40px;
                 width: calc(100% - 174px);
                 padding: 8px 12px;
@@ -541,7 +541,7 @@
                 margin-top: 0 !important;
                 border-radius: 0px 4px 4px 0px !important; 
                 height: 40px !important;
-                border: 1px solid #F6EEF2 !important;
+                border: 1px solid $ui50 !important;
                 border-left: 0px solid !important;
                 &:focus, &:active {
                     outline: none;
@@ -590,14 +590,14 @@
         li{
             padding: 8px 12px;
             border-radius: 4px;
-            background: #FFF;
+            background: #fff;
             box-shadow: 0px 1px 3px 0px rgba(40, 16, 26, 0.10), 0px 1px 2px 0px rgba(40, 16, 26, 0.06);
             cursor: pointer;
             &.active{
-                background: #FEE6F0;
+                background: $primaryi50;
                 /* Button/Active */
                 box-shadow: 0px 1px 3px 0px rgba(40, 16, 26, 0.10), 0px 1px 2px 0px rgba(40, 16, 26, 0.06);
-                color: #F62881;
+                color: $primaryi;
             }
         }
     }

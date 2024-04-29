@@ -11,16 +11,16 @@
                     padding: 8px 8px 8px 12px;
                     min-width: 100%;
                     border-radius: 4px;
-                    border: 1px solid #F6EEF2;
+                    border: 1px solid $ui50;
                     background-color: transparent;
                     line-height: 20px;
                     height: 40px;
                     margin: 0;
                     box-shadow: none;
-                    color: #8F707D !important;
+                    color: $ui500 !important;
                     font-size: 14px;
                     &::placeholder{
-                        color: #8F707D !important; 
+                        color: $ui500 !important; 
                     }
                 }
             }
@@ -33,12 +33,12 @@
     table{
         width: 100%;
         border-radius: 8px;
-        background: #F6EEF2;
+        background: $ui50;
         thead{
-            border-bottom: 1px solid #F6EEF2;
+            border-bottom: 1px solid $ui50;
             th{
                 padding: 12px 16px;
-                color: #765664;
+                color: $ui600;
                 font-size: 15px;
                 font-style: normal;
                 font-weight: 400;
@@ -51,13 +51,13 @@
                 background-color: #fff;
                 td{
                     padding: 16px;
-                    color: #765664;
+                    color: $ui600;
                     font-size: 15px;
                     font-style: normal;
                     font-weight: 400;
                     line-height: 24px;
                     border: 0px solid;
-                    border-bottom: 1px solid #F6EEF2;
+                    border-bottom: 1px solid $ui50;
                     .checkbox-lists{
                         label{
                             
@@ -67,9 +67,9 @@
                                 left: 0px;
                                 height: 20px;
                                 width: 20px;
-                                background-color: #F6EEF2;
+                                background-color: $ui50;
                                 border-radius: 5px;
-                                border: 1px solid #F6EEF2;
+                                border: 1px solid $ui50;
                                 margin: 0 !important;
                                 &:after {
                                     content: "";
@@ -78,7 +78,7 @@
                                     top: 2px;
                                     width: 5px;
                                     height: 10px;
-                                    border: solid #F6EEF2;
+                                    border: solid $ui50;
                                     border-width: 0 3px 3px 0;
                                     -webkit-transform: rotate(45deg);
                                     -ms-transform: rotate(45deg);
@@ -87,8 +87,8 @@
                                 }
                             }
                             input:checked~.checkmark {
-                                background-color: #F62881;
-                                border: 1px solid #F62881;
+                                background-color: $primaryi;
+                                border: 1px solid $primaryi;
                             }
                             input:checked~.checkmark:after {
                                 display: block;
@@ -105,20 +105,20 @@
                     }
                     .tfhb-details-action{
                         a{
-                            color: #765664;
+                            color: $ui600;
                             text-decoration: none;
                         }
                         span{
-                            color: #765664;
+                            color: $ui600;
                             cursor: pointer;
                         }
                     }
                     .tfhb-details-status{
                         .status{
                             border-radius: 16px;
-                            background: #FFF8E5;
+                            background: $alert50;
                             padding: 2px 8px;
-                            color: #D69D00;
+                            color: $alert600;
                             text-align: center;
                             font-size: 11px;
                             font-style: normal;
@@ -126,16 +126,16 @@
                             line-height: 16px; /* 145.455% */
                             text-transform: capitalize;
                             &.approved{
-                                background: #E6FAEE; 
-                                color: #21A159; 
+                                background: $success50; 
+                                color: $success600; 
                             }
                             &.canceled{
-                                background: #FEECEE; 
-                                color: #E5102E; 
+                                background: $warning50; 
+                                color: $warning600; 
                             }
                             &.schedule{
-                                background-color: #EBEFFF;
-                                color: #0037EB;
+                                background-color: $info50;
+                                color: $info600;
                             }
                         }
                         .tfhb-status-bar{
@@ -144,7 +144,7 @@
                             .tfhb-status-popup{
                                 width: 140px; 
                                 border-radius: 6px;
-                                background: #F6EEF2;
+                                background: $ui50;
                                 padding: 2px;
                                 position: absolute;
                                 right: 0;
@@ -157,24 +157,24 @@
                                     li{
                                         padding: 8px 12px; 
                                         border-radius: 4px; 
-                                        background: #E6FAEE; 
-                                        color: #21A159;
+                                        background: $success50; 
+                                        color: $success600;
                                         font-size: 15px;
                                         font-style: normal;
                                         font-weight: 400;
                                         line-height: 24px; /* 160% */
                                         width: 100%;
                                         &.pending{
-                                            background-color: #FFF8E5;
-                                            color: #D69D00;
+                                            background-color: $alert50;
+                                            color: $alert600;
                                         }
                                         &.schedule{
-                                            background-color: #EBEFFF;
-                                            color: #0037EB;
+                                            background-color: $info50;
+                                            color: $info600;
                                         }
                                         &.canceled{
-                                            background-color: #FEECEE;
-                                            color: #E5102E;
+                                            background-color: $warning50;
+                                            color: $warning600;
                                         }
                                     }
                                 }
@@ -193,11 +193,11 @@
     .tfhb-booking-details-pagination{
         .tfhb-prev-next-button{
             border-radius: 8px;
-            border: 1px solid #FFF;
-            background: #FFF;
+            border: 1px solid #fff;
+            background: #fff;
             padding: 8px 14px;
             a{
-                color: #765664;
+                color: $ui600;
                 font-size: 15px;
                 font-style: normal;
                 font-weight: 400;
@@ -211,7 +211,7 @@
                     height: 40px;
                     width: 40px;
                     padding: 12px;
-                    color: #765664;
+                    color: $ui600;
                     font-size: 15px;
                     font-style: normal;
                     font-weight: 400;
@@ -223,11 +223,11 @@
                     justify-content: center;
                     a{
                         text-decoration: none;
-                        color: #765664;
+                        color: $ui600;
                     }
                     &.active{
-                        background-color: #FFF;
-                        color: #3F2731;
+                        background-color: #fff;
+                        color: $ui800;
                     }
                 }
             }
@@ -237,12 +237,12 @@
 
 // Booking Details Quick View Design
 .tfhb-attendee-info{
-    border-bottom: 1px solid #F6EEF2; 
+    border-bottom: 1px solid $ui50; 
     .tfhb-attendee-box{
         .tfhb-attendee-name{
             width: calc(33.333% - 16px);
             h4{
-                color: #3F2731 !important;
+                color: $ui800 !important;
                 font-size: 13px;
                 font-style: normal;
                 font-weight: 400 !important;
@@ -250,7 +250,7 @@
                 margin: 0 0 12px 0 !important;
             }
             p{
-                color: #765664 !important;
+                color: $ui600 !important;
                 font-size: 15px !important;
                 font-style: normal;
                 font-weight: 400;

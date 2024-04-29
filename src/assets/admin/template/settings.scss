@@ -2,7 +2,7 @@
 	width: 80%;
 	padding: 0;
 	margin: 0;
-	background-color: $ui0;
+	background-color: #ffffff;
 	border-radius: 16px;
 	a{
 		text-decoration: none;
@@ -26,11 +26,11 @@
 
 			.tfhb-availability-single-box-wrap {
 				border-radius: 8px;
-				border: 1px solid #F6EEF2;
+				border: 1px solid $ui50;
 				padding: 24px;
 				.tfhb-dashboard-heading {
 					margin-bottom: 16px;
-					border-bottom: .5px solid #F6EEF2;
+					border-bottom: .5px solid $ui50;
 					margin-right: 0 !important;
 					.tfhb-admin-title{
 						h3{
@@ -143,7 +143,7 @@
 	}
 	.tfhb-hydra-admin-tabs {
 		padding: 32px 16px 32px 16px;
-		border-right: 1px solid #F6EEF2;
+		border-right: 1px solid $ui50;
 		ul {
 			display: flex;
 
@@ -158,10 +158,10 @@
 					font-weight: 400;
 					font-size: 15px;
 					font-family: inter;
-					color: #765664;
+					color: $ui600;
 					&.active {
-						background-color: #FEE6F0;
-						color: #F62881;
+						background-color: $primaryi50;
+						color: $primaryi;
 					}
 					&:focus {
 						outline: none;

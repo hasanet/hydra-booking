@@ -11,7 +11,7 @@
                 margin-top: 4px;
                 border-radius: 4px;
                 height: 40px;
-                border: 1px solid #F6EEF2;
+                border: 1px solid $ui50;
                 font-family: "Inter", sans-serif;
                 &:focus, &:active {
                     outline: none;
@@ -25,13 +25,13 @@
                 min-width: 100%;
                 margin-top: 4px;
                 border-radius: 4px;
-                border: 1px solid #F6EEF2;
+                border: 1px solid $ui50;
                 background-color: transparent;
                 line-height: 20px;
                 height: 40px;
                 margin: 0;
                 box-shadow: none;
-                color: #8F707D !important;
+                color: $ui500 !important;
                 font-family: "Inter", sans-serif;
                 &:focus, &:active {
                     outline: none;
@@ -54,8 +54,8 @@
             textarea{
                 height: 96px;
                 border-radius: 4px;
-                border: 1px solid #F6EEF2;
-                color: #8F707D;
+                border: 1px solid $ui50;
+                color: $ui500;
                 font-size: 15px;
                 font-style: normal;
                 font-weight: 400;
@@ -75,9 +75,9 @@
                 left: 0px;
                 height: 20px;
                 width: 20px;
-                background-color: #F6EEF2;
+                background-color: $ui50;
                 border-radius: 5px;
-                border: 1px solid #F6EEF2;
+                border: 1px solid $ui50;
                 margin: 0 !important;
                 &:after {
                     content: "";
@@ -86,7 +86,7 @@
                     top: 3px;
                     width: 4px;
                     height: 8px;
-                    border: solid #F6EEF2;
+                    border: solid $ui50;
                     border-width: 0 3px 3px 0;
                     -webkit-transform: rotate(45deg);
                     -ms-transform: rotate(45deg);
@@ -95,7 +95,7 @@
                 }
             }
             label{
-                color: #3F2731 !important;
+                color: $ui800 !important;
                 font-size: 15px !important;
                 font-style: normal;
                 font-weight: 400;
@@ -104,8 +104,8 @@
                 position: relative;
                 padding-left: 38px;
                 input:checked~.checkmark {
-                    background-color: #F62881;
-                    border: 1px solid #F62881;
+                    background-color: $primaryi;
+                    border: 1px solid $primaryi;
                 }
                 input:checked~.checkmark:after {
                     display: block;
@@ -116,7 +116,7 @@
             gap: 8px !important;
             justify-content: normal !important;
             label{
-                color: #3F2731;
+                color: $ui800;
                 font-size: 15px !important;
                 font-style: normal;
                 font-weight: 400;
