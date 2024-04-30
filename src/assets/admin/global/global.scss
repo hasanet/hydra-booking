@@ -163,11 +163,17 @@
     .tfhb-align-baseline{
         align-items: baseline !important;
     }
+    .tfhb-align-normal{
+        align-items: normal !important;
+    }
     .tfhb-flexbox-nowrap{
         flex-wrap: nowrap !important;
     }
     .tfhb-cursor-pointer{
         cursor: pointer !important;
+    }
+    .tfhb-border-box{
+        box-sizing: border-box;
     }
 	.tfhb-admin-card-box {
         padding: 24px;

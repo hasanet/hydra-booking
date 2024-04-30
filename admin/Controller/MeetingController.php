@@ -303,6 +303,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_locations' => isset($request['meeting_locations']) ? wp_json_encode($request['meeting_locations']) : '',
             'meeting_category' => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
             'availability_type' => isset($request['availability_type']) ? sanitize_text_field($request['availability_type']) : '',
+            'availability_range_type' => isset($request['availability_range_type']) ? sanitize_text_field($request['availability_range_type']) : '',
+            'availability_range' => isset($request['availability_range']) ? wp_json_encode($request['availability_range']) : '',
             'availability_id' => isset($request['availability_id']) ? sanitize_text_field($request['availability_id']) : '',
             'availability_custom' => isset($request['availability_custom']) ? wp_json_encode($request['availability_custom']) : '',
             'buffer_time_before' => isset($request['buffer_time_before']) ? sanitize_text_field($request['buffer_time_before']) : '',

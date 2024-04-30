@@ -34,6 +34,8 @@ class Meeting {
                 custom_duration VARCHAR(20) NULL,
                 meeting_locations LONGTEXT NULL,
                 meeting_category VARCHAR(20) NULL,
+                availability_range_type VARCHAR(20) NULL,
+                availability_range LONGTEXT NULL, 
                 availability_type VARCHAR(20) NULL,
                 availability_id INT(11) NULL,
                 availability_custom LONGTEXT NULL, 

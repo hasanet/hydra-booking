@@ -30,6 +30,8 @@ const meetingData = reactive({
         }
     ],
     meeting_category: '',
+    availability_range_type: 'indefinitely',
+    availability_range: {},
     availability_type: 'settings',
     availability_id : '',
     availability_custom: 
@@ -317,7 +319,11 @@ const meetingId = route.params.id;
             if(response.data.meeting.meeting_locations){
                 meetingData.meeting_locations = JSON.parse(response.data.meeting.meeting_locations)
             }
-            
+
+            meetingData.availability_range_type = response.data.meeting.availability_range_type ? response.data.meeting.availability_range_type : 'indefinitely'
+
+            meetingData.availability_range = response.data.meeting.availability_range ? JSON.parse(response.data.meeting.availability_range) : {}
+
             if(response.data.meeting.availability_custom){
                 meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
             }
