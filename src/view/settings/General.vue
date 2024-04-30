@@ -4,13 +4,13 @@ import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
-import { toast } from "vue3-toastify"; 
+import { toast } from "vue3-toastify";
 
 
-// import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue'
+// import Form Field  
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
-import HbSwitch from '@/components/form-fields/HbSwitch.vue';
+import HbSwitch from '@/components/form-fields/HbSwitch.vue'; 
 
 const generalSettings = reactive({
   admin_email: '{{wp.admin_email}}',
@@ -115,33 +115,37 @@ onBeforeMount(() => {
                     width="50"
                 /> 
 
-                <!-- Time Zone -->
-                <HbSelect 
+                <!-- Time Zone --> 
+                <HbDropdown
                     
                     v-model="generalSettings.time_zone"  
                     required= "true"  
                     :label="$tfhb_trans['Time zone']" 
-                    width="50"
+                    width="50" 
+                    :filter="true"
                     selected = "1"
                     placeholder="Select Time Zone"  
                     :option = "timeZone.value" 
-                /> 
+                />  
                 <!-- Time Zone -->
 
                 <!-- Time format -->
-                <HbSelect 
+                <HbDropdown 
                     
                     v-model="generalSettings.time_format"  
                     required= "true" 
                     :label="$tfhb_trans['Time format']"  
                     width="50"
                     :selected = "1"
-                    placeholder="Select Time Format"  
-                    :option = "{'12_hours': '12 hours', '24_hours': '24 hours'}" 
+                    placeholder="Select Time Format"   
+                    :option = "[
+                        {'name': '12 Hours', 'value': '12_hours'}, 
+                        {'name': '24 Hours', 'value': '24_hours'}
+                    ]"
                 />
                 <!-- Time format --> 
                 <!-- Week start from -->
-                <HbSelect 
+                <HbDropdown 
                     
                     v-model="generalSettings.week_start_from"  
                     required= "true"  
@@ -149,33 +153,41 @@ onBeforeMount(() => {
                     width="50"
                     selected = "1"
                     placeholder="Select Time Format"  
-                    :option = "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
+                    :option = "[
+                        {'name': 'Sunday', 'value': 'sunday'}, 
+                        {'name': 'Monday', 'value': 'monday'},
+                        {'name': 'Tuesday', 'value': 'tuesday'},
+                        {'name': 'Wednesday', 'value': 'wednesday'},
+                        {'name': 'Thursday', 'value': 'thursday'},
+                        {'name': 'Friday', 'value': 'friday'},
+                        {'name': 'Saturday', 'value': 'saturday'}
+                    ]"
                     
                 />
                 <!-- Week start from -->
                 
                 <!-- Date Format -->
-                <HbSelect 
+                <HbDropdown 
                     
                     v-model="generalSettings.date_format"  
                     required= "true" 
                     :label="$tfhb_trans['Date format']"   
                     width="50"
                     selected = "1"
-                    placeholder="Select Date Format"  
-                    :option = "{
-                        'g:i a': 'g:i a', 
-                        'g:i a': 'g:i a'
-                    }" 
+                    placeholder="Select Date Format"   
+                    :option = "[
+                        {'name': 'g:i a', 'value': 'g:i a'},  
+                    ]"
                 />
                 <!-- Date Format -->
 
                 <!-- Select countr -->
-                <HbSelect 
+                <HbDropdown 
                     
                     v-model="generalSettings.country"  
                     required= "true"
                     width="50"
+                    :filter="true"
                     :label="$tfhb_trans['Select country for phone code']"   
                     selected = "1"
                     placeholder="Select Country"  
@@ -192,7 +204,7 @@ onBeforeMount(() => {
             </div>
             <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-tb-24">  
                 <!-- Bookings will be completed automatically after -->
-                <HbSelect 
+                <HbDropdown 
                     
                     v-model="generalSettings.after_booking_completed"  
                     required= "true" 
@@ -200,22 +212,22 @@ onBeforeMount(() => {
                     width="50"
                     selected = "1"
                     placeholder="Select Time"  
-                    :option = "{
-                        '5': '5 Minutes',  
-                        '10': '10 Minutes',   
-                        '20': '20 Minutes',  
-                        '30': '30 Minutes',  
-                        '40': '40 Minutes',
-                        '50': '50 Minutes',
-                        '60': '1 Hour',
-                    }"  
+                    :option = "[
+                        {'name': '5 Minutes', 'value': '5'},  
+                        {'name': '10 Minutes', 'value': '10'},   
+                        {'name': '20 Minutes', 'value': '20'},  
+                        {'name': '30 Minutes', 'value': '30'},  
+                        {'name': '40 Minutes', 'value': '40'},
+                        {'name': '50 Minutes', 'value': '50'},
+                        {'name': '1 Hour', 'value': '60'}
+                    ]" 
                 /> 
                 <!-- Bookings will be completed automatically after -->
 
                
                 
                 <!-- Minimum time required before Booking/Cancel/Reschedule -->
-                <HbSelect 
+                <HbDropdown 
                     
                     v-model="generalSettings.allowed_reschedule_before_meeting_start"  
                     required= "true" 
@@ -223,15 +235,15 @@ onBeforeMount(() => {
                     selected = "1"
                     width="50"
                     placeholder="Select Time"  
-                    :option = "{
-                        '5': '5 Minutes',  
-                        '10': '10 Minutes',   
-                        '20': '20 Minutes',  
-                        '30': '30 Minutes',  
-                        '40': '40 Minutes',
-                        '50': '50 Minutes',
-                        '60': '1 Hour',
-                    }" 
+                    :option = "[
+                        {'name': '5 Minutes', 'value': '5'},  
+                        {'name': '10 Minutes', 'value': '10'},   
+                        {'name': '20 Minutes', 'value': '20'},  
+                        {'name': '30 Minutes', 'value': '30'},  
+                        {'name': '40 Minutes', 'value': '40'},
+                        {'name': '50 Minutes', 'value': '50'},
+                        {'name': '1 Hour', 'value': '60'}
+                    ]" 
                 />
                 <!-- Minimum time required before Booking/Cancel/Reschedule -->
 

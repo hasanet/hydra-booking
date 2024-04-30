@@ -3,10 +3,10 @@ import { ref, reactive, onBeforeMount, } from 'vue';
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
-import HbText from '../form-fields/HbText.vue';
-import HbSelect from '../form-fields/HbSelect.vue';
+import HbText from '../form-fields/HbText.vue'; 
 import HbDateTime from '../form-fields/HbDateTime.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import { toast } from "vue3-toastify"; 
  
 
@@ -135,12 +135,13 @@ const removeOverridesTime = (key, tkey = null) => {
                 /> 
                 <!-- Title -->
                 <!-- Time Zone -->
-                <HbSelect 
+                <HbDropdown 
                         
                     v-model="props.availabilityDataSingle.time_zone"  
                     required= "true"  
                     :label="$tfhb_trans['Time zone']"  
                     selected = "1"
+                    :filter="true"
                     placeholder="Select Time Zone"  
                     :option = "props.timeZone" 
                 /> 

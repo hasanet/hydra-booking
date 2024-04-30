@@ -4,6 +4,8 @@ import { useRouter, RouterView } from 'vue-router'
 import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbSelect from '@/components/form-fields/HbSelect.vue'
+
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbImageBox from '@/components/form-fields/HbImageBox.vue'
 import { Upload } from 'lucide-vue-next';
@@ -95,12 +97,13 @@ const UploadImage = () => {
             disabled="true"
         /> 
         <!-- Time Zone -->
-        <HbSelect 
+        <HbDropdown 
             
             v-model="host.time_zone"  
             required= "true"  
             :label="$tfhb_trans['Time zone']"  
             selected = "1"
+            :filter="true"
             placeholder="Select Time Zone"  
             :option = "time_zone" 
             width="50" 

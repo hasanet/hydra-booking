@@ -2,6 +2,7 @@
 import HbText from '../form-fields/HbText.vue';
 import HbSwitch from '../form-fields/HbSwitch.vue';
 import HbSelect from '../form-fields/HbSelect.vue';
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 
 const emit = defineEmits(['update:modelValue', 'question-add', 'question-cancel'])
 
@@ -15,22 +16,22 @@ const props = defineProps({
 </script>
 
 <template>
-    <HbSelect 
+    <HbDropdown 
         v-model="questions_data.type"
         required= "true" 
         :label="$tfhb_trans['Field type']"  
         :selected = "1"
         :placeholder="$tfhb_trans['Field type']" 
-        :option = "{
-            'text': 'Text', 
-            'email': 'Email', 
-            'textarea': 'Textarea', 
-            'number': 'Number', 
-            'radio': 'Radio', 
-            'select': 'Select', 
-            'checkbox': 'Checkbox', 
-            'date': 'Date'
-        }" 
+        :option = "[
+            {name: 'Text', value: 'text'}, 
+            {name: 'Email', value: 'email'}, 
+            {name: 'Textarea', value: 'textarea'}, 
+            {name: 'Number', value: 'number'}, 
+            {name: 'Radio', value: 'radio'}, 
+            {name: 'Select', value: 'select'}, 
+            {name: 'Checkbox', value: 'checkbox'}, 
+            {name: 'Date', value: 'date'}
+        ]" 
     />
 
     <HbText  
