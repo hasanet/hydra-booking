@@ -413,7 +413,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $_tfhb_host_availability_settings =  get_user_meta($request['user_id'], '_tfhb_host', true);
         $data = array(
             'status' => true,  
-            'availability' => $_tfhb_host_availability_settings['availability'][$request['availability_id']],
+            'availability' => !empty($_tfhb_host_availability_settings['availability']) ? $_tfhb_host_availability_settings['availability'][$request['availability_id']] : [],
         );
         return rest_ensure_response($data);
     }
