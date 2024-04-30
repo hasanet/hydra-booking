@@ -208,71 +208,75 @@ const removeOverridesTime = (key, tkey = null) => {
                             
                         </div>
                     </div>
-                
-                </div>  
-                <div class="tfhb-admin-card-box ">  
-                    <!-- Yearly dates -->
-                    <div  class="tfhb-dashboard-heading ">
-                        <div class="tfhb-admin-title tfhb-flexbox"> 
-                            <h3>Add date overrides </h3>  
-                            <div class="tfhb-availability-schedule-clone-single">
-                                <button class="tfhb-availability-schedule-btn" @click="addAvailabilityDate(key)"><Icon name="Plus" size="20" /> </button> 
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
-                        <div class="tfhb-availability-schedule-wrap tfhb-full-width">
-                            <div v-for="(date_slot, key) in props.availabilityDataSingle.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
-                                <div class="tfhb-dates tfhb-full-width">
-                                    <p>What dates are you available / unavailable?</p>
-                                    <div class="tfhb-flexbox">
-                                        <div class="tfhb-availability-schedule-time tfhb-flexbox" style="width:calc(100% - 52px)">
-                                            <HbDateTime  
-                                                v-model="date_slot.date"    
-                                                selected = "1"
-                                                enableTime='true'
-                                                placeholder="Type your schedule title"   
-                                                :config="{
-                                                    mode: 'multiple',
-                                                }"
-                                            /> 
-                                        </div>
-                                        
-                                        <div class="tfhb-availability-schedule-clone-single">
-                                            <button class="tfhb-availability-schedule-btn" @click="removeAvailabilityTDate(key)"><Icon name="X" size="20" />   </button> 
-                                        </div>
-                                    </div>
-                                </div>
+                    
 
-                                <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="date_slot.available!=1"> 
-                                    <p>What hours are you available?</p>
-                                    <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
-                                        <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                    <!-- Date Overrides -->
+                    <div class="tfhb-admin-card-box ">  
+
+                        <div  class="tfhb-dashboard-heading">
+                            <div class="tfhb-admin-title"> 
+                                <h3>Add date overrides </h3>  
+                                <p>Add dates when your availability changes from your daily hours</p>
+                            </div> 
+                        </div>
+
+                        <div class="tfhb-admin-card-box">
+                            <div class="tfhb-flexbox">
+                                <div class="tfhb-overrides-date">
+                                    <h4>Monday, April 29</h4>
+                                    <p class="tfhb-m-0">10:00 PM - 11:30 PM, 12:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="tfhb-overrides-action tfhb-flexbox tfhb-gap-16 tfhb-justify-normal">
+                                    <button class="question-edit-btn">
+                                        <Icon name="PencilLine" :width="16" />
+                                    </button>
+                                    <button class="question-edit-btn">
+                                        <Icon name="Trash" :width="16"/>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="tfhb-flexbox">
+                                <div class="tfhb-override-calendar">
+                                    <HbDateTime  
+                                        selected = "1" 
+                                        :config="{
+                                            inline: true,
+                                            monthSelectorType: 'static',
+                                            yearSelectorType: 'static',
+                                            mode: 'multiple',
+                                        }"
+                                        placeholder="Type your schedule title"   
+                                    /> 
+                                </div>
+                                <div class="tfhb-override-times">
+                                    <h4>Which hours are you free?</h4>
+
+                                    <div class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                        <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
                                             <HbDateTime  
-                                                v-model="time.start"    
                                                 selected = "1" 
                                                 :config="{
                                                     enableTime: true,
                                                     noCalendar: true,
-                                                    dateFormat: 'H:i',
-                                                    defaultDate: time.start
+                                                    dateFormat: 'H:i'
                                                 }"
                                                 width="45"
                                                 placeholder="Type your schedule title"   
+                                                icon="Clock"
                                             /> 
                                             <Icon name="MoveRight" size="20" /> 
                                             <HbDateTime  
-                                                v-model="time.end"   
                                                 :label="$tfhb_trans['End']"  
                                                 selected = "1"
                                                 :config="{
                                                     enableTime: true,
                                                     noCalendar: true,
-                                                    dateFormat: 'H:i',
-                                                    defaultDate: time.end
+                                                    dateFormat: 'H:i'
                                                 }"
                                                 width="45"
                                                 placeholder="Type your schedule title"   
+                                                icon="Clock"
                                             /> 
 
                                         </div>
@@ -283,22 +287,102 @@ const removeOverridesTime = (key, tkey = null) => {
                                             <button class="tfhb-availability-schedule-btn" @click="removeOverridesTime(key, tkey)"><Icon name="X" size="20px" /> </button> 
                                         </div>
                                     </div>
-                                    
                                 </div>
-                                
-                                <div class="tfhb-mark-unavailable tfhb-full-width">
-                                    <HbCheckbox 
-                                        v-model="date_slot.available"
-                                        :label="$tfhb_trans['Mark to Unavailable']"
-                                        :name="'mark_unavailable'+key"
-                                    />
-                                </div>
-
                             </div>
                         </div>
-                    </div>
-                
+
+
+                        <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
+                            <div class="tfhb-availability-schedule-wrap tfhb-full-width">
+                                <div v-for="(date_slot, key) in props.availabilityDataSingle.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
+                                    <div class="tfhb-dates tfhb-full-width">
+                                        <p>What dates are you available / unavailable?</p>
+                                        <div class="tfhb-flexbox">
+                                            <div class="tfhb-availability-schedule-time tfhb-flexbox" style="width:calc(100% - 52px)">
+                                                <HbDateTime  
+                                                    v-model="date_slot.date"    
+                                                    selected = "1"
+                                                    enableTime='true'
+                                                    placeholder="Type your schedule title"   
+                                                    :config="{
+                                                        mode: 'multiple',
+                                                    }"
+                                                /> 
+                                            </div>
+                                            
+                                            <div class="tfhb-availability-schedule-clone-single">
+                                                <button class="tfhb-availability-schedule-btn" @click="removeAvailabilityTDate(key)"><Icon name="X" size="20" />   </button> 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="date_slot.available!=1"> 
+                                        <p>What hours are you available?</p>
+                                        <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                            <div class="tfhb-availability-schedule-time tfhb-flexbox">
+                                                <HbDateTime  
+                                                    v-model="time.start"    
+                                                    selected = "1" 
+                                                    :config="{
+                                                        enableTime: true,
+                                                        noCalendar: true,
+                                                        dateFormat: 'H:i',
+                                                        defaultDate: time.start
+                                                    }"
+                                                    width="45"
+                                                    placeholder="Type your schedule title"   
+                                                /> 
+                                                <Icon name="MoveRight" size="20" /> 
+                                                <HbDateTime  
+                                                    v-model="time.end"   
+                                                    :label="$tfhb_trans['End']"  
+                                                    selected = "1"
+                                                    :config="{
+                                                        enableTime: true,
+                                                        noCalendar: true,
+                                                        dateFormat: 'H:i',
+                                                        defaultDate: time.end
+                                                    }"
+                                                    width="45"
+                                                    placeholder="Type your schedule title"   
+                                                /> 
+
+                                            </div>
+                                            <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
+                                                <button class="tfhb-availability-schedule-btn" @click="addOverridesTime(key)"><Icon name="Plus" size="20px" /> </button> 
+                                            </div>
+                                            <div v-else class="tfhb-availability-schedule-clone-single">
+                                                <button class="tfhb-availability-schedule-btn" @click="removeOverridesTime(key, tkey)"><Icon name="X" size="20px" /> </button> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="tfhb-mark-unavailable tfhb-full-width">
+                                        <HbCheckbox 
+                                            v-model="date_slot.available"
+                                            :label="$tfhb_trans['Mark to Unavailable']"
+                                            :name="'mark_unavailable'+key"
+                                        />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="tfhb-btn tfhb-flexbox tfhb-gap-8" @click="addAvailabilityDate(key)">
+                            <Icon name="PlusCircle" :width="20"/>
+                            Add an override
+                        </button>
+                        
+                    </div>  
+
+
                 </div>  
+
+                
+
+
                 <!-- Create Or Update Availability -->
                 <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? 'Save Availability' : $tfhb_trans['Update General Settings'] }}</button>
             </div>

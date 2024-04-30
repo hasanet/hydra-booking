@@ -608,3 +608,95 @@
         }
     }
 }
+.tfhb-overrides-date{
+    width: calc(100% - 104px);
+    h4{
+        font-size: 15px !important;
+        font-style: normal !important;
+        font-weight: 400 !important; 
+        margin: 0px 0px 7px 0px !important;
+    }
+
+}
+.tfhb-overrides-action{
+    button{
+        border-radius: 4px;
+        border: 1px solid #F6EEF2;
+        background: #fff;
+        height: 32px;
+        width: 32px;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.tfhb-override-calendar,
+.tfhb-override-times{
+    width: calc(50% - 12px);
+}
+
+.tfhb-override-calendar{
+    span{
+        margin: unset !important;
+        color: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: 37px !important;
+        &.flatpickr-day{
+            border-radius: 8px !important;
+            border: 0px solid;
+            color: #3F2731 !important;
+            text-align: center;
+            font-size: 15px !important;
+            font-style: normal;
+            font-weight: 400 !important;
+            &:hover{
+                background: #F6EEF2 !important; 
+            }
+        }
+        &.flatpickr-day.selected{
+            background: #F62881 !important;
+            box-shadow: 0px 8px 30px 0px rgba(229, 0, 99, 0.30);
+            color: #FFF !important;
+            position: relative;
+            &::before{
+                position: absolute;
+                content: "";
+                height: 2px;
+                width: 16px;
+                border-radius: 16px;
+                background: #FFF;
+                bottom: 9px;
+                left: 50%;
+                margin-left: -8px;
+            }
+        }
+    }
+    .tfhb-single-form-field-wrap.tfhb-field-date > input{
+        display: none;
+    }
+    .flatpickr-current-month input.cur-year {
+        background: transparent !important;
+          background-color: transparent;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: inherit !important;
+        cursor: text;
+        padding: 0 0 0 0.5ch !important;
+        margin: 0 !important;
+        display: inline-block;
+        font-size: inherit !important;
+        font-family: inherit;
+        font-weight: 300;
+        line-height: inherit !important;
+        height: auto !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        vertical-align: initial;
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+}
