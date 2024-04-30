@@ -1,5 +1,5 @@
-<script setup>
-import HbSelect from '@/components/form-fields/HbSelect.vue'
+<script setup> 
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbCounter from '@/components/meetings/HbCounter.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
@@ -43,45 +43,45 @@ const removeExtraFrequency = (key) => {
         <div class="tfhb-admin-card-box tfhb-flexbox tfhb-align-baseline tfhb-m-0 tfhb-full-width">  
 
             <!-- Buffer time before meeting -->
-            <HbSelect 
+            <HbDropdown 
                 v-model="meeting.buffer_time_before"
                 required= "true" 
                 :label="$tfhb_trans['Buffer time before meeting']"  
                 width="50"
                 :selected = "1"
                 placeholder="No buffer time"  
-                :option = "{
-                    '5': '5 Minutes',  
-                    '10': '10 Minutes',  
-                    '15': '15 Minutes',  
-                    '20': '20 Minutes',  
-                    '30': '30 Minutes',  
-                    '45': '45 Minutes',  
-                    '60': '60 Minutes',  
-                    '90': '90 Minutes',  
-                    '120': '120 Minutes',   
-                }" 
+                :option = "[
+                    {name: '5 Minutes', value: '5'},  
+                    {name: '10 Minutes', value: '10'},  
+                    {name: '15 Minutes', value: '15'},  
+                    {name: '20 Minutes', value: '20'},  
+                    {name: '30 Minutes', value: '30'},  
+                    {name: '45 Minutes', value: '45'},  
+                    {name: '60 Minutes', value: '60'},  
+                    {name: '90 Minutes', value: '90'},  
+                    {name: '120 Minutes', value: '120'},   
+                ]" 
             />
             <!-- Buffer time before meeting --> 
             <!-- Buffer time after meeting -->
-            <HbSelect 
+            <HbDropdown 
                 v-model="meeting.buffer_time_after"
                 required= "true"  
                 :label="$tfhb_trans['Buffer time after meeting']"   
                 width="50"
                 selected = "1"
                 placeholder="No buffer time"  
-                :option = "{
-                    '5': '5 Minutes',  
-                    '10': '10 Minutes',  
-                    '15': '15 Minutes',  
-                    '20': '20 Minutes',  
-                    '30': '30 Minutes',  
-                    '45': '45 Minutes',  
-                    '60': '60 Minutes',  
-                    '90': '90 Minutes',  
-                    '120': '120 Minutes',   
-                }" 
+                :option = "[
+                    {name: '5 Minutes', value: '5'},  
+                    {name: '10 Minutes', value: '10'},  
+                    {name: '15 Minutes', value: '15'},  
+                    {name: '20 Minutes', value: '20'},  
+                    {name: '30 Minutes', value: '30'},  
+                    {name: '45 Minutes', value: '45'},  
+                    {name: '60 Minutes', value: '60'},  
+                    {name: '90 Minutes', value: '90'},  
+                    {name: '120 Minutes', value: '120'},   
+                ]" 
             />
             <!-- Buffer time after meeting -->
 
@@ -98,24 +98,24 @@ const removeExtraFrequency = (key) => {
             />
 
             <!-- Meeting interval -->
-            <HbSelect 
+            <HbDropdown 
                 v-model="meeting.meeting_interval"
                 required= "true"  
                 :label="$tfhb_trans['Meeting interval']"   
                 width="50"
                 selected = "1"
                 :placeholder="$tfhb_trans['Use meeting length (default)']"
-                :option = "{
-                    '5': '5 Minutes',  
-                    '10': '10 Minutes',  
-                    '15': '15 Minutes',  
-                    '20': '20 Minutes',  
-                    '30': '30 Minutes',  
-                    '45': '45 Minutes',  
-                    '60': '60 Minutes',  
-                    '90': '90 Minutes',  
-                    '120': '120 Minutes',   
-                }" 
+                :option = "[
+                    {name: '5 Minutes', value: '5'},  
+                    {name: '10 Minutes', value: '10'},  
+                    {name: '15 Minutes', value: '15'},  
+                    {name: '20 Minutes', value: '20'},  
+                    {name: '30 Minutes', value: '30'},  
+                    {name: '45 Minutes', value: '45'},  
+                    {name: '60 Minutes', value: '60'},  
+                    {name: '90 Minutes', value: '90'},  
+                    {name: '120 Minutes', value: '120'},   
+                ]"
             />
         
         </div>  
@@ -141,15 +141,22 @@ const removeExtraFrequency = (key) => {
             />
             
             <!-- For a maximum of -->
-            <HbSelect 
+            <HbDropdown 
                 v-model="meeting.recurring_maximum"
                 required= "true"  
                 :label="$tfhb_trans['For a maximum of']"   
                 width="50"
                 selected = "1"
                 :placeholder="$tfhb_trans['Use meeting length (default)']"
-                :option = "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
-                
+                :option = "[
+                    {name: 'Sunday', value: 'Sunday'},
+                    {name: 'Monday', value: 'Monday'},
+                    {name: 'Tuesday', value: 'Tuesday'},
+                    {name: 'Wednesday', value: 'Wednesday'},
+                    {name: 'Thursday', value: 'Thursday'},
+                    {name: 'Friday', value: 'Friday'},
+                    {name: 'Saturday', value: 'Saturday'},
+                ]" 
             />
 
         </div>  

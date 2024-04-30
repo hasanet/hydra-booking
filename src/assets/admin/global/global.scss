@@ -87,6 +87,8 @@
         margin: 0 !important;
     }
 
+    
+
     //Padding
     .tfhb-p-24{
         padding: 24px !important;
@@ -602,3 +604,18 @@
         }
     }
 }
+
+// Prime Vue Dropdown
+.p-dropdown-panel {
+    .p-dropdown-items {
+        .p-dropdown-item{
+            &.p-highlight {
+                color: #F62881 !important;
+                background: #FEE6F0 !important;
+            }
+            &.p-focus {
+                background: #FEE6F0 !important;
+            }
+        }
+    }
+} 

@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
-import HbSelect from '@/components/form-fields/HbSelect.vue'
+import { useRouter, RouterView } from 'vue-router'  
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
@@ -60,20 +60,20 @@ const validateSelect = (fieldName) => {
 
         <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-16 tfhb-m-0 tfhb-full-width"> 
             <!-- Duration -->
-            <HbSelect 
+            <HbDropdown 
                 v-model="meeting.duration" 
                 required= "true" 
                 :label="$tfhb_trans['Duration']"  
                 :selected = "1"
                 name="duration"
                 placeholder="Select Meetings Duration"  
-                :option = "{
-                    '15': '15 minutes', 
-                    '30': '30 minutes',
-                    '45': '45 minutes',
-                    '60': '60 minutes',
-                    'custom': 'Custom'
-                    }" 
+                :option = "[
+                    {name: '15 minutes', value: '15'}, 
+                    {name: '30 minutes', value: '30'},
+                    {name: '45 minutes', value: '45'},
+                    {name: '60 minutes', value: '60'},
+                    {name: 'Custom', value: 'custom'} 
+                ]" 
                 @change="() => validateSelect('duration')"
                 @click="() => validateSelect('duration')"
                 :errors="errors.duration"
@@ -101,20 +101,20 @@ const validateSelect = (fieldName) => {
             <div class="tfhb-flexbox tfhb-gap-16 tfhb-mb-24" v-for="(slocation, index) in meeting.meeting_locations" :key="index">
                 <div class="tfhb-meeting-location tfhb-flexbox tfhb-gap-16" :style="meeting.meeting_locations.length<2 ?'width:100%' : '' ">
                     <!-- Location -->
-                    <HbSelect 
+                    <HbDropdown 
                         v-model="slocation.location" 
                         required= "true" 
                         :label="$tfhb_trans['Location']"  
                         :selected = "1"
                         :placeholder="$tfhb_trans['Location']" 
-                        :option = "{
-                            'zoom': 'Zoom', 
-                            'attendee_address': 'In Person (Attendee Address)',
-                            'organizer_address': 'In Person (Organizer Address)',
-                            'attendee_phone': 'Attendee Phone Number',
-                            'organizer_phone': 'Organizer Phone Number',
-                            'online_meeting': 'Online Meeting',
-                            }" 
+                        :option = "[
+                            {name: 'Zoom', value: 'zoom'}, 
+                            {name: 'In Person (Attendee Address)', value: 'attendee_address'},
+                            {name: 'In Person (Organizer Address)', value: 'organizer_address'},
+                            {name: 'Attendee Phone Number', value: 'attendee_phone'},
+                            {name: 'Organizer Phone Number', value: 'organizer_phone'},
+                            {name: 'Online Meeting', value: 'online_meeting'}
+                        ]" 
                         :width= "50"
                     />
                     <!-- Address -->
@@ -141,13 +141,15 @@ const validateSelect = (fieldName) => {
         </div>
 
         <!-- Category -->
-        <HbSelect 
+        <HbDropdown 
             v-model="meeting.meeting_category" 
             required= "true" 
             :label="$tfhb_trans['Select Category']"  
             :selected = "1"
             placeholder="Select Category"  
-            :option = "{'12_hours': 'Design System', '24_hours': '10 minutes'}" 
+            :option = "[
+                    {name: 'Design System', value: 'Design System'},  
+                ]"  
         />
         <div class="tfhb-submission-btn">
             <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['title', 'description', 'duration'])">{{ $tfhb_trans['Save & Continue'] }} </button>

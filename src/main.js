@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/router.js'   
 import PrimeVue from "primevue/config"; 
+import 'primevue/resources/themes/aura-light-green/theme.css'
 const tfhb_trans = tfhb_core_apps.trans || {};  
 const tfhb_url =  tfhb_core_apps.tfhb_url || '';      
 const user =  tfhb_core_apps.user || '';      

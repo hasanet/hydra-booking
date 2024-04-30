@@ -19,6 +19,16 @@
                 }
             }
         }
+        // Dropdown Field
+        &.tfhb-field-dropdown{ 
+            .p-dropdown { 
+                border: 1px solid $ui50 !important; 
+                box-shadow: none !important;
+              } 
+              span{
+                margin: 0 !important;
+              }
+        }
         &.tfhb-field-input, &.tfhb-field-date{ 
             input { 
                 padding: 8px 8px 8px 12px;

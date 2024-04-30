@@ -23,10 +23,17 @@ namespace HydraBooking\Admin\Controller;
         // get form public api  
         $country_list = [];
         foreach ($this->country as $key => $value) {
-            $country_list[$value->cca2] = $value->name->common;
-        }
-        // sort country list
-        asort($country_list);
+            // $country_list[$value->cca2] = $value->name->common;
+            $country_list[] = array(
+                'value' => $value->cca2,
+                'name' => $value->name->common
+            );
+            
+        } 
+        // sort by name
+        usort($country_list, function($a, $b) {
+            return $a['name'] <=> $b['name'];
+        });
         
         return $country_list;
 

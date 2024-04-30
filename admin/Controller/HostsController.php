@@ -284,8 +284,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
         
         
-        $DateTimeZone = new \DateTimeZone('UTC');
-        $time_zone = $DateTimeZone->listIdentifiers();
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
 
         // Hosts Global Settings.
         $_tfhb_hosts_settings = get_option('_tfhb_hosts_settings'); 

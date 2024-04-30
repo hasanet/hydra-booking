@@ -7,8 +7,13 @@ namespace HydraBooking\Admin\Controller;
     public function TimeZone() { 
         $time_zone_data = $this->listIdentifiers();
         $time_zone = [];
-        foreach ($time_zone_data as $key => $value) {
-            $time_zone[$value] = $value;
+        // make array in this format { value: 'New York', name: 'NY' }, 
+    // { value: 'New York', name: 'NY' }, 
+        foreach ($time_zone_data as $key => $value) { 
+            $time_zone[] = array(
+                'value' => $value,
+                'name' => $value
+            );
         }
         return $time_zone;
     }
