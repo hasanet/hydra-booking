@@ -26,8 +26,8 @@ const props = defineProps({
             <!-- Single Hosts -->
             <div   v-for="(host, key) in host_list"  class="tfhb-single-hosts"> 
                 <div class="tfhb-single-hosts-wrap ">
-                    <span class="tfhb-hosts-status" v-if="host.status == 1">Active</span> 
-                    <span class="tfhb-hosts-status" v-else>Inactive</span>
+                    <span class="tfhb-hosts-status" v-if="host.status == 'activate'">Activate</span> 
+                    <span class="tfhb-hosts-status tfhb-hosts-status-warning" v-else>Deactiavte</span>
 
                     <div class="tfhb-hosts-info tfhb-flexbox">
                         <div class="hosts-avatar" v-if="host.avatar !='' " >
@@ -49,8 +49,10 @@ const props = defineProps({
                             <!-- route link -->
                             <router-link :to="{ name: 'HostsProfile', params: { id: host.user_id } }" class="tfhb-dropdown-single">Edit</router-link>
                             <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
+                            <span class="tfhb-dropdown-single" @click="emit('update-host-status',host.id, host.user_id, host.status)">{{host.status == 'activate' ? 'Deactiavte' : 'Actiavte'}}</span>
+                       
                             <span class="tfhb-dropdown-single" @click="emit('delete-host', host.id, host.user_id)">Delete</span>
-                        </div>
+                         </div>
                     </div>
                 </div> 
             </div>

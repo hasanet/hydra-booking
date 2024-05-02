@@ -68,6 +68,29 @@ class AuthController {
     }
     
   }
+
+
+  // Checked Host Role user Status when user login
+  public function tfhb_restrict_unverified_user( $user, $username, $password ) {
+
+   
+    $user_obj      = get_user_by( 'login', $username );
+    $allowed_roles = array( 'tfhb_host' );
+    if ( $username != '' && $user_obj != false ) {
+   
+      if ( array_intersect( $allowed_roles, $user_obj->roles ) ) {
+        
+        $value = get_user_meta( $user_obj->ID, '_tfhb_host', true ); 
+        if($value != '' && $value['status'] != 'activate'){
+          $user = new \WP_Error( 'denied', __( "<strong>ERROR</strong>: Your account is disabled by Admin!", "thb-hydra-booking" ) );
+          remove_action( 'authenticate', 'wp_authenticate_username_password', 20 );
+        } 
+      }
+    }
+  
+    return $user;
+  }
+
  
 }
  

@@ -61,6 +61,10 @@
           color: $success600;
           font-weight: 600 !important;
           font-size: 11px !important;
+          &.tfhb-hosts-status-warning {
+            background-color: $warning50;
+            color: $warning600 !important;
+          }
         }
         .tfhb-single-hosts-action {
           position: absolute !important;

@@ -86,6 +86,26 @@ const deleteHost = async ($id, $user_id) => {
     }
 }
 
+// Delete Hosts 
+const updateHostStatus = async ($id, $user_id, $status) => { 
+    let HostData = {
+        id: $id,
+        user_id: $user_id,
+        status: $status
+    }
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/update-status', HostData, {
+               
+        } );
+        if (response.data.status) { 
+            hosts.data = response.data.hosts;  
+            toast.success(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 onBeforeMount(() => { 
     fetchHosts();
 });
@@ -132,7 +152,7 @@ const Tfhb_Host_Filter = async (e) =>{
         </div>
         <div class="tfhb-hosts-content">  
             <CreateHostPopup v-if="isModalOpened" :isOpen="isModalOpened" :usersData="usersData.data" @modal-close="closeModal" @hosts-create="CreateHosts"   />
-            <router-view :host_list="hosts.data" @delete-host="deleteHost" :host_skeleton="skeleton" /> 
+            <router-view :host_list="hosts.data" @update-host-status="updateHostStatus" @delete-host="deleteHost" :host_skeleton="skeleton" /> 
         </div> 
     </div>
 </template>
