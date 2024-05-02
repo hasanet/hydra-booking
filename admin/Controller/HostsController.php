@@ -42,6 +42,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'DeleteHosts'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));  
+        register_rest_route('hydra-booking/v1', '/hosts/update-status', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateHostsStatus'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));  
         // Get Single Host based on id
         register_rest_route('hydra-booking/v1', '/hosts/(?P<id>[0-9]+)', array(
             'methods' => 'GET',
@@ -320,6 +325,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(empty($HostData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
+
         // Update Host
         $data = [ 
             'id' => $request['id'],
@@ -354,6 +360,53 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
     }
 
+    public function UpdateHostsStatus(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        
+
+        $host_id = $request['user_id']; 
+        $status = $request['status'] == 1 || $request['status'] == 'activate' ? 'deactivate' : 'activate';
+        if (empty($host_id) || $host_id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+
+        // Get Host
+        $host = new Host();
+        $HostData = $host->get( $host_id );
+
+        if(empty($HostData)) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+
+         // Update Host
+         $data = [  
+            'id' => $request['id'],
+            'status' => $status, 
+        ];
+        $hostUpdate = $host->update($data);
+        if(!$hostUpdate['status']) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while updating host'));
+        }
+
+        //  Get User MEta
+        $_tfhb_host = get_user_meta($host_id, '_tfhb_host');
+        $_tfhb_host['status'] =  $status;
+        
+        // Update user Option 
+        update_user_meta($host_id, '_tfhb_host', $data); 
+
+        // Hosts Lists
+        $HostsList = $host->get();
+
+        // Return response
+        $data = array(
+            'status' => true,  
+            'hosts' => $HostsList,  
+            'message' => 'Host Status Updated Successfully', 
+        );
+
+        return rest_ensure_response($data);
+    }
 
     // Get Integration Settings
     public function GetIntegrationSettings(){
