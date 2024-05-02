@@ -128,7 +128,7 @@ const removeAvailabilityTDate = (key) => {
     props.availabilityDataSingle.date_slots.splice(key, 1);
 }
 
-// Add new date slot
+// Store to the reactive
 const addAvailabilityDate = (key) => {
 
     props.availabilityDataSingle.date_slots[OverridesDates.key].date = OverridesDates.date
