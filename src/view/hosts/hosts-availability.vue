@@ -319,7 +319,7 @@ function formatTime(time) {
                 <div class="tfhb-flexbox">
                     <div class="tfhb-overrides-date">
                         <h4>{{ date_slot.date }}</h4>
-                        <p class="tfhb-m-0">{{ formatTimeSlots(date_slot.times) }}</p>
+                        <p class="tfhb-m-0">{{ date_slot.available!=1 ? formatTimeSlots(date_slot.times) : 'Unavailable' }}</p>
                     </div>
                 </div>
             </div>
