@@ -226,6 +226,20 @@ const fetchDefaultAvailabilitySingle = async (setting) => {
     } 
 }
 
+// Date & Time Format
+function formatTimeSlots(timeSlots) {
+    return timeSlots.map(slot => {
+    return `${this.formatTime(slot.start)} - ${this.formatTime(slot.end)}`
+    }).join(', ');
+}
+
+function formatTime(time) {
+    const [hour, minute] = time.split(':');
+    const formattedHour = (parseInt(hour) % 12 || 12);
+    const period = parseInt(hour) < 12 ? 'AM' : 'PM';
+    return `${formattedHour}:${minute} ${period}`;
+}
+
 </script>
 
 <template>
@@ -292,68 +306,21 @@ const fetchDefaultAvailabilitySingle = async (setting) => {
             </div>
         </div>
 
+        <!-- Date Overrides -->
+        <div class="tfhb-admin-card-box tfhb-m-0 tfhb-flexbox tfhb-full-width">  
+            <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
+                <div class="tfhb-admin-title tfhb-m-0"> 
+                    <h3>Add date overrides </h3>  
+                    <p>Add dates when your availability changes from your daily hours</p>
+                </div> 
+            </div>
 
-        <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline tfhb-full-width">
-            <div class="tfhb-availability-schedule-wrap tfhb-full-width">
-                <div v-for="(date_slot, key) in Settings_avalibility.availability.date_slots" :key="key" class="tfhb-availability-schedule-inner tfhb-admin-card-box tfhb-flexbox">
-                    <div class="tfhb-dates tfhb-full-width">
-                        <p>What dates are you available / unavailable?</p>
-                        <div class="tfhb-flexbox">
-                            <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-full-width">
-                                <div class="tfhb-single-form-field tfhb-full-width">
-                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
-                                        <input type="text" data-input="true" class="flatpickr-input" :value="date_slot.date" readonly="readonly">
-                                        <span class="tfhb-flat-icon"><!--v-if-->
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
+            <div class="tfhb-admin-card-box tfhb-m-0 tfhb-full-width" v-for="(date_slot, key) in Settings_avalibility.availability.date_slots" :key="key">
+                <div class="tfhb-flexbox">
+                    <div class="tfhb-overrides-date">
+                        <h4>{{ date_slot.date }}</h4>
+                        <p class="tfhb-m-0">{{ formatTimeSlots(date_slot.times) }}</p>
                     </div>
-
-                    <div class="tfhb-availability-schedule-wrap tfhb-full-width" v-if="!date_slot.available"> 
-                        <p>What hours are you available?</p>
-                        <div v-for="(time, tkey) in date_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
-                            <div class="tfhb-availability-schedule-time tfhb-flexbox">
-
-                                <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
-                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
-                                        <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
-                                        <span class="tfhb-flat-icon"><!--v-if-->
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <Icon name="MoveRight" size="20px" /> 
-
-                                <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
-                                    <div class="tfhb-single-form-field-wrap tfhb-field-date">
-                                        <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
-                                        <span class="tfhb-flat-icon"><!--v-if-->
-                                        </span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        
-                    </div>
-                    
-                    <div class="tfhb-mark-unavailable tfhb-full-width">
-                        <div class="tfhb-single-form-field mark_unavailable" style="width: 100%;">
-                            <div class="tfhb-single-form-field-wrap tfhb-field-checkbox">
-                                <div class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
-                                    <label for="mark_unavailable">
-                                        <input id="mark_unavailable" name="mark_unavailable" type="checkbox" :checked="date_slot.available ? true : false" disabled>
-                                        <span class="checkmark"></span> Mark to Unavailable <!--v-if-->
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
