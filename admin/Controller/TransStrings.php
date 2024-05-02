@@ -57,6 +57,7 @@ namespace HydraBooking\Admin\Controller;
             'Title' =>  __('Title', 'hydra-booking'),
             'Set up booking times when you are available' =>  __('Set up booking times when you are available', 'hydra-booking'),
             ' Add New Availability' =>  __(' Add New Availability', 'hydra-booking'),
+            'Mark unavailable (All day)' => __('Mark unavailable (All day)', 'hydra-booking'),
 
             // Integrations
             'Integrations' =>  __('Integrations', 'hydra-booking'),

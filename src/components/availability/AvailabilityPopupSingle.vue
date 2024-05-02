@@ -97,9 +97,22 @@ const addAvailabilityDate = (key) => {
     });
 }
 
+// Overrides Calander Open
+const OverridesOpen = ref(false);
+const OverridesDates = reactive({
+    date: '',
+    available: '',
+    times: [
+        {
+            start: '09:00',
+            end: '17:00',
+        }
+    ]
+})
+
 //add Overrides Time
 const addOverridesTime = (key) => {
-    props.availabilityDataSingle.date_slots[key].times.push({
+    OverridesDates.times.push({
         start: '09:00',
         end: '17:00',
     });
@@ -107,7 +120,19 @@ const addOverridesTime = (key) => {
 
 // Remove Overrides time slot
 const removeOverridesTime = (key, tkey = null) => {
-    props.availabilityDataSingle.date_slots[key].times.splice(tkey, 1);
+    OverridesDates.times.splice(tkey, 1);
+}
+
+const openOverridesCalendarDate = () => {
+    OverridesDates.date = '';
+    OverridesDates.available = '';
+    OverridesDates.times = [
+        {
+            start: '09:00',
+            end: '17:00',
+        }
+    ]
+    OverridesOpen.value = true;
 }
 
 </script>
@@ -236,26 +261,32 @@ const removeOverridesTime = (key, tkey = null) => {
                                     </button>
                                 </div>
                             </div>
-                            
-                            <div class="tfhb-flexbox">
+                        </div>
+
+                        <!-- Overrides Calendar Form -->
+
+                        <div class="tfhb-overrides-add-form tfhb-flexbox" v-if="OverridesOpen">
+                            <div class="tfhb-flexbox tfhb-align-normal">
                                 <div class="tfhb-override-calendar">
                                     <HbDateTime  
+                                        v-model="OverridesDates.date"
                                         selected = "1" 
                                         :config="{
                                             inline: true,
                                             monthSelectorType: 'static',
                                             yearSelectorType: 'static',
-                                            mode: 'multiple',
+                                            mode: 'multiple'
                                         }"
                                         placeholder="Type your schedule title"   
                                     /> 
                                 </div>
                                 <div class="tfhb-override-times">
-                                    <h4>Which hours are you free?</h4>
+                                    <h3>Which hours are you free?</h3>
 
-                                    <div class="tfhb-availability-schedule-inner tfhb-flexbox">
+                                    <div class="tfhb-availability-schedule-inner tfhb-flexbox tfhb-gap-16 tfhb-mt-16" v-for="(time, tkey) in OverridesDates.times" :key="tkey" v-if="OverridesDates.available!=1">
                                         <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
                                             <HbDateTime  
+                                                v-model="time.start"
                                                 selected = "1" 
                                                 :config="{
                                                     enableTime: true,
@@ -268,6 +299,7 @@ const removeOverridesTime = (key, tkey = null) => {
                                             /> 
                                             <Icon name="MoveRight" size="20" /> 
                                             <HbDateTime  
+                                                v-model="time.end"
                                                 :label="$tfhb_trans['End']"  
                                                 selected = "1"
                                                 :config="{
@@ -281,6 +313,7 @@ const removeOverridesTime = (key, tkey = null) => {
                                             /> 
 
                                         </div>
+                                        
                                         <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
                                             <button class="tfhb-availability-schedule-btn" @click="addOverridesTime(key)"><Icon name="Plus" size="20px" /> </button> 
                                         </div>
@@ -288,9 +321,24 @@ const removeOverridesTime = (key, tkey = null) => {
                                             <button class="tfhb-availability-schedule-btn" @click="removeOverridesTime(key, tkey)"><Icon name="X" size="20px" /> </button> 
                                         </div>
                                     </div>
+
+                                    <div class="tfhb-mark-unavailable tfhb-full-width tfhb-mt-16">
+                                        <HbCheckbox 
+                                            v-model="OverridesDates.available"
+                                            :label="$tfhb_trans['Mark unavailable (All day)']"
+                                            :name="'mark_unavailable'+key"
+                                        />
+                                    </div>
+                                    
                                 </div>
                             </div>
+
+                            <div class="tfhb-overrides-store tfhb-flexbox tfhb-gap-16 tfhb-justify-end tfhb-full-width">
+                                <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">Cancel</button>
+                                <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">Add override</button>
+                            </div>
                         </div>
+
 
 
                         <div class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
@@ -371,7 +419,7 @@ const removeOverridesTime = (key, tkey = null) => {
                             </div>
                         </div>
 
-                        <button class="tfhb-btn tfhb-flexbox tfhb-gap-8" @click="addAvailabilityDate(key)">
+                        <button class="tfhb-btn tfhb-flexbox tfhb-gap-8" @click="openOverridesCalendarDate()">
                             <Icon name="PlusCircle" :width="20"/>
                             Add an override
                         </button>
