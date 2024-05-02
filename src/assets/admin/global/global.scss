@@ -97,10 +97,18 @@
     .tfhb-pb-0{
         padding-bottom: 0px !important;
     }
+    .tfhb-p-0{
+        padding: 0px !important;
+    }
     
     //no-wrap
     .tfhb-no-flexbox{
         display: flow-root !important;
+    }
+
+    // Height auto
+    .tfhb-height-auto{
+        height: auto !important;
     }
     //Gap
     .tfhb-gap-32{
