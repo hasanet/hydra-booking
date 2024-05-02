@@ -158,6 +158,9 @@
     .tfhb-justify-normal{
         justify-content: normal !important;
     }
+    .tfhb-justify-end{
+        justify-content: end !important;
+    }
     .tfhb-align-baseline{
         align-items: baseline !important;
     }
@@ -632,9 +635,11 @@
     }
 }
 
-.tfhb-override-calendar,
+.tfhb-override-calendar{
+    width: calc(55% - 12px);
+}
 .tfhb-override-times{
-    width: calc(50% - 12px);
+    width: calc(45% - 12px);
 }
 
 .tfhb-override-calendar{
@@ -652,9 +657,15 @@
             font-size: 15px !important;
             font-style: normal;
             font-weight: 400 !important;
+            height: 48px;
+            max-width: 48px;
+            line-height: 48px !important;
             &:hover{
                 background: #F6EEF2 !important; 
             }
+        }
+        &.flatpickr-day.today{
+            background: #F6EEF2 !important; 
         }
         &.flatpickr-day.selected{
             background: #F62881 !important;
@@ -671,6 +682,92 @@
                 bottom: 9px;
                 left: 50%;
                 margin-left: -8px;
+            }
+        }
+    }
+    .flatpickr-calendar{
+        width: 100%;
+        padding: 24px;
+        .flatpickr-months{
+            .flatpickr-prev-month,
+            .flatpickr-next-month{
+                position: static;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: .3s all ease;
+                svg{
+                    fill: #F62881;
+                }
+                &:hover{
+                    border-radius: 6px;
+                    background: #FAF5F7;
+                }
+            }
+            .flatpickr-next-month{
+                margin-left: 16px !important;
+            }
+            .flatpickr-month{
+                order: -1;
+                position: static;
+                text-align: left;
+                .flatpickr-current-month{
+                    position: static;
+                    text-align: left;
+                    padding: 0;
+                    font-weight: unset !important;
+                    font-size: unset !important;
+                    .cur-month{
+                        color: #3F2731 !important;
+                        text-align: center;
+                        font-size: 17px !important;
+                        font-style: normal !important;
+                        font-weight: 400 !important;
+                        line-height: 150% !important; /* 25.5px */
+                        &:hover{
+                            background-color: transparent !important;
+                        }
+                    }
+                }
+                .numInputWrapper{
+                    &:hover{
+                        background-color: transparent !important;
+                    }
+                    input{
+                        color: #3F2731 !important;
+                        font-size: 17px !important;
+                        font-style: normal !important;
+                        font-weight: 400 !important;
+                        line-height: 150% !important; /* 25.5px */
+                    }
+                    span{
+                        display: none;
+                    }
+                }
+            }
+        }
+        .flatpickr-rContainer{
+            width: 100%;
+            .flatpickr-weekdays{
+                height: auto !important;
+                padding: 16px 0px;
+                span{
+                    line-height: 1 !important;
+                    font-size: 15px !important;
+                    color: #3F2731 !important;
+                }
+            }
+            .flatpickr-days{
+                width: 100%;
+                .dayContainer{
+                    width: 100%;
+                    min-width: auto;
+                    max-width: none;
+                    gap: 8px;
+                }
             }
         }
     }
@@ -698,6 +795,17 @@
         -webkit-appearance: textfield;
         -moz-appearance: textfield;
         appearance: textfield;
+    }
+}
+.tfhb-override-times{
+    .tfhb-availability-schedule-time{
+        width: calc(100% - 36px);
+    }
+    .tfhb-availability-schedule-clone-single{
+        button{
+            width: 20px;
+            padding: 0;
+        }
     }
 }
 
