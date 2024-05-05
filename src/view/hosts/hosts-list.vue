@@ -38,7 +38,7 @@ const props = defineProps({
                         </div>
                     </div>
                     <hr>
-                    <div class="tfhb-hosts-info">  
+                    <div class="tfhb-hosts-info tfhb-flexbox">  
                          <span class="tfhb-info-icon-text tfhb-flexbox" v-if="host.email !=''"> <Icon name="Mail" size="20" />{{ host.email }}</span>
                          <span class="tfhb-info-icon-text tfhb-flexbox" v-if="host.phone_number !=''"> <Icon name="Phone" size="20" />{{ host.phone_number }}</span>
                     </div>

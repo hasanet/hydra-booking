@@ -36,7 +36,7 @@ const removeExtraFrequency = (key) => {
     <div class="meeting-create-details tfhb-gap-24">
 
         <!-- Date And Time --> 
-        <div class="tfhb-admin-title" >
+        <div class="tfhb-admin-title tfhb-full-width tfhb-m-0" >
             <h2>Meeting Limits</h2> 
             <p>How often attendee can be book</p>
         </div>
@@ -120,8 +120,8 @@ const removeExtraFrequency = (key) => {
         
         </div>  
 
-        <div class="tfhb-admin-title" >
-            <h2 class="tfhb-flexbox tfhb-gap-8">
+        <div class="tfhb-admin-title tfhb-full-width tfhb-m-0">
+            <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
                 Recurring Event
                 <HbSwitch 
                     v-model="meeting.recurring_status"
