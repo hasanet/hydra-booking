@@ -88,7 +88,7 @@ onBeforeMount(() => {
     <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard ">
   
         <div  class="tfhb-dashboard-heading ">
-            <div class="tfhb-admin-title"> 
+            <div class="tfhb-admin-title tfhb-m-0"> 
                 <h1 >{{ $tfhb_trans['General Settings'] }}</h1> 
                 <p>{{ $tfhb_trans['Manage your time zone settings and bookings'] }}</p>
             </div>
