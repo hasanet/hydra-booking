@@ -128,12 +128,15 @@
 
             >.tfhb-admin-card-box {
               width: calc(100% - 120px);
+              border: 1px solid #F6EEF2 !important;
+              background: #FAF5F7;
             }
           }
 
           .tfhb-admin-card-box {
             margin-bottom: 8px !important;
-
+            border: 1px solid #F6EEF2 !important;
+            background: #FAF5F7;
             // last child
             &:last-child {
               // margin-bottom: 0 !important;
