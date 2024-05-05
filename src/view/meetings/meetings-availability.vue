@@ -316,7 +316,7 @@ function formatTime(time) {
         <!-- Time Zone --> 
         <!-- Settings Data -->
         
-        <div class="tfhb-admin-card-box tfhb-gap-24" v-if="Settings_avalibility && 'settings'==meeting.availability_type">  
+        <div class="tfhb-admin-card-box tfhb-gap-24 tfhb-full-width" v-if="Settings_avalibility && 'settings'==meeting.availability_type">  
             <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
                 <div class="tfhb-admin-title"> 
                     <h3 >Weekly hours </h3>  
@@ -362,7 +362,7 @@ function formatTime(time) {
             </div>
 
             <!-- Date Overrides -->
-            <div class="tfhb-admin-card-box tfhb-m-0 tfhb-flexbox tfhb-full-width">  
+            <div class="tfhb-admin-card-box tfhb-m-0 tfhb-flexbox tfhb-full-width" v-if="Settings_avalibility.availability.date_slots">  
                 <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
                     <div class="tfhb-admin-title tfhb-m-0"> 
                         <h3>Add date overrides </h3>  
