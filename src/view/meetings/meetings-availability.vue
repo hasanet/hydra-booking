@@ -8,8 +8,7 @@ import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import useValidators from '@/store/validator'
 import { Host } from '@/store/hosts';
-const { errors, isEmpty } = useValidators();
-import Multiselect from 'vue-multiselect'
+const { errors, isEmpty } = useValidators(); 
 
 const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting", "add-overrides-time", "remove-overrides-time"]); 
 const props = defineProps({
@@ -116,8 +115,7 @@ onBeforeMount(() => {
 
 </script>
 
-<template>
-    <multiselect :options="['list', 'of', 'options']"></multiselect>
+<template> 
     <div class="meeting-create-details tfhb-gap-24">
         <div class="tfhb-meeting-range tfhb-full-width">
             <div class="tfhb-admin-title" >

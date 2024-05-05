@@ -79,7 +79,10 @@ const deleteHost = async ($id, $user_id) => {
         } );
         if (response.data.status) { 
             hosts.data = response.data.hosts;  
-            toast.success(response.data.message); 
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
         }
     } catch (error) {
         console.log(error);
@@ -99,7 +102,10 @@ const updateHostStatus = async ($id, $user_id, $status) => {
         } );
         if (response.data.status) { 
             hosts.data = response.data.hosts;  
-            toast.success(response.data.message); 
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
         }
     } catch (error) {
         console.log(error);

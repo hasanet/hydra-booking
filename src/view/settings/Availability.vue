@@ -148,8 +148,12 @@ const deleteAvailabilitySettings = async (key, id ) => {
              
       } );
       if (response.data.status) { 
-        AvailabilityGet.data = response.data.availability; 
-          toast.success(response.data.message); 
+        AvailabilityGet.data = response.data.availability;
+         
+        toast.success(response.data.message, {
+            position: 'bottom-right', // Set the desired position
+            "autoClose": 1500,
+        }); 
       }
   } catch (error) {
       console.log(error);

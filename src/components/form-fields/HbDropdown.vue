@@ -31,15 +31,15 @@ const handleChange = (e) => {
       <div class="tfhb-single-form-field-wrap tfhb-field-dropdown"> 
           <label v-if="label" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
           <h4 v-if="subtitle">{{ subtitle }}</h4>
-          <p v-if="description">{{ description }}</p>
- 
+          <p v-if="description">{{ description }}</p> 
             <div>
                 <Dropdown 
                     v-model="props.modelValue"  
                     @change="handleChange"   
                     :filter="filter == true ? true : false"
                     :options="option" 
-                    optionLabel="name" 
+                    optionLabel="name"
+                    optionValue="value"
                     :placeholder="placeholder" 
                     :style="{ 'width': '100%' }"  
                 />

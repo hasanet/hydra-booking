@@ -19,7 +19,7 @@ const emit = defineEmits(['update:modelValue', 'question-edit', 'question-remove
                 <label>{{ question.placeholder }}</label>
                 <div class="tfhb-flexbox tfhb-gap-16 tfhb-field-select">
                     <HbText  
-                        v-model="question.label"
+                        v-model="question.type"
                         disabled="disabled"
                     /> 
                     <HbSwitch 

@@ -493,20 +493,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
      */
     public function UpdateGetHostsSettings(){
         $request = json_decode(file_get_contents('php://input'), true);
-        $_tfhb_hosts_settings = get_option('_tfhb_hosts_settings'); 
+        $_tfhb_hosts_settings = !empty(get_option('_tfhb_hosts_settings')) ? get_option('_tfhb_hosts_settings') : array(); 
 
         // delete option
         // delete_option('_tfhb_hosts_settings');
 
-        if(isset($request['hosts_settings']['others_information']['enable_others_information']) && isset($request['hosts_settings']['others_information']['fields'])){
+        if(isset($request['hosts_settings']['others_information']['enable_others_information']) ){ 
             $_tfhb_hosts_settings['others_information']['enable_others_information'] = sanitize_text_field($request['hosts_settings']['others_information']['enable_others_information']);
             foreach ($request['hosts_settings']['others_information']['fields'] as $key => $value) {
                 $_tfhb_hosts_settings['others_information']['fields'][$key]['label'] = sanitize_text_field($value['label']); 
                 $_tfhb_hosts_settings['others_information']['fields'][$key]['type'] = sanitize_text_field($value['type']);
                 $_tfhb_hosts_settings['others_information']['fields'][$key]['placeholder'] = sanitize_text_field($value['placeholder']);
+                //  sanitize array
+                $_tfhb_hosts_settings['others_information']['fields'][$key]['options'] = array_map('sanitize_text_field', $value['options']);
                 $_tfhb_hosts_settings['others_information']['fields'][$key]['required'] = sanitize_text_field($value['required']);
             }
-        }
+        } 
 
         if(isset($request['hosts_settings']['permission'])){
             $_tfhb_hosts_settings['permission']['tfhb_manage_dashboard'] = rest_sanitize_boolean($request['hosts_settings']['permission']['tfhb_manage_dashboard']);

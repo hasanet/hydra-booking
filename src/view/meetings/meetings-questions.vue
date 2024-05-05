@@ -27,12 +27,14 @@ const removeExtraQuestion = (key) => {
     props.meeting.questions.splice(key, 1);
 }
 function EditExtraQuestion(key){
+    
     props.meeting.questions.forEach((question, qkey) => {
         if (qkey === key) {
             questions_data.key = key;
             questions_data.label = question.label;
             questions_data.type = question.type;
             questions_data.placeholder = question.placeholder;
+            questions_data.options = question.options;
             questions_data.required = question.required;
             QuestionPopup.value = true;
         }
@@ -43,6 +45,12 @@ function addExtraQuestion(){
     props.meeting.questions[questions_data.key].label = questions_data.label
     props.meeting.questions[questions_data.key].type = questions_data.type
     props.meeting.questions[questions_data.key].placeholder = questions_data.placeholder
+    // if type is radio, select, multi-select, checkbox then options will be added
+    if (questions_data.type === 'radio' || questions_data.type === 'select' || questions_data.type === 'multi-select' || questions_data.type === 'checkbox') {
+        props.meeting.questions[questions_data.key].options = questions_data.options
+    }else{
+        props.meeting.questions[questions_data.key].options = []
+    }
     props.meeting.questions[questions_data.key].required = questions_data.required
     QuestionPopup.value = false;
 }
@@ -52,6 +60,7 @@ function QuestionPopupAdd(){
         label: '',
         type:'',
         placeholder:'',
+        options: ['Option 1', 'Option 2'],
         required: 1
     });
     const lastIndexOfQuestion = props.meeting.questions.length - 1;
@@ -59,6 +68,7 @@ function QuestionPopupAdd(){
     questions_data.label = '';
     questions_data.type = '';
     questions_data.placeholder = '';
+    questions_data.options = ['Option 1', 'Option 2'],
     questions_data.required = '';
     QuestionPopup.value = true;
 }

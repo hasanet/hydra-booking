@@ -139,18 +139,22 @@ const meetingData = reactive({
             label: 'name',
             type:'Text',
             placeholder:'Name',
+            options: [],
             required: 1
         },
         {
             label: 'email',
             type:'Email',
+            options: [],
             placeholder:'Email',
+            options: [],
             required: 1
         },
         {
             label: 'address',
             type:'Text', 
             placeholder:'Address',
+            options: [],
             required: 1
         }
     ],

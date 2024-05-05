@@ -29,7 +29,8 @@
                 margin: 0 !important;
               }
         }
-        &.tfhb-field-input, &.tfhb-field-date{ 
+     
+        &.tfhb-field-input, &.tfhb-field-date, &.tfhb-field-options{ 
             input { 
                 padding: 8px 8px 8px 12px;
                 min-width: 100%;
@@ -47,6 +48,14 @@
                     outline: none;
                     box-shadow: none; 
                 }
+            }
+        }
+        &.tfhb-field-options{
+            .tfhb-options-fields{
+                margin-bottom: 10px;
+            }
+            input { 
+                min-width: 80% !important;
             }
         }
         &.tfhb-field-date{
