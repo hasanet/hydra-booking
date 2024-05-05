@@ -244,7 +244,7 @@ function formatTime(time) {
                             selected = "1" 
                             :config="{
                             }"
-                            width="45"
+                            width="41"
                             placeholder="Type your schedule title"   
                         /> 
                         <Icon name="MoveRight" size="20" /> 
@@ -255,7 +255,7 @@ function formatTime(time) {
                             selected = "1"
                             :config="{
                             }"
-                            width="45"
+                            width="41"
                             placeholder="Type your schedule title"   
                         /> 
 
