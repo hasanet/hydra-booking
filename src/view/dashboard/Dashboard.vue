@@ -160,7 +160,7 @@ const setChartOptions = () => {
             <div class="tfhb-single-chartbox">
                 <div class="tfhb-single-chartbox-wrap gradient-1">
                     <span class="tfhb-adminchartbox-shape">
-                        <img  :src="$tfhb_url+'/assets/images/shape-1.svg'" alt="">
+                        <img  :src="$tfhb_url+'/assets/images/Vector 1.svg'" alt="">
                     </span>
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
@@ -267,7 +267,7 @@ const setChartOptions = () => {
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
                         <span class="cartbox-badge badge-up tfhb-flexbox tfhb-gap-8">
-                            <span><Icon name="ArrowUp" :size="15"/></span>
+                            <Icon name="ArrowUp" :size="15"/>
                             <span> 80%</span>
                         </span>
                         <span> VS </span>
@@ -387,7 +387,7 @@ const setChartOptions = () => {
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
                         <span class="cartbox-badge badge-down tfhb-flexbox tfhb-gap-8">
-                            <span><Icon name="ArrowUp" :size="15"/></span>
+                            <Icon name="ArrowUp" :size="15"/>
                             <span> 80%</span>
                         </span>
                         <span> VS </span>
@@ -508,7 +508,7 @@ const setChartOptions = () => {
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
                         <span class="cartbox-badge badge-up tfhb-flexbox tfhb-gap-8">
-                            <span><Icon name="ArrowUp" :size="15"/></span>
+                            <Icon name="ArrowUp" :size="15"/>
                             <span> 80%</span>
                         </span>
                         <span> VS </span>
@@ -628,7 +628,7 @@ const setChartOptions = () => {
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
                         <span class="cartbox-badge badge-up tfhb-flexbox tfhb-gap-8">
-                            <span><Icon name="ArrowUp" :size="15"/></span>
+                            <Icon name="ArrowUp" :size="15"/>
                             <span> 80%</span>
                         </span>
                         <span> VS </span>
@@ -646,11 +646,11 @@ const setChartOptions = () => {
         <div class="tfhb-flexbox tfhb-dashboard-notice-box tfhb-gap-24">
 
             <div class="tfhb-dashboard-notice-box-inner">
-                <h3 class="tfhb-dashboard-notice-box-title">Upcoming Meetings</h3>
-                <div class="tfhb-dashboard-notice-box-wrap">
+                <div class="tfhb-dashboard-notice-box-wrap tfhb-flexbox tfhb-gap-16">
+                    <h3 class="tfhb-dashboard-notice-box-title tfhb-m-0 tfhb-full-width">Upcoming Meetings</h3>
 
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8" >
+                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
                         <span >  4:00 PM</span>
                         <div class="tfhb-admin-card-box">
                             <p>Jack Sparrow sent request to join  </p>
@@ -663,7 +663,7 @@ const setChartOptions = () => {
                     </div>
                     <!-- Single Notice Box --> 
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8" >
+                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
                         <span >  4:00 PM</span>
                         <div class="tfhb-admin-card-box">
                             <p>Jack Sparrow sent request to join  </p>
@@ -676,7 +676,7 @@ const setChartOptions = () => {
                     </div>
                     <!-- Single Notice Box --> 
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8" >
+                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
                         <span >  4:00 PM</span>
                         <div class="tfhb-admin-card-box">
                             <p>Jack Sparrow sent request to join  </p>
@@ -696,10 +696,11 @@ const setChartOptions = () => {
 
 
             <div class="tfhb-dashboard-notice-box-inner">
-                <h3 class="tfhb-dashboard-notice-box-title">Recent Bookings</h3>
-                <div class="tfhb-dashboard-notice-box-wrap">
+                <div class="tfhb-dashboard-notice-box-wrap tfhb-flexbox tfhb-gap-16">
+
+                    <h3 class="tfhb-dashboard-notice-box-title tfhb-m-0 tfhb-full-width">Upcoming Meetings</h3>
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box " >
+                    <div class="tfhb-dashboard-notice-single-box tfhb-full-width" >
                         <div class="tfhb-admin-card-box">
                             <p>Jack Sparrow sent request to join Discussion about design system</p>
                             <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
@@ -717,7 +718,7 @@ const setChartOptions = () => {
                     </div>
                     <!-- Single Notice Box -->
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box " >
+                    <div class="tfhb-dashboard-notice-single-box tfhb-full-width" >
                         <div class="tfhb-admin-card-box">
                             <p>Jack Sparrow sent request to join Discussion about design system</p>
                             <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
@@ -735,7 +736,7 @@ const setChartOptions = () => {
                     </div>
                     <!-- Single Notice Box -->
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box " >
+                    <div class="tfhb-dashboard-notice-single-box tfhb-full-width" >
                         <div class="tfhb-admin-card-box">
                             <p>Jack Sparrow sent request to join Discussion about design system</p>
                             <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 

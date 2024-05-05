@@ -18,32 +18,21 @@
           padding: 24px;
           border-radius: 16px;
           overflow: hidden;
-
-
-          background: linear-gradient(100.23deg,
-              #fcf4df -15.15%,
-              #fc9cc6 50.47%,
-              #d66fee 117.42%),
-            linear-gradient(180deg,
-              rgba(252, 244, 223, 0.4) 0%,
-              rgba(252, 156, 198, 0.4) 49.5%,
-              rgba(214, 111, 238, 0.4) 100%);
+          background: linear-gradient(180deg, rgba(252, 244, 223, 0.40) 0%, rgba(252, 156, 198, 0.40) 49.5%, rgba(214, 111, 238, 0.40) 100%), linear-gradient(100deg, #FCF4DF -15.15%, #FC9CC6 50.47%, #D66FEE 117.42%);
+          min-height: 187px;
 
           &.gradient-2 {
-            background: linear-gradient(100.23deg, #F2F3E2 -15.15%, #FC9CC6 50.96%, #B2E5F8 117.42%),
-              linear-gradient(180deg, rgba(242, 243, 226, 0.4) 0%, rgba(252, 156, 198, 0.4) 52.27%, rgba(178, 229, 248, 0.4) 100%) !important;
 
+            background: linear-gradient(180deg, rgba(242, 243, 226, 0.40) 0%, rgba(252, 156, 198, 0.40) 52.27%, rgba(178, 229, 248, 0.40) 100%), linear-gradient(100deg, #F2F3E2 -15.15%, #FC9CC6 50.96%, #B2E5F8 117.42%); 
           }
 
           &.gradient-3 {
-            background: linear-gradient(100.23deg, #D7EBEB -15.15%, #FC9CC6 50.47%, #9D7EF3 117.42%),
-              linear-gradient(180deg, rgba(215, 235, 235, 0.4) 0%, rgba(252, 156, 198, 0.4) 49.5%, rgba(157, 126, 243, 0.4) 100%) !important;
+            background: linear-gradient(180deg, rgba(215, 235, 235, 0.40) 0%, rgba(252, 156, 198, 0.40) 49.5%, rgba(157, 126, 243, 0.40) 100%), linear-gradient(100deg, #D7EBEB -15.15%, #FC9CC6 50.47%, #9D7EF3 117.42%); 
 
           }
 
           &.gradient-4 {
-            background: linear-gradient(100.23deg, #F9CDC3 -15.15%, #FC9CC6 50.47%, #ADFDA2 117.42%),
-              linear-gradient(180deg, rgba(249, 205, 195, 0.4) 0%, rgba(252, 156, 198, 0.4) 49.5%, rgba(173, 253, 162, 0.4) 100%) !important;
+            background: linear-gradient(180deg, rgba(249, 205, 195, 0.40) 0%, rgba(252, 156, 198, 0.40) 49.5%, rgba(173, 253, 162, 0.40) 100%), linear-gradient(100deg, #F9CDC3 -15.15%, #FC9CC6 50.47%, #ADFDA2 117.42%); 
 
 
           }
@@ -70,9 +59,10 @@
           .cartbox-title {
             display: inline-block;
             width: 100%;
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 24px;
+            font-size: 15px !important;
+            font-weight: 400 !important;
+            line-height: 24px !important;
+            margin: 0px !important;
           }
 
           .cartbox-value {
@@ -80,7 +70,7 @@
             font-weight: 600 !important;
             line-height: 43.2px !important;
             color: $ui600;
-            margin: 16px 0;
+            margin: 16px 0 18px 0 !important;
             display: inline-block;
 
           }
@@ -92,16 +82,18 @@
               padding: 2px 8px 2px 6px;
               background-color: #ffffff80;
               border-radius: 16px;
+              margin: 0px !important;
+              svg{
+                color: $success600 !important;
+              }
+              span {
+                margin: 0 !important;
+                font-weight: 600 !important;
+                color: $success600 !important;
+              }
 
               &.badge-down {
                 color: #FF0000;
-              }
-
-              span {
-                margin: 0;
-
-                font-weight: 600 !important;
-                color: $success600 !important;
               }
             }
           }
@@ -119,7 +111,12 @@
         border-radius: 12px;
         padding: 24px;
         margin-top: 8px;
-
+        h3{
+          font-size: 17px !important;
+          font-style: normal !important;
+          font-weight: 400 !important;
+          line-height: 150% !important; /* 25.5px */ 
+        }
         .tfhb-dashboard-notice-single-box {
           &.tfhb-flexbox {
             >span {
@@ -134,13 +131,9 @@
           }
 
           .tfhb-admin-card-box {
-            margin-bottom: 8px !important;
+            margin-bottom: 0px !important;
             border: 1px solid #F6EEF2 !important;
             background: #FAF5F7;
-            // last child
-            &:last-child {
-              // margin-bottom: 0 !important;
-            }
           }
         }
       }
