@@ -118,7 +118,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box "> 
+    <div class="tfhb-admin-card-box tfhb-m-0"> 
        {{ Integration.google_calendar }}
         <!-- Woo  Integrations  --> 
         <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
@@ -217,7 +217,7 @@ onBeforeMount(() => {
             </div>
          </div> 
         
-        <div class="tfhb-admin-card-box tfhb-flexbox">   
+        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-m-0">   
             <div class="tfhb-admin-cartbox-cotent tfhb-flexbox">
                 <svg width="56" height="32" viewBox="0 0 56 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_809_950)">

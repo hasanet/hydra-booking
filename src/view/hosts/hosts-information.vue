@@ -63,14 +63,14 @@ const UploadImage = () => {
             </div>
             <div class="tfhb-image-box-content">  
             <h4 v-if="label !=''" :for="name">{{ $tfhb_trans['Profile image'] }} <span  v-if="required == 'true'"> *</span> </h4>
-            <p v-if="description !=''">{{ $tfhb_trans['Recommended Image Size: 400x400px'] }}</p>
+            <p v-if="description !=''"  class="tfhb-m-0">{{ $tfhb_trans['Recommended Image Size: 400x400px'] }}</p>
             </div>
         </div> 
     </div>
     <div class="tfhb-admin-title" >
         <h2>{{ $tfhb_trans['General Information'] }}    </h2>  
     </div>
-    <div class="tfhb-admin-card-box tfhb-flexbox">  
+    <div class="tfhb-admin-card-box tfhb-flexbox tfhb-mb-24">  
         <HbText  
             v-model="host.first_name"  
             required= "true"  

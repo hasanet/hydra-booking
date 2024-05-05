@@ -45,9 +45,9 @@
             display: inline-block;
             width: 100%;
             justify-content: normal !important;
-            font-size: 16px !important;
+            font-size: 15px !important;
             gap: 16px !important;
-            margin: 8px 0 !important;
+            margin: 0 !important;
           }
         }
 
@@ -87,6 +87,10 @@
     .tfhb-host-single-information{
       width: 100%;
     }
-   
+    .tfhb-image-box-content{
+      h4{
+        margin: 0 0 8px 0 !important;
+      }
+    }
   }
 }

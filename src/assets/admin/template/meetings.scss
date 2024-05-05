@@ -208,7 +208,7 @@
                         width: calc(100% - 20px) !important;
                     }
                     .meeting-user-info{
-                        margin-top: 8px;
+                        margin-top: 16px;
                         ul{
                             gap: 8px 32px !important;
                             li{
@@ -465,8 +465,8 @@
                     &:after {
                         content: "";
                         position: absolute;
-                        left: 7px;
-                        top: 3px;
+                        left: 6px;
+                        top: 2px;
                         width: 4px;
                         height: 8px;
                         border: solid $ui50;

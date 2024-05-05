@@ -81,7 +81,7 @@ function QuestionPopupClose(){
 
 <template>
     <div class="meeting-create-details tfhb-gap-24"> 
-        <div class="tfhb-admin-title" >
+        <div class="tfhb-admin-title tfhb-m-0 tfhb-full-width">
             <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
                 Meeting Questions for Attendee
                 <HbSwitch 

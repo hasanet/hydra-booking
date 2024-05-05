@@ -128,7 +128,7 @@ const removeAvailabilityTDate = (key) => {
     props.availabilityDataSingle.date_slots.splice(key, 1);
 }
 
-// Add new date slot
+// Store to the reactive
 const addAvailabilityDate = (key) => {
 
     props.availabilityDataSingle.date_slots[OverridesDates.key].date = OverridesDates.date
@@ -236,6 +236,7 @@ function formatTime(time) {
                                         }"
                                         width="45"
                                         placeholder="Type your schedule title"   
+                                        icon="Clock4"
                                     /> 
                                     <Icon name="MoveRight" size="20" /> 
                                     <HbDateTime  
@@ -250,6 +251,7 @@ function formatTime(time) {
                                         }"
                                         width="45"
                                         placeholder="Type your schedule title"   
+                                        icon="Clock4"
                                     /> 
 
                                 </div>
@@ -279,7 +281,7 @@ function formatTime(time) {
                             <div class="tfhb-flexbox">
                                 <div class="tfhb-overrides-date">
                                     <h4>{{ date_slot.date }}</h4>
-                                    <p class="tfhb-m-0">{{ formatTimeSlots(date_slot.times) }}</p>
+                                    <p class="tfhb-m-0">{{ date_slot.available!=1 ? formatTimeSlots(date_slot.times) : 'Unavailable' }}</p>
                                 </div>
                                 <div class="tfhb-overrides-action tfhb-flexbox tfhb-gap-16 tfhb-justify-normal">
                                     <button class="question-edit-btn" @click="editAvailabilityDate(key)">
