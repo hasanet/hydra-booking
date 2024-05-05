@@ -286,7 +286,8 @@ function formatTime(time) {
                         <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
                             <div class="tfhb-single-form-field-wrap tfhb-field-date">
                                 <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
-                                <span class="tfhb-flat-icon"><!--v-if-->
+                                <span class="tfhb-flat-icon">
+                                    <Icon name="Clock4" size="20px" />
                                 </span>
                             </div>
                         </div>
@@ -296,7 +297,8 @@ function formatTime(time) {
                         <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
                             <div class="tfhb-single-form-field-wrap tfhb-field-date">
                                 <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
-                                <span class="tfhb-flat-icon"><!--v-if-->
+                                <span class="tfhb-flat-icon">
+                                    <Icon name="Clock4" size="20px" />
                                 </span>
                             </div>
                         </div>
@@ -307,7 +309,7 @@ function formatTime(time) {
         </div>
 
         <!-- Date Overrides -->
-        <div class="tfhb-admin-card-box tfhb-m-0 tfhb-flexbox tfhb-full-width">  
+        <div class="tfhb-admin-card-box tfhb-m-0 tfhb-flexbox tfhb-full-width" v-if="Settings_avalibility.availability.date_slots">  
             <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
                 <div class="tfhb-admin-title tfhb-m-0"> 
                     <h3>Add date overrides </h3>  

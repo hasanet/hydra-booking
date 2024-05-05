@@ -236,6 +236,7 @@ function formatTime(time) {
                                         }"
                                         width="45"
                                         placeholder="Type your schedule title"   
+                                        icon="Clock4"
                                     /> 
                                     <Icon name="MoveRight" size="20" /> 
                                     <HbDateTime  
@@ -250,6 +251,7 @@ function formatTime(time) {
                                         }"
                                         width="45"
                                         placeholder="Type your schedule title"   
+                                        icon="Clock4"
                                     /> 
 
                                 </div>

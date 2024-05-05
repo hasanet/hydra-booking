@@ -338,7 +338,8 @@ function formatTime(time) {
                             <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
                                 <div class="tfhb-single-form-field-wrap tfhb-field-date">
                                     <input type="text" data-input="true" class="flatpickr-input" :value="time.start" readonly="readonly">
-                                    <span class="tfhb-flat-icon"><!--v-if-->
+                                    <span class="tfhb-flat-icon">
+                                        <Icon name="Clock4" size="20px" />
                                     </span>
                                 </div>
                             </div>
@@ -348,7 +349,8 @@ function formatTime(time) {
                             <div class="tfhb-single-form-field" style="width: calc(45% - 12px);" selected="1">
                                 <div class="tfhb-single-form-field-wrap tfhb-field-date">
                                     <input type="text" data-input="true" class="flatpickr-input" :value="time.end" readonly="readonly">
-                                    <span class="tfhb-flat-icon"><!--v-if-->
+                                    <span class="tfhb-flat-icon">
+                                        <Icon name="Clock4" size="20px" />
                                     </span>
                                 </div>
                             </div>
@@ -416,6 +418,7 @@ function formatTime(time) {
                                 }"
                                 width="45"
                                 placeholder="Type your schedule title"   
+                                icon="Clock4"
                             /> 
                             <Icon name="MoveRight" size="20" /> 
                             <HbDateTime  
@@ -429,6 +432,7 @@ function formatTime(time) {
                                 }"
                                 width="45"
                                 placeholder="Type your schedule title"   
+                                icon="Clock4"
                             /> 
 
                         </div>
