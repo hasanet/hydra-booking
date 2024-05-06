@@ -24,10 +24,13 @@
             .p-dropdown { 
                 border: 1px solid $ui50 !important; 
                 box-shadow: none !important;
-              } 
-              span{
-                margin: 0 !important;
-              }
+                &.tfhb-required{
+                    border: 1px solid red !important;
+                }
+            } 
+            span{
+            margin: 0 !important;
+            }
         }
      
         &.tfhb-field-input, &.tfhb-field-date, &.tfhb-field-options{ 

@@ -18,10 +18,11 @@ const props = defineProps([
   ])
 
  
-const emit = defineEmits(['update:modelValue', 'tfhb-onchange'])
+const emit = defineEmits(['update:modelValue', 'tfhb-onchange', 'add-change', 'add-click'])
 const handleChange = (e) => {  
     emit('update:modelValue', e.value)
     emit('tfhb-onchange', e)
+    emit('add-change', e)
 }
 </script>
 
@@ -53,6 +54,8 @@ const handleChange = (e) => {
                     optionValue="value"
                     :placeholder="placeholder" 
                     :style="{ 'width': '100%' }"  
+                    @click="emit('add-click')"
+                    :class="errors ? 'tfhb-required' : ''"
                 />
             </div>
      
