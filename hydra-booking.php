@@ -37,6 +37,7 @@ class THB_INIT{
 
         add_action('init', array($this, 'init'));
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );
+        add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
 
    }
 
@@ -54,8 +55,20 @@ class THB_INIT{
         } 
     }  
  
- 
+    public function tfhb_get_plugin_screen()
+    {
+        $current_screen = get_current_screen();
+        if (isset($_GET['page']) && $_GET['page'] === 'hydra-booking') {
+            // remove admin notice
+            add_action('in_admin_header', array($this, 'tfhb_hide_notices'), 99);
+        }
+    }
 
+    public function tfhb_hide_notices()
+    {
+        remove_all_actions('user_admin_notices');
+        remove_all_actions('admin_notices');
+    }
     
 }
 
