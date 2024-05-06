@@ -74,8 +74,8 @@ const validateSelect = (fieldName) => {
                     {name: '60 minutes', value: '60'},
                     {name: 'Custom', value: 'custom'} 
                 ]" 
-                @change="() => validateSelect('duration')"
-                @click="() => validateSelect('duration')"
+                @add-change="validateSelect('duration')" 
+                @add-click="validateSelect('duration')" 
                 :errors="errors.duration"
             />
             <!-- Duration -->
