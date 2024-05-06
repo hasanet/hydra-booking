@@ -83,9 +83,9 @@
                 width: 100%;
                 font-family: "Inter", sans-serif;
             }
-        }
-        &.tfhb-field-checkbox{
-            input[type="checkbox"]{
+        } 
+        &.tfhb-field-checkbox, &.tfhb-field-radio{
+            input[type="checkbox"], input[type="radio"] {
                 display: none;
             }
             .checkmark {
@@ -122,6 +122,7 @@
                 margin: 0 !important;
                 position: relative;
                 padding-left: 38px;
+                margin-right: 16px !important;
                 input:checked~.checkmark {
                     background-color: $primaryi;
                     border: 1px solid $primaryi;
@@ -130,6 +131,13 @@
                     display: block;
                 }
             }
+        }
+        &.tfhb-field-radio{
+            .checkmark {
+                border-radius: 50%;
+            }
+            
+             
         }
         .tfhb-swicher-wrap{
             gap: 8px !important;

@@ -27,14 +27,12 @@ const checkedValue = (e) => {
     } 
 }
 
-const MulticheckedValue = (e) => {   
-    if(e.target.checked){
-        groupsvalue.push(e.target.value);
-        emit('update:modelValue', groupsvalue);
+const MulticheckedValue = (e) => {    
+  if(e.target.checked){
+        emit('update:modelValue',   e.target.value);
     }else{
-        groupsvalue.splice(groupsvalue.indexOf(e.target.value), 1);
-        emit('update:modelValue', groupsvalue);
-    }
+        emit('update:modelValue', 0);
+    } 
 }
 </script>
 
@@ -42,7 +40,7 @@ const MulticheckedValue = (e) => {
   <div class="tfhb-single-form-field" :class="name" 
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
     > 
-    <div class="tfhb-single-form-field-wrap tfhb-field-checkbox">
+    <div class="tfhb-single-form-field-wrap tfhb-field-radio">
         <div class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
             <span style="width: 100%; font-size: 13px;" v-if="label && groups == true " :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </span>
             <h4 v-if="subtitle && groups == true">{{ subtitle }}</h4>
@@ -55,20 +53,20 @@ const MulticheckedValue = (e) => {
                 @change="checkedValue" 
                 :name="name"
                 :checked="props.modelValue == 1 ? true : false"
-                type="checkbox"
+                type="radio"
                 />     
                 <span class="checkmark"></span>
                 {{ label }} <span  v-if="required == 'true'"> *</span> 
             </label>
-            <label v-else-if="groups == true && options" v-for="(value, key) in options"  :for="key+'-'+name"> 
-                <input 
-                :id="key+'-'+name" 
-                :v-model="groupsvalue"  
-                @change="MulticheckedValue" 
+            <label v-else-if="groups == true && options" v-for="(value, key) in options"  :for="key+'-'+name">  
+                <input
+                :id="key+'-'+name"
+                :v-model="groupsvalue"
+                @change="MulticheckedValue"
                 :name="name"
                 :value="value"
-                type="checkbox"
-                />     
+                type="radio"
+                /> 
                 <span class="checkmark"></span>
                 {{ value }} <span  v-if="required == 'true'"> *</span>
             </label>

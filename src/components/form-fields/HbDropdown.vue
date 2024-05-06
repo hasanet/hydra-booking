@@ -13,7 +13,8 @@ const props = defineProps([
     'description', 
     'option',
     'errors',
-    'filter'
+    'filter',
+    'optionType'
   ])
 
  
@@ -34,6 +35,16 @@ const handleChange = (e) => {
           <p v-if="description">{{ description }}</p> 
             <div>
                 <Dropdown 
+                    v-if="optionType == 'array'"
+                    v-model="props.modelValue"  
+                    @change="handleChange"   
+                    :filter="filter == true ? true : false"
+                    :options="option"  
+                    :placeholder="placeholder" 
+                    :style="{ 'width': '100%' }"  
+                />
+                <Dropdown 
+                    v-else
                     v-model="props.modelValue"  
                     @change="handleChange"   
                     :filter="filter == true ? true : false"

@@ -39,8 +39,7 @@ const DeleteOptions = (index) => {
             {name: 'Number', value: 'number'}, 
             {name: 'Phone', value: 'phone'}, 
             {name: 'Radio', value: 'radio'}, 
-            {name: 'Select', value: 'select'}, 
-            {name: 'Multi Select', value: 'multi-select'}, 
+            {name: 'Select', value: 'select'},  
             {name: 'Checkbox', value: 'checkbox'}, 
             {name: 'Date', value: 'date'}
         ]" 

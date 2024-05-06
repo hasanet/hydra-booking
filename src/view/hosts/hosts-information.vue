@@ -8,6 +8,9 @@ import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbImageBox from '@/components/form-fields/HbImageBox.vue'
+import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import HbTextarea from '@/components/form-fields/HbTextarea.vue'
+import HbRadio from '@/components/form-fields/HbRadio.vue'
 import { Upload } from 'lucide-vue-next';
 const emit = defineEmits(["save-host-info"]); 
 
@@ -118,18 +121,66 @@ const UploadImage = () => {
         />  
          
     <!-- Time Zone -->
-    </div>  
+    </div>   
     <div v-if="hosts_settings.others_information && hosts_settings.others_information.enable_others_information == true"  class="tfhb-admin-title" >
         <h2>{{ $tfhb_trans['Others Information'] }}    </h2>  
     </div>
     <div v-if="hosts_settings.others_information && hosts_settings.others_information.enable_others_information == true && hosts_settings.others_information.fields" class="tfhb-admin-card-box tfhb-flexbox">  
        <div class="tfhb-host-single-information" v-for="(field, index) in hosts_settings.others_information.fields" :key="index">  
-            <HbText  
-                v-model="host.others_information[field.label]"  
-                :required= "field.required == 1 ? 'true' : 'false'"  
-                :label="field.placeholder"   
-                :placeholder="field.placeholder"  
-            />
+            <!--  --> 
+            <div v-if="field.type == 'checkbox'" class="tfhb-hosts-single-information-wrap">
+                
+                <HbCheckbox 
+                    v-model="host.others_information[field.label]" 
+                    :names="host.others_information[field.label]"
+                    :label="field.placeholder"
+                    :groups="true"
+                    :options="field.options" 
+                />
+            </div>
+            <div v-else-if="field.type == 'textarea'" class="tfhb-hosts-single-information-wrap">
+                
+                <HbTextarea 
+                    v-model="host.others_information[field.label]" 
+                    :names="host.others_information[field.label]"
+                    :label="field.placeholder"  
+                    :name="host.others_information[field.label]"
+                />
+            </div>
+            <div v-else-if="field.type == 'radio'" class="tfhb-hosts-single-information-wrap">
+                 
+                <HbRadio 
+                    v-model="host.others_information[field.label]" 
+                    :names="host.others_information[field.label]"
+                    :label="field.placeholder"
+                    :groups="true"
+                    :options="field.options"   
+                    :name="host.others_information[field.label]"
+                />
+            </div>
+            <div v-else-if="field.type == 'select'" class="tfhb-hosts-single-information-wrap">
+                
+                <HbDropdown 
+            
+                    v-model="host.others_information[field.label]"  
+                    required= "true"  
+                    label="field.placeholder"
+                    selected = "1" 
+                    placeholder="Select Time Zone"  
+                    :option = "field.options"  
+                    optionType = "array"  
+                />  
+            </div>
+            <div v-else class="tfhb-hosts-single-information-wrap">
+                <HbText  
+                    v-model="host.others_information[field.label]"  
+                    :required= "field.required == 1 ? 'true' : 'false'"  
+                    :label="field.placeholder"   
+                    :placeholder="field.placeholder"  
+                    :type="field.type"  
+                />
+            </div>
+            
 
        </div>
     </div>  
