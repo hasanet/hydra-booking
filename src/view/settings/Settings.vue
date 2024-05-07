@@ -34,7 +34,12 @@ const updateEvent = async () => {
                     <li><router-link to="/settings/hosts-settings" exact :class="{ 'active': $route.path.startsWith('/settings/hosts-settings') }"> <Icon name="UserCog" /> Host Settings</router-link></li> 
                     <li><router-link to="/settings/availability" :class="{ 'active': $route.path === '/settings/availability' }"> <Icon name="Clock" /> Availability</router-link></li> 
                     <li><router-link to="/settings/notifications" :class="{ 'active': $route.path === '/settings/notifications' }"> <Icon name="BellDot" /> Notifications</router-link></li>
-                    <li><router-link to="/settings/integrations" :class="{ 'active': $route.path === '/settings/integrations' }"> <Icon name="Unplug" /> Integrations</router-link></li>
+                    <li><router-link to="/settings/integrations" :class="{ 'active': $route.path === '/settings/integrations' }"> <Icon name="Unplug" /> Integrations</router-link>
+                        <!-- <ul class="dropdown">
+                            <li><a href="#"> <Icon name="sidebarMenu" /> All </a></li>
+
+                        </ul> -->
+                    </li>
                     <li><router-link to="/settings/appearance" :class="{ 'active': $route.path === '/settings/appearance' }"> <Icon name="SwatchBook" /> Appearance</router-link></li>
 
                 </ul>  

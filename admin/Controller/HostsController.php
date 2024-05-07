@@ -6,6 +6,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
  use HydraBooking\Services\Integrations\Zoom\ZoomServices;
+ use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
  // Use DB 
 use HydraBooking\DB\Host;
 // exit
@@ -418,24 +419,34 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $hostData = $host->get( $host_id );
         $user_id = $hostData->user_id;
 
-        $_tfhb_host_integration_settings =  get_user_meta($user_id, '_tfhb_host_integration_settings', true);
-        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
-        if(isset($_tfhb_integration_settings['google_calendar']) && $_tfhb_integration_settings['google_calendar']['status'] == 1){
-            $google_calendar = $_tfhb_host_integration_settings['google_calendar'];
-            $google_calendar['type'] = 'google_calendar';
-            $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status'];
-            $google_calendar['client_id'] = $_tfhb_integration_settings['google_calendar']['client_id'];
-            $google_calendar['secret_key'] = $_tfhb_integration_settings['google_calendar']['secret_key'];
-            $google_calendar['redirect_url'] = $_tfhb_integration_settings['google_calendar']['redirect_url']; 
-            $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status'];
-            $_tfhb_host_integration_settings['google_calendar'] = $google_calendar;
-        }
+
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array();
+
         
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+ 
+        $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
+        
+        if($_tfhb_integration_settings['google_calendar']['status'] == true){  
+
+            $google_calendar['type'] = 'google_calendar';
+            $GoogleCalendar = new GoogleCalendar(
+                $_tfhb_integration_settings['google_calendar']['client_id'], 
+                $_tfhb_integration_settings['google_calendar']['secret_key'], 
+                $_tfhb_integration_settings['google_calendar']['redirect_url']
+            );
+            $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id); 
+            $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
+            $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status']; 
+        } 
+        
+
 
         // Checked if woo
         $data = array(
             'status' => true,  
             'integration_settings' => $_tfhb_host_integration_settings,
+            'google_calendar' => $google_calendar,
         );
         return rest_ensure_response($data);
     }

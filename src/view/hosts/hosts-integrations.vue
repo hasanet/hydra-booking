@@ -44,11 +44,7 @@ const Integration = reactive( {
     google_calendar : {
         type: 'meeting', 
         status: 0, 
-        connection_status: 0,
-        client_id: '',
-        secret_key: '',
-        access_token: '',
-        redirect_url: '',
+        connection_status: 0, 
 
     },
 });
@@ -71,7 +67,7 @@ const fetchIntegration = async () => {
 
         if (response.data.status) {   
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
-            Integration.google_calendar= response.data.integration_settings.google_calendar ? response.data.integration_settings.google_calendar : Integration.google_calendar;
+            Integration.google_calendar= response.data.google_calendar ? response.data.google_calendar : Integration.google_calendar;
             
 
             skeleton.value = false;
@@ -118,8 +114,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box tfhb-m-0"> 
-       {{ Integration.google_calendar }}
+    <div class="tfhb-admin-card-box tfhb-m-0">  
         <!-- Woo  Integrations  --> 
         <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
 

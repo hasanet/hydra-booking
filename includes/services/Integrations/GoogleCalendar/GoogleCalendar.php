@@ -17,12 +17,21 @@ class GoogleCalendar{
  
     public $calendarEvent = 'https://www.googleapis.com/calendar/v3/calendars/primary/events/';
 
+    public $authScope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events';
+
+
  
     public function __construct($clientId, $clientSecret, $redirectUrl) {
 
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->redirectUrl =  $this->getRedirectUrl();
+    }
+
+    public function GetAccessTokenUrl($host_id){ 
+        return $this->authUrl . '?client_id=' . $this->clientId . '&redirect_uri=' . $this->redirectUrl . '&scope=' . $this->authScope . '&response_type=code&access_type=offline&prompt=consent&state=' . $host_id;
+        
+        
     }
 
     // Get Redirect URL

@@ -39,7 +39,8 @@ const emit = defineEmits([ "update-integrations", ]);
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
             <button @click="gCalPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ google_calendar.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
              <!-- a tag for get access token  -->
-            <a  v-if="google_calendar.status"  :href="'https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&redirect_uri='+google_calendar.redirect_url+'&response_type=code&client_id='+google_calendar.client_id+'&access_type=online'" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a>
+            <!-- <a   :href="'https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&redirect_uri='+google_calendar.redirect_url+'&response_type=code&client_id='+google_calendar.client_id+'&access_type=online'" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a> -->
+            <a  v-if="google_calendar.connection_status == 1"  :href="google_calendar.access_url" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a>
                
             
         </div>
