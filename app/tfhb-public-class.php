@@ -122,7 +122,7 @@ class Tfhb_APP {
                 </div>
             </div>
         </div>
-
+        <br>
 
         <div class="tfhb-meeting-box">
             <div class="tfhb-meeting-card">
@@ -198,10 +198,113 @@ class Tfhb_APP {
                             <label for="note">Note</label>
                             <textarea name="" id="note"></textarea>
                         </div>
+
+                        <div class="tfhb-confirmation-box tfhb-flexbox">
+                            <div class="tfhb-swicher-wrap tfhb-flexbox tfhb-gap-8">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <div class="slider"></div>
+                                </label>
+                                <label class="swicher-label">Booking Confirmation</label>
+                            </div>
+
+                            <div class="tfhb-checkbox-wrap tfhb-flexbox tfhb-gap-8">
+                                <label for="attendee_can_cancel">
+                                    <input id="attendee_can_cancel" name="attendee_can_cancel" type="checkbox">
+                                    <span class="checkmark"></span> Attendee can cancel this meeting 
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="tfhb-confirmation-button">
+                            <button class="tfhb-flexbox tfhb-gap-8">
+                                Confirm
+                                <img src="<?php echo THB_URL.'assets/app/images/arrow-right.svg'; ?>" alt="arrow"> 
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <br>
+        <div class="tfhb-meeting-box">
+            <div class="tfhb-meeting-card">
+                <div class="tfhb-meeting-confirmation">
+                    <div class="tfhb-confirmation-seccess">
+                        <img src="<?php echo THB_URL.'assets/app/images/sucess.gif'; ?>" alt="Success"> 
+                        <h3>Booking Confirmed!</h3>
+                        <p>Please check your email for more information. Now you can reschedule or cancel booking from here.</p>
+                    </div>
+
+                    <div class="tfhb-meeting-hostinfo">
+                        <h4>Discussion about design system to work faster</h4>
+                        <ul>
+                            <li class="tfhb-flexbox tfhb-gap-8">
+                                <div class="tfhb-icon">
+                                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                                </div>
+                                Abdullah Eusuf 
+                                <span>Host</span>
+                            </li>
+                            <li class="tfhb-flexbox tfhb-gap-8">
+                                <div class="tfhb-icon">
+                                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                                </div>
+                                9:00pm-9:45pm, Saturday, April 25
+                            </li>
+                            <li class="tfhb-flexbox tfhb-gap-8">
+                                <div class="tfhb-icon">
+                                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                                </div>
+                                Asia/Dhaka(09.00pm)
+                            </li>
+                            <li class="tfhb-flexbox tfhb-gap-8">
+                                <div class="tfhb-icon">
+                                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                                </div>
+                                Google Meet
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tfhb-meeting-confirmation-calender">
+                        <h3>Add to Calendar</h3>
+                        <ul class="tfhb-flexbox tfhb-gap-16">
+                            <li>
+                                <a href="#">
+                                    <img src="<?php echo THB_URL.'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="<?php echo THB_URL.'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="<?php echo THB_URL.'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="<?php echo THB_URL.'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tfhb-meeting-confirmation-action tfhb-flexbox tfhb-gap-16">
+                        <button>Reschedule</button>
+                        <button>Cancel booking</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     <?php 
     $output_string = ob_get_contents();
 	ob_end_clean();

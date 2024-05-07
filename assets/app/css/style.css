@@ -228,13 +228,274 @@
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-single-form textarea {
   height: 90px;
 }
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-confirmation-box {
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 16px 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-confirmation-box .tfhb-swicher-wrap {
+  width: 100%;
+  align-items: center;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-confirmation-box .tfhb-swicher-wrap .swicher-label {
+  color: #3F2731;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-confirmation-box .tfhb-checkbox-wrap {
+  width: 100%;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-confirmation-button {
+  width: 100%;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-confirmation-button button {
+  border-radius: 8px;
+  background: #F62881;
+  padding: 16px;
+  color: #FFF;
+  justify-content: center;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+  cursor: pointer;
+  width: 224px;
+  border: 0px solid;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation {
+  width: 500px;
+  margin: 64px auto;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-confirmation-seccess {
+  text-align: center;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-confirmation-seccess img {
+  height: 66px;
+  width: 66px;
+  margin-bottom: 24px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-confirmation-seccess h3 {
+  color: #3F2731;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 33px */
+  margin: 0 0 16px 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-confirmation-seccess p {
+  color: #765664;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+  margin: 0 0 16px 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo {
+  border-radius: 8px;
+  background: #FAF5F7;
+  padding: 24px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo h3 {
+  color: #3F2731;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 25.5px */
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo ul li {
+  color: #765664;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(227, 207, 215, 0.1);
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo ul li:last-child {
+  margin-bottom: 0px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo ul li span {
+  border-radius: 16px;
+  background: #EBEFFF;
+  padding: 4px 8px;
+  color: #0037EB;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 145.455% */
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-hostinfo ul li .tfhb-icon {
+  border-radius: 6px;
+  border: 0.2px solid rgba(227, 207, 215, 0.2);
+  background: #FFF;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-calender {
+  margin: 32px 0 0 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-calender h3 {
+  color: #3F2731;
+  text-align: center;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+  margin: 0 0 8px 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-calender ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-content: center;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-calender ul li a img {
+  width: 32px;
+  height: 32px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-action {
+  justify-content: center;
+  margin-top: 24px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-action button {
+  border-radius: 8px;
+  border: 1px solid #F6EEF2;
+  background: #FFF;
+  padding: 8px 24px;
+  width: 158px;
+  color: #765664;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+  cursor: pointer;
+}
 
 .tfhb-flexbox {
   display: flex;
 }
 
+.tfhb-gap-16 {
+  gap: 16px;
+}
+
 .tfhb-gap-8 {
   gap: 8px;
+}
+
+.tfhb-swicher-wrap {
+  /* Rounded sliders */
+}
+.tfhb-swicher-wrap .switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 20px;
+  margin: 0;
+}
+.tfhb-swicher-wrap .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.tfhb-swicher-wrap .switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #E3CFD7;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 10px;
+  margin: 0 !important;
+}
+.tfhb-swicher-wrap .switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 4px;
+  bottom: 3px;
+  background-color: #ffffff;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+.tfhb-swicher-wrap .switch input:checked + .slider {
+  background-color: #F62881;
+}
+.tfhb-swicher-wrap .switch input:focus + .slider {
+  box-shadow: none;
+}
+.tfhb-swicher-wrap .switch input:checked + .slider:before {
+  -webkit-transform: translateX(10px);
+  -ms-transform: translateX(10px);
+  transform: translateX(10px);
+}
+.tfhb-swicher-wrap .switch .slider.round {
+  border-radius: 34px;
+}
+.tfhb-swicher-wrap .slider.round:before {
+  border-radius: 50%;
+}
+
+.tfhb-checkbox-wrap input[type=checkbox] {
+  display: none;
+}
+.tfhb-checkbox-wrap .checkmark {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  background-color: #F6EEF2;
+  border-radius: 5px;
+  border: 1px solid #F6EEF2;
+  margin: 0;
+}
+.tfhb-checkbox-wrap .checkmark:after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: solid #F6EEF2;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  display: none;
+}
+.tfhb-checkbox-wrap label {
+  color: #3F2731;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0;
+  position: relative;
+  padding-left: 40px;
+}
+.tfhb-checkbox-wrap label input:checked ~ .checkmark {
+  background-color: #F62881;
+  border: 1px solid #F62881;
+}
+.tfhb-checkbox-wrap label input:checked ~ .checkmark:after {
+  display: block;
 }
 
 /*# sourceMappingURL=style.css.map */
