@@ -1,0 +1,120 @@
+.tfhb-meeting-box .tfhb-meeting-card {
+  border-radius: 16px;
+  border: 0.5px solid #E3CFD7;
+  background: #FFF;
+  box-shadow: 0px 0px 8px 2px rgba(255, 221, 236, 0.3) inset, 0px 0px 0px 16px #FEF1F7;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info {
+  width: 322px;
+  border-right: 0.5px solid #E3CFD7;
+  background: #FFF;
+  border-radius: 16px 0 0 16px;
+  box-shadow: -8px 0px 30px 0px rgba(40, 16, 26, 0.2);
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-host-info {
+  padding: 38px 16px 16px 16px;
+  border-radius: 16px 0 0 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-host-info .tfhb-host-profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-host-info .tfhb-host-profile .tfhb-host-name h3 {
+  color: #FFF;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 160% */
+  margin: 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-host-info .tfhb-host-profile .tfhb-host-name p {
+  color: #FFF;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 153.846% */
+  margin: 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details {
+  padding: 8px 16px 16px 16px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details h2 {
+  color: #3F2731;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 33px */
+  margin: 0 0 8px 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details p {
+  color: #765664;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+  margin: 0 0 16px 0;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details p span {
+  color: #3F2731;
+  cursor: pointer;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details ul li {
+  color: #765664;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 160% */
+  margin-bottom: 8px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details ul li:last-child {
+  margin-bottom: 0px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details ul li span {
+  border-radius: 6px;
+  border: 1px solid #F6EEF2;
+  padding: 0 16px;
+  margin: 0 8px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details ul li .tfhb-icon {
+  border-radius: 6px;
+  border: 0.2px solid rgba(227, 207, 215, 0.2);
+  background: #FFF;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details .tfhb-timezone {
+  border-radius: 8px;
+  border: 0.5px solid rgba(227, 207, 215, 0.2);
+  background: #FFF;
+  box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
+  padding: 8px 12px;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info .tfhb-meeting-details .tfhb-timezone .tfhb-timezone-title {
+  color: #3F2731;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 160% */
+  width: calc(100% - 24px);
+}
+
+.tfhb-flexbox {
+  display: flex;
+}
+
+.tfhb-gap-8 {
+  gap: 8px;
+}
+
+/*# sourceMappingURL=style.css.map */
