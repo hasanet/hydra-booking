@@ -4,6 +4,8 @@
         border: 0.5px solid #E3CFD7;
         background: #FFF;
         box-shadow: 0px 0px 8px 2px rgba(255, 221, 236, 0.30) inset, 0px 0px 0px 16px #FEF1F7;
+        display: flex;
+        justify-content: space-between;
 
         .tfhb-meeting-info{
             width: 322px;
@@ -110,6 +112,128 @@
                         font-weight: 600;
                         line-height: 24px; /* 160% */
                         width: calc(100% - 24px);
+                    }
+                }
+            }
+        }
+
+        .tfhb-meeting-times{
+            width: 224px;
+            padding: 16px 16px 16px 0;
+            .tfhb-timezone-tabs{
+                text-align: right;
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    border-radius: 8px;
+                    border: 0.5px solid rgba(227, 207, 215, 0.2);
+                    background: #FFF;
+                    box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
+                    padding: 4px;
+                    display: inline-flex;
+                    li{
+                        display: inline-block;
+                        padding: 4px 8px;
+                        color: #8F707D;
+                        font-size: 11px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 16px; /* 145.455% */
+                        &.active{
+                            border-radius: 4px;
+                            background: #F6EEF2;
+                            color: #3F2731;
+                        }
+                    }
+                }
+            }
+            h3{
+                color: #3F2731;
+                font-size: 17px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 150%; /* 25.5px */
+                margin: 24px 0 16px 0;
+            }
+            .tfhb-available-times{
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    height: 338px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                    overflow-y: auto;
+                    li{
+                        gap: 12px;
+                        width: 100%;
+                        span{
+                            border-radius: 8px;
+                            border: 0.5px solid #F62881;
+                            background: #FFF;
+                            padding: 16px 10px;
+                            color: #F62881;
+                            text-align: center;
+                            font-size: 15px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 24px; /* 160% */
+                            width: 100%;
+                            text-align: center;
+                        }
+                        span.next{
+                            border-radius: 8px;
+                            background: #F62881;
+                            color: #FFF;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .tfhb-meeting-booking-form{
+            width: calc(100% - 346px);
+            padding: 16px 16px 16px 0;
+            .tfhb-back-btn{
+                align-items: center;
+                h3{
+                    color: #3F2731;
+                    font-size: 17px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 150%; /* 25.5px */
+                    margin: 0;
+                }
+            }
+            .tfhb-forms{
+                flex-wrap: wrap;
+                gap: 16px;
+                margin-top: 16px;
+                .tfhb-single-form{
+                    width: 100%;
+                    label{
+                        color: #3F2731;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 20px; /* 153.846% */
+                        margin: 0 0 4px 0;
+                    }
+                    input[type="text"],
+                    input[type="email"],
+                    textarea{
+                        border-radius: 8px;
+                        border: 0.5px solid #E3CFD7;
+                        background: #FFF;
+                        height: 40px;
+                        width: 100%;
+                    }
+                    textarea{
+                        height: 90px;
                     }
                 }
             }
