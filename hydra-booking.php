@@ -38,7 +38,11 @@ class THB_INIT{
         add_action('init', array($this, 'init'));
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
-
+        add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
+        // Load Front-End App File
+        if(file_exists(THB_PATH . '/app/tfhb-public-class.php')) {
+            require_once THB_PATH . '/app/tfhb-public-class.php'; 
+        }
    }
 
     public function init() {    
@@ -68,6 +72,10 @@ class THB_INIT{
     {
         remove_all_actions('user_admin_notices');
         remove_all_actions('admin_notices');
+    }
+
+    public function tfhb_enqueue_scripts(){
+        wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
     }
     
 }

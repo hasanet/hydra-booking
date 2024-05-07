@@ -1,0 +1,404 @@
+.tfhb-meeting-box{
+    .tfhb-meeting-card{
+        border-radius: 16px;
+        border: 0.5px solid #E3CFD7;
+        background: #FFF;
+        box-shadow: 0px 0px 8px 2px rgba(255, 221, 236, 0.30) inset, 0px 0px 0px 16px #FEF1F7;
+        display: flex;
+        justify-content: space-between;
+
+        .tfhb-meeting-info{
+            width: 322px;
+            border-right: 0.5px solid #E3CFD7;
+            background: #FFF;
+            border-radius: 16px 0 0 16px;
+            box-shadow: -8px 0px 30px 0px rgba(40, 16, 26, 0.20);
+            .tfhb-host-info{
+                padding: 38px 16px 16px 16px;
+                border-radius: 16px 0 0 0;
+                .tfhb-host-profile{
+                    img{
+                        width: 40px;
+                        height: 40px; 
+                        border-radius: 50%;
+                    }
+                    .tfhb-host-name{
+                        h3{
+                            color: #FFF;
+                            font-size: 15px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 24px; /* 160% */
+                            margin: 0;
+                        }
+                        p{
+                            color: #FFF;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 20px; /* 153.846% */
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+
+            .tfhb-meeting-details{
+                padding: 8px 16px 16px 16px;
+                h2{
+                    color: #3F2731;
+                    font-size: 22px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 150%; /* 33px */
+                    margin: 0 0 8px 0;
+                }
+                p{
+                    color:#765664;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */ 
+                    margin: 0 0 16px 0;
+                    span{
+                        color: #3F2731;
+                        cursor: pointer;
+                    }
+                }
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    li{
+                        color: #765664;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 24px; /* 160% */
+                        margin-bottom: 8px;
+                        &:last-child{
+                            margin-bottom: 0px;
+                        }
+                        span{
+                            border-radius: 6px;
+                            border: 1px solid #F6EEF2;     
+                            padding: 0 16px;
+                            margin: 0 8px;  
+                        }
+                        .tfhb-icon{
+                            border-radius: 6px;
+                            border: 0.2px solid rgba(227, 207, 215, 0.2);
+                            background: #FFF;
+                            width: 24px;
+                            height: 24px; 
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+                .tfhb-timezone{
+                    border-radius: 8px;
+                    border: 0.5px solid rgba(227, 207, 215, 0.2);
+                    background: #FFF;
+                    box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
+                    padding: 8px 12px;
+                    justify-content: space-between;
+                    margin-top: 40px;
+                    .tfhb-timezone-title{
+                        color: #3F2731;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 24px; /* 160% */
+                        width: calc(100% - 24px);
+                    }
+                }
+            }
+        }
+
+        .tfhb-meeting-times{
+            width: 224px;
+            padding: 16px 16px 16px 0;
+            .tfhb-timezone-tabs{
+                text-align: right;
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    border-radius: 8px;
+                    border: 0.5px solid rgba(227, 207, 215, 0.2);
+                    background: #FFF;
+                    box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
+                    padding: 4px;
+                    display: inline-flex;
+                    li{
+                        display: inline-block;
+                        padding: 4px 8px;
+                        color: #8F707D;
+                        font-size: 11px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 16px; /* 145.455% */
+                        &.active{
+                            border-radius: 4px;
+                            background: #F6EEF2;
+                            color: #3F2731;
+                        }
+                    }
+                }
+            }
+            h3{
+                color: #3F2731;
+                font-size: 17px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 150%; /* 25.5px */
+                margin: 24px 0 16px 0;
+            }
+            .tfhb-available-times{
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    height: 338px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                    overflow-y: auto;
+                    li{
+                        gap: 12px;
+                        width: 100%;
+                        span{
+                            border-radius: 8px;
+                            border: 0.5px solid #F62881;
+                            background: #FFF;
+                            padding: 16px 10px;
+                            color: #F62881;
+                            text-align: center;
+                            font-size: 15px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 24px; /* 160% */
+                            width: 100%;
+                            text-align: center;
+                        }
+                        span.next{
+                            border-radius: 8px;
+                            background: #F62881;
+                            color: #FFF;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .tfhb-meeting-booking-form{
+            width: calc(100% - 346px);
+            padding: 16px 16px 16px 0;
+            .tfhb-back-btn{
+                align-items: center;
+                h3{
+                    color: #3F2731;
+                    font-size: 17px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 150%; /* 25.5px */
+                    margin: 0;
+                }
+            }
+            .tfhb-forms{
+                flex-wrap: wrap;
+                gap: 16px;
+                margin-top: 16px;
+                .tfhb-single-form{
+                    width: 100%;
+                    label{
+                        color: #3F2731;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 20px; /* 153.846% */
+                        margin: 0 0 4px 0;
+                    }
+                    input[type="text"],
+                    input[type="email"],
+                    textarea{
+                        border-radius: 8px;
+                        border: 0.5px solid #E3CFD7;
+                        background: #FFF;
+                        height: 40px;
+                        width: 100%;
+                    }
+                    textarea{
+                        height: 90px;
+                    }
+                }
+                .tfhb-confirmation-box{
+                    flex-wrap: wrap;
+                    gap: 24px;
+                    margin: 16px 0;
+                    .tfhb-swicher-wrap{
+                        width: 100%;
+                        align-items: center;
+                        .swicher-label{
+                            color: #3F2731;
+                            font-size: 15px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 24px; /* 160% */
+                        }
+                    }
+                    .tfhb-checkbox-wrap{
+                        width: 100%;
+                    }
+                }
+
+                .tfhb-confirmation-button{
+                    width: 100%;
+                    button{
+                        border-radius: 8px;
+                        background: #F62881;
+                        padding: 16px;
+                        color: #FFF;
+                        justify-content: center;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px; /* 160% */
+                        cursor: pointer;
+                        width: 224px;
+                        border: 0px solid;
+                    }
+                }
+            }
+        }
+
+
+        .tfhb-meeting-confirmation{
+            width: 500px;
+            margin: 64px auto;
+            .tfhb-confirmation-seccess{
+                text-align: center;
+                img{
+                    height: 66px;
+                    width: 66px;
+                    margin-bottom: 24px;
+                }
+                h3{
+                    color: #3F2731;
+                    font-size: 22px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 150%; /* 33px */
+                    margin: 0 0 16px 0;
+                }
+                p{
+                    color: #765664;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */
+                    margin: 0 0 16px 0;
+                }
+            }
+            .tfhb-meeting-hostinfo{
+                border-radius: 8px;
+                background: #FAF5F7;
+                padding: 24px;
+                h3{
+                    color: #3F2731;
+                    font-size: 17px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 150%; /* 25.5px */
+                }
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    li{
+                        color: #765664;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px; /* 160% */
+                        padding-bottom: 8px;
+                        margin-bottom: 8px;
+                        border-bottom: 1px solid rgba(227, 207, 215, 0.10);
+                        &:last-child{
+                            margin-bottom: 0px;
+                        }
+                        span{
+                            border-radius: 16px;
+                            background: #EBEFFF;
+                            padding: 4px 8px;
+                            color: #0037EB;
+                            font-size: 11px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 16px; /* 145.455% */
+                        }
+                        .tfhb-icon{
+                            border-radius: 6px;
+                            border: 0.2px solid rgba(227, 207, 215, 0.2);
+                            background: #FFF;
+                            width: 24px;
+                            height: 24px; 
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+            }
+
+            .tfhb-meeting-confirmation-calender{
+                margin: 32px 0 0 0;
+                h3{
+                    color:#3F2731;
+                    text-align: center;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */
+                    margin: 0 0 8px 0;
+                }
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    justify-content: center;
+                    li{
+                        a{
+                            img{
+                                width: 32px;
+                                height: 32px;
+                            }
+                        }
+                    }
+                }
+            }   
+
+            .tfhb-meeting-confirmation-action{
+                justify-content: center;
+                margin-top: 24px;
+                button{
+                    border-radius: 8px;
+                    border: 1px solid #F6EEF2;
+                    background: #FFF;
+                    padding: 8px 24px;
+                    width: 158px;
+                    color: #765664;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
