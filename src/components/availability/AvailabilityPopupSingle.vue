@@ -306,7 +306,9 @@ function formatTime(time) {
                                             inline: true,
                                             monthSelectorType: 'static',
                                             yearSelectorType: 'static',
-                                            mode: 'multiple'
+                                            mode: 'multiple',
+                                            nextArrow: `<svg width='19' height='20' viewBox='0 0 19 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g id='chevron-right'><path id='Vector' d='M7.5 15L12.5 10L7.5 5' stroke='#F62881' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></g></svg>`,
+                                            prevArrow: `<svg width='19' height='20' viewBox='0 0 19 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11.5 15L6.5 10L11.5 5' stroke='#F62881' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>`
                                         }"
                                         placeholder="Type your schedule title"   
                                     /> 

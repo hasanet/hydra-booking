@@ -707,16 +707,26 @@
                 align-items: center;
                 justify-content: center;
                 transition: .3s all ease;
-                svg{
-                    fill: #F62881;
-                }
                 &:hover{
                     border-radius: 6px;
                     background: #FAF5F7;
+                    svg{
+                    fill: transparent !important;
+                    }
                 }
             }
             .flatpickr-next-month{
-                margin-left: 16px !important;
+                margin-left: 40px !important;
+                position: relative;
+                &::before{
+                    position: absolute;
+                    content: "";
+                    width: 8px;
+                    height: 8px; 
+                    background-color: #765664;
+                    border-radius: 50%;
+                    left: -24px;
+                }
             }
             .flatpickr-month{
                 order: -1;
