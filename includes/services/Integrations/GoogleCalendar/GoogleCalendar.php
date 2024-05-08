@@ -28,10 +28,8 @@ class GoogleCalendar{
         $this->redirectUrl =  $this->getRedirectUrl();
     }
 
-    public function GetAccessTokenUrl($host_id){ 
-        return $this->authUrl . '?client_id=' . $this->clientId . '&redirect_uri=' . $this->redirectUrl . '&scope=' . $this->authScope . '&response_type=code&access_type=offline&prompt=consent&state=' . $host_id;
-        
-        
+    public function GetAccessTokenUrl($host_id){  
+        return $this->authUrl . '?client_id=' . $this->clientId . '&redirect_uri=' . $this->redirectUrl . '&scope=' . $this->authScope . '&response_type=code&access_type=offline&prompt=consent&state=' . $host_id;  
     }
 
     // Get Redirect URL

@@ -99,6 +99,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'UpdateIntegrationSettings'),
             'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
+
+        register_rest_route('hydra-booking/v1', '/hosts/integration/fetch', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'FetchIntegrationSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
         
         register_rest_route('hydra-booking/v1', '/hosts/filter', array(
             'methods' => 'GET',
@@ -435,6 +441,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 $_tfhb_integration_settings['google_calendar']['secret_key'], 
                 $_tfhb_integration_settings['google_calendar']['redirect_url']
             );
+            $site_url = get_site_url();
             $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id); 
             $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
             $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status']; 
@@ -637,5 +644,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
     }
     
+
+    /**
+     * Fetch Integration Settings
+     */
+
+     public function FetchIntegrationSettings(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        echo 'fetch';
+        
+     }
     
 } 
