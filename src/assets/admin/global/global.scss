@@ -707,12 +707,12 @@
                 align-items: center;
                 justify-content: center;
                 transition: .3s all ease;
-                svg{
-                    fill: #F62881;
-                }
                 &:hover{
                     border-radius: 6px;
                     background: #FAF5F7;
+                    svg{
+                    fill: transparent !important;
+                    }
                 }
             }
             .flatpickr-next-month{
