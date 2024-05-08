@@ -140,6 +140,7 @@
                         font-style: normal;
                         font-weight: 600;
                         line-height: 16px; /* 145.455% */
+                        cursor: pointer;
                         &.active{
                             border-radius: 4px;
                             background: #F6EEF2;
@@ -182,6 +183,7 @@
                             line-height: 24px; /* 160% */
                             width: 100%;
                             text-align: center;
+                            cursor: pointer;
                         }
                         span.next{
                             border-radius: 8px;

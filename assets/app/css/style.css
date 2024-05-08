@@ -136,6 +136,7 @@
   font-style: normal;
   font-weight: 600;
   line-height: 16px; /* 145.455% */
+  cursor: pointer;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-timezone-tabs ul li.active {
   border-radius: 4px;
@@ -177,6 +178,7 @@
   line-height: 24px; /* 160% */
   width: 100%;
   text-align: center;
+  cursor: pointer;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-available-times ul li span.next {
   border-radius: 8px;

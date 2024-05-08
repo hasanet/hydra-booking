@@ -76,6 +76,7 @@ class THB_INIT{
 
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
+        wp_enqueue_script( 'tfhb-script', THB_URL . 'assets/app/js/main.js', array('jquery'), THB_VERSION, true );
     }
     
 }
