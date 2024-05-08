@@ -8,18 +8,25 @@ export default defineConfig({
   plugins: [
     vue(),
   ], 
-  // build: {
-  //   assetsDir: 'assets',
-  //   publicDir: '/public',
-  //   rollupOptions: {
-  //     output: {
-  //       assetFileNames: 'assets/[name].[ext]'
-  //     }
-  //   }
-  // },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets', 
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    outDir: './dist',
+    assetsDir: 'assets',
+
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+        entryFileNames: 'assets/tfhb-admin-app-script.js',
+        assetFileNames: `assets/tfhb-admin-app.[ext]`
+      }
+    },
   }
 })
