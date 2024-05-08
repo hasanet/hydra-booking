@@ -716,7 +716,17 @@
                 }
             }
             .flatpickr-next-month{
-                margin-left: 16px !important;
+                margin-left: 40px !important;
+                position: relative;
+                &::before{
+                    position: absolute;
+                    content: "";
+                    width: 8px;
+                    height: 8px; 
+                    background-color: #765664;
+                    border-radius: 50%;
+                    left: -24px;
+                }
             }
             .flatpickr-month{
                 order: -1;
