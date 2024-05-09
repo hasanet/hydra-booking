@@ -30,6 +30,7 @@
 			$('.tfhb-calendar-dates li').removeClass('active');
             var $this = $(this);
             $this.addClass('active');
+			$('.tfhb-meeting-times .tfhb-select-date').html($this.attr('data-date'));
 			$('.tfhb-meeting-times').show();
 		});
     });
