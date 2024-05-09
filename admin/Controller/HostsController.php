@@ -116,6 +116,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             ),
         ));
        
+        
     }
     // permission_callback
     public function getHostsData() { 
@@ -436,12 +437,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if($_tfhb_integration_settings['google_calendar']['status'] == true){  
 
             $google_calendar['type'] = 'google_calendar';
-            $GoogleCalendar = new GoogleCalendar(
-                $_tfhb_integration_settings['google_calendar']['client_id'], 
-                $_tfhb_integration_settings['google_calendar']['secret_key'], 
-                $_tfhb_integration_settings['google_calendar']['redirect_url']
-            );
-            $site_url = get_site_url();
+            $GoogleCalendar = new GoogleCalendar(); 
             $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id); 
             $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
             $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status']; 
