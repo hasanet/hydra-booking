@@ -30,6 +30,7 @@
 			$('.tfhb-calendar-dates li').removeClass('active');
             var $this = $(this);
             $this.addClass('active');
+			$('.tfhb-meeting-times .tfhb-select-date').html($this.attr('data-date'));
 			$('.tfhb-meeting-times').show();
 		});
     });
@@ -93,7 +94,7 @@ const tfhb_date_manipulate = () => {
 			&& year === new Date().getFullYear()
 			? "active"
 			: "";
-		lit += `<li class="${isToday} current">${i}</li>`;
+		lit += `<li data-date="${i} ${months[month]}, ${year}" class="${isToday} current">${i}</li>`;
 	}
 
 	// Loop to add the first dates of the next month

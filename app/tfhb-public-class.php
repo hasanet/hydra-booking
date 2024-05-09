@@ -107,7 +107,7 @@ class Tfhb_APP {
                             <li>24h</li>
                         </ul>
                     </div>
-                    <h3>Saturday, 11 April, 2024</h3>
+                    <h3 class="tfhb-select-date">Saturday, 11 April, 2024</h3>
 
                     <div class="tfhb-available-times">
                         <ul>
