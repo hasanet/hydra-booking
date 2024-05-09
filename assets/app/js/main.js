@@ -21,6 +21,16 @@
             var $this = $(this);
             $this.parent().append('<span class="next tfhb-flexbox tfhb-gap-8"> Next<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 10L14 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4.16666L14.8333 9.99999L9 15.8333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
         });
+
+		/**
+         * Date Select
+         * @author Jahid
+         */
+        $(document).on('click', '.tfhb-calendar-dates li', function (e) {
+			$('.tfhb-calendar-dates li').removeClass('active');
+            var $this = $(this);
+            $this.addClass('active');
+		});
     });
 
 })(jQuery);
@@ -31,7 +41,7 @@ let month = date.getMonth();
 
 const day = document.querySelector(".tfhb-calendar-dates");
 const currdate = document.querySelector(".tfhb-calendar-current-date");
-const prenexIcons = document.querySelectorAll(".tfhb-calendar-navigation span");
+const tfhb_calendar_navs = document.querySelectorAll(".tfhb-calendar-navigation span");
 
 // Array of month names
 const months = [
@@ -48,20 +58,7 @@ const months = [
 	"November",
 	"December"
 ];
-document.addEventListener("DOMContentLoaded", function() {
-	const dateElements = document.querySelectorAll(".tfhb-calendar-dates li");
-	dateElements.forEach(dateElement => {
-		dateElement.addEventListener("click", () => {
-			const activeElement = document.querySelector(".tfhb-calendar-dates .active");
-			if (activeElement) {
-				activeElement.classList.remove("active");
-			}
-			
-			// Add the 'active' class to the clicked date
-			dateElement.classList.add("active");
-		});
-	});
-});
+
 // Function to generate the tfhb-calendar
 const tfhb_date_manipulate = () => {
 
@@ -115,7 +112,7 @@ const tfhb_date_manipulate = () => {
 tfhb_date_manipulate();
 
 // Attach a click event listener to each icon
-prenexIcons.forEach(icon => {
+tfhb_calendar_navs.forEach(icon => {
 
 	// When an icon is clicked
 	icon.addEventListener("click", () => {
