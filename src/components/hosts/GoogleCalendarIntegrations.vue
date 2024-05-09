@@ -24,7 +24,6 @@ const emit = defineEmits([ "update-integrations", ]);
  
 <template>
       <!-- Zoom Integrations  -->
-      {{ google_calendar }}
       <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box ">
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
             <span class="tfhb-integrations-single-block-icon">
