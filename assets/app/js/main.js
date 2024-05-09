@@ -30,12 +30,8 @@ let year = date.getFullYear();
 let month = date.getMonth();
 
 const day = document.querySelector(".tfhb-calendar-dates");
-
-const currdate = document
-	.querySelector(".tfhb-calendar-current-date");
-
-const prenexIcons = document
-	.querySelectorAll(".tfhb-calendar-navigation span");
+const currdate = document.querySelector(".tfhb-calendar-current-date");
+const prenexIcons = document.querySelectorAll(".tfhb-calendar-navigation span");
 
 // Array of month names
 const months = [
@@ -52,9 +48,22 @@ const months = [
 	"November",
 	"December"
 ];
-
+document.addEventListener("DOMContentLoaded", function() {
+	const dateElements = document.querySelectorAll(".tfhb-calendar-dates li");
+	dateElements.forEach(dateElement => {
+		dateElement.addEventListener("click", () => {
+			const activeElement = document.querySelector(".tfhb-calendar-dates .active");
+			if (activeElement) {
+				activeElement.classList.remove("active");
+			}
+			
+			// Add the 'active' class to the clicked date
+			dateElement.classList.add("active");
+		});
+	});
+});
 // Function to generate the tfhb-calendar
-const manipulate = () => {
+const tfhb_date_manipulate = () => {
 
 	// Get the first day of the month
 	let dayone = new Date(year, month, 1).getDay();
@@ -81,7 +90,6 @@ const manipulate = () => {
 	for (let i = 1; i <= lastdate; i++) {
 
 		// Check if the current date is today
-
 		let isToday = i === date.getDate()
 			&& month === new Date().getMonth()
 			&& year === new Date().getFullYear()
@@ -104,7 +112,7 @@ const manipulate = () => {
 	day.innerHTML = lit;
 }
 
-manipulate();
+tfhb_date_manipulate();
 
 // Attach a click event listener to each icon
 prenexIcons.forEach(icon => {
@@ -136,8 +144,8 @@ prenexIcons.forEach(icon => {
 			date = new Date();
 		}
 
-		// Call the manipulate function to 
+		// Call the tfhb_date_manipulate function to 
 		// update the tfhb-calendar display
-		manipulate();
+		tfhb_date_manipulate();
 	});
 });
