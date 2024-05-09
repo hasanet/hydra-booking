@@ -427,9 +427,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $user_id = $hostData->user_id;
 
 
-        $_tfhb_host_integration_settings =  is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array();
-
-        
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array(); 
+ 
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
  
         $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
@@ -437,10 +436,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if($_tfhb_integration_settings['google_calendar']['status'] == true){  
 
             $google_calendar['type'] = 'google_calendar';
-            $GoogleCalendar = new GoogleCalendar(); 
-            $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id); 
+            $GoogleCalendar = new GoogleCalendar();  
+            $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id, ); 
             $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
-            $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status']; 
+            $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status'];  
+            
+            
         } 
         
 
@@ -449,9 +450,64 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'integration_settings' => $_tfhb_host_integration_settings,
-            'google_calendar' => $google_calendar,
+            'google_calendar' => $google_calendar,  
         );
         return rest_ensure_response($data);
+    }
+
+       // Update Integration Settings.
+       public function UpdateIntegrationSettings (){
+        
+        $request = json_decode(file_get_contents('php://input'), true);
+        $key = sanitize_text_field($request['key']);
+        $data = $request['value'];
+        $host_id = $request['id'];
+        $user_id = $request['user_id'];
+        
+        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        if($key == 'zoom_meeting'){ 
+
+            $zoom = new ZoomServices(
+                sanitize_text_field($data['account_id']), 
+                sanitize_text_field($data['app_client_id']),  
+                sanitize_text_field($data['app_secret_key'])
+            ); 
+            return rest_ensure_response($zoom->updateHostsZoomSettings($data, $user_id));
+            
+        }elseif($key == 'woo_payment'){
+            $_tfhb_host_integration_settings['woo_payment']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['woo_payment']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['woo_payment']['woo_payment'] =  sanitize_text_field($data['woo_payment']);
+
+            // update User Meta 
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'message' => 'Integration Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'google_calendar'){
+            // Get Global Settings 
+            $_tfhb_host_integration_settings['google_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['google_calendar']['status'] =  sanitize_text_field($data['status']);     
+            $_tfhb_host_integration_settings['google_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar'] =  $data['tfhb_google_calendar'];
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+            
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Google Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }
     }
 
     // Get Availability Settings
@@ -582,63 +638,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }
-    // Update Integration Settings.
-    public function UpdateIntegrationSettings (){
-        
-        $request = json_decode(file_get_contents('php://input'), true);
-        $key = sanitize_text_field($request['key']);
-        $data = $request['value'];
-        $host_id = $request['id'];
-        $user_id = $request['user_id'];
-        
-        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
-        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
-        if($key == 'zoom_meeting'){ 
-
-            $zoom = new ZoomServices(
-                sanitize_text_field($data['account_id']), 
-                sanitize_text_field($data['app_client_id']),  
-                sanitize_text_field($data['app_secret_key'])
-            ); 
-            return rest_ensure_response($zoom->updateHostsZoomSettings($data, $user_id));
-            
-        }elseif($key == 'woo_payment'){
-            $_tfhb_host_integration_settings['woo_payment']['type'] =  sanitize_text_field($data['type']);
-            $_tfhb_host_integration_settings['woo_payment']['status'] =  sanitize_text_field($data['status']);
-            $_tfhb_host_integration_settings['woo_payment']['woo_payment'] =  sanitize_text_field($data['woo_payment']);
-
-            // update User Meta 
-            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
-
-            //  woocommerce payment   
-            $data = array(
-                'status' => true,  
-                'message' => 'Integration Settings Updated Successfully',
-            );
-            return rest_ensure_response($data);
-        }elseif($key == 'google_calendar'){
-            // Get Global Settings 
-            $_tfhb_host_integration_settings['google_calendar']['type'] =  sanitize_text_field($data['type']);
-            $_tfhb_host_integration_settings['google_calendar']['status'] =  sanitize_text_field($data['status']); 
-            $_tfhb_host_integration_settings['google_calendar']['client_id'] =  sanitize_text_field($data['client_id']); 
-            $_tfhb_host_integration_settings['google_calendar']['secret_key'] =  sanitize_text_field($data['secret_key']); 
-            $_tfhb_host_integration_settings['google_calendar']['redirect_url'] =  sanitize_text_field($data['redirect_url']); 
-            $_tfhb_host_integration_settings['google_calendar']['access_token'] =  sanitize_text_field($data['access_token']); 
-            $_tfhb_host_integration_settings['google_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']); 
-
-            // update User Meta  
-            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
-            
-
-
-            //  woocommerce payment   
-            $data = array(
-                'status' => true,   
-                'message' => 'Google Calendar Settings Updated Successfully',
-            );
-            return rest_ensure_response($data);
-        }
-    }
+ 
     
 
     /**

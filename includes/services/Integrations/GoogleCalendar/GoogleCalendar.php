@@ -21,10 +21,22 @@ class GoogleCalendar{
 
 
  
-    public function __construct( ) {
-     
+    public function __construct( ) { 
+
+        $this->setClientData();  
     }
 
+    // Set Client Data
+    public function setClientData(){
+        // Get the Google Calendar Data
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings'); 
+        $google_calendar = isset($_tfhb_integration_settings['google_calendar']) ? $_tfhb_integration_settings['google_calendar'] : array();
+
+        // Set the Client Data
+        $this->clientId = isset($google_calendar['client_id']) ? $google_calendar['client_id'] : '';
+        $this->clientSecret = isset($google_calendar['client_secret']) ? $google_calendar['client_secret'] : '';
+        $this->redirectUrl =  isset($google_calendar['redirect_url']) ? $google_calendar['redirect_url'] : '';
+    }
     
 
     public function create_endpoint(){
@@ -39,29 +51,52 @@ class GoogleCalendar{
 
     public function GetAccessData(){
 
-        if(isset($_GET['code'])) {
+        if(isset($_GET['code']) && isset($_GET['state'])) {
 			try { 
 				
+                $host_id = $_GET['state'];
 				// Get the access token 
-				$response = $this->GetAccessToken( $_GET['code']);
-                $response = json_decode($response, true);
-                $email = $this->getEmailByIdToken($response['id_token']);
+				$data = $this->GetAccessToken( $_GET['code']);
+                $data = json_decode($data, true);
+                $email = $this->getEmailByIdToken($data['id_token']);
 
                 // Get all calendar in the account 
                 $url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList';
-                $response = wp_remote_get($url, array( 'headers' => array('Authorization' => 'Bearer ' . $response['access_token'])));
+                $response = wp_remote_get($url, array( 'headers' => array('Authorization' => 'Bearer ' . $data['access_token'])));
                 $body = wp_remote_retrieve_body($response);
                 $body = json_decode($body, true);
 
-                echo '<pre>';
-                print_r($body );
-                echo '</pre>';
-                exit;
+                $data['email'] = $email;
+
+                foreach($body['items'] as $calendar){ 
+                    $data['items'][] = array(
+                        'id' => $calendar['id'],
+                        'title' => $calendar['summary'],
+                        'write_status' => 0,
+                    );
+
+                }
+
+                // remove the Id Token
+                unset($data['id_token']);
+
+                $_tfhb_host_integration_settings =  is_array(get_user_meta($host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($host_id, '_tfhb_host_integration_settings', true) : array();
+
+                 $_tfhb_host_integration_settings['tfhb_google_calendar'] = $data;
+
+                // save to user metadata
+                update_user_meta($host_id, '_tfhb_google_calendar', $_tfhb_host_integration_settings);
+ 
+                $redirect_url = get_site_url() . '/wp-admin/admin.php?page=hydra-booking#/hosts/profile/' . $host_id . '/integrations';
+                 
+                wp_redirect($redirect_url);
+                wp_die();
 				 
 			}
+
 			catch(Exception $e) {
 				echo $e->getMessage();
-				exit();
+				exit(); 
 			}
 		}
     }
@@ -95,11 +130,7 @@ class GoogleCalendar{
         return $this->authUrl . '?client_id=' . $this->clientId . '&redirect_uri=' . $this->redirectUrl . '&scope=' . $this->authScope . '&response_type=code&access_type=offline&prompt=consent&state=' . $host_id;  
     }
 
-    // Get Redirect URL
-    public function getRedirectUrl(){
-        return 'https://sydur.tourfic.site/wp-json/hydra-booking/v1/integration/google-api';
-    }
-
+ 
     /**
      * Get the email by id token
      * @param $token
