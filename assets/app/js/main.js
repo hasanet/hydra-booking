@@ -93,7 +93,7 @@ const tfhb_date_manipulate = () => {
 			&& year === new Date().getFullYear()
 			? "active"
 			: "";
-		lit += `<li class="${isToday} current">${i}</li>`;
+		lit += `<li data-date="${i} ${months[month]}, ${year}" class="${isToday} current">${i}</li>`;
 	}
 
 	// Loop to add the first dates of the next month
