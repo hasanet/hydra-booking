@@ -198,3 +198,94 @@
 
     }
 }
+
+.tfhb-imageselect-box{
+    width: 100%;
+    ul{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li{
+            width: calc(33% - 12px);
+            input[type="radio"]{
+                display: none;
+            }
+
+            label {
+                display: block;
+                position: relative;
+                margin: 0px;
+                cursor: pointer;
+                &::before{
+                    background-color: white;
+                    color: white;
+                    content: " ";
+                    display: block;
+                    border-radius: 50%;
+                    border: 1px solid grey;
+                    position: absolute;
+                    top: -5px;
+                    left: -5px;
+                    width: 25px;
+                    height: 25px;
+                    text-align: center;
+                    line-height: 28px;
+                    transition-duration: 0.4s;
+                    transform: scale(0);
+                }
+                .image-box{
+                    height: 150px;
+                    border-radius: 8px;
+                    background: #765664;
+                }
+                h3{
+                    color: #3F2731 !important;
+                    font-size: 13px;
+                    font-style: normal;
+                    font-weight: 400 !important;
+                    line-height: 20px; /* 153.846% */
+                    margin: 8px 0 0 0 !important;
+                    text-align: center;
+                }
+            }
+
+            :checked + label:before {
+            content: "✓";
+                background-color: grey;
+                transform: scale(1);
+                color: #fff;
+            }
+        }
+    }
+}
+
+.tfhb-single-colorbox{
+    border-radius: 6px;
+    background: #FAF5F7;
+    padding: 12px 16px; 
+    label{
+        color: #765664 !important;
+        font-size: 15px !important;
+        font-style: normal;
+        font-weight: 400 !important;
+        line-height: 24px !important; /* 160% */
+        margin: 0 !important;
+    }
+    .color-select{
+        background-color: #fff;
+        border-radius: 6px;
+        input[type="text"]{
+            height: 32px;
+            width: 32px;
+            border-radius: 6px 0 0 6px;
+        }
+        span{
+            color: #765664;
+            font-size: 13px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px; /* 153.846% */
+            padding: 6px 8px;
+        }
+    }
+}

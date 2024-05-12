@@ -199,11 +199,11 @@ const routes = [
                 meta: { Capabilities: 'tfhb_manage_settings' },
                 component: () => import('../view/settings/Integrations.vue')
             },  
-            // {
-            //     path: 'appearance',
-            //     name: 'SettingsAppearance',
-            //     component: () => import('../view/settings/appearance.vue')
-            // },  
+            {
+                path: 'appearance',
+                name: 'SettingsAppearance',
+                component: () => import('../view/settings/Appearance.vue')
+            },  
              
         ]
         
