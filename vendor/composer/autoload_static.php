@@ -13,6 +13,7 @@ class ComposerStaticInitf230e5d46c73a3bfe303ee4885dd24a1
             'HydraBooking\\PostType\\' => 22,
             'HydraBooking\\Hooks\\' => 19,
             'HydraBooking\\DB\\' => 16,
+            'HydraBooking\\App\\' => 17,
             'HydraBooking\\Admin\\' => 19,
         ),
     );
@@ -33,6 +34,10 @@ class ComposerStaticInitf230e5d46c73a3bfe303ee4885dd24a1
         'HydraBooking\\DB\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes/database',
+        ),
+        'HydraBooking\\App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
         ),
         'HydraBooking\\Admin\\' => 
         array (
