@@ -25,6 +25,7 @@ const ImagecheckedValue = (e) => {
         :name="name" 
         :value="soption.name"
         @change="ImagecheckedValue"
+        :checked="props.modelValue == soption.name ? true : false"
         />
         <label :for="soption.name">
             <div class="image-box" :style="{'background': soption.value}"></div>

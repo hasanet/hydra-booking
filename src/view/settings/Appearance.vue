@@ -1,26 +1,70 @@
 <script setup> 
-import {reactive} from 'vue'
+import {reactive, onBeforeMount} from 'vue'
 import { useRouter, RouterView,} from 'vue-router'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbImageSelect from '@/components/form-fields/HbImageSelect.vue'
 import ColorPicker from 'primevue/colorpicker';
+import axios from 'axios' 
+import { toast } from "vue3-toastify";
 
 const router = useRouter();
 
 const appearanceSettings = reactive({
-  themes: '',
+  themes: 'System default',
   primary_color: 'F62881',
   secondary_color: '3F2731',
   titleTypo: '',
   desTypo: '',
 });
 
+// Fetch Appearance
+const fetchAppearanceSettings = async () => {
+
+try { 
+    const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/appearance-settings');
+    if (response.data.status) { 
+  
+        // Set Appearance Settings
+        appearanceSettings.themes = response.data.appearance_settings.themes ? response.data.appearance_settings.themes : 'System default';
+        appearanceSettings.primary_color = response.data.appearance_settings.primary_color ? response.data.appearance_settings.primary_color : 'F62881';
+        appearanceSettings.secondary_color = response.data.appearance_settings.secondary_color ? response.data.appearance_settings.secondary_color : '3F2731';
+        appearanceSettings.titleTypo = response.data.appearance_settings.titleTypo ? response.data.appearance_settings.titleTypo : '';
+        appearanceSettings.desTypo = response.data.appearance_settings.desTypo ? response.data.appearance_settings.desTypo : '';
+    }
+} catch (error) {
+    console.log(error);
+} 
+}
+
+const UpdateAppearanceSettings = async () => { 
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/appearance-settings/update', appearanceSettings, {
+             
+        } );
+      
+        if (response.data.status) {    
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+            
+        }
+    } catch (error) {
+        toast.error('Action successful', {
+            position: 'bottom-right', // Set the desired position
+        });
+    }
+}
+
+onBeforeMount(() => { 
+    fetchAppearanceSettings();
+});
 
 </script>
 <template>
     <div class="thb-event-dashboard">
-        {{ appearanceSettings }}
+
         <div  class="tfhb-dashboard-heading ">
             <div class="tfhb-admin-title tfhb-m-0"> 
                 <h1 >{{ $tfhb_trans['Appearance'] }}</h1> 
@@ -118,6 +162,8 @@ const appearanceSettings = reactive({
                     
                 />
             </div>
+
+            <button class="tfhb-btn boxed-btn" @click="UpdateAppearanceSettings">{{ $tfhb_trans['Save'] }}</button>
 
         </div>
     </div>
