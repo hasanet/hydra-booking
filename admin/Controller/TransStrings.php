@@ -60,6 +60,8 @@ namespace HydraBooking\Admin\Controller;
             'Theme' => __('Theme', 'hydra-booking'),
             'Customize your own brand color into your booking page' => __('Customize your own brand color into your booking page', 'hydra-booking'),
             'Custom brand colors' => __('Custom brand colors', 'hydra-booking'),
+            'Admin Email' => __('Admin Email', 'hydra-booking'),
+            'Type your Admin Email' => __('Type your Admin Email', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),

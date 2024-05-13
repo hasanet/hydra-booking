@@ -25,6 +25,22 @@ const generalSettings = reactive({
   allowed_reschedule_before_meeting_start: '', 
 });
 
+// Field Validator
+import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
+const error = reactive({})
+
+const validateInput = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, generalSettings[fieldValueKey]);
+};
+
+const validateSelect = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, generalSettings[fieldValueKey]);
+};
+
+
 //  Load Time Zone
 const timeZone = reactive({});
 const  countryList = reactive({});
@@ -58,7 +74,23 @@ const fetchGeneralSettings = async () => {
     } 
 }
 const UpdateGeneralSettings = async () => { 
-    
+    // Errors Added
+    let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'date_format', 'country']
+    if(validator_field){
+        validator_field.forEach(field => {
+            if(!generalSettings[field]){
+                errors[field] = 'Required this field';
+            }
+        });
+    }
+
+    // Errors Checked
+    const isEmpty = Object.keys(errors).length === 0;
+    if(!isEmpty){
+        toast.error('Fill Up The Required Fields'); 
+        return
+    }
+
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/general/update', generalSettings, {
              
@@ -109,10 +141,13 @@ onBeforeMount(() => {
                 <HbText  
                     v-model="generalSettings.admin_email"  
                     required= "true"  
-                    :label="$tfhb_trans['First name']"  
+                    :label="$tfhb_trans['Admin Email']"  
                     selected = "1"
-                    :placeholder="$tfhb_trans['Type your first name']" 
+                    :placeholder="$tfhb_trans['Type your Admin Email']" 
                     width="50"
+                    @keyup="() => validateInput('admin_email')"
+                    @click="() => validateInput('admin_email')"
+                    :errors="errors.admin_email"
                 /> 
 
                 <!-- Time Zone --> 
@@ -126,6 +161,9 @@ onBeforeMount(() => {
                     selected = "1"
                     placeholder="Select Time Zone"  
                     :option = "timeZone.value" 
+                    @add-change="validateSelect('time_zone')" 
+                    @add-click="validateSelect('time_zone')" 
+                    :errors="errors.time_zone"
                 />  
                 <!-- Time Zone -->
 
@@ -142,6 +180,9 @@ onBeforeMount(() => {
                         {'name': '12 Hours', 'value': '12_hours'}, 
                         {'name': '24 Hours', 'value': '24_hours'}
                     ]"
+                    @add-change="validateSelect('time_format')" 
+                    @add-click="validateSelect('time_format')" 
+                    :errors="errors.time_format"
                 />
                 <!-- Time format --> 
                 <!-- Week start from -->
@@ -162,6 +203,9 @@ onBeforeMount(() => {
                         {'name': 'Friday', 'value': 'friday'},
                         {'name': 'Saturday', 'value': 'saturday'}
                     ]"
+                    @add-change="validateSelect('week_start_from')" 
+                    @add-click="validateSelect('week_start_from')" 
+                    :errors="errors.week_start_from"
                     
                 />
                 <!-- Week start from -->
@@ -178,6 +222,9 @@ onBeforeMount(() => {
                     :option = "[
                         {'name': 'g:i a', 'value': 'g:i a'},  
                     ]"
+                    @add-change="validateSelect('date_format')" 
+                    @add-click="validateSelect('date_format')" 
+                    :errors="errors.date_format"
                 />
                 <!-- Date Format -->
 
@@ -192,6 +239,9 @@ onBeforeMount(() => {
                     selected = "1"
                     placeholder="Select Country"  
                     :option = "countryList.value"
+                    @add-change="validateSelect('country')" 
+                    @add-click="validateSelect('country')" 
+                    :errors="errors.country"
                 />
                 <!-- Select countr --> 
             </div>  
