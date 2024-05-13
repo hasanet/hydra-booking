@@ -345,7 +345,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'avatar' => $request['avatar'],
             'featured_image' => $request['featured_image'],
             'availability_type' => $request['availability_type'],
-            'others_information' => json_encode($request['others_information']),
+            'others_information' => $request['others_information'],
             'availability_id' => $request['availability_id'],
             'time_zone' => $request['time_zone'],
             'status' => $request['status'], 
@@ -397,11 +397,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
 
         //  Get User MEta
-        $_tfhb_host = get_user_meta($host_id, '_tfhb_host');
+        $_tfhb_host = get_user_meta($host_id, '_tfhb_host', true);
         $_tfhb_host['status'] =  $status;
         
         // Update user Option 
-        update_user_meta($host_id, '_tfhb_host', $data); 
+        update_user_meta($host_id, '_tfhb_host', $_tfhb_host); 
 
         // Hosts Lists
         $HostsList = $host->get();
@@ -410,7 +410,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'hosts' => $HostsList,  
-            'message' => 'Host Status Updated Successfully', 
+            'message' => 'Host Status Updated Successfully',  
         );
 
         return rest_ensure_response($data);

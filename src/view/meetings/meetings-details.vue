@@ -109,11 +109,11 @@ const validateSelect = (fieldName) => {
                         :placeholder="$tfhb_trans['Location']" 
                         :option = "[
                             {name: 'Zoom', value: 'zoom'}, 
-                            {name: 'In Person (Attendee Address)', value: 'attendee_address'},
-                            {name: 'In Person (Organizer Address)', value: 'organizer_address'},
-                            {name: 'Attendee Phone Number', value: 'attendee_phone'},
-                            {name: 'Organizer Phone Number', value: 'organizer_phone'},
-                            {name: 'Online Meeting', value: 'online_meeting'}
+                            {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)'},
+                            {name: 'In Person (Organizer Address)', value: 'In Person (Organizer Address)'},
+                            {name: 'Attendee Phone Number', value: 'Attendee Phone Number'},
+                            {name: 'Organizer Phone Number', value: 'Organizer Phone Number'},
+                            {name: 'Online Meeting', value: 'Online Meeting'}
                         ]" 
                         :width= "50"
                     />
@@ -125,7 +125,7 @@ const validateSelect = (fieldName) => {
                         selected = "1"
                         :placeholder="'Type Location Address'" 
                         :width= "50"
-                        v-if="'organizer_address'==slocation.location || 'organizer_phone'==slocation.location || 'online_meeting'==slocation.location"
+                        v-if="'In Person (Organizer Address)'==slocation.location || 'Organizer Phone Number'==slocation.location || 'Online Meeting'==slocation.location"
                     /> 
                 </div>
                 <div class="tfhb-meeting-location-removed" v-if="meeting.meeting_locations.length>1" @click="emit('remove-meeting-location', index)">

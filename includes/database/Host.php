@@ -95,6 +95,9 @@ class Host {
 
         $table_name = $wpdb->prefix . $this->table;
 
+        // 
+        $request['others_information'] = wp_json_encode($request['others_information']);
+
         $id = $request['id'];
         unset($request['id']);
         // Update availability

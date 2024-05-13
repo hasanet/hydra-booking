@@ -2,7 +2,8 @@
 namespace HydraBooking\App\Shortcode;
 // use Classes
 use HydraBooking\DB\Meeting;
-use HydraBooking\DB\Availability;
+use HydraBooking\DB\Availability; 
+use HydraBooking\Admin\Controller\DateTimeController;
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -11,6 +12,7 @@ class HydraBookingShortcode {
 
         //  Add Action
         add_action('hydra_booking/after_meeting_render', array($this, 'after_meeting_render'));
+        add_action('hydra_booking/before_meeting_render', array($this, 'before_meeting_render'));
 
     }
 
@@ -37,10 +39,16 @@ class HydraBookingShortcode {
         $MeetingData = $meeting->get( $calendar_id ); 
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-        echo "<pre>";
-        print_r($meta_data);
-        echo "</pre>";
 
+        // GetHost meta Data
+        $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
+        $host_meta = get_user_meta($host_id, '_tfhb_host', true);
+
+        // Time Zone
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
+
+     
         // Start Buffer
         ob_start();
 
@@ -49,19 +57,24 @@ class HydraBookingShortcode {
         do_action('hydra_booking/before_meeting_render', $meta_data);
 
         ?>
-        <div class="tfhb-meeting-box">
+        <div class="tfhb-meeting-box tfhb-meeting-<?php echo esc_attr($calendar_id) ?>" data-calendar="<?php echo esc_attr($calendar_id) ?>">
 
             <form action="">
                 <div class="tfhb-meeting-card">
                         <?php  
+
                             // Load Meeting Info Template  
-                            load_template(THB_PATH . '/app/Content/Template/meeting-info.php', true, $meta_data); 
+                            load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
+                                'meeting' => $meta_data,
+                                'host' => $host_meta, 
+                                'time_zone' => $time_zone, 
+                            ]); 
 
                             // Load Meeting Calendar Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-calendar.php', true, $meta_data);
+                            load_template(THB_PATH . '/app/Content/Template/meeting-calendar.php', false, $meta_data);
 
                             // Load Meeting Time Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-times.php', true, $meta_data);
+                            load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, $meta_data);
                         ?>
                 </div>
 
@@ -77,6 +90,13 @@ class HydraBookingShortcode {
         return  ob_get_clean();
     }
  
+    // Before Render
+    public function before_meeting_render(){
+        // Enqueue Styles 
+        if(!wp_style_is('tfhb-select2-style', 'enqueued')) {
+            wp_enqueue_style('tfhb-select2-style');
+        }
+    }
 
     // After Render
     public function after_meeting_render($data) { 
@@ -108,6 +128,11 @@ class HydraBookingShortcode {
         if(!wp_script_is('tfhb-app-script', 'enqueued')) {
             wp_enqueue_script('tfhb-app-script');
         } 
+
+        // Enqueue Select2
+        if(!wp_script_is('tfhb-select2-script', 'enqueued')) {
+            wp_enqueue_script('tfhb-select2-script');
+        }
 
         // Localize Script
         wp_localize_script('tfhb-app-script', 'tfhb_app_booking_'.$id, array( 

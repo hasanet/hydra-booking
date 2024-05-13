@@ -70,6 +70,7 @@
                     margin: 0;
                     padding: 0;
                     list-style: none;
+                    margin-bottom: 40px;
                     li{
                         color: #765664;
                         font-size: 15px;
@@ -104,8 +105,9 @@
                     background: #FFF;
                     box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
                     padding: 8px 12px;
-                    justify-content: space-between;
-                    margin-top: 40px;
+                    justify-content: space-between; 
+                    padding: 0 !important;
+                    position: relative;
                     .tfhb-timezone-title{
                         color: #3F2731;
                         font-size: 15px;
@@ -114,6 +116,20 @@
                         line-height: 24px; /* 160% */
                         width: calc(100% - 24px);
                     }
+                    .select2-selection {
+                        padding-left: 2em !important;
+                    }
+                    .tfhb-timezone-icon {
+                        position: absolute;
+                        left: 0; 
+                        top: 0;
+                        height: 100%;
+                        width: 35px;
+                        text-align: center;
+                        padding: 0.6em 0;
+                    }
+ 
+                    
                 }
             }
         }

@@ -73,8 +73,10 @@ class THB_INIT{
 
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
+        wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
 
-        // register script
+        // register script 
+        wp_register_script( 'tfhb-select2-script', THB_URL . 'assets/app/js/select2.min.js', array('jquery', 'tfhb-app-script'), THB_VERSION, true );
         wp_register_script( 'tfhb-app-script', THB_URL . 'assets/app/js/main.js', array('jquery'), THB_VERSION, true ); 
 
     }
