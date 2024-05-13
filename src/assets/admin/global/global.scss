@@ -831,6 +831,9 @@
 .p-dropdown-panel {
     .p-dropdown-items {
         .p-dropdown-item{
+            &:last-child{
+                margin: 0px !important;
+            }
             &.p-highlight {
                 color: #F62881 !important;
                 background: #FEE6F0 !important;

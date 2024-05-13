@@ -4,6 +4,9 @@ import { useRouter, useRoute, RouterView } from 'vue-router'
 import axios from 'axios'  
 import { toast } from "vue3-toastify";
 import Icon from '@/components/icon/LucideIcon.vue'
+import useValidators from '@/store/validator'
+const { errors } = useValidators();
+const error = reactive({})
 
 // Get Current Route url 
 const route = useRoute();
@@ -37,11 +40,34 @@ const AvailabilityTabs = (type) => {
 }
 
 // Save and Update Host Info
-const UpdateHostsInformation = async () => {
+const UpdateHostsInformation = async (validator_field) => {
+
+    // Errors Added
+    if(validator_field){
+        validator_field.forEach(field => {
+            if(!hostData[field]){
+                errors[field] = 'Required this field';
+            }
+        });
+    }
+
+    // Errors Checked
+    const isEmpty = Object.keys(errors).length === 0;
+    if(!isEmpty){
+        toast.error('Fill Up The Required Fields'); 
+        return
+    }
+
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/information/update', hostData);
         if (response.data.status == true) { 
             toast.success(response.data.message); 
+            if("HostsProfileInformation"==route.name){
+                router.push({ name: 'HostsAvailability' });
+            }
+            if("HostsAvailability"==route.name){
+                router.push({ name: 'HostsProfileIntegrations' });
+            }
         }else{
             toast.error(response.data.message); 
         }
