@@ -429,8 +429,16 @@
 
     // Meeting Range
     .tfhb-meeting-range{
+        .tfhb-flexbox{
+            @media #{$max767}{
+                gap: 24px !important;
+            }
+        }
         .tfhb-single-meeting-range{
             width: calc(50% - 12px);
+            @media #{$max767}{
+                width: 100% !important;
+            }
             .tfhb-range-checkbox{
                 position: relative;
                 width: 20px;
