@@ -222,7 +222,8 @@
                     padding: 16px 0;
                     &.inactive{
                         color: #765664;
-                        cursor: not-allowed;
+                        cursor: not-allowed !important;
+                        background-color: transparent !important;
                     }
                     &.current {
                         border-radius: 8px;
@@ -297,7 +298,7 @@
                     margin: 0;
                     padding: 0;
                     list-style: none;
-                    height: 338px;
+                    max-height: 338px;
                     display: flex;
                     flex-wrap: wrap;
                     gap: 12px;

@@ -33,35 +33,8 @@ defined( 'ABSPATH' ) || exit;
 
     <div class="tfhb-available-times">
         <ul>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-            </li>
-
-            <li class="tfhb-flexbox">
-                <span class="time">09:00 AM</span>
-                
-            </li>
+            <!-- <li class="tfhb-flexbox"> <span class="time">09:00 AM</span> </li> -->
+            
         </ul>
     </div>
 

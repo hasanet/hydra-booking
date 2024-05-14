@@ -213,7 +213,8 @@
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.inactive {
   color: #765664;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
+  background-color: transparent !important;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current {
   border-radius: 8px;
@@ -284,7 +285,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  height: 338px;
+  max-height: 338px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
