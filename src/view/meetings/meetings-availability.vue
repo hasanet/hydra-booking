@@ -40,7 +40,7 @@ const fetchAvailabilitySettings = async (availability_id) => {
                 'X-WP-Nonce': tfhb_core_apps.rest_nonce
             } 
         } );
-        if (response.data.status && response.data.availability.length > 0) { 
+        if (response.data.status && response.data.availability) { 
             Settings_avalibility.value = response.data;
         }
     } catch (error) {

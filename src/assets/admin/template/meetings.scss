@@ -286,7 +286,10 @@
         padding: 32px; 
         width: 980px;
         margin: 0 auto;
-
+        @media #{$max1240}{
+            width: calc(100% - 16px) !important;
+            margin-right: 16px !important;
+        }
         .tfhb-meeting-create-notice{
             .tfhb-meeting-heading{
                 justify-content: normal !important;
@@ -426,8 +429,16 @@
 
     // Meeting Range
     .tfhb-meeting-range{
+        .tfhb-flexbox{
+            @media #{$max767}{
+                gap: 24px !important;
+            }
+        }
         .tfhb-single-meeting-range{
             width: calc(50% - 12px);
+            @media #{$max767}{
+                width: 100% !important;
+            }
             .tfhb-range-checkbox{
                 position: relative;
                 width: 20px;

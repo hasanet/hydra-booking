@@ -23,7 +23,9 @@
 
 		.tfhb-availability-single-box{
 			width: calc(50% - 12px);
-
+			@media #{$max991}{
+				width: 100% !important;
+			}
 			.tfhb-availability-single-box-wrap {
 				border-radius: 8px;
 				border: 1px solid $ui50;
@@ -74,9 +76,16 @@
 		.tfhb-integrations-wrap{
 			width: 100% !important; 
 			justify-content: normal !important;
+			flex-wrap: nowrap !important;
+			@media #{$max1240}{
+				flex-wrap: wrap !important;
+			}
 			.tfhb-integrations-single-block{
-				margin: 0;
-  				width: calc(30% - 48px);
+				margin: 0 !important;
+				width: calc(33% - 12px);
+				@media #{$max1240}{
+                    width: calc(50% - 12px);
+                }
 				h3 {
 					font-weight: 600;
 					line-height: 1.5;
