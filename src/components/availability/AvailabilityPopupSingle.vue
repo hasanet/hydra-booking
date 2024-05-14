@@ -73,8 +73,8 @@ const removeAvailabilityTime = (key, tkey = null) => {
 // Add new time slot
 const addAvailabilityTime = (key) => {
     props.availabilityDataSingle.time_slots[key].times.push({
-        start: '09:00',
-        end: '17:00',
+        start: '',
+        end: '',
     });
 }
 
@@ -163,7 +163,39 @@ function formatTime(time) {
     const period = parseInt(hour) < 12 ? 'AM' : 'PM';
     return `${formattedHour}:${minute} ${period}`;
 }
-  
+
+const getLatestEndTime = (day) => {
+    let latestEndTime = day.times[0].end; // Initialize with the end time of the first time slot
+    for (let i = 1; i < day.times.length; i++) {
+        const endTime = day.times[i].end;
+        if (endTime > latestEndTime) {
+            latestEndTime = endTime;
+        }
+    }
+    return latestEndTime;
+}
+
+const TfhbStartDataEvent = (key, startTime) => {
+    const day = props.availabilityDataSingle.time_slots[key];
+    const latestEndTime = getLatestEndTime(day);
+
+    if (startTime < latestEndTime) {
+        alert("Your start time will be over the last end time: " + latestEndTime);
+        return latestEndTime;
+    }
+}
+
+const TfhbEndDataEvent = (key, endTime) => {
+    const day = props.availabilityDataSingle.time_slots[key];
+    console.log(key)
+    // const latestEndTime = getLatestEndTime(day);
+
+    // if (startTime < latestEndTime) {
+    //     alert("Your start time will be over the last end time: " + latestEndTime);
+    //     return latestEndTime;
+    // }
+}
+
 </script>
  
 
@@ -237,6 +269,8 @@ function formatTime(time) {
                                         width="45"
                                         placeholder="Type your schedule title"   
                                         icon="Clock4"
+                                        @tfhb_start_change="TfhbStartDataEvent"
+                                        :tkey = "key"
                                     /> 
                                     <Icon name="MoveRight" size="20" /> 
                                     <HbDateTime  
@@ -252,6 +286,8 @@ function formatTime(time) {
                                         width="45"
                                         placeholder="Type your schedule title"   
                                         icon="Clock4"
+                                        @tfhb_start_change="TfhbEndDataEvent"
+                                        :tkey = "key"
                                     /> 
 
                                 </div>

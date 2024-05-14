@@ -20,8 +20,9 @@ const props = defineProps([
     'placeholder',
     'description', 
     'icon', 
+    'tkey'
 ])
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'tfhb_start_change'])
 
 // Read more at https://flatpickr.js.org/options/
 const config = ref(props.config || {});
@@ -39,7 +40,7 @@ const config = ref(props.config || {});
         <h4 v-if="subtitle">{{ subtitle }}</h4>
         <p v-if="description">{{ description }}</p>
         
-        <flatPickr  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" />
+        <flatPickr @change="emit('tfhb_start_change', tkey, $event.target.value)"  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" />
     
         <span class="tfhb-flat-icon"><Icon v-if="icon" :name="icon" size="20" /> </span>
              
