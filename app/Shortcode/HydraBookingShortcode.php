@@ -40,6 +40,10 @@ class HydraBookingShortcode {
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
+        echo '<pre>';
+        // print_r($meta_data);
+        echo '</pre>';
+
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
         $host_meta = get_user_meta($host_id, '_tfhb_host', true);
@@ -123,6 +127,20 @@ class HydraBookingShortcode {
         // Availability Range
         $availability_range = isset($data['availability_range']) ? $data['availability_range'] : array();
 
+        // Duration
+        $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
+
+        $duration = isset($data['custom_duration']) && !empty($data['custom_duration']) ? $data['custom_duration'] : $duration;
+
+        // Buffer Time Before
+        $buffer_time_before = isset($data['buffer_time_before']) && !empty($data['buffer_time_before']) ? $data['buffer_time_before'] : 0;
+
+        // Buffer Time After
+        $buffer_time_after = isset($data['buffer_time_after']) && !empty($data['buffer_time_after']) ? $data['buffer_time_after'] : 0;
+
+        // Meeting Interval
+        $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
+
 
         // Enqueue Scripts Register scripts 
         if(!wp_script_is('tfhb-app-script', 'enqueued')) {
@@ -133,11 +151,16 @@ class HydraBookingShortcode {
         if(!wp_script_is('tfhb-select2-script', 'enqueued')) {
             wp_enqueue_script('tfhb-select2-script');
         }
+        
 
         // Localize Script
         wp_localize_script('tfhb-app-script', 'tfhb_app_booking_'.$id, array( 
             'meeting_id' => $id,
             'host_id' => $host_id,
+            'duration' => $duration,
+            'meeting_interval' => $meeting_interval,
+            'buffer_time_before' => $buffer_time_before,
+            'buffer_time_after' => $buffer_time_after,
             'availability' => $availability_data,
             'availability_range' => $availability_range,
         ));

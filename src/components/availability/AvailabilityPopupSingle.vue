@@ -317,7 +317,7 @@ const TfhbEndDataEvent = (key, endTime) => {
                             <div class="tfhb-flexbox">
                                 <div class="tfhb-overrides-date">
                                     <h4>{{ date_slot.date }}</h4>
-                                    <p class="tfhb-m-0">{{ date_slot.available!=1 ? formatTimeSlots(date_slot.times) : 'Unavailable' }}</p>
+                                    <p class="tfhb-m-0">{{ date_slot.unavailable!=1 ? formatTimeSlots(date_slot.times) : 'Unavailable' }}</p>
                                 </div>
                                 <div class="tfhb-overrides-action tfhb-flexbox tfhb-gap-16 tfhb-justify-normal">
                                     <button class="question-edit-btn" @click="editAvailabilityDate(key)">
@@ -393,7 +393,7 @@ const TfhbEndDataEvent = (key, endTime) => {
 
                                     <div class="tfhb-mark-unavailable tfhb-full-width tfhb-mt-16">
                                         <HbCheckbox 
-                                            v-model="OverridesDates.available"
+                                            v-model="OverridesDates.unavailable"
                                             :label="$tfhb_trans['Mark unavailable (All day)']"
                                             :name="'mark_unavailable'+key"
                                         />
