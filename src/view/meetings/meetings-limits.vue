@@ -40,7 +40,7 @@ const removeExtraFrequency = (key) => {
             <h2>Meeting Limits</h2> 
             <p>How often attendee can be book</p>
         </div>
-        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-align-baseline tfhb-m-0 tfhb-full-width">  
+        <div class="tfhb-admin-card-box tfhb-meeting-limits tfhb-flexbox tfhb-align-baseline tfhb-m-0 tfhb-full-width">  
 
             <!-- Buffer time before meeting -->
             <HbDropdown 
@@ -129,7 +129,7 @@ const removeExtraFrequency = (key) => {
             </h2> 
             <p>Set up a repeating schedule</p>
         </div>
-        <div class="tfhb-admin-card-box tfhb-flexbox tfhb-m-0 tfhb-full-width" v-if="meeting.recurring_status">  
+        <div class="tfhb-admin-card-box tfhb-meeting-limits tfhb-flexbox tfhb-m-0 tfhb-full-width" v-if="meeting.recurring_status">  
 
             <!-- Meeting interval -->
 

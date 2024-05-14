@@ -135,7 +135,7 @@ onBeforeMount(() => {
                 <h2>{{ $tfhb_trans['Date and Time'] }}</h2> 
                 <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
             </div>
-            <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-tb-24">  
+            <div class="tfhb-admin-card-box tfhb-general-card tfhb-flexbox tfhb-gap-tb-24">  
 
                 <!-- Time Zone -->
                 <HbText  
@@ -252,7 +252,7 @@ onBeforeMount(() => {
                 <h2>{{ $tfhb_trans['Bookings'] }}</h2> 
                 <p>{{ $tfhb_trans['Manage your bookings and reservations'] }}</p>
             </div>
-            <div class="tfhb-admin-card-box tfhb-flexbox tfhb-gap-tb-24">  
+            <div class="tfhb-admin-card-box tfhb-general-card tfhb-flexbox tfhb-gap-tb-24">  
                 <!-- Bookings will be completed automatically after -->
                 <HbDropdown 
                     

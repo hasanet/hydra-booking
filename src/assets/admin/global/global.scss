@@ -405,7 +405,9 @@
         .tfhb-hydra-settings {
     
             width: 272px;
-    
+            @media #{$max1140}{
+                width: 200px;
+            }
             ul {
                 display: inline-block;
             }
@@ -414,6 +416,9 @@
         .tfhb-hydra-dasboard-content {
             width: calc(100% - 272px);
             padding: 24px;
+            @media #{$max1140}{
+                width: calc(100% - 200px);
+            }
         }
     
         .tfhb-hydra-wrap {
@@ -547,6 +552,10 @@
                 height: 40px;
                 width: calc(100% - 174px);
                 padding: 8px 12px;
+                @media #{$max1140}{
+                    gap: 8px !important;
+                    width: calc(100% - 100px);
+                }
                 .tfhb-inc,
                 .tfhb-dec{
                     cursor: pointer;
@@ -560,6 +569,9 @@
                 height: 40px !important;
                 border: 1px solid $ui50 !important;
                 border-left: 0px solid !important;
+                @media #{$max1140}{
+                    min-width: 100px !important;
+                }
                 &:focus, &:active {
                     outline: none;
                     box-shadow: none; 
@@ -844,3 +856,12 @@
         }
     }
 } 
+
+@media only screen and (max-width: 991px){
+    .tfhb-hydra-dasboard-content .tfhb-general-card .tfhb-single-form-field,
+    .tfhb-meeting-location .tfhb-single-form-field,
+    .tfhb-meeting-limits .tfhb-single-form-field,
+    .tfhb-meeting-limits .tfhb-counter-box{
+        width: 100% !important;
+    }
+}

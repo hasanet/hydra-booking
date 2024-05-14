@@ -18,6 +18,12 @@
     justify-content: normal !important;
     .tfhb-single-hosts {
       width: calc(33.333% - 24px);
+      @media #{$max1140}{
+				width: calc(50% - 24px);
+			}
+      @media #{$max767}{
+				width: calc(100% - 12px);
+			}
       .tfhb-single-hosts-wrap {
         border-radius: 8px;
         background-color: #fff;

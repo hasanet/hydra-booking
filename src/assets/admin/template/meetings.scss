@@ -286,7 +286,10 @@
         padding: 32px; 
         width: 980px;
         margin: 0 auto;
-
+        @media #{$max1240}{
+            width: calc(100% - 16px) !important;
+            margin-right: 16px !important;
+        }
         .tfhb-meeting-create-notice{
             .tfhb-meeting-heading{
                 justify-content: normal !important;
