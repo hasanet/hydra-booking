@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 
 ?> 
-<div class="tfhb-meeting-confirmation">
+<div class="tfhb-meeting-confirmation" style="display: none;">
     <?php 
         // Hook for before confirmation
         do_action('hydra_booking/before_meeting_confirmation');

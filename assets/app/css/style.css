@@ -328,6 +328,7 @@
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-back-btn {
   align-items: center;
+  cursor: pointer;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-back-btn h3 {
   color: #3F2731;

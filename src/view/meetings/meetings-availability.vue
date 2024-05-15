@@ -6,6 +6,7 @@ import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
@@ -284,6 +285,7 @@ function formatTime(time) {
             </ul>
         </div>
         <!-- Choose Schedule -->
+        {{HostAvailabilities}}
         <HbSelect 
             v-model="meeting.availability_id"
             required= "true" 
@@ -303,11 +305,12 @@ function formatTime(time) {
             v-if="'custom'==meeting.availability_type"
         /> 
         <!-- Time Zone -->
-        <HbSelect 
+        <HbDropdown 
             
             v-model="meeting.availability_custom.time_zone"  
             required= "true"  
             :label="$tfhb_trans['Time zone']"  
+            :filter="true"
             selected = "1"
             placeholder="Select Time Zone"  
             :option = "props.timeZone" 
