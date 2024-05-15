@@ -122,6 +122,9 @@
 				}
 
 				.tfhb-availability-schedule-wrap{
+					@media #{$max570}{
+						width: 100%;
+					}
 					.tfhb-availability-schedule-inner{
 						margin-bottom: 24px;
 						// last child
