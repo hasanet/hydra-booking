@@ -20,7 +20,8 @@ const props = defineProps([
     'placeholder',
     'description', 
     'icon', 
-    'tkey'
+    'parent_key',
+    'single_key'
 ])
 const emit = defineEmits(['update:modelValue', 'tfhb_start_change'])
 
@@ -40,7 +41,7 @@ const config = ref(props.config || {});
         <h4 v-if="subtitle">{{ subtitle }}</h4>
         <p v-if="description">{{ description }}</p>
         
-        <flatPickr @change="emit('tfhb_start_change', tkey, $event.target.value)"  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" />
+        <flatPickr @change="emit('tfhb_start_change', parent_key, single_key, $event.target.value)"  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" />
     
         <span class="tfhb-flat-icon"><Icon v-if="icon" :name="icon" size="20" /> </span>
              
