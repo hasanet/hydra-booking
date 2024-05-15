@@ -165,7 +165,7 @@ function formatTime(time) {
 }
 
 const getLatestEndTime = (day) => {
-    let latestEndTime = day.times[0].end; // Initialize with the end time of the first time slot
+    let latestEndTime = day.times[0].end;
     for (let i = 1; i < day.times.length; i++) {
         const endTime = day.times[i].end;
         if (endTime > latestEndTime) {
@@ -175,25 +175,33 @@ const getLatestEndTime = (day) => {
     return latestEndTime;
 }
 
-const TfhbStartDataEvent = (key, startTime) => {
+const TfhbStartDataEvent = (key, skey, startTime) => {
     const day = props.availabilityDataSingle.time_slots[key];
     const latestEndTime = getLatestEndTime(day);
 
-    if (startTime < latestEndTime) {
-        alert("Your start time will be over the last end time: " + latestEndTime);
+    if (startTime <= latestEndTime) {
+        toast.error("Your start time will be over the: " + latestEndTime);
         return latestEndTime;
     }
 }
 
-const TfhbEndDataEvent = (key, endTime) => {
+const TfhbEndDataEvent = (key, skey, endTime) => {
     const day = props.availabilityDataSingle.time_slots[key];
-    console.log(key)
-    // const latestEndTime = getLatestEndTime(day);
+    const nextDate = skey+1;
+    const NextdayData = day.times[nextDate] ? day.times[nextDate].start : '';
 
-    // if (startTime < latestEndTime) {
-    //     alert("Your start time will be over the last end time: " + latestEndTime);
-    //     return latestEndTime;
-    // }
+    if(NextdayData){
+        if ( day.times[skey].start >= endTime || NextdayData <= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start +" And Less than " + NextdayData);
+            return;
+        }
+    }else{
+        if (day.times[skey].start >= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start);
+            return;
+        }
+    }
+    
 }
 
 </script>
@@ -270,7 +278,8 @@ const TfhbEndDataEvent = (key, endTime) => {
                                         placeholder="Type your schedule title"   
                                         icon="Clock4"
                                         @tfhb_start_change="TfhbStartDataEvent"
-                                        :tkey = "key"
+                                        :parent_key = "key"
+                                        :single_key = "tkey"
                                     /> 
                                     <Icon name="MoveRight" size="20" /> 
                                     <HbDateTime  
@@ -287,7 +296,8 @@ const TfhbEndDataEvent = (key, endTime) => {
                                         placeholder="Type your schedule title"   
                                         icon="Clock4"
                                         @tfhb_start_change="TfhbEndDataEvent"
-                                        :tkey = "key"
+                                        :parent_key = "key"
+                                        :single_key = "tkey"
                                     /> 
 
                                 </div>
