@@ -258,7 +258,7 @@
   padding: 4px;
   display: inline-flex;
 }
-.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-timezone-tabs ul li {
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-timezone-tabs ul li label {
   display: inline-block;
   padding: 4px 8px;
   color: #8F707D;
@@ -268,7 +268,10 @@
   line-height: 16px; /* 145.455% */
   cursor: pointer;
 }
-.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-timezone-tabs ul li.active {
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-timezone-tabs ul li label input {
+  display: none;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times .tfhb-timezone-tabs ul li.active label {
   border-radius: 4px;
   background: #F6EEF2;
   color: #3F2731;

@@ -33,8 +33,7 @@
 			// Get Calender Id
 			let $this = $(this),
 			 	calenderId = $this.attr('data-calendar'),
-				calenderData =  eval("tfhb_app_booking_" + calenderId); 
-				console.log(calenderData); 
+				calenderData =  eval("tfhb_app_booking_" + calenderId);
 			// Select 2 Time Zone 
 			$this.find('.tfhb-time-zone-select').select2({
 				dropdownCssClass: 'tfhb-select2-dropdown',
@@ -111,6 +110,13 @@
 
 				
 			});
+			$(document).on('change', $this.find('input[name="tfhb_time_format"]'), function (e) { 
+				var $this_li = $this.find('.tfhb-calendar-dates li.active');  
+				// Get the first day of the month
+				tfhb_times_manipulate( $this, calenderData, $this_li );
+
+				
+			});
 
 
 			
@@ -125,8 +131,7 @@
 			let calender_data = calenderData;
 			let availability = calender_data.availability;
 			let date_slots = availability.date_slots;  
-			
-			console.log(date_slots)
+			 
 
 			// Get the first day of the month
 			let dayone = new Date(year, month, 1).getDay();
@@ -182,6 +187,8 @@
  
 			var selected_date = $this_li.attr('data-date'); 
 			var data_available = $this_li.attr('data-available'); 
+			//  input radio data name tfhb_time_format
+			var time_format = $this.find('input[name="tfhb_time_format"]:checked').val(); 
 			$this.find('.tfhb-meeting-times .tfhb-select-date').html(selected_date);
 			
 			// Get Selected Date day
@@ -206,7 +213,7 @@
 					for (var i = 0; i < date_slot.times.length; i++) {
 						var startTime = date_slot.times[i].start;
 						var endTime = date_slot.times[i].end;
-						var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date);
+						var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format);
 						// merge with timesData 
 						timesData = timesData.concat(generatedSlots);
 					} 
@@ -217,7 +224,7 @@
 				for (var i = 0; i < times.length; i++) {
 					var startTime = times[i].start;
 					var endTime = times[i].end;
-					var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date);
+					var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format);
 					// merge with timesData 
 					timesData = timesData.concat(generatedSlots);
 				} 
@@ -242,7 +249,7 @@
 		}
 
 		// Generate Time Slots
-		function generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date) {
+		function generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format) {
 			var timeSlots = [];
 			// start date data format =   2024-05-04 
 			var start = new Date(selected_date + " " + startTime);
@@ -256,11 +263,14 @@
 			var meeting_interval = meeting_interval * 60000;
 			var total_diff = diff +before_diff + after_diff;
 			while (current < end) {
+				// new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+				var start_time = time_format == 12 ? current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  }) : current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false  });
+				var end_time = time_format == 12 ? new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  }) : new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false  }); 
 				timeSlots.push({
 
-					start: current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+					start: start_time, 
 					// before_diff and after_diff need to use 
-					end: new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+					end: end_time,
 
 				});
 				current = new Date(current.getTime() + total_diff + meeting_interval);

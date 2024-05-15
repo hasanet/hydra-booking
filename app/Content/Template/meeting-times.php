@@ -25,8 +25,16 @@ defined( 'ABSPATH' ) || exit;
     ?>
     <div class="tfhb-timezone-tabs">
         <ul>
-            <li class="active">12h</li>
-            <li>24h</li>
+            <li class="active">
+                <label for="tfhb_time_format_12" for="">12h
+                    <input id="tfhb_time_format_12" type="radio" checked name="tfhb_time_format" value="12">
+                </label> 
+            </li>
+            <li>
+                <label for="tfhb_time_format_24" for="">24h
+                    <input id="tfhb_time_format_24" type="radio" name="tfhb_time_format" value="24">
+                </label>
+            </li>
         </ul>
     </div>
     <h3 class="tfhb-select-date">Saturday, 11 April, 2024</h3>

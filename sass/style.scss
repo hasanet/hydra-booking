@@ -269,18 +269,26 @@
                     padding: 4px;
                     display: inline-flex;
                     li{
-                        display: inline-block;
-                        padding: 4px 8px;
-                        color: #8F707D;
-                        font-size: 11px;
-                        font-style: normal;
-                        font-weight: 600;
-                        line-height: 16px; /* 145.455% */
-                        cursor: pointer;
+                        label{
+                            display: inline-block;
+                            padding: 4px 8px;
+                            color: #8F707D;
+                            font-size: 11px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 16px; /* 145.455% */
+                            cursor: pointer;
+                           
+                            input{
+                                display: none;
+                            }
+                        }
                         &.active{
-                            border-radius: 4px;
-                            background: #F6EEF2;
-                            color: #3F2731;
+                            label{
+                                border-radius: 4px;
+                                background: #F6EEF2;
+                                color: #3F2731;
+                            }
                         }
                     }
                 }
