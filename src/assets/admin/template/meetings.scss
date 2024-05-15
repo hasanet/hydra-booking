@@ -192,6 +192,12 @@
             background: #fff;
             padding: 24px;
             box-sizing: border-box;
+            @media #{$max1240}{
+                width: calc(50% - 16px);
+            }
+            @media #{$max991}{
+                width: 100%;
+            }
             .single-meeting-content-box{
                 flex-wrap: nowrap !important;
                 align-items: baseline !important;

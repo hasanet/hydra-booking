@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount, } from 'vue'; 
+import { ref, reactive, onBeforeMount } from 'vue'; 
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
