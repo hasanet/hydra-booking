@@ -84,21 +84,18 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
             ?>
         </ul>
 
-        <div class="tfhb-timezone ">
+        <div class="tfhb-timezone "> 
             <select class="tfhb-time-zone-select" name="tfhb_time_zone" id="">
                 <?php 
                     if(!empty($time_zone)) {
-                        foreach($time_zone as $key => $zone) {
-                            $selected = ($zone['value'] == $meeting['time_zone']) ? 'selected' : '';
+                        $selected_timezone = $meeting['availability_custom']['time_zone'] ;
+                        foreach($time_zone as $key => $zone) { 
+                            $selected = ($zone['value'] == $selected_timezone) ? 'selected' : '';
                             echo '<option value="'.esc_attr($zone['value']).'" '.esc_attr($selected).'>'.esc_html($zone['name']).'</option>';
                         }
                     }
                 
-                ?>
-                <option value="1">Asia/Dhaka(09.00 PM)</option>
-                <option value="2">Asia/Dhaka</option>
-                <option value="3">Asia/Dhaka</option>
-                <option value="4">Asia/Dhaka</option>
+                ?> 
             </select>
             <div class="tfhb-timezone-icon ">
                 <img src="<?php echo THB_URL.'assets/app/images/globe.svg'; ?>" alt="globe">  

@@ -12,17 +12,7 @@
         });
 
 
-        /**
-         * Time Select
-         * @author Jahid
-         */
-        $(document).on('click', '.tfhb-available-times li .time', function (e) {
-            $('.tfhb-available-times li .next').remove();
-            var $this = $(this);
-            $this.parent().append('<span class="next tfhb-flexbox tfhb-gap-8"> Next<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 10L14 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4.16666L14.8333 9.99999L9 15.8333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
-        });
-
-	 
+     
  
 
 		/**
@@ -102,15 +92,20 @@
 			// Select Date
 			$(document).on('click', '.tfhb-calendar-dates li', function (e) {
 				var $this_li = $(this);
+				if($this_li.hasClass('inactive')){
+					return false;
+				}
 				$this.find('.tfhb-calendar-dates li').removeClass('active');  
 				$this_li.addClass('active');	
+				
 
 				// Get the first day of the month
 				tfhb_times_manipulate( $this, calenderData, $this_li );
 
 				
 			});
-			$(document).on('change', $this.find('input[name="tfhb_time_format"]'), function (e) { 
+
+			$this.find('input[name="tfhb_time_format"], .tfhb-time-zone-select').on('change', function (e) {  
 				var $this_li = $this.find('.tfhb-calendar-dates li.active');  
 				// Get the first day of the month
 				tfhb_times_manipulate( $this, calenderData, $this_li );
@@ -118,7 +113,35 @@
 				
 			});
 
+			   /**
+			* Time Select
+			* @author Jahid
+			*/
+			// $this.find('input[name="tfhb_time_format"], .tfhb-time-zone-select').on('change', function (e) { 
+			$(document).on('click', '.tfhb-available-times li .time', function (e) {
+				$('.tfhb-available-times li .next').remove(); 
+				$(this).parent().append('<span class="next tfhb-flexbox tfhb-gap-8"> Next<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 10L14 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4.16666L14.8333 9.99999L9 15.8333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
+			});
+ 
+ 			$(document).on('click', '.tfhb-available-times li .next', function (e) {
+				$this.find('.tfhb-meeting-calendar').hide();
+				$this.find('.tfhb-meeting-times').hide();
+				$this.find('.tfhb-meeting-booking-form').show(); 
+			});
 
+			$(document).on('click', '.tfhb-meeting-booking-form .tfhb-back-btn', function (e) {
+				$this.find('.tfhb-meeting-calendar').show();
+				$this.find('.tfhb-meeting-times').show();
+				$this.find('.tfhb-meeting-booking-form').hide();
+			});
+			$(document).on('click', '.tfhb-confirmation-button button', function (e) {
+				e.preventDefault(); 
+				$this.find('.tfhb-meeting-info').hide();
+				$this.find('.tfhb-meeting-booking-form').hide();
+				$this.find('.tfhb-meeting-confirmation').show();
+				
+
+			});
 			
 		});
 
@@ -188,7 +211,8 @@
 			var selected_date = $this_li.attr('data-date'); 
 			var data_available = $this_li.attr('data-available'); 
 			//  input radio data name tfhb_time_format
-			var time_format = $this.find('input[name="tfhb_time_format"]:checked').val(); 
+			var time_format = $this.find('input[name="tfhb_time_format"]:checked').val();  
+			var time_zone = $this.find('.tfhb-time-zone-select').val();
 			$this.find('.tfhb-meeting-times .tfhb-select-date').html(selected_date);
 			
 			// Get Selected Date day
@@ -213,7 +237,7 @@
 					for (var i = 0; i < date_slot.times.length; i++) {
 						var startTime = date_slot.times[i].start;
 						var endTime = date_slot.times[i].end;
-						var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format);
+						var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format, time_zone);
 						// merge with timesData 
 						timesData = timesData.concat(generatedSlots);
 					} 
@@ -224,7 +248,7 @@
 				for (var i = 0; i < times.length; i++) {
 					var startTime = times[i].start;
 					var endTime = times[i].end;
-					var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format);
+					var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format, time_zone);
 					// merge with timesData 
 					timesData = timesData.concat(generatedSlots);
 				} 
@@ -249,7 +273,7 @@
 		}
 
 		// Generate Time Slots
-		function generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format) {
+		function generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format, time_zone) {
 			var timeSlots = [];
 			// start date data format =   2024-05-04 
 			var start = new Date(selected_date + " " + startTime);
@@ -264,8 +288,9 @@
 			var total_diff = diff +before_diff + after_diff;
 			while (current < end) {
 				// new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-				var start_time = time_format == 12 ? current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  }) : current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false  });
-				var end_time = time_format == 12 ? new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  }) : new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false  }); 
+				var start_time = formatTime(current, time_format, time_zone);
+				var end_time = formatTime(new Date(current.getTime() + total_diff), time_format, time_zone);
+			   
 				timeSlots.push({
 
 					start: start_time, 
@@ -276,6 +301,16 @@
 				current = new Date(current.getTime() + total_diff + meeting_interval);
 			} 
 			return timeSlots;
+		}
+
+		function formatTime(date, timeFormat, timeZone) {
+			var options = {
+				hour: '2-digit',
+				minute: '2-digit',
+				hour12: timeFormat === '12',
+				timeZone: timeZone
+			};
+			return date.toLocaleTimeString([], options);
 		}
 
 

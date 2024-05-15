@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 
 ?> 
-<div class="tfhb-meeting-booking-form">
+<div class="tfhb-meeting-booking-form" style="display:none">
     <?php 
         // Hook for Before Form
         do_action('hydra_booking/before_meeting_form');
