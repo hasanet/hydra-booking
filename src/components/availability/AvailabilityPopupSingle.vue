@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount, } from 'vue'; 
+import { ref, reactive, onBeforeMount } from 'vue'; 
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -218,6 +218,7 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                     <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
                 </div> 
             </div>
+            {{ props.availabilityDataSingle }}
             <div class="tfhb-content-wrap tfhb-flexbox"> 
                 <!-- Title -->
                 <HbText  
