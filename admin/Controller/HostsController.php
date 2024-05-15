@@ -9,6 +9,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
  // Use DB 
 use HydraBooking\DB\Host;
+use HydraBooking\DB\Availability;
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -573,7 +574,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
             return rest_ensure_response($data);
         }
- 
+
         $_tfhb_host_info = get_user_meta($request['user_id'], '_tfhb_host', true);
         $tfhb_host_availability = !empty($_tfhb_host_info['availability']) ? $_tfhb_host_info['availability'] : [];
 
@@ -626,6 +627,51 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
            
         } 
+        if($availability['id'] == ''){
+            // Host Availability DB
+            $availbility_data = [ 
+                'host' => isset($request['host']) ? sanitize_text_field($request['host']) : '', 
+                'title' => $availability['title'],
+                'time_zone' => $availability['time_zone'],
+                'override' => '',
+                'time_slots' => $request['time_slots'],
+                'date_status' => $availability['date_status'],
+                'date_slots' => $request['date_slots'],
+                'status' => 'active',
+                'created_at' => date('y-m-d'), 
+                'updated_at' => date('y-m-d'), 
+            ];
+
+            $hostAvailability = new Availability(); 
+            $insert = $hostAvailability->add($availbility_data);
+
+            if(!$insert['status']) {
+                return rest_ensure_response(array('status' => false, 'message' => 'Error while creating host'));
+            }
+            $host_insert_availablekey = count($tfhb_host_availability);
+            $_tfhb_host_info['availability'][$host_insert_availablekey]['available_id'] = $insert['insert_id'];
+        }else{
+            // Host Availability DB
+            $availbility_data = [ 
+                'id' => $request['available_id'],
+                'host' => isset($request['host']) ? sanitize_text_field($request['host']) : '', 
+                'title' => $availability['title'],
+                'time_zone' => $availability['time_zone'],
+                'override' => '',
+                'time_slots' => serialize($request['time_slots']),
+                'date_status' => $availability['date_status'],
+                'date_slots' => serialize($request['date_slots']),
+                'status' => 'active',
+                'created_at' => date('y-m-d'), 
+                'updated_at' => date('y-m-d'), 
+            ];
+
+            $hostAvailability = new Availability(); 
+            $hostAvailability->update($availbility_data);
+
+            $_tfhb_host_info['availability'][$request['id']]['available_id'] = $request['available_id']; 
+        }
+        
          // update user meta
          $_tfhb_availability_settings = update_user_meta($request['user_id'], '_tfhb_host', $_tfhb_host_info);
 

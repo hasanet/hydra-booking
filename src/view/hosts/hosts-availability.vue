@@ -117,7 +117,8 @@ const openModal = () => {
         }
     ],
     date_slots: [
-    ]
+    ],
+    availability_id: ''
   };
   isModalOpened.value = true;
 };
