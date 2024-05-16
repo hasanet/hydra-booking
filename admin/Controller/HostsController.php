@@ -553,6 +553,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             
                 // If you expect only one result, you can extract the first item from the filtered array
                 $defult_availability = reset($filteredAvailability);
+            }else{
+                $defult_availability = [];
             }
         }else{
             // Get Single Host Data 

@@ -385,6 +385,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             
                 // If you expect only one result, you can extract the first item from the filtered array
                 $HostData->availability = reset($filteredAvailability);
+            }else{
+                $HostData->availability = '';
             }
             
             
