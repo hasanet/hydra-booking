@@ -225,7 +225,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(!$hostInsert['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while creating host'));
         }
-        $hosts_id = $hostInsert['insert_id'];
+        $hosts_id = $data['user_id'];
         unset($data['user_id']);
         $data['host_id'] = $hostInsert['insert_id'];
 
