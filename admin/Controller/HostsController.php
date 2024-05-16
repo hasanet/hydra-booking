@@ -533,11 +533,36 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function GetSingleAvailabilitySettings() {
         $request = json_decode(file_get_contents('php://input'), true);
 
-        // Get Single Host Data 
-        $_tfhb_host_availability_settings =  get_user_meta($request['user_id'], '_tfhb_host', true);
+        // Check if user is selected
+        if (empty($request['host_id'])) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Host id is Empty'));
+        }
+
+        $host = new Host();
+        $HostData = $host->get( $request['host_id'] );
+        
+        // If Host Use existing availability
+        if(!empty($HostData->availability_type) && "settings"==$HostData->availability_type){
+            if(!empty($HostData->availability_id)){
+                $availability_id = $HostData->availability_id; 
+                $availability = get_option('_tfhb_availability_settings');
+    
+                $filteredAvailability = array_filter($availability, function($item) use ($availability_id) {
+                    return $item['id'] == $availability_id;
+                });
+            
+                // If you expect only one result, you can extract the first item from the filtered array
+                $defult_availability = reset($filteredAvailability);
+            }
+        }else{
+            // Get Single Host Data 
+            $_tfhb_host_availability_settings =  get_user_meta($request['host_id'], '_tfhb_host', true);
+            $defult_availability = !empty($_tfhb_host_availability_settings['availability']) ? $_tfhb_host_availability_settings['availability'][$request['availability_id']] : [];
+        }
+
         $data = array(
             'status' => true,  
-            'availability' => !empty($_tfhb_host_availability_settings['availability']) ? $_tfhb_host_availability_settings['availability'][$request['availability_id']] : [],
+            'availability' => $defult_availability,
         );
         return rest_ensure_response($data);
     }

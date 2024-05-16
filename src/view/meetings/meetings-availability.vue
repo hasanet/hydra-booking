@@ -32,7 +32,7 @@ const props = defineProps({
 const Settings_avalibility = ref();
 const fetchAvailabilitySettings = async (availability_id) => {
     let data = {
-        user_id: props.meeting.user_id,
+        host_id: props.meeting.host_id,
         availability_id: availability_id
     };  
     try { 
@@ -63,16 +63,20 @@ const validateSelect = (fieldName) => {
 const HostAvailabilities = reactive({});
 const fetchHostAvailability = async (host) => {
     try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/'+host); 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/single-host-availability/'+host); 
         
         // Clear existing data before updating
         for (const key in HostAvailabilities) {
             delete HostAvailabilities[key];
         }
-        
-        response.data.host.availability && response.data.host.availability.forEach((available, key) => {
-            HostAvailabilities[key] = available.title;
-        });
+        if("settings"==response.data.host_availble){
+            console.log(response.data.host.availability);
+            Settings_avalibility.value = response.data.host;
+        }else{
+            response.data.host.availability && response.data.host.availability.forEach((available, key) => {
+                HostAvailabilities[key] = available.title;
+            });
+        }
     } catch (error) {
         console.log(error);
     } 
@@ -85,9 +89,9 @@ const Host_Avalibility_Callback = (e) => {
 }
 
 // Host Default Availability
-const fetchSingleAvailabilitySettings = async (user_id, availability_id) => {
+const fetchSingleAvailabilitySettings = async (host_id, availability_id) => {
     let data = {
-        user_id: user_id,
+        host_id: host_id,
         availability_id: availability_id
     };  
     try { 
@@ -109,8 +113,8 @@ onBeforeMount(() => {
     Host.fetchHosts().then(() => {
         if(props.meeting.host_id!=0){
             fetchHostAvailability(props.meeting.host_id);
+            fetchSingleAvailabilitySettings(props.meeting.host_id, props.meeting.availability_id);
         }
-        fetchSingleAvailabilitySettings(props.meeting.user_id, props.meeting.availability_id);
     });
 });
 
@@ -285,7 +289,7 @@ function formatTime(time) {
             </ul>
         </div>
         <!-- Choose Schedule -->
-        {{HostAvailabilities}}
+
         <HbSelect 
             v-model="meeting.availability_id"
             required= "true" 

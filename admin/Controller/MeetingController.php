@@ -62,6 +62,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'getMeetingsCategories'),
         )); 
        
+        // Get Single Host based on id
+        register_rest_route('hydra-booking/v1', '/meetings/single-host-availability/(?P<id>[0-9]+)', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'getTheHostAvailabilityData'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
     }
     // Meeting List
     public function getMeetingsData() { 
@@ -354,5 +360,57 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'data' => $data, 
         );
         return rest_ensure_response($data);
+    }
+
+    // Host availability
+    public function getTheHostAvailabilityData($request){
+
+        $id = $request['id']; 
+        // Check if user is selected
+        if (empty($id) || $id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Get Host
+        $host = new Host();
+        $HostData = $host->get( $id );
+       
+        if("settings"==$HostData->availability_type){
+            if(!empty($HostData->availability_id)){
+                $availability_id = $HostData->availability_id; 
+                $availability = get_option('_tfhb_availability_settings');
+    
+                $filteredAvailability = array_filter($availability, function($item) use ($availability_id) {
+                    return $item['id'] == $availability_id;
+                });
+            
+                // If you expect only one result, you can extract the first item from the filtered array
+                $HostData->availability = reset($filteredAvailability);
+            }
+            
+            
+        }else{
+            $_tfhb_host_availability_settings =  get_user_meta($HostData->user_id, '_tfhb_host', true);
+            if(!empty($_tfhb_host_availability_settings['availability'])){
+                $HostData->availability = $_tfhb_host_availability_settings['availability'];
+            }
+            if(empty($HostData)) {
+                return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+            }
+        }
+        
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
+
+
+        // Return response
+        $data = array(
+            'status' => true, 
+            'host' => $HostData,  
+            'host_availble' => $HostData->availability_type,
+            'time_zone' => $time_zone,
+            'message' => 'Host Data',
+        );
+        return rest_ensure_response($data);
+
     }
 } 

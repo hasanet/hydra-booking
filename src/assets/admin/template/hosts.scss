@@ -103,6 +103,10 @@
 }
 
 .tfhb-availability-schedule-single  {
+  // last child
+  &:last-child {
+    margin-bottom: 0;
+  }
   .tfhb-availability-schedule-wrap{
     @media #{$max570}{
       width: 100%;
