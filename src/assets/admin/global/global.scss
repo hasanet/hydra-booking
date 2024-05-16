@@ -434,7 +434,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: #ffffff63;
-		z-index: 99;
+		z-index: 9999;
 		
 		.tfhb-popup-wrap {
 			max-width: 800px;
@@ -863,6 +863,7 @@
 
 // Prime Vue Dropdown
 .p-dropdown-panel {
+    z-index: 99999 !important;
     .p-dropdown-items {
         .p-dropdown-item{
             &:last-child{
