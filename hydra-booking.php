@@ -45,6 +45,10 @@ class THB_INIT{
    }
 
     public function init() {    
+        // Post Type 
+        new HydraBooking\PostType\Meeting\Meeting_CPT();
+        new HydraBooking\PostType\Booking\Booking_CPT();
+
         // Create a New host Role 
         new HydraBooking\Admin\Controller\RouteController();   
         

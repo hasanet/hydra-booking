@@ -880,6 +880,51 @@
     }
 } 
 
+// Pagination
+.tfhb-booking-details-pagination{
+    .tfhb-prev-next-button{
+        border-radius: 8px;
+        border: 1px solid #fff;
+        background: #fff;
+        padding: 8px 14px;
+        a{
+            color: $ui600;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px; /* 160% */
+            text-decoration: none;
+        }
+    }
+    .tfhb-pagination{
+        ul{
+            li{
+                height: 40px;
+                width: 40px;
+                padding: 12px;
+                color: $ui600;
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; /* 160% */
+                box-sizing: border-box;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                a{
+                    text-decoration: none;
+                    color: $ui600;
+                }
+                &.active{
+                    background-color: #fff;
+                    color: $ui800;
+                }
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 991px){
     .tfhb-hydra-dasboard-content .tfhb-general-card .tfhb-single-form-field,
     .tfhb-meeting-location .tfhb-single-form-field,

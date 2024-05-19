@@ -62,6 +62,10 @@ namespace HydraBooking\Admin\Controller;
             'Custom brand colors' => __('Custom brand colors', 'hydra-booking'),
             'Admin Email' => __('Admin Email', 'hydra-booking'),
             'Type your Admin Email' => __('Type your Admin Email', 'hydra-booking'),
+            'Meeting Category' => __('Meeting Category', 'hydra-booking'),
+            'Category Title' => __('Category Title', 'hydra-booking'),
+            'Save Category' => __('Save Category', 'hydra-booking'),
+            'Update Category' => __('Update Category', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),

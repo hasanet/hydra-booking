@@ -57,11 +57,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             ),
         ));
 
+        // Meeting Category Endpoint
         register_rest_route('hydra-booking/v1', '/meetings/categories', array(
             'methods' => 'GET',
             'callback' => array($this, 'getMeetingsCategories'),
         )); 
-       
+        register_rest_route('hydra-booking/v1', '/meetings/categories/create-update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'createupdateMeeting'),
+        ));  
+        register_rest_route('hydra-booking/v1', '/meetings/categories/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'DeleteCategory'),
+        )); 
+
+
         // Get Single Host based on id
         register_rest_route('hydra-booking/v1', '/meetings/single-host-availability/(?P<id>[0-9]+)', array(
             'methods' => 'GET',
@@ -88,19 +98,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // getMeetingsCategories List
     public function getMeetingsCategories() { 
 
-        global $wpdb;
-        $taxonomy = 'meeting_category';
-        $terms = $wpdb->get_results( "
-            SELECT t.*
-            FROM {$wpdb->terms} AS t
-            INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
-            WHERE tt.taxonomy = '{$taxonomy}'
-        " );
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
         $term_array = array();
-        foreach ( $terms as $term ) {
+        foreach ($terms as $term) {
             $term_array[] = array(
                 'id' => $term->term_id,
-                'name' => $term->name
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
             );
         }
 
@@ -112,6 +121,122 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }  
+
+    //createupdateMeeting
+    public function createupdateMeeting(){
+        $request = json_decode(file_get_contents('php://input'), true);
+    
+        // Sanitize data
+        $title = !empty($request['title']) ? sanitize_text_field($request['title']) : 'No Title';
+        $description = !empty($request['description']) ? sanitize_text_field($request['description']) : '';
+        
+        // Check if taxonomy is registered
+        if (!taxonomy_exists('meeting_category')) {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Invalid taxonomy.'
+            ));
+        }
+    
+        if (empty($request['id'])) {
+            // Insert the term
+            $term = wp_insert_term(
+                $title,   // The term
+                'meeting_category', // The taxonomy
+                array(
+                    'description' => $description,
+                    'slug'        => sanitize_title($title)
+                )
+            );
+    
+            // Check for errors
+            if (is_wp_error($term)) {
+                return rest_ensure_response(array(
+                    'status' => false,
+                    'message' => $term->get_error_message(),
+                ));
+            }
+
+        } else {
+            // Update the term
+            $term_id = intval($request['id']);
+            $term = wp_update_term(
+                $term_id,
+                'meeting_category',
+                array(
+                    'name'        => $title,
+                    'description' => $description,
+                    'slug'        => sanitize_title($title)
+                )
+            );
+    
+            // Check for errors
+            if (is_wp_error($term)) {
+                return rest_ensure_response(array(
+                    'status' => false,
+                    'message' => $term->get_error_message(),
+                ));
+            }
+        }
+
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
+            );
+        }
+
+        // Success response
+        return rest_ensure_response(array(
+            'status' => true,
+            'category' => $term_array,
+            'message' => empty($request['id']) ? 'Meeting Category Successfully Added!' : 'Meeting Category Successfully Updated!',
+        ));
+
+    }    
+
+    // Category Delete
+    public function DeleteCategory(){
+        $request = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($request['id'])) {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Term ID is required.'
+            ));
+        }
+        $term_id = intval($request['id']);
+        $result = wp_delete_term($term_id, 'meeting_category');
+
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
+            );
+        }
+        
+        return rest_ensure_response(array(
+            'status' => true,
+            'category' => $term_array,
+            'message' => 'Meeting Category Successfully Deleted!',
+        ));
+    }
 
     // Meeting Filter 
     public function filterMeetings($request) {
