@@ -1,6 +1,6 @@
 <script setup> 
 // Use children routes for the tabs 
-import { ref, reactive, onBeforeMount } from 'vue';
+import { ref, reactive, onBeforeMount, computed } from 'vue';
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -10,6 +10,9 @@ import { Meeting } from '@/store/meetings';
 
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'; 
+
+const itemsPerPage = ref(2);
+const currentPage = ref(1);
 
 const CategoryData = reactive({
   id: '',
@@ -81,6 +84,35 @@ onBeforeMount(() => {
 });
 
 
+const totalPages = computed(() => {
+  return Math.ceil(Meeting.meetingCategory.length / itemsPerPage.value);
+});
+
+const paginatedCategories = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return Meeting.meetingCategory.slice(start, end);
+});
+
+const changePage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value += 1;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1;
+  }
+};
+
+
 </script>
 <template>
     
@@ -119,11 +151,11 @@ onBeforeMount(() => {
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Action</th>
+                                <th width="120">Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="Meeting.meetingCategory">
-                            <tr v-for="category in Meeting.meetingCategory">
+                        <tbody v-if="paginatedCategories">
+                            <tr v-for="category in paginatedCategories">
                                 <td>
                                     {{category.name}}
                                 </td>
@@ -143,6 +175,23 @@ onBeforeMount(() => {
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32">
+                        <div class="tfhb-prev-next-button">
+                            <a href="#" @click.prevent="prevPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === 1"><Icon name="ArrowLeft" width="20" />Previous</a>
+                        </div>
+                        <div class="tfhb-pagination">
+                            <ul class="tfhb-flexbox tfhb-gap-0 tfhb-justify-normal">
+                                <li v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
+                                    <a href="#" @click.prevent="changePage(page)" :class="{ 'active-link': page === currentPage }">{{ page }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tfhb-prev-next-button">
+                            <a href="#" @click.prevent="nextPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === totalPages">Next<Icon name="ArrowRight" width="20" /></a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             
