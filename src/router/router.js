@@ -204,6 +204,11 @@ const routes = [
                 name: 'SettingsAppearance',
                 component: () => import('../view/settings/Appearance.vue')
             },  
+            {
+                path: 'category',
+                name: 'SettingsCategory',
+                component: () => import('../view/settings/Category.vue')
+            },  
              
         ]
         
