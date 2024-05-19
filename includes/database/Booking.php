@@ -131,7 +131,7 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($id = null, $page = 1, $itemsPerPage = 10) {
+    public function get($id = null) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
@@ -142,17 +142,13 @@ class Booking {
             $sql = "SELECT * FROM $table_name WHERE id = $id";
             $data = $wpdb->get_row($wpdb->prepare($sql));
         } else {
-            $offset = ($page - 1) * $itemsPerPage;
     
             $sql = "SELECT 
                 $table_name.id,
                 $table_name.meeting_id,
-                $table_name.first_name AS attendee_first_name,
-                $table_name.last_name AS attendee_last_name,
+                $table_name.attendee_name,
                 $table_name.email AS attendee_email,
-                $table_name.phone AS attendee_phone,
-                $table_name.message,
-                $table_name.location_details,
+                $table_name.address,
                 $table_name.status AS booking_status,
                 $table_name.created_at AS booking_created_at,
                 $meeting_table.host_id,
@@ -167,50 +163,11 @@ class Booking {
                 INNER JOIN $meeting_table
                 ON $table_name.meeting_id=$meeting_table.id
                 INNER JOIN $host_table
-                ON $meeting_table.host_id=$host_table.id
-                LIMIT $itemsPerPage
-                OFFSET $offset";
+                ON $meeting_table.host_id=$host_table.id";
     
             $data = $wpdb->get_results($sql);
         }
     
-        return $data; 
-    }
-    
-    public function getTotal() {
-        global $wpdb;
-    
-        $table_name = $wpdb->prefix . $this->table;
-        $meeting_table = $wpdb->prefix . 'tfhb_meetings';
-        $host_table = $wpdb->prefix . 'tfhb_hosts';
-        
-        $sql = "SELECT 
-            $table_name.id,
-            $table_name.meeting_id,
-            $table_name.first_name AS attendee_first_name,
-            $table_name.last_name AS attendee_last_name,
-            $table_name.email AS attendee_email,
-            $table_name.phone AS attendee_phone,
-            $table_name.message,
-            $table_name.location_details,
-            $table_name.status AS booking_status,
-            $table_name.created_at AS booking_created_at,
-            $meeting_table.host_id,
-            $meeting_table.title,
-            $meeting_table.duration,
-            $meeting_table.meeting_locations,
-            $host_table.first_name AS host_first_name,
-            $host_table.last_name AS host_last_name,
-            $host_table.email AS host_email,
-            $host_table.time_zone AS host_time_zone
-            FROM $table_name 
-            INNER JOIN $meeting_table
-            ON $table_name.meeting_id=$meeting_table.id
-            INNER JOIN $host_table
-            ON $meeting_table.host_id=$host_table.id";
-
-        $data = $wpdb->get_results($sql);
-        
         return $data; 
     }
 
