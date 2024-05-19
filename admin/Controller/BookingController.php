@@ -51,13 +51,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Booking Lists 
         $booking = new Booking();
         $bookingsList = $booking->get();
-        $bookingsTotal = $booking->getTotal();
-
+        
         // Return response
         $data = array(
             'status' => true, 
             'bookings' => $bookingsList,  
-            'total_items' => !empty($bookingsTotal) ? count($bookingsTotal) : 0,
             'message' => 'Booking Data Successfully Retrieve!', 
         );
         return rest_ensure_response($data);
