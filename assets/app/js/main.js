@@ -156,7 +156,11 @@
 					processData: false,
                 	contentType: false,
 					success: function (response) {
-						console.log(response);
+						if(response.success){
+
+							$this.find('.tfhb-meeting-card').html(''); 
+							$this.find('.tfhb-meeting-card').append(response.data.confirmation_template); 
+						}
 					},
 					error: function (error) {
 						console.log(error);

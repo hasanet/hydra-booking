@@ -15,8 +15,12 @@ defined( 'ABSPATH' ) || exit;
  */
 
 
+ $meeting = isset($args['meeting']) ? $args['meeting'] : array();
+ $booking = isset($args['booking']) ? $args['booking'] : array();
+ $host = isset($args['host']) ? $args['host'] : array();
+
 ?> 
-<div class="tfhb-meeting-confirmation" style="display: none;">
+<div class="tfhb-meeting-confirmation" >
     <?php 
         // Hook for before confirmation
         do_action('hydra_booking/before_meeting_confirmation');
@@ -24,7 +28,7 @@ defined( 'ABSPATH' ) || exit;
     ?>
     <div class="tfhb-confirmation-seccess">
         <img src="<?php echo THB_URL.'assets/app/images/sucess.gif'; ?>" alt="Success"> 
-        <h3>Booking Confirmed!</h3>
+        <h3><?php echo esc_html(__('Booking Confirmed!', 'hydra-booking')) ?></h3>
         <p>Please check your email for more information. Now you can reschedule or cancel booking from here.</p>
     </div>
 
@@ -35,7 +39,7 @@ defined( 'ABSPATH' ) || exit;
                 <div class="tfhb-icon">
                     <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
                 </div>
-                Abdullah Eusuf 
+                <?php echo  !empty($host['first_name']) ?  ''.esc_html($host['first_name']).'  '.esc_html($host['last_name']).'' : '' ?>
                 <span>Host</span>
             </li>
             <li class="tfhb-flexbox tfhb-gap-8">

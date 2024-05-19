@@ -43,10 +43,7 @@ class HydraBookingShortcode {
         $MeetingData = $meeting->get( $calendar_id ); 
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-
-        echo '<pre>';
-        // print_r($meta_data);
-        echo '</pre>';
+ 
 
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
@@ -88,9 +85,6 @@ class HydraBookingShortcode {
                             load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
                                 'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
                             ]);
-
-                            // Load Meeting Confirmation Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-confirmation.php', false, $meta_data);
                         ?>
                 </div>
 
@@ -244,13 +238,80 @@ class HydraBookingShortcode {
         $data['payment_method'] = 'paypal';
         $data['payment_status'] = 'pending';
 
+
+        // Before Booking Hooks Action
+        do_action('hydra_booking/before_booking_confirmation', $data);
+
+
+        // Filter Hooks After Booking
+        $data = apply_filters('hydra_booking/after_booking_confirmation_filters', $data);
+
+
         // Save Meeting Data
         $booking = new Booking();
         $result = $booking->add($data);
+
+
+
+        if($result === false){
+            wp_send_json_error( array( 'message' => 'Booking Failed' ) );
+        }
+
+
+        $data['booking_id'] = $result['insert_id'];
+        $title = 'Booking  #' . $result['insert_id'];
+
+        // Create an array to store the post data for meeting the current row
+        $meeting_post_data = array(
+            'post_type'    => 'tfhb_booking',
+            'post_title'   => esc_html($title),
+            'post_status'  => 'publish', 
+        );
+
+        // Insert the post into the database
+        $meeting_post_id = wp_insert_post( $meeting_post_data );
+
         
-        wp_send_json_success( array( 'message' => 'Booking Successful', 'data' => $result ) );
+        update_post_meta($meeting_post_id, '_tfhb_booking_opt', $data);
+
+        // Load The Thankyou Template
+
+
+        // Load Meeting Confirmation Template 
+        $confirmation_template =  $this->tfhb_booking_confirmation($data);
+
+        // After Booking Hooks
+        do_action('hydra_booking/after_booking_confirmation', $data);
+        
+        wp_send_json_success( array( 'message' => 'Booking Successful', 'confirmation_template' => $confirmation_template ) );
         
         wp_die();
+    }
+
+    public function tfhb_booking_confirmation($data){
+
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get( $data['meeting_id'] ); 
+
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+
+        // GetHost meta Data
+        $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
+        $host_meta = get_user_meta($host_id, '_tfhb_host', true);
+
+        // Load Meeting Confirmation Template
+        ob_start();
+
+            load_template(THB_PATH . '/app/Content/Template/meeting-confirmation.php', false, [
+                'meeting' => $meta_data,
+                'host' => $host_meta,
+                'booking' => $data,
+            ]);
+
+        $confirmation_template = ob_get_clean() ;
+
+        return $confirmation_template;
     }
 }
 
