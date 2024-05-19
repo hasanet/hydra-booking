@@ -23,12 +23,21 @@ const UpdateCategory = async () => {
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/categories/create-update', CategoryData, {
         } );
       
-        // if (response.data.status) {    
-        //     toast.success(response.data.message, {
-        //         position: 'bottom-right', // Set the desired position
-        //         "autoClose": 1500,
-        //     }); 
-        // }
+        if (response.data.status) {  
+
+            // Categories add to the list
+            Meeting.meetingCategory = response.data.category;
+
+            // Set Default
+            CategoryData.id = '';
+            CategoryData.title = '';
+            CategoryData.description = '';
+
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+        }
     } catch (error) {
         toast.error('Action successful', {
             position: 'bottom-right', // Set the desired position
@@ -38,7 +47,6 @@ const UpdateCategory = async () => {
 
 // Edit Category
 const editCategory = (data) => {
-    console.log(data);
     CategoryData.id = data.id;
     CategoryData.title = data.name;
     CategoryData.description = data.description;
@@ -54,6 +62,8 @@ const removeCategory = async (key) => {
         } );
       
         if (response.data.status) {    
+            // Categories add to the list
+            Meeting.meetingCategory = response.data.category;
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,

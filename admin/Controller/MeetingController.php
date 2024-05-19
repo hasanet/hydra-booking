@@ -98,20 +98,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // getMeetingsCategories List
     public function getMeetingsCategories() { 
 
-        global $wpdb;
-        $taxonomy = 'meeting_category';
-        $terms = $wpdb->get_results( "
-            SELECT t.*, tt.description
-            FROM {$wpdb->terms} AS t
-            INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
-            WHERE tt.taxonomy = '{$taxonomy}'
-        " );
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
         $term_array = array();
-        foreach ( $terms as $term ) {
+        foreach ($terms as $term) {
             $term_array[] = array(
                 'id' => $term->term_id,
                 'name' => $term->name,
-                'description' => $term->description
+                'description' => $term->description,
+                'slug' => $term->slug
             );
         }
 
@@ -158,13 +156,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                     'message' => $term->get_error_message(),
                 ));
             }
-    
-            // Success response
-            return rest_ensure_response(array(
-                'status' => true,
-                'term_id' => $term['term_id'],
-                'message' => 'Meeting category successfully created!',
-            ));
+
         } else {
             // Update the term
             $term_id = intval($request['id']);
@@ -185,14 +177,30 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                     'message' => $term->get_error_message(),
                 ));
             }
-    
-            // Success response
-            return rest_ensure_response(array(
-                'status' => true,
-                'term_id' => $term['term_id'],
-                'message' => 'Meeting category successfully updated!',
-            ));
         }
+
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
+            );
+        }
+
+        // Success response
+        return rest_ensure_response(array(
+            'status' => true,
+            'category' => $term_array,
+            'message' => empty($request['id']) ? 'Meeting Category Successfully Added!' : 'Meeting Category Successfully Updated!',
+        ));
+
     }    
 
     // Category Delete
@@ -208,9 +216,25 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $term_id = intval($request['id']);
         $result = wp_delete_term($term_id, 'meeting_category');
 
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
+            );
+        }
+        
         return rest_ensure_response(array(
             'status' => true,
-            'message' => 'Meeting category successfully deleted!',
+            'category' => $term_array,
+            'message' => 'Meeting Category Successfully Deleted!',
         ));
     }
 
