@@ -24,23 +24,22 @@ class Booking {
             $sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT, 
                 meeting_id INT(11) NULL,
-                host_user_id INT(11) NULL,
-                person_user_id INT(11) NULL,
-                person_contact_id INT(11) NULL,
-                person_time_zone VARCHAR(20) NULL,
+                host_id INT(11) NULL,
+                attendee_id INT(11) NULL, 
+                attendee_time_zone VARCHAR(20) NULL,
+                meeting_dates LONGTEXT NULL, 
                 start_time VARCHAR(20) NULL,
                 end_time VARCHAR(20) NULL,
                 slot_minutes LONGTEXT NULL, 
-                first_name VARCHAR(50) NULL,
-                last_name VARCHAR(50) NULL,
-                email VARCHAR(100) NOT NULL,
-                phone VARCHAR(100) NOT NULL,
-                message LONGTEXT NULL,
+                duration LONGTEXT NULL, 
+                attendee_name VARCHAR(50) NULL, 
+                email VARCHAR(100) NOT NULL, 
+                address LONGTEXT NULL,
+                others_info LONGTEXT NULL,
                 country VARCHAR(20) NULL,
                 ip_address VARCHAR(50) NULL, 
-                device VARCHAR(50) NULL,
-                other_info LONGTEXT NULL,
-                location_details LONGTEXT NOT NULL,
+                device VARCHAR(50) NULL, 
+                meeting_locations LONGTEXT NOT NULL,
                 cancelled_by INT(11) NULL,
                 status VARCHAR(50) NOT NULL, 
                 booking_type VARCHAR(20) NULL,
@@ -77,6 +76,10 @@ class Booking {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
+
+        // json encode meeting locations
+        $request['others_info'] = json_encode($request['others_info']);
+        $request['meeting_locations'] = json_encode($request['meeting_locations']);
 
         // insert Booking
         $result =  $wpdb->insert(

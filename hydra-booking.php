@@ -21,7 +21,7 @@ class THB_INIT{
         // DEFINE PATH 
         define('THB_PATH', plugin_dir_path(__FILE__));
         define('THB_URL', plugin_dir_url(__FILE__));
-        define('THB_VERSION', '1.0.0');  
+        define('THB_VERSION', '1.0.0'); 
 
         // Load Vendor Auto Load
         if(file_exists(THB_PATH . '/vendor/autoload.php')) {
@@ -39,6 +39,8 @@ class THB_INIT{
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
         add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
+
+        
         
    }
 
@@ -46,14 +48,13 @@ class THB_INIT{
         // Create a New host Role 
         new HydraBooking\Admin\Controller\RouteController();   
         
-        if(is_admin()) {
-            
+        if(is_admin()) { 
             // Load Admin Class
             new HydraBooking\Admin\Admin(); 
-        } else {
-            // Load App Class 
-            new HydraBooking\App\App();
         } 
+
+        // Load App Class 
+        new HydraBooking\App\App();
     }  
  
     public function tfhb_get_plugin_screen()
@@ -78,6 +79,11 @@ class THB_INIT{
         // register script 
         wp_register_script( 'tfhb-select2-script', THB_URL . 'assets/app/js/select2.min.js', array('jquery', 'tfhb-app-script'), THB_VERSION, true );
         wp_register_script( 'tfhb-app-script', THB_URL . 'assets/app/js/main.js', array('jquery'), THB_VERSION, true ); 
+
+        wp_localize_script( 'tfhb-app-script', 'tfhb_app_booking', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'tfhb_nonce' ),
+        ) );
 
     }
     

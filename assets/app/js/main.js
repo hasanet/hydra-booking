@@ -98,7 +98,7 @@
 				$this.find('.tfhb-calendar-dates li').removeClass('active');  
 				$this_li.addClass('active');	
 				
-
+				// 
 				// Get the first day of the month
 				tfhb_times_manipulate( $this, calenderData, $this_li );
 
@@ -113,6 +113,7 @@
 				
 			});
 
+
 			   /**
 			* Time Select
 			* @author Jahid
@@ -120,6 +121,11 @@
 			// $this.find('input[name="tfhb_time_format"], .tfhb-time-zone-select').on('change', function (e) { 
 			$(document).on('click', '.tfhb-available-times li .time', function (e) {
 				$('.tfhb-available-times li .next').remove(); 
+				var selected_time_start = $(this).attr('data-time-start');
+				var selected_time_end = $(this).attr('data-time-end');
+				$this.find("input[name='meeting_time_start']").val(selected_time_start);
+				$this.find("input[name='meeting_time_end']").val(selected_time_end);
+			
 				$(this).parent().append('<span class="next tfhb-flexbox tfhb-gap-8"> Next<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 10L14 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4.16666L14.8333 9.99999L9 15.8333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
 			});
  
@@ -133,15 +139,31 @@
 				$this.find('.tfhb-meeting-calendar').show();
 				$this.find('.tfhb-meeting-times').show();
 				$this.find('.tfhb-meeting-booking-form').hide();
-			});
-			$(document).on('click', '.tfhb-confirmation-button button', function (e) {
-				e.preventDefault(); 
-				$this.find('.tfhb-meeting-info').hide();
-				$this.find('.tfhb-meeting-booking-form').hide();
-				$this.find('.tfhb-meeting-confirmation').show();
-				
+			}); 
 
+			// Ajax Submit .tfhb-meeting-form.ajax-submit'  
+			$this.find('.tfhb-meeting-form.ajax-submit').on('submit', function (e) {
+				e.preventDefault(); 
+ 
+				var data  = new FormData(this); 
+
+				data.append('action', 'tfhb_meeting_form_submit'); 
+				data.append('nonce', tfhb_app_booking.nonce); 
+				$.ajax({
+					url: tfhb_app_booking.ajax_url, 
+					type: 'POST',
+					data: data,
+					processData: false,
+                	contentType: false,
+					success: function (response) {
+						console.log(response);
+					},
+					error: function (error) {
+						console.log(error);
+					}
+				});
 			});
+			 
 			
 		});
 
@@ -214,6 +236,8 @@
 			var time_format = $this.find('input[name="tfhb_time_format"]:checked').val();  
 			var time_zone = $this.find('.tfhb-time-zone-select').val();
 			$this.find('.tfhb-meeting-times .tfhb-select-date').html(selected_date);
+
+			$this.find("input[name='meeting_dates']").val(selected_date);
 			
 			// Get Selected Date day
 			let selected_date_day = new Date(selected_date).getDay(),
@@ -260,7 +284,7 @@
 			for (var i = 0; i < timesData.length; i++) {
 				// loop times and add to html li
 				// Remove 
-				$this.find('.tfhb-available-times ul').append('<li class="tfhb-flexbox"> <span class="time">' + timesData[i].start + '</span> </li>');
+				$this.find('.tfhb-available-times ul').append('<li class="tfhb-flexbox"> <span class="time" data-time-start="'+ timesData[i].start +'" data-time-end="'+ timesData[i].end +'">' + timesData[i].start + '</span> </li>');
 			}
 
 			// tfhb-meeting-times show
@@ -311,11 +335,7 @@
 				timeZone: timeZone
 			};
 			return date.toLocaleTimeString([], options);
-		}
-
-
-		
-
+		} 
 
     });
 

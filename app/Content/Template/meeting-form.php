@@ -32,16 +32,15 @@ defined( 'ABSPATH' ) || exit;
         <h3>Details</h3>
     </div>
 
-    <?php 
-        //  echo '<pre>';
-        //  print_r($questions);
-        //  echo '</pre>';
+    <?php  
     ?>
     <div class="tfhb-forms tfhb-flexbox">
+       
         <?php  
             if(is_array($questions) && !empty($questions)): 
                   
                 foreach($questions as $key => $question): 
+                    $name = 2  >= $key ? $question['label'] : 'question['.$question['label'].']';
                  
                     if(empty($question['type'])){
                         continue;
@@ -51,10 +50,10 @@ defined( 'ABSPATH' ) || exit;
                     $required = $question['required'] == 1 ? 'required' : '';
                     
                     echo '<div class="tfhb-single-form">
-                            <label for="'.$question['label'].'">'.$question['placeholder'].' '.$required_star.'</label>';
+                            <label for="'.$name.'">'.$question['placeholder'].' '.$required_star.'</label>';
                             if($question['type'] == 'select'){
 
-                                echo '<select id="'.$question['label'].'" '.$required.'>';
+                                echo '<select name="'.$name.'" id="'.$name.'" '.$required.'>';
                                     foreach($question['options'] as $option){
                                         echo '<option value="'.$option['value'].'">'.$option['label'].'</option>';
                                     }
@@ -62,48 +61,40 @@ defined( 'ABSPATH' ) || exit;
 
                             }elseif($question['type'] == 'textarea'){
 
-                                echo '<textarea id="'.$question['label'].'" '.$required.'></textarea>';
+                                echo '<textarea name="'.$name.'" id="'.$name.'" '.$required.'></textarea>';
 
-                            }elseif($question['type'] == 'checkbox'){
+                            }elseif($question['type'] == 'checkbox'){ 
 
-                                echo '<label for="'.$question['label'].'">
-                                        <input id="'.$question['label'].'" type="'.$question['type'].'" '.$required.'>
+                                echo '<label for="'.$name.'">
+                                        <input name="'.$name.'" id="'.$name.'" type="'.$question['type'].'" '.$required.'>
                                         <span class="checkmark"></span> '.$question['placeholder'].'
                                     </label>';
 
                             }else{
                                 
-                                echo '<input id="'.$question['label'].'"  type="'.$question['type'].'" '.$required.' placeholder="'.$question['placeholder'].'">';
+                                echo '<input name="'.$name.'" id="'.$name.'"  type="'.$question['type'].'" '.$required.' placeholder="'.$question['placeholder'].'">';
                             }
                     echo '</div>';
          
                 endforeach;
             endif;
-        ?>
-        <div class="tfhb-single-form">
-            <label for="email">Email *</label>
-            <input type="text" id="email">
-        </div>
-        <div class="tfhb-single-form">
-            <label for="note">Note</label>
-            <textarea name="" id="note"></textarea>
-        </div>
+        ?> 
 
         <div class="tfhb-confirmation-box tfhb-flexbox">
             <div class="tfhb-swicher-wrap tfhb-flexbox tfhb-gap-8">
                 <label class="switch">
-                    <input type="checkbox">
+                    <input required name="tfhb_booking_checkbox" type="checkbox">
                     <div class="slider"></div>
                 </label>
                 <label class="swicher-label">Booking Confirmation</label>
             </div>
 
-            <div class="tfhb-checkbox-wrap tfhb-flexbox tfhb-gap-8">
+            <!-- <div class="tfhb-checkbox-wrap tfhb-flexbox tfhb-gap-8">
                 <label for="attendee_can_cancel">
                     <input id="attendee_can_cancel" name="attendee_can_cancel" type="checkbox">
                     <span class="checkmark"></span> Attendee can cancel this meeting 
                 </label>
-            </div>
+            </div> -->
         </div>
 
         <div class="tfhb-confirmation-button">

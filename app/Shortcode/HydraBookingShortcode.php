@@ -4,6 +4,7 @@ namespace HydraBooking\App\Shortcode;
 use HydraBooking\DB\Meeting;
 use HydraBooking\DB\Availability; 
 use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\DB\Booking;
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -14,6 +15,9 @@ class HydraBookingShortcode {
         add_action('hydra_booking/after_meeting_render', array($this, 'after_meeting_render'));
         add_action('hydra_booking/before_meeting_render', array($this, 'before_meeting_render'));
 
+        // Form Submit 
+        add_action('wp_ajax_nopriv_tfhb_meeting_form_submit', array($this, 'tfhb_meeting_form_submit_callback'));
+        add_action('wp_ajax_tfhb_meeting_form_submit', array($this, 'tfhb_meeting_form_submit_callback'));
     }
 
     public function hydra_booking_shortcode($atts) { 
@@ -41,7 +45,7 @@ class HydraBookingShortcode {
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
         echo '<pre>';
-        print_r($meta_data);
+        // print_r($meta_data);
         echo '</pre>';
 
         // GetHost meta Data
@@ -63,7 +67,7 @@ class HydraBookingShortcode {
         ?>
         <div class="tfhb-meeting-box tfhb-meeting-<?php echo esc_attr($calendar_id) ?>" data-calendar="<?php echo esc_attr($calendar_id) ?>">
 
-            <form action="">
+            <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">
                 <div class="tfhb-meeting-card">
                         <?php  
 
@@ -173,6 +177,80 @@ class HydraBookingShortcode {
             'availability_range' => $availability_range,
         ));
 
+    }
+
+
+    // Form Submit Callback
+    public function tfhb_meeting_form_submit_callback() { 
+        // Checked Nonce validation
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Nonce verification failed' ) );
+        } 
+
+        // Check if the request is POST
+        if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+            wp_send_json_error( array( 'message' => 'Invalid request method' ) );
+        }
+        // echo "<pre>";
+        // print_r($_POST);
+        // echo "</pre>";
+
+        // Check if the request is not empty
+        if ( empty( $_POST ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid request' ) );
+        }
+
+        if($_POST['meeting_id'] == 0){
+            wp_send_json_error( array( 'message' => 'Invalid Meeting ID' ) );
+        }
+        $data = array();
+        // sanitize the data 
+        $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
+        $data['host_id'] = isset($_POST['host_id']) ? sanitize_text_field($_POST['host_id']) : 0;
+        $data['attendee_id'] = isset($_POST['attendee_id']) ? sanitize_text_field($_POST['attendee_id']) : 0; 
+        $data['attendee_time_zone'] = isset($_POST['attendee_time_zone']) ? sanitize_text_field($_POST['attendee_time_zone']) : 0; 
+        $data['meeting_dates'] = isset($_POST['meeting_dates']) ? sanitize_text_field($_POST['meeting_dates']) : '';
+        $data['start_time'] = isset($_POST['meeting_time_start']) ? sanitize_text_field($_POST['meeting_time_start']) : '';
+        $data['end_time'] = isset($_POST['meeting_time_end']) ? sanitize_text_field($_POST['meeting_time_end']) : '';
+        $data['slot_minutes'] = isset($_POST['slot_minutes']) ? sanitize_text_field($_POST['slot_minutes']) : '';
+        $data['duration'] = isset($_POST['duration']) ? sanitize_text_field($_POST['duration']) : 0;
+        $data['attendee_name'] = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+        $data['email'] = isset($_POST['email']) ? sanitize_text_field($_POST['email']) : '';
+        $data['address'] = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : '';
+
+        $data['others_info'] = array();
+        if(isset($_POST['question']) && !empty($_POST['question'])){ 
+            foreach($_POST['question'] as $key => $question){
+                $data['others_info'][$key] = sanitize_text_field($question);
+            } 
+        }
+
+        $data['country'] = isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '';
+        $data['ip_address'] = isset($_POST['ip_address']) ? sanitize_text_field($_POST['ip_address']) : '';
+        $data['device'] = isset($_POST['device']) ? sanitize_text_field($_POST['device']) : '';
+
+        $data['meeting_locations'] = array();
+        if(isset($_POST['meeting_locations']) && !empty($_POST['meeting_locations'])){ 
+            foreach($_POST['meeting_locations'] as $key => $location){ 
+                $data['meeting_locations'][$key] = array(
+                    'location' => sanitize_text_field($location['location']),
+                    'address' => sanitize_text_field($location['address']),
+                );
+            } 
+        }
+        $data['cancelled_by'] = '';
+        $data['status'] = 'pending';
+        $data['booking_type'] = 'single';
+        $data['payment_method'] = 'paypal';
+        $data['payment_status'] = 'pending';
+
+        // Save Meeting Data
+        $booking = new Booking();
+        $result = $booking->add($data);
+        
+        wp_send_json_success( array( 'message' => 'Booking Successful', 'data' => $result ) );
+        
+        wp_die();
     }
 }
 

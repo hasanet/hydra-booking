@@ -21,8 +21,14 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
 
 ?> 
 <div class="tfhb-meeting-info">
-  
-
+    <div class="hidden-field">
+        <input type="hidden" id="meeting_id" name="meeting_id" value="<?php echo $meeting['id']; ?>">
+        <input type="hidden" id="host_id" name="host_id" value="<?php echo $host['id']; ?>"> 
+        <input type="hidden" id="meeting_duration" name="meeting_dates" value="<?php echo $meeting['duration'] ?>">
+        <input type="hidden" id="meeting_dates" name="meeting_dates" value="">
+        <input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">
+        <input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
+    </div> 
     <div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo THB_URL.'assets/app/images/meeting-cover.png'; ?>) lightgray 50% / cover no-repeat;">
         <div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
             <?php echo !empty($host['avatar']) ?  '<img src="'.esc_url($host['avatar']).'" alt="">' : '' ?>
@@ -49,9 +55,11 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
                 
             </li>
             <?php 
-                if(!empty($meeting['meeting_locations'])) { 
+                if(!empty($meeting['meeting_locations'])) {  
                     foreach($meeting['meeting_locations'] as $key => $location) {
                         echo '<li class="tfhb-flexbox tfhb-gap-8">
+                                <input type="hidden" id="meeting_locations['.$key.'][location]" name="meeting_locations['.$key.'][location]" value="'.esc_attr($location['location']).'">
+                                <input type="hidden" id="meeting_locations['.$key.'][address]" name="meeting_locations['.$key.'][address]" value="'.esc_attr($location['address']).'">
                                 <div class="tfhb-icon">
                                     <img src="'.esc_url(THB_URL.'assets/app/images/location.svg').'" alt="location">   
                                 </div> 
@@ -65,6 +73,7 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
                 if(!empty($meeting['payment_status']) && true == $meeting['payment_status']) {  
                     $price = !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : 'Free';
                     echo '<li class="tfhb-flexbox tfhb-gap-8">
+                            <input type="hidden" id="meeting_price" name="meeting_price" value="'.esc_attr($price).'">
                             <div class="tfhb-icon">
                                 <img src="'.esc_url(THB_URL.'assets/app/images/payment.svg').'" alt="payment">   
                             </div> 
@@ -75,17 +84,18 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
             <?php 
                 if(!empty($meeting['recurring_status']) && true == $meeting['recurring_status']) {  
                     echo '<li class="tfhb-flexbox tfhb-gap-8">
+                            <input type="hidden" id="recurring_maximum" name="recurring_maximum" value="'.esc_attr($meeting['recurring_maximum']).'">
                             <div class="tfhb-icon">
                                 <img src="'.esc_url(THB_URL.'assets/app/images/refresh-cw.svg').'" alt="refresh">   
                             </div> 
-                            Recurring for <span>8</span> weeks
+                            Recurring for  <span>'.esc_attr($meeting['recurring_repeat'][0]['limit']).'</span> '.esc_attr($meeting['recurring_repeat'][0]['times']).'
                         </li>'; 
                 }
             ?>
         </ul>
 
         <div class="tfhb-timezone "> 
-            <select class="tfhb-time-zone-select" name="tfhb_time_zone" id="">
+            <select class="tfhb-time-zone-select" name="attendee_time_zone" id="">
                 <?php 
                     if(!empty($time_zone)) {
                         $selected_timezone = $meeting['availability_custom']['time_zone'] ;

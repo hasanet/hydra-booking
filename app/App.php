@@ -9,6 +9,8 @@ class App {
     public function __construct() {
         $this->init();
 
+        
+
     }
 
     public function init(){ 
@@ -16,12 +18,15 @@ class App {
         // Load Shortcode Class
         new HydraBookingShortcode();
 
+
         if(file_exists(THB_PATH . '/app/tfhb-public-class.php')) {
             require_once THB_PATH . '/app/tfhb-public-class.php'; 
         }
 
 
+
     }
+
 }
 
 ?>
