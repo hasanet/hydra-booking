@@ -139,8 +139,15 @@ class Booking {
         $host_table = $wpdb->prefix . 'tfhb_hosts';
         
         if ($id) {
-            $sql = "SELECT * FROM $table_name WHERE id = $id";
-            $data = $wpdb->get_row($wpdb->prepare($sql));
+            $sql = "
+                SELECT *, 
+                $table_name.email AS attendee_email,
+                $host_table.email AS host_email
+                FROM $table_name
+                INNER JOIN $host_table ON $table_name.host_id = $host_table.id
+                WHERE $table_name.id = %d
+            ";
+            $data = $wpdb->get_row($wpdb->prepare($sql, $id));
         } else {
     
             $sql = "SELECT 
