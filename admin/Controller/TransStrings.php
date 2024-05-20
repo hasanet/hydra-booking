@@ -89,6 +89,7 @@ namespace HydraBooking\Admin\Controller;
             'Enter Secret Key' =>  __('Enter Secret Key', 'hydra-booking'),
             'Redirect Url' =>  __('Redirect Url', 'hydra-booking'),
             'Enter Redirect Url' =>  __('Enter Redirect Url', 'hydra-booking'),
+            'Payment Method' =>  __('Enter Redirect Url', 'hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 

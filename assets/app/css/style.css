@@ -6,6 +6,26 @@
   display: flex;
   gap: 24px;
   width: fit-content;
+  position: relative;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-preloader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-preloader::after {
+  position: absolute;
+  left: 0;
+  content: "";
+  background-color: #000 !important;
+  height: 100%;
+  width: 100%;
+  opacity: 0.1;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-info {
   width: 322px;

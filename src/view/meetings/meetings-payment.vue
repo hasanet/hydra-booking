@@ -6,6 +6,7 @@ import HbSwitch from '@/components/form-fields/HbSwitch.vue'
 // component
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
+import HbDropdown from '@/components/form-fields/HbDropdown.vue';
 
 const emit = defineEmits(["update-meeting"]); 
 const props = defineProps({
@@ -51,8 +52,25 @@ const changeTab = (e) => {
                     />
                 </h2> 
                 <p>You can enable or disable payment for this meeting by toggle switch</p>
+            </div> 
+            <div v-if="meeting.payment_status == 1"  class="tfhb-content-wrap tfhb-full-width"> 
+                <div class="tfhb-integrations-wrap tfhb-flexbox">
+                    <HbDropdown 
+                        v-model="meeting.payment_method" 
+                        required= "true" 
+                        :label="$tfhb_trans['Payment Method']"  
+                        :selected = "1"
+                        name="payment_method"
+                        placeholder="Select Payment Method"  
+                        :option = "[
+                            {name: 'Woo Commerce', value: 'woocommerce'},  
+                        ]"   
+                    />
+                    <!-- Woo  Integrations  -->
+                    <!-- Woo Integrations  -->
+                </div> 
             </div>
-            <div class="tfhb-single-form-field" style="width: 100%;" selected="1">
+            <div v-if="meeting.payment_status == 1" class="tfhb-single-form-field" style="width: 100%;" selected="1">
                 <div class="tfhb-single-form-field-wrap tfhb-field-input">
                     <label>{{ $tfhb_trans['Price'] }} <span> *</span></label>
                     <div class="tfhb-meeting-currency tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
@@ -64,19 +82,7 @@ const changeTab = (e) => {
                     </div>
                 </div>
             </div>
-            <div class="tfhb-admin-title tfhb-full-width tfhb-m-0">
-                <h2>
-                    Select Payment Method
-                </h2> 
-                <p>Create and manage booking/appointment form</p>
-            </div>
-            <div class="tfhb-content-wrap tfhb-full-width"> 
-                <div class="tfhb-integrations-wrap tfhb-flexbox">
-                    <!-- Woo  Integrations  -->
-                    <WooIntegrations :woo_payment="meeting.payment_meta.woo_payment" @update-integrations="UpdateIntegration" />
-                    <!-- Woo Integrations  -->
-                </div> 
-            </div>
+            
 
         </div> 
         <div class="tfhb-submission-btn">

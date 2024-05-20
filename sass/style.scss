@@ -7,6 +7,28 @@
         display: flex;
         gap: 24px;
         width: fit-content;
+        position: relative;
+
+
+        .tfhb-preloader {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &::after {
+                position: absolute;
+                left: 0; 
+                content: '';
+                background-color: #000 !important;
+                height: 100%; 
+                width: 100%;
+                opacity: 0.1;
+            }
+        } 
 
         .tfhb-meeting-info{
             width: 322px;
