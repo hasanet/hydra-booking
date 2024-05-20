@@ -8,9 +8,8 @@ class MailHooks{
 
     public function pushBookingScheduledToCompleted($booking){
         $_tfhb_notification_settings = get_option('_tfhb_notification_settings');
-        if("approved"==$booking){
-            $_tfhb_notification_settings['host']['booking_confirmation']['status'];
-
+        if("approved"==$booking->status){
+            var_dump($_tfhb_notification_settings['host']['booking_confirmation']['status']); exit();
         }
     }
 }

@@ -140,9 +140,8 @@ class Booking {
         
         if ($id) {
             $sql = "
-                SELECT *, 
-                $table_name.email AS attendee_email,
-                $host_table.email AS host_email
+                SELECT $table_name.*, 
+                $table_name.email AS attendee_email
                 FROM $table_name
                 INNER JOIN $host_table ON $table_name.host_id = $host_table.id
                 WHERE $table_name.id = %d
