@@ -153,6 +153,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             do_action('hydra_booking/after_booking_completed', $single_booking_meta);
         }
 
+        if("canceled"==$request['status']){
+            do_action('hydra_booking/after_booking_canceled', $single_booking_meta);
+        }
+
+        if("schedule"==$request['status']){
+            do_action('hydra_booking/after_booking_schedule', $single_booking_meta);
+        }
 
         // Return response
         $data = array(
