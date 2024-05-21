@@ -141,9 +141,11 @@ class Booking {
         if ($id) {
             $sql = "
                 SELECT $table_name.*, 
-                $host_table.email AS host_email
+                $host_table.email AS host_email,
+                $meeting_table.post_id
                 FROM $table_name
                 INNER JOIN $host_table ON $table_name.host_id = $host_table.id
+                INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
                 WHERE $table_name.id = %d
             ";
             $data = $wpdb->get_row($wpdb->prepare($sql, $id));

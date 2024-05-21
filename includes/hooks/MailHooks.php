@@ -7,8 +7,10 @@ class MailHooks{
     }
 
     public function pushBookingScheduledToCompleted($booking){
-        $_tfhb_notification_settings = get_option('_tfhb_notification_settings');
-        if("approved"==$booking->status){
+        $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
+        $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
+
+        if(!empty($_tfhb_notification_settings) && "approved"==$booking->status){
 
             // Host Confirmation Email, If Settings Enable for Host Confirmation
             if(!empty($_tfhb_notification_settings['host']['booking_confirmation']['status'])){
