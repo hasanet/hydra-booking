@@ -43,6 +43,10 @@ class HydraBookingShortcode {
         $meeting = new Meeting();
         $MeetingData = $meeting->get( $calendar_id ); 
 
+        if(!$MeetingData){
+            return 'Invalid Meeting ID';
+        }
+
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
         // add to cart with post id 
@@ -203,6 +207,7 @@ class HydraBookingShortcode {
         }
 
         $data = array();
+        $response = array();
         // sanitize the data 
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
         $data['host_id'] = isset($_POST['host_id']) ? sanitize_text_field($_POST['host_id']) : 0;
@@ -259,24 +264,11 @@ class HydraBookingShortcode {
 
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
-        $host_meta = get_user_meta($host_id, '_tfhb_host', true);
+        $host_meta = get_user_meta($host_id, '_tfhb_host', true); 
         
         echo "<pre>";
-        print_r($meta_data);  
+        print_r($data);
         echo "</pre>";
-
-        if(true === $meta_data['payment_status']){
-
-            $woo_booking = new WooBooking();
-            $woo_booking->add_to_cart($data, $MeetingData);
-            
-
-        }else{
-            
-        }
-        exit;
-
-
 
         // Save Meeting Data
         $booking = new Booking();
@@ -306,24 +298,35 @@ class HydraBookingShortcode {
         update_post_meta($meeting_post_id, '_tfhb_booking_opt', $data);
 
       
+    
+        if(true == $meta_data['payment_status'] && 'woo_payment' == $meta_data['payment_method']){
+            // Add to cart
+            $product_id = $meta_data['payment_meta']['product_id'];
+             
+            $woo_booking = new WooBooking();
+            $woo_booking->add_to_cart($product_id, $data);
+            // WC()->cart->add_to_cart( $product_id, 1, '0', array(), $order_meta ); 
+            // response redirect to checkout page
+            $response['redirect'] =  wc_get_checkout_url();
+            
+
+        }  
+
+      
  
         // Load Meeting Confirmation Template 
         $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
 
-
-    
-        # Add product to cart with the custom cart item data
-        WC()->cart->add_to_cart( $MeetingData->post_id, 1, '0', array(), $data );
+ 
 
         // After Booking Hooks
         do_action('hydra_booking/after_booking_confirmation', $data);
         
-        wp_send_json_success( 
-            array( 
-                'message' => 'Booking Successful',  
-                'confirmation_template' => $confirmation_template 
-            ) 
-        );
+        $response['message'] = 'Booking Successful';
+        $response['confirmation_template'] = $confirmation_template;
+
+
+        wp_send_json_success(  $response );
         
         wp_die();
     }

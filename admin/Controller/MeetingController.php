@@ -5,6 +5,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\RouteController;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
+ use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
  
  // Use DB 
 use HydraBooking\DB\Meeting;
@@ -277,7 +278,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_type' => isset($request_data['meeting_type']) ? sanitize_text_field($request_data['meeting_type']) : '', 
             'post_id' => $meeting_post_id,
             'created_by' => $current_user_id,
-            'updated_by' => $current_user_id,
+            'updated_by' => $current_user_id, 
             'created_at' => date('Y-m-d'),
             'updated_at' => date('Y-m-d'),
             'status'    => 'draft'
@@ -387,12 +388,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Time Zone 
         $DateTimeZone = new DateTimeController('UTC');
         $time_zone = $DateTimeZone->TimeZone();
-        
+
+        // WooCommerce Product
+        $woo_commerce = new  WooBooking();
+        $wc_product =  $woo_commerce->getAllProductList();
         // Return response
         $data = array(
             'status' => true, 
             'meeting' => $MeetingData,  
             'time_zone' => $time_zone,  
+            'wc_product' => $wc_product,  
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -453,6 +458,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'payment_status'            => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
             'meeting_price'             => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
             'payment_currency'          => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
+            'payment_method'            => isset($request['payment_method']) ? sanitize_text_field($request['payment_method'])  : '',
             'payment_meta'              => isset($request['payment_meta']) ? $request['payment_meta'] : '',
             'updated_at'                => date('Y-m-d'),
             'updated_by'                => $current_user_id
