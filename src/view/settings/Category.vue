@@ -129,7 +129,7 @@ const prevPage = () => {
         </div>
         <div class="tfhb-content-wrap">
 
-            <div class="tfhb-category-warp tfhb-flexbox tfhb-align-normal tfhb-gap-0">
+            <div class="tfhb-category-warp tfhb-flexbox tfhb-align-baseline tfhb-gap-0">
                 <div class="tfhb-admin-card-box tfhb-category-create-box tfhb-flexbox tfhb-gap-tb-24">  
                     <HbText  
                         v-model="CategoryData.title"
