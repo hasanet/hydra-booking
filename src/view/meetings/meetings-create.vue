@@ -230,12 +230,9 @@ const meetingData = reactive({
     payment_status: 1,
     meeting_price: '',
     payment_currency: '',
+    payment_method: '',
     payment_meta: {
-        woo_payment : {
-            type: 'payment', 
-            status: 0, 
-            connection_status: 0,  
-        }
+        payment_method: '',
     }
 });
 

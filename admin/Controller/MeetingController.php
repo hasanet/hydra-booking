@@ -476,6 +476,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
             //Updated post meta
             update_post_meta( $MeetingData->post_id, '__tfhb_meeting_opt', $data );
+ 
         }
 
         // Return response

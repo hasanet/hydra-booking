@@ -13,7 +13,7 @@
  */
 
 // don't load directly
-defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || exit; 
 
 class THB_INIT{
     // CONSTARACT 
@@ -43,17 +43,22 @@ class THB_INIT{
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
         add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
 
+
+      
         
         
    }
 
-    public function init() {    
+    public function init() {   
+        
+        
         // Post Type 
         new HydraBooking\PostType\Meeting\Meeting_CPT();
-        new HydraBooking\PostType\Booking\Booking_CPT();
+        new HydraBooking\PostType\Booking\Booking_CPT(); 
 
         // Create a New host Role 
         new HydraBooking\Admin\Controller\RouteController();   
+ 
         
         if(is_admin()) { 
             // Load Admin Class
@@ -63,6 +68,9 @@ class THB_INIT{
         // Load App Class 
         new HydraBooking\App\App();
     }  
+
+   
+ 
  
     public function tfhb_get_plugin_screen()
     {
@@ -95,6 +103,8 @@ class THB_INIT{
     }
     
 }
+
+
 
 new THB_INIT();
  

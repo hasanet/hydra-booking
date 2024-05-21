@@ -5,6 +5,7 @@ use HydraBooking\DB\Meeting;
 use HydraBooking\DB\Availability; 
 use HydraBooking\Admin\Controller\DateTimeController;
 use HydraBooking\DB\Booking;
+use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -43,6 +44,12 @@ class HydraBookingShortcode {
         $MeetingData = $meeting->get( $calendar_id ); 
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+
+        // add to cart with post id 
+        // echo "<pre>";
+        // print_r($meta_data);
+        // echo "</pre>";
+
  
 
         // GetHost meta Data
@@ -185,9 +192,6 @@ class HydraBookingShortcode {
         if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
             wp_send_json_error( array( 'message' => 'Invalid request method' ) );
         }
-        // echo "<pre>";
-        // print_r($_POST);
-        // echo "</pre>";
 
         // Check if the request is not empty
         if ( empty( $_POST ) ) {
@@ -197,6 +201,7 @@ class HydraBookingShortcode {
         if($_POST['meeting_id'] == 0){
             wp_send_json_error( array( 'message' => 'Invalid Meeting ID' ) );
         }
+
         $data = array();
         // sanitize the data 
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
@@ -246,6 +251,32 @@ class HydraBookingShortcode {
         // Filter Hooks After Booking
         $data = apply_filters('hydra_booking/after_booking_confirmation_filters', $data);
 
+        // Load The Thankyou Template 
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get( $data['meeting_id'] ); 
+
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+
+        // GetHost meta Data
+        $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
+        $host_meta = get_user_meta($host_id, '_tfhb_host', true);
+        
+        echo "<pre>";
+        print_r($meta_data);  
+        echo "</pre>";
+
+        if(true === $meta_data['payment_status']){
+
+            $woo_booking = new WooBooking();
+            $woo_booking->add_to_cart($data, $MeetingData);
+            
+
+        }else{
+            
+        }
+        exit;
+
+
 
         // Save Meeting Data
         $booking = new Booking();
@@ -274,32 +305,32 @@ class HydraBookingShortcode {
         
         update_post_meta($meeting_post_id, '_tfhb_booking_opt', $data);
 
-        // Load The Thankyou Template
-
-
+      
+ 
         // Load Meeting Confirmation Template 
-        $confirmation_template =  $this->tfhb_booking_confirmation($data);
+        $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
+
+
+    
+        # Add product to cart with the custom cart item data
+        WC()->cart->add_to_cart( $MeetingData->post_id, 1, '0', array(), $data );
 
         // After Booking Hooks
         do_action('hydra_booking/after_booking_confirmation', $data);
         
-        wp_send_json_success( array( 'message' => 'Booking Successful', 'confirmation_template' => $confirmation_template ) );
+        wp_send_json_success( 
+            array( 
+                'message' => 'Booking Successful',  
+                'confirmation_template' => $confirmation_template 
+            ) 
+        );
         
         wp_die();
     }
 
-    public function tfhb_booking_confirmation($data){
+    public function tfhb_booking_confirmation($data, $meta_data, $host_meta){
 
-        // Get Meeting
-        $meeting = new Meeting();
-        $MeetingData = $meeting->get( $data['meeting_id'] ); 
-
-        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-
-        // GetHost meta Data
-        $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
-        $host_meta = get_user_meta($host_id, '_tfhb_host', true);
-
+     
         // Load Meeting Confirmation Template
         ob_start();
 
