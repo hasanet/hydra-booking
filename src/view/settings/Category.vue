@@ -11,7 +11,7 @@ import { Meeting } from '@/store/meetings';
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'; 
 
-const itemsPerPage = ref(2);
+const itemsPerPage = ref(5);
 const currentPage = ref(1);
 
 const CategoryData = reactive({
@@ -176,7 +176,7 @@ const prevPage = () => {
                         </tbody>
                     </table>
 
-                    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32">
+                    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32" v-if="totalPages > 1">
                         <div class="tfhb-prev-next-button">
                             <a href="#" @click.prevent="prevPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === 1"><Icon name="ArrowLeft" width="20" />Previous</a>
                         </div>
