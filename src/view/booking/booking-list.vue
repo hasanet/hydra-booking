@@ -23,7 +23,7 @@ const booking_data = reactive({
 
 const BookingDetailsPopup = ref(false);
 const BackendBooking = ref(false);
-const itemsPerPage = ref(1);
+const itemsPerPage = ref(10);
 const currentPage = ref(1);
 
 // Add New Booking
@@ -365,7 +365,7 @@ const prevPage = () => {
         </tbody>
     </table>
 
-    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32">
+    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32" v-if="totalPages > 1">
         <div class="tfhb-prev-next-button">
             <a href="#" @click.prevent="prevPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === 1"><Icon name="ArrowLeft" width="20" />Previous</a>
         </div>
