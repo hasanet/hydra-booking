@@ -263,7 +263,7 @@ const copyMeeting = (link) => {
                     </div>
                 </div>
                 <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
+                    <a :href="'/?hydra-booking=meeting&meeting=' + smeeting.id" class="tfhb-flexbox" target="_blank">
                         <Icon name="Eye" size="20" /> 
                         Preview
                     </a>
