@@ -16,7 +16,7 @@ class MailHooks{
         $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
         $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
 
-        if(!empty($_tfhb_notification_settings) && "approved"==$booking->status){
+        if(!empty($_tfhb_notification_settings)){
 
             // Host Confirmation Email, If Settings Enable for Host Confirmation
             if(!empty($_tfhb_notification_settings['host']['booking_confirmation']['status'])){
@@ -81,7 +81,7 @@ class MailHooks{
         $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
         $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
 
-        if(!empty($_tfhb_notification_settings) && "approved"==$booking->status){
+        if(!empty($_tfhb_notification_settings)){
 
             // Host Canceled Email, If Settings Enable for Host Canceled
             if(!empty($_tfhb_notification_settings['host']['booking_cancel']['status'])){
@@ -146,7 +146,7 @@ class MailHooks{
         $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
         $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
 
-        if(!empty($_tfhb_notification_settings) && "approved"==$booking->status){
+        if(!empty($_tfhb_notification_settings)){
 
             // Host ReSchedule Email, If Settings Enable for Host ReSchedule
             if(!empty($_tfhb_notification_settings['host']['booking_reschedule']['status'])){

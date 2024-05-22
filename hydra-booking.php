@@ -42,11 +42,6 @@ class THB_INIT{
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
         add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
-
-
-      
-        
-        
    }
 
     public function init() {   
@@ -67,6 +62,7 @@ class THB_INIT{
 
         // Load App Class 
         new HydraBooking\App\App();
+
     }  
 
    
