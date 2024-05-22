@@ -266,9 +266,9 @@ class HydraBookingShortcode {
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
         $host_meta = get_user_meta($host_id, '_tfhb_host', true); 
         
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
 
         // Save Meeting Data
         $booking = new Booking();
@@ -321,6 +321,11 @@ class HydraBookingShortcode {
 
         // After Booking Hooks
         do_action('hydra_booking/after_booking_confirmation', $data);
+
+        // Single Booking 
+        $single_booking_meta = $booking->get($data['booking_id']);
+        do_action('hydra_booking/after_booking_completed', $single_booking_meta);
+        
         
         $response['message'] = 'Booking Successful';
         $response['confirmation_template'] = $confirmation_template;
