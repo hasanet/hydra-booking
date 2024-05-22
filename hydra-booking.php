@@ -43,10 +43,21 @@ class THB_INIT{
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
         add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
 
-
+        add_filter( 'query_vars', function( $query_vars ) {
+            $query_vars[] = 'hydra-booking';
+            $query_vars[] = 'meeting';
+            return $query_vars;
+        } );
       
         
-        
+        add_filter( 'template_include', function( $template ) {
+            if (get_query_var('hydra-booking') === 'meeting' && get_query_var('meeting')) {
+                $custom_template = load_template(THB_PATH . '/app/Content/Template/single-meeting.php', false);
+                return $custom_template;
+            }
+            return $template;
+
+        } );
    }
 
     public function init() {   
@@ -67,6 +78,12 @@ class THB_INIT{
 
         // Load App Class 
         new HydraBooking\App\App();
+
+        add_rewrite_rule(
+            '^meeting/([0-9]+)/?$',
+            'index.php?hydra-booking=meeting&meeting=$matches[1]',
+            'top'
+        );
     }  
 
    
