@@ -144,8 +144,8 @@
 				setTimeout(function(){
 					// Your code here 
 					$('.tfhb-available-times li .next').remove(); 
-					var selected_time_start = $(this).attr('data-time-start');
-					var selected_time_end = $(this).attr('data-time-end');
+					var selected_time_start = $this_time.attr('data-time-start');  
+					var selected_time_end = $this_time.attr('data-time-end');
 					$this.find("input[name='meeting_time_start']").val(selected_time_start);
 					$this.find("input[name='meeting_time_end']").val(selected_time_end);
 				
@@ -202,10 +202,17 @@
                 	contentType: false,
 					success: function (response) {
 						if(response.success){
+						
+							if(response.data.redirect){
+								window.location.href = response.data.redirect;
+								return;
 
-							// $this.find('.tfhb-meeting-card').html(''); 
-							// $this.find('.tfhb-meeting-card').append(response.data.confirmation_template); 
+							}else{
 
+								$this.find('.tfhb-meeting-card').html(''); 
+								$this.find('.tfhb-meeting-card').append(response.data.confirmation_template); 
+
+							}
 							$this.find('.tfhb-preloader').remove();
 						}
 					},
