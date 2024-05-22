@@ -26,6 +26,7 @@ class Booking {
                 meeting_id INT(11) NULL,
                 host_id INT(11) NULL,
                 attendee_id INT(11) NULL, 
+                order_id INT(11) NULL, 
                 attendee_time_zone VARCHAR(20) NULL,
                 meeting_dates LONGTEXT NULL, 
                 start_time VARCHAR(20) NULL,
@@ -131,7 +132,7 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($id = null) {
+    public function get($id = null , $join = false) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
@@ -150,8 +151,8 @@ class Booking {
             ";
             $data = $wpdb->get_row($wpdb->prepare($sql, $id));
         } else {
-    
-            $sql = "SELECT 
+            if($join == true){
+                $sql = "SELECT 
                 $table_name.id,
                 $table_name.meeting_id,
                 $table_name.attendee_name,
@@ -175,6 +176,11 @@ class Booking {
                 ON $table_name.meeting_id=$meeting_table.id
                 INNER JOIN $host_table
                 ON $meeting_table.host_id=$host_table.id";
+            }else{
+                $sql = "SELECT * FROM $table_name";
+            }
+    
+
     
             $data = $wpdb->get_results($sql);
         }

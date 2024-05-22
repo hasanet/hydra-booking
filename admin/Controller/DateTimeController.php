@@ -17,6 +17,14 @@ namespace HydraBooking\Admin\Controller;
         }
         return $time_zone;
     }
+
+    public function convert_time_based_on_timezone($time, $time_zone, $selected_time_zone, ) {
+        $date = new \DateTime($time, new \DateTimeZone($time_zone));
+        $date->setTimezone(new \DateTimeZone($selected_time_zone));
+
+        return $date;
+        
+    }
      
     
 }

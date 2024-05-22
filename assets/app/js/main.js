@@ -1,6 +1,7 @@
 (function ($) {
 
     $(document).ready(function () {
+		
         /**
          * Time Zone Change
          * @author Jahid
@@ -63,8 +64,7 @@
 			// Attach a click event listener to each icon
 			tfhb_calendar_navs.each(function() {
 				// When an icon is clicked
-				$(this).on("click", function() {
-					// Check if the icon is "tfhb-calendar-prev"
+				$(this).on("click", function() { 
 					// or "tfhb-calendar-next"
 					month = $(this).attr("id") === "tfhb-calendar-prev" ? month - 1 : month + 1;
 		
@@ -111,10 +111,7 @@
 					
 					$this.find('.tfhb-preloader').remove();
 				}, 1000); // 2000 milliseconds = 2 seconds
-
-				
-
-				
+ 
 			});
 
 			$this.find('input[name="tfhb_time_format"], .tfhb-time-zone-select').on('change', function (e) {  
@@ -132,7 +129,7 @@
 			});
 
 
-			   /**
+			/**
 			* Time Select
 			* @author Jahid
 			*/
@@ -296,6 +293,26 @@
 			$this.find('.tfhb-meeting-times .tfhb-select-date').html(selected_date);
 
 			$this.find("input[name='meeting_dates']").val(selected_date);
+			
+			// Get Disable Times based on booking using ajax
+		 
+			$.ajax({
+				url: tfhb_app_booking.ajax_url, 
+				type: 'POST',
+				data: {
+					action: 'tfhb_already_booked_times',
+					nonce: tfhb_app_booking.nonce,
+					selected_date: selected_date,
+					time_format: time_format,
+					time_zone: time_zone,
+				}, 
+				success: function (response) { 
+					console.log(response);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
 			
 			// Get Selected Date day
 			let selected_date_day = new Date(selected_date).getDay(),

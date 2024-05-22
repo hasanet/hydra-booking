@@ -1,9 +1,11 @@
 <?php 
 namespace HydraBooking\Services\Integrations\Woocommerce;
+
 // don't load directly
 defined( 'ABSPATH' ) || exit;
 
 
+use HydraBooking\DB\Booking;
 /**
  *  
  * 
@@ -77,23 +79,35 @@ defined( 'ABSPATH' ) || exit;
    }
 
    //
-   public function tfhb_add_apartment_data_checkout_order_processed_block_checkout($order){
-   
- 
-         $items = $order->get_items();
-         foreach($items as $item_id => $item){
-            // echo '<pre>';
-            // print_r($item);
-            // echo '</pre>';
-            // exit;
+   public function tfhb_woocommerce_thankyou($id){ 
+         $order = wc_get_order($id);
 
-            if(!empty($item->get_meta('tfhb_order_meta'))){
-               
-               $booking_id = $item->get_meta('tfhb_order_meta')['booking_id'];
-               $appointment = $item->get_meta('tfhb_order_meta')['Appointment'];
-               $order->update_meta_data('tfhb_order_meta', array('booking_id' => $booking_id, 'Appointment' => $appointment));
+         // check if order is not empty
+         if(!$order) return; 
+
+
+         $items = $order->get_items();
+         foreach($items as $item_id => $item){ 
+
+            if(!empty($item->get_meta('tfhb_booking_id'))){   
+ 
+               $booking_id = $item->get_meta('tfhb_booking_id');
+               $booking = new Booking(); 
+               $updateData = array(
+                  'id' => $booking_id,
+                  'order_id' => $order->get_id(),
+                  'attendee_id' => $order->get_user_id(),
+                  'payment_status' => $order->get_status()
+               );
+               // update booking 
+         
+         
+               // update booking
+               $booking->update($updateData);
+
             }
          }
+   
    }
 
 

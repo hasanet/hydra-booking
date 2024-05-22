@@ -16,6 +16,10 @@ class HydraBookingShortcode {
         add_action('hydra_booking/after_meeting_render', array($this, 'after_meeting_render'));
         add_action('hydra_booking/before_meeting_render', array($this, 'before_meeting_render'));
 
+        // Already Booked Times
+        add_action('wp_ajax_nopriv_tfhb_already_booked_times', array($this, 'tfhb_already_booked_times_callback'));
+        add_action('wp_ajax_tfhb_already_booked_times', array($this, 'tfhb_already_booked_times_callback'));
+
         // Form Submit 
         add_action('wp_ajax_nopriv_tfhb_meeting_form_submit', array($this, 'tfhb_meeting_form_submit_callback'));
         add_action('wp_ajax_tfhb_meeting_form_submit', array($this, 'tfhb_meeting_form_submit_callback'));
@@ -212,6 +216,7 @@ class HydraBookingShortcode {
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
         $data['host_id'] = isset($_POST['host_id']) ? sanitize_text_field($_POST['host_id']) : 0;
         $data['attendee_id'] = isset($_POST['attendee_id']) ? sanitize_text_field($_POST['attendee_id']) : 0; 
+        $data['order_id'] = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : 0; 
         $data['attendee_time_zone'] = isset($_POST['attendee_time_zone']) ? sanitize_text_field($_POST['attendee_time_zone']) : 0; 
         $data['meeting_dates'] = isset($_POST['meeting_dates']) ? sanitize_text_field($_POST['meeting_dates']) : '';
         $data['start_time'] = isset($_POST['meeting_time_start']) ? sanitize_text_field($_POST['meeting_time_start']) : '';
@@ -245,8 +250,26 @@ class HydraBookingShortcode {
         $data['cancelled_by'] = '';
         $data['status'] = 'pending';
         $data['booking_type'] = 'single';
-        $data['payment_method'] = 'paypal';
-        $data['payment_status'] = 'pending';
+      
+
+        // Load The Thankyou Template 
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get( $data['meeting_id'] ); 
+
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+
+        // Payment Method
+        if(true == $meta_data['payment_status']){ 
+
+            $data['payment_method'] = $meta_data['payment_method'];
+            $data['payment_status'] = 'pending';
+
+        }else{
+
+            $data['payment_method'] = 'free';
+            $data['payment_status'] = 'completed';
+            
+        }
 
 
         // Before Booking Hooks Action
@@ -256,21 +279,13 @@ class HydraBookingShortcode {
         // Filter Hooks After Booking
         $data = apply_filters('hydra_booking/after_booking_confirmation_filters', $data);
 
-        // Load The Thankyou Template 
-        $meeting = new Meeting();
-        $MeetingData = $meeting->get( $data['meeting_id'] ); 
-
-        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
         $host_meta = get_user_meta($host_id, '_tfhb_host', true); 
         
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
+         
 
-        // Save Meeting Data
+        // Save Booking Data
         $booking = new Booking();
         $result = $booking->add($data);
 
@@ -304,9 +319,7 @@ class HydraBookingShortcode {
             $product_id = $meta_data['payment_meta']['product_id'];
              
             $woo_booking = new WooBooking();
-            $woo_booking->add_to_cart($product_id, $data);
-            // WC()->cart->add_to_cart( $product_id, 1, '0', array(), $order_meta ); 
-            // response redirect to checkout page
+            $woo_booking->add_to_cart($product_id, $data); 
             $response['redirect'] =  wc_get_checkout_url();
             
 
@@ -346,6 +359,64 @@ class HydraBookingShortcode {
         $confirmation_template = ob_get_clean() ;
 
         return $confirmation_template;
+    }
+
+
+    // Already Booked Times Callback
+    public function tfhb_already_booked_times_callback() { 
+        // Checked Nonce validation
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Nonce verification failed' ) );
+        } 
+    
+
+        // Check if the request is POST
+        if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+            wp_send_json_error( array( 'message' => 'Invalid request method' ) );
+        }
+
+        // Check if the request is not empty
+        if ( empty( $_POST ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid request' ) );
+        }  
+
+        // Get All Booking Data
+        $booking = new Booking();
+        $bookings = $booking->get();
+
+        $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : '';
+        $selected_time_format = isset($_POST['selected_time_format']) ? sanitize_text_field($_POST['selected_time_format']) : '12';
+        $selected_time_zone = isset($_POST['selected_time_zone']) ? sanitize_text_field($_POST['selected_time_zone']) : 'UTC';
+
+        $bookings = array_filter($bookings, function($booking) use ($selected_date){
+            return $booking->meeting_dates == $selected_date;
+        });
+
+        $date_time = new DateTimeController( $selected_time_zone );
+
+
+        $disabled_times = array();
+        foreach($bookings as $booking){
+            $start_time = $booking->start_time;
+            $end_time = $booking->end_time;
+            $time_zone = $booking->attendee_time_zone; 
+ 
+            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone);
+            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone);
+
+            $disabled_times[] = array(
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            );
+        }
+
+
+
+
+        echo "<pre>";
+        print_r($disabled_times);
+        echo "</pre>";
+        wp_die();
     }
 }
 

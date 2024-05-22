@@ -100,7 +100,9 @@ class Host {
 
         $id = $request['id'];
         unset($request['id']);
+
         // Update availability
+        
         $result =  $wpdb->update(
             $table_name,
             $request,
