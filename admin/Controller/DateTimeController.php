@@ -18,11 +18,15 @@ namespace HydraBooking\Admin\Controller;
         return $time_zone;
     }
 
-    public function convert_time_based_on_timezone($time, $time_zone, $selected_time_zone, ) {
-        $date = new \DateTime($time, new \DateTimeZone($time_zone));
-        $date->setTimezone(new \DateTimeZone($selected_time_zone));
+    public function convert_time_based_on_timezone($time, $time_zone, $selected_time_zone, $time_format ) { 
+        $time = new \DateTime($time, new \DateTimeZone($time_zone));
+        $time->setTimezone(new \DateTimeZone($selected_time_zone));
+        if ($time_format == '12') {
+            return $time->format('h:i A');
+        }else{
+            return $time->format('H:i');
+        } 
 
-        return $date;
         
     }
      

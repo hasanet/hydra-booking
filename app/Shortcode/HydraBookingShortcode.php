@@ -282,13 +282,25 @@ class HydraBookingShortcode {
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
         $host_meta = get_user_meta($host_id, '_tfhb_host', true); 
-        
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";
 
-        // Save Booking Data
+        // Checked if the booking is already booked
+
+         
         $booking = new Booking();
+
+        $check_booking = $booking->get(
+            array(
+                'meeting_dates' => $data['meeting_dates'], 
+                'start_time' => $data['start_time'], 
+                'end_time' => $data['end_time']
+            )
+        );
+ 
+
+        if($check_booking){
+            wp_send_json_error( array( 'message' => 'Already Booked' ) );
+        }
+
         $result = $booking->add($data);
 
 
@@ -357,11 +369,11 @@ class HydraBookingShortcode {
         // Load Meeting Confirmation Template
         ob_start();
 
-            load_template(THB_PATH . '/app/Content/Template/meeting-confirmation.php', false, [
-                'meeting' => $meta_data,
-                'host' => $host_meta,
-                'booking' => $data,
-            ]);
+        load_template(THB_PATH . '/app/Content/Template/meeting-confirmation.php', false, [
+            'meeting' => $meta_data,
+            'host' => $host_meta,
+            'booking' => $data,
+        ]);
 
         $confirmation_template = ob_get_clean() ;
 
@@ -371,36 +383,33 @@ class HydraBookingShortcode {
 
     // Already Booked Times Callback
     public function tfhb_already_booked_times_callback() { 
-        // Checked Nonce validation
+        // Checked Nonce validation.
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
             wp_send_json_error( array( 'message' => 'Nonce verification failed' ) );
         } 
     
 
-        // Check if the request is POST
+        // Check if the request is POST.
         if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
             wp_send_json_error( array( 'message' => 'Invalid request method' ) );
         }
 
-        // Check if the request is not empty
+        // Check if the request is not empty.
         if ( empty( $_POST ) ) {
             wp_send_json_error( array( 'message' => 'Invalid request' ) );
         }  
 
-        // Get All Booking Data
-        $booking = new Booking();
-        $bookings = $booking->get();
 
         $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : '';
-        $selected_time_format = isset($_POST['selected_time_format']) ? sanitize_text_field($_POST['selected_time_format']) : '12';
-        $selected_time_zone = isset($_POST['selected_time_zone']) ? sanitize_text_field($_POST['selected_time_zone']) : 'UTC';
+        $selected_time_format = isset($_POST['time_format']) ? sanitize_text_field($_POST['time_format']) : '12';
+        $selected_time_zone = isset($_POST['time_zone']) ? sanitize_text_field($_POST['time_zone']) : 'UTC';
 
-        $bookings = array_filter($bookings, function($booking) use ($selected_date){
-            return $booking->meeting_dates == $selected_date;
-        });
 
+        // Get All Booking Data.
+        $booking = new Booking();
+        $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
         $date_time = new DateTimeController( $selected_time_zone );
-
+ 
 
         $disabled_times = array();
         foreach($bookings as $booking){
@@ -408,21 +417,17 @@ class HydraBookingShortcode {
             $end_time = $booking->end_time;
             $time_zone = $booking->attendee_time_zone; 
  
-            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone);
-            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone);
+            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
+            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
 
-            $disabled_times[] = array(
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            );
+            // $disabled_times[] = array(
+            //     'start_time' => $start_time,
+            //     'end_time' => $end_time,
+            // );
+
         }
 
-
-
-
-        echo "<pre>";
-        print_r($disabled_times);
-        echo "</pre>";
+        wp_send_json_success(  $disabled_times );
         wp_die();
     }
 }

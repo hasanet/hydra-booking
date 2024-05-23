@@ -28,7 +28,7 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
         <input type="hidden" id="meeting_dates" name="meeting_dates" value="">
         <input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">
         <input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
-    </div> 
+    </div>  
     <div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo THB_URL.'assets/app/images/meeting-cover.png'; ?>) lightgray 50% / cover no-repeat;">
         <div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
             <?php echo !empty($host['avatar']) ?  '<img src="'.esc_url($host['avatar']).'" alt="">' : '' ?>

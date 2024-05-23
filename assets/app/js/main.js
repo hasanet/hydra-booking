@@ -295,24 +295,7 @@
 			$this.find("input[name='meeting_dates']").val(selected_date);
 			
 			// Get Disable Times based on booking using ajax
-		 
-			$.ajax({
-				url: tfhb_app_booking.ajax_url, 
-				type: 'POST',
-				data: {
-					action: 'tfhb_already_booked_times',
-					nonce: tfhb_app_booking.nonce,
-					selected_date: selected_date,
-					time_format: time_format,
-					time_zone: time_zone,
-				}, 
-				success: function (response) { 
-					console.log(response);
-				},
-				error: function (error) {
-					console.log(error);
-				}
-			});
+			
 			
 			// Get Selected Date day
 			let selected_date_day = new Date(selected_date).getDay(),
@@ -353,17 +336,52 @@
 				} 
 			}
 			
+		 
+			$.ajax({
+				url: tfhb_app_booking.ajax_url, 
+				type: 'POST',
+				data: {
+					action: 'tfhb_already_booked_times',
+					nonce: tfhb_app_booking.nonce,
+					selected_date: selected_date,
+					time_format: time_format,
+					time_zone: time_zone,
+				}, 
+				success: function (response) {  
+					if(response.success){  
 
-			$this.find('.tfhb-available-times ul').html('');
+						var already_booked_times = response.data;
 
-			for (var i = 0; i < timesData.length; i++) {
-				// loop times and add to html li
-				// Remove 
-				$this.find('.tfhb-available-times ul').append('<li class="tfhb-flexbox"> <span class="time" data-time-start="'+ timesData[i].start +'" data-time-end="'+ timesData[i].end +'">' + timesData[i].start + '</span> </li>');
-			}
+						console.log(already_booked_times);
+						$this.find('.tfhb-available-times ul').html('');
 
-			// tfhb-meeting-times  with animation 
-			$this.find('.tfhb-meeting-times').show();
+						for (var i = 0; i < timesData.length; i++) {
+
+							// check already booked times 
+							var already_booked = already_booked_times.find( time => time.start_time == timesData[i].start && time.end_time == timesData[i].end );
+						 
+							if(already_booked){ 
+								// Remove
+								continue;
+							}
+ 
+							// Remove 
+							$this.find('.tfhb-available-times ul').append('<li class="tfhb-flexbox"> <span class="time" data-time-start="'+ timesData[i].start +'" data-time-end="'+ timesData[i].end +'">' + timesData[i].start + '</span> </li>');
+						
+						}
+
+						// tfhb-meeting-times  with animation 
+						$this.find('.tfhb-meeting-times').show();
+
+					}
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+			
+
+			
 
 
 			// loop times and add to html li

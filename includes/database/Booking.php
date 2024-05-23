@@ -132,14 +132,29 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($id = null , $join = false) {
+    public function get($where = null , $join = false) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
         $meeting_table = $wpdb->prefix . 'tfhb_meetings';
         $host_table = $wpdb->prefix . 'tfhb_hosts';
-        
-        if ($id) {
+
+        if(is_array($where)){
+            $sql = "SELECT * FROM $table_name WHERE ";
+            $i = 0;
+            foreach($where as $k => $v){
+                if($i == 0){
+                    $sql .= " $k = '$v'";
+                }else{
+                    $sql .= " AND $k = '$v'";
+                }
+                $i++;
+            }
+            $data = $wpdb->get_results(
+                $wpdb->prepare( $sql )
+            ); 
+            // echo $sql;
+        }elseif($where != null) {
             $sql = "
                 SELECT $table_name.*, 
                 $host_table.email AS host_email,
@@ -149,7 +164,7 @@ class Booking {
                 INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
                 WHERE $table_name.id = %d
             ";
-            $data = $wpdb->get_row($wpdb->prepare($sql, $id));
+            $data = $wpdb->get_row($wpdb->prepare($sql, $where));
         } else {
             if($join == true){
                 $sql = "SELECT 
