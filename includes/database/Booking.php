@@ -160,6 +160,7 @@ class Booking {
                 $host_table.email AS host_email,
                 $meeting_table.post_id,
                 $meeting_table.title AS meeting_title,
+                $meeting_table.meeting_locations AS meeting_location,
                 $meeting_table.duration AS meeting_duration,
                 $meeting_table.buffer_time_before,
                 $meeting_table.buffer_time_after

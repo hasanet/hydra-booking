@@ -244,7 +244,8 @@ class MailHooks{
             $host_table.email AS host_email,
             $host_table.first_name AS host_first_name,
             $host_table.last_name AS host_last_name,
-            $meeting_table.title AS meeting_title
+            $meeting_table.title AS meeting_title,
+            $meeting_table.meeting_locations AS meeting_location
             FROM $tfhb_booking_table
             INNER JOIN $host_table ON $tfhb_booking_table.host_id = $host_table.id
             INNER JOIN $meeting_table ON $tfhb_booking_table.meeting_id = $meeting_table.id
@@ -252,10 +253,21 @@ class MailHooks{
         ";
         $booking_data = $wpdb->get_row($wpdb->prepare($sql, $booking_id));
 
+        // Meeting Location Check
+        $meeting_locations = json_decode($booking_data->meeting_location);
+        $locations = [];
+        if (is_array($meeting_locations)) {
+            foreach ($meeting_locations as $location) {
+                if (isset($location->location) ) {
+                    $locations[] = $location->location;
+                }
+            }
+        }
+
         $replacements = array(
             '{{meeting.title}}'     => !empty($booking_data->meeting_title) ? $booking_data->meeting_title : '',
             '{{meeting.date}}'      => !empty($booking_data->meeting_dates) ? $booking_data->meeting_dates : '',
-            '{{meeting.location}}'  => '',
+            '{{meeting.location}}'  => implode(", ",$locations),
             '{{meeting.duration}}'  => $booking_data->meeting_duration,
             '{{meeting.time}}'      => $booking_data->start_time . '-' . $booking_data->end_time,
             '{{host.name}}'         => $booking_data->host_first_name . ' ' . $booking_data->host_last_name,
