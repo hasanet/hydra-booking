@@ -165,4 +165,40 @@ Class ZoomServices {
             return $data;
         }  
     } 
+
+    public function create_zoom_meeting() {
+        $access_response = $this->generateAccessToken(); 
+        
+        $data = array(
+            'topic' => 'Your Meeting Topic',
+            'type' => 2, // Scheduled Meeting
+            'start_time' => '2024-07-25T07:32:55Z',
+            'timezone' => 'America/Los_Angeles',
+            'duration' => 60,
+            'password' => '123456',
+            'settings' => array(
+                'join_before_host' => true,
+                'mute_upon_entry' => true,
+                'waiting_room' => false
+            )
+        );
+    
+        $response = wp_remote_post('https://api.zoom.us/v2/users/me/meetings', array(
+            'body' => json_encode($data),
+            'headers' => array(
+                'Authorization' => 'Bearer ' . $access_response['access_token'],
+                'Content-Type' => 'application/json'
+            )
+        ));
+
+        // Handle the response
+        if (is_wp_error($response)) {
+            return $response; // Return the WP_Error object
+        }
+
+        $response_body = wp_remote_retrieve_body($response);
+
+        return json_decode($response_body, true);
+    }
+
 }  
