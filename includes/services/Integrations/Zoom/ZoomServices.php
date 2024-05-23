@@ -170,7 +170,7 @@ Class ZoomServices {
         $access_response = $this->generateAccessToken(); 
         
         $data = array(
-            'topic' => 'Your Meeting Topic',
+            'topic' => 'Web Dev',
             'type' => 2, // Scheduled Meeting
             'start_time' => '2024-07-25T07:32:55Z',
             'timezone' => 'America/Los_Angeles',

@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Booking Lists 
         $booking = new Booking();
-        $bookingsList = $booking->get();
+        $bookingsList = $booking->get(null, true);
         
         // Return response
         $data = array(
@@ -149,15 +149,33 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Single Booking 
         $single_booking_meta = $booking->get($request['id']);
+        $_tfhb_host_integration_settings = get_user_meta($single_booking_meta->host_id, '_tfhb_host_integration_settings', true);
 
+        // Global Integration
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
-        $zoom = new ZoomServices(
-            sanitize_text_field($_tfhb_integration_settings['zoom_meeting']['account_id']), 
-            sanitize_text_field($_tfhb_integration_settings['zoom_meeting']['app_client_id']),  
-            sanitize_text_field($_tfhb_integration_settings['zoom_meeting']['app_secret_key'])
-        ); 
+        if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
+            $account_id = $_tfhb_integration_settings['zoom_meeting']['account_id'];
+            $app_client_id = $_tfhb_integration_settings['zoom_meeting']['app_client_id'];
+            $app_secret_key = $_tfhb_integration_settings['zoom_meeting']['app_secret_key'];
+        }
 
-        $meeting_creation = $zoom->create_zoom_meeting();
+        // Host Integration
+        if( !empty($_tfhb_host_integration_settings['zoom_meeting']) && !empty($_tfhb_host_integration_settings['zoom_meeting']['connection_status'])){
+            $account_id = $_tfhb_host_integration_settings['zoom_meeting']['account_id'];
+            $app_client_id = $_tfhb_host_integration_settings['zoom_meeting']['app_client_id'];
+            $app_secret_key = $_tfhb_host_integration_settings['zoom_meeting']['app_secret_key'];
+        }
+        
+        if( !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+
+            $zoom = new ZoomServices(
+                sanitize_text_field($account_id), 
+                sanitize_text_field($app_client_id),  
+                sanitize_text_field($app_secret_key)
+            ); 
+
+            $meeting_creation = $zoom->create_zoom_meeting();
+        }
 
         var_dump($meeting_creation); exit();
         
