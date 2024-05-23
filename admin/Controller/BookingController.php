@@ -3,6 +3,7 @@ namespace HydraBooking\Admin\Controller;
  
  //  Use Namespace
  use HydraBooking\Admin\Controller\RouteController;
+ use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  
  // Use DB 
 use HydraBooking\DB\Booking;
@@ -148,6 +149,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Single Booking 
         $single_booking_meta = $booking->get($request['id']);
+
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        $zoom = new ZoomServices(
+            sanitize_text_field($_tfhb_integration_settings['zoom_meeting']['account_id']), 
+            sanitize_text_field($_tfhb_integration_settings['zoom_meeting']['app_client_id']),  
+            sanitize_text_field($_tfhb_integration_settings['zoom_meeting']['app_secret_key'])
+        ); 
+
+        $meeting_creation = $zoom->create_zoom_meeting();
+
+        var_dump($meeting_creation); exit();
         
         if("approved"==$request['status']){
             do_action('hydra_booking/after_booking_completed', $single_booking_meta);
