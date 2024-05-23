@@ -158,7 +158,11 @@ class Booking {
             $sql = "
                 SELECT $table_name.*, 
                 $host_table.email AS host_email,
-                $meeting_table.post_id
+                $meeting_table.post_id,
+                $meeting_table.title AS meeting_title,
+                $meeting_table.duration AS meeting_duration,
+                $meeting_table.buffer_time_before,
+                $meeting_table.buffer_time_after
                 FROM $table_name
                 INNER JOIN $host_table ON $table_name.host_id = $host_table.id
                 INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id

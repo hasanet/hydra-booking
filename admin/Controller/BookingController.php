@@ -150,7 +150,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Single Booking 
         $single_booking_meta = $booking->get($request['id']);
         $_tfhb_host_integration_settings = get_user_meta($single_booking_meta->host_id, '_tfhb_host_integration_settings', true);
-
+        // var_dump($single_booking_meta); exit();
         // Global Integration
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
         if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
@@ -174,7 +174,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 sanitize_text_field($app_secret_key)
             ); 
 
-            $meeting_creation = $zoom->create_zoom_meeting();
+            $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
         }
 
         var_dump($meeting_creation); exit();

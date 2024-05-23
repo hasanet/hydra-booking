@@ -166,15 +166,15 @@ Class ZoomServices {
         }  
     } 
 
-    public function create_zoom_meeting() {
+    public function create_zoom_meeting($meeting_data) {
         $access_response = $this->generateAccessToken(); 
         
         $data = array(
-            'topic' => 'Web Dev',
+            'topic' => !empty($meeting_data->meeting_title) ? $meeting_data->meeting_title : '',
             'type' => 2, // Scheduled Meeting
-            'start_time' => '2024-07-25T07:32:55Z',
-            'timezone' => 'America/Los_Angeles',
-            'duration' => 60,
+            'start_time' => $meeting_data->meeting_dates.'T'.$meeting_data->start_time.'Z',
+            'timezone' => !empty($meeting_data->attendee_time_zone) ? $meeting_data->attendee_time_zone : '',
+            'duration' => intval($meeting_data->meeting_duration) + intval($meeting_data->buffer_time_before) + intval($meeting_data->buffer_time_after),
             'password' => '123456',
             'settings' => array(
                 'join_before_host' => true,
