@@ -31,8 +31,7 @@ defined( 'ABSPATH' ) || exit;
         <img src="<?php echo THB_URL.'assets/app/images/arrow-left.svg'; ?>" alt="arrow"> 
         <h3>Details</h3>
     </div>
-    <div class="tfhb-notice notice-error">
-        <p>Fill out the form below to confirm your booking.</p>
+    <div class="tfhb-notice notice-error" style="display:none;"> 
     </div>
 
     <?php  

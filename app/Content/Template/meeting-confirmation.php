@@ -19,6 +19,18 @@ defined( 'ABSPATH' ) || exit;
  $booking = isset($args['booking']) ? $args['booking'] : array();
  $host = isset($args['host']) ? $args['host'] : array();
 
+
+
+//  echo "<pre>";
+//  print_r($booking);
+//  echo "</pre>";
+//  echo "<pre>";
+//  print_r($host);
+//  echo "</pre>";
+//  echo "<pre>";
+//  print_r($meeting);
+//  echo "</pre>";
+
 ?> 
 <div class="tfhb-meeting-confirmation" >
     <?php 
@@ -46,20 +58,37 @@ defined( 'ABSPATH' ) || exit;
                 <div class="tfhb-icon">
                     <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
                 </div>
-                9:00pm-9:45pm, Saturday, April 25
+                <!--date stored in this format  2024-05-24  9:00pm-9:45pm, Saturday, April 25 -->
+                <?php  
+                    echo  !empty($booking['start_time']) ?  ''.esc_html($booking['start_time']).' - '.esc_html($booking['end_time']).', '.esc_html(date('l, F j', strtotime($booking['date']))).'' : '' 
+                ?>
             </li>
             <li class="tfhb-flexbox tfhb-gap-8">
                 <div class="tfhb-icon">
                     <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
                 </div>
-                Asia/Dhaka(09.00pm)
+                <!-- Asia/Dhaka  -->
+                <?php echo  !empty($booking['time_zone']) ?  ''.esc_html($booking['time_zone']).'' : '' ?>
+
             </li>
-            <li class="tfhb-flexbox tfhb-gap-8">
+            <!-- <li class="tfhb-flexbox tfhb-gap-8">
                 <div class="tfhb-icon">
                     <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
-                </div>
-                Google Meet
-            </li>
+                </div>  
+            </li> -->
+            <!-- Meeting location -->
+            <?php 
+                if(!empty($booking['meeting_locations'])) {
+                    foreach($booking['meeting_locations'] as $key => $location) {
+                        echo '<li class="tfhb-flexbox tfhb-gap-8">
+                                <div class="tfhb-icon">
+                                    <img src="'.esc_url(THB_URL.'assets/app/images/location.svg').'" alt="location">   
+                                </div> 
+                                '.esc_html($location['location']).'
+                            </li>';
+                    }
+                }
+            ?>
         </ul>
     </div>
 

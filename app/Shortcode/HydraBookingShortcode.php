@@ -53,11 +53,7 @@ class HydraBookingShortcode {
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
-        // add to cart with post id 
-        // echo "<pre>";
-        // print_r($meta_data);
-        // echo "</pre>";
-
+  
  
 
         // GetHost meta Data
@@ -420,10 +416,10 @@ class HydraBookingShortcode {
             $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
             $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
 
-            // $disabled_times[] = array(
-            //     'start_time' => $start_time,
-            //     'end_time' => $end_time,
-            // );
+            $disabled_times[] = array(
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            );
 
         }
 

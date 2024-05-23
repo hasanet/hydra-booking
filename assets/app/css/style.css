@@ -671,4 +671,18 @@
   display: block;
 }
 
+.tfhb-notice {
+  border-radius: 8px;
+  padding: 24px;
+  background-color: #E6FAEE;
+  border: 0.5px solid #21A159;
+  margin: 8px 0;
+  color: #21A159;
+}
+.tfhb-notice.notice-error {
+  background-color: #FEECEE;
+  border-color: #E5102E;
+  color: #E5102E;
+}
+
 /*# sourceMappingURL=style.css.map */

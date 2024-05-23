@@ -185,7 +185,9 @@
 
 			// Ajax Submit .tfhb-meeting-form.ajax-submit'  
 			$this.find('.tfhb-meeting-form.ajax-submit').on('submit', function (e) {
+				
 				e.preventDefault(); 
+				$this.find('.tfhb-notice').hide();
  				$this.find('.tfhb-meeting-card').append(preloader);
 				var data  = new FormData(this); 
 
@@ -211,6 +213,11 @@
 
 							}
 							$this.find('.tfhb-preloader').remove();
+						}else{
+							$this.find('.tfhb-preloader').remove();
+							$this.find('.tfhb-notice').append(response.data.message);
+							$this.find('.tfhb-notice').show();
+							
 						}
 					},
 					error: function (error) {
@@ -295,7 +302,7 @@
 			$this.find("input[name='meeting_dates']").val(selected_date);
 			
 			// Get Disable Times based on booking using ajax
-			
+
 			
 			// Get Selected Date day
 			let selected_date_day = new Date(selected_date).getDay(),
