@@ -17,8 +17,8 @@ const TfhbMeetingType = (type, router) => {
 
 <template> 
 
-    <div class="tfhb-question-popup tfhb-p-24">
-        <div class="tfhb-flexbox tfhb-gap-16">
+    <div class="tfhb-popup tfhb-p-24">
+        <div class="tfhb-flexbox tfhb-gap-16 tfhb-popup-wrap" :style="{ 'max-width': '400px' }">
             <div class="question-header tfhb-flexbox tfhb-full-width">
                 <h3>Create New Meeting Type</h3>
                 <div class="tfhb-question-times" @click.stop="emit('modal-close')">

@@ -195,11 +195,7 @@ class Meeting {
             $data = $wpdb->get_results($sql);
 
         }else{
-            $sql = "SELECT $table_name.*,
-            $host_table.first_name AS host_first_name,
-            $host_table.last_name AS host_last_name
-            FROM $table_name INNER JOIN $host_table
-            ON $table_name.host_id=$host_table.id";
+            $sql = "SELECT * FROM $table_name";
 
             $data = $wpdb->get_results(
                 $wpdb->prepare( $sql )
