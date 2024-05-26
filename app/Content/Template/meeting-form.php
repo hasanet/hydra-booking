@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 
  $questions = isset($args['questions']) ? $args['questions'] : array();
+ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
 
 
 
@@ -101,7 +102,7 @@ defined( 'ABSPATH' ) || exit;
 
         <div class="tfhb-confirmation-button">
             <button class="tfhb-flexbox tfhb-gap-8">
-                Confirm
+                <?php echo  !empty($booking_data) ? 'Reschedule' : 'Confirm' ?>  
                 <img src="<?php echo THB_URL.'assets/app/images/arrow-right.svg'; ?>" alt="arrow"> 
             </button>
         </div>

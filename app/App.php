@@ -44,18 +44,40 @@ class App {
             'index.php?hydra-booking=meeting&meeting=$matches[1]',
             'top'
         );
+
+        // add_rewrite_rule(
+        //     '^booking/([0-9]+)/?$',
+        //     'index.php?hydra-booking=booking&hash=$matches[1]&type=$matches[2]',
+        //     'top'
+        // );
+        // Create Rewrite Rule for Reschedule hydra-booking.local/?hydra-booking=booking&hash=2121&type=reschedule
+        add_rewrite_rule(
+            '^booking/([0-9]+)/?$',
+            'index.php?hydra-booking=booking&hash=$matches[1]&meeting-id=$matches[2]&type=$matches[3]',
+            'top'
+        );
     }
 
     public function tfhb_single_query_vars( $query_vars ) {
         $query_vars[] = 'hydra-booking';
         $query_vars[] = 'meeting';
+        $query_vars[] = 'meeting-id';
+        $query_vars[] = 'hash';
+        $query_vars[] = 'type';
         return $query_vars;
     }
 
     public function tfhb_single_page_template( $template ) {
+      
         if (get_query_var('hydra-booking') === 'meeting' && get_query_var('meeting')) {
             $custom_template = load_template(THB_PATH . '/app/Content/Template/single-meeting.php', false);
             return $custom_template;
+        }
+        // Reschedule Page
+        if (get_query_var('hydra-booking') === 'booking' && get_query_var('hash')) { 
+            $custom_template = load_template(THB_PATH . '/app/Content/Template/reschedule.php', false);
+            return $custom_template;
+
         }
         return $template;
     }

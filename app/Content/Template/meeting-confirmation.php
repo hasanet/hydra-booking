@@ -19,9 +19,11 @@ defined( 'ABSPATH' ) || exit;
  $booking = isset($args['booking']) ? $args['booking'] : array();
  $host = isset($args['host']) ? $args['host'] : array();
 
-
-
-//  echo "<pre>";
+ 
+?> 
+<div class="tfhb-meeting-confirmation" >
+    <?php 
+//      echo "<pre>";
 //  print_r($booking);
 //  echo "</pre>";
 //  echo "<pre>";
@@ -30,10 +32,6 @@ defined( 'ABSPATH' ) || exit;
 //  echo "<pre>";
 //  print_r($meeting);
 //  echo "</pre>";
-
-?> 
-<div class="tfhb-meeting-confirmation" >
-    <?php 
         // Hook for before confirmation
         do_action('hydra_booking/before_meeting_confirmation');
     
@@ -60,7 +58,8 @@ defined( 'ABSPATH' ) || exit;
                 </div>
                 <!--date stored in this format  2024-05-24  9:00pm-9:45pm, Saturday, April 25 -->
                 <?php  
-                    echo  !empty($booking['start_time']) ?  ''.esc_html($booking['start_time']).' - '.esc_html($booking['end_time']).', '.esc_html(date('l, F j', strtotime($booking['date']))).'' : '' 
+                    
+                    echo  !empty($booking['start_time']) ?  ''.esc_html($booking['start_time']).' - '.esc_html($booking['end_time']).', '.esc_html(date('l, F j', strtotime($booking['meeting_dates']))).'' : '' 
                 ?>
             </li>
             <li class="tfhb-flexbox tfhb-gap-8">
@@ -68,7 +67,7 @@ defined( 'ABSPATH' ) || exit;
                     <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
                 </div>
                 <!-- Asia/Dhaka  -->
-                <?php echo  !empty($booking['time_zone']) ?  ''.esc_html($booking['time_zone']).'' : '' ?>
+                <?php echo  !empty($booking['attendee_time_zone']) ?  ''.esc_html($booking['attendee_time_zone']).'' : '' ?>
 
             </li>
             <!-- <li class="tfhb-flexbox tfhb-gap-8">
@@ -92,7 +91,7 @@ defined( 'ABSPATH' ) || exit;
         </ul>
     </div>
 
-    <div class="tfhb-meeting-confirmation-calender">
+    <!-- <div class="tfhb-meeting-confirmation-calender">
         <h3>Add to Calendar</h3>
         <ul class="tfhb-flexbox tfhb-gap-16">
             <li>
@@ -116,11 +115,32 @@ defined( 'ABSPATH' ) || exit;
                 </a>
             </li>
         </ul>
-    </div>
+    </div> -->
 
     <div class="tfhb-meeting-confirmation-action tfhb-flexbox tfhb-gap-16">
-        <button>Reschedule</button>
-        <button>Cancel booking</button>
+        
+        <?php  
+            
+            if(true == $meeting->attendee_can_cancel){ 
+                echo '<a href="">Cancel booking</a>';
+            }
+            if( true == $meeting->attendee_can_reschedule){
+                // Create Url using wordpress methood 
+                // add_rewrite_rule(
+                //     '^booking/([0-9]+)/?$',
+                //     'index.php?hydra-booking=booking&hash=$matches[1]&meeting-id=$matches[2]&type=$matches[3]',
+                //     'top'
+                // );  
+                $reschedule_url = add_query_arg( array(
+                    'hydra-booking' => 'booking',
+                    'hash' => $booking['hash'],
+                    'meeting-id' => $booking['meeting_id'],
+                    'type' => 'reschedule'
+                ), home_url() );
+                
+                echo '<a href="'.esc_url( $reschedule_url ).'">Reschedule</a>';
+            }
+        ?>
     </div>
 
     <?php 

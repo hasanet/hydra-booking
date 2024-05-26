@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 $meeting = isset($args['meeting']) ? $args['meeting'] : array();
 $host = isset($args['host']) ? $args['host'] : array();
 $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
+$booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
 
 
 ?> 
@@ -28,6 +29,12 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
         <input type="hidden" id="meeting_dates" name="meeting_dates" value="">
         <input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">
         <input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
+        <?php 
+            if(!empty($booking_data)) {    
+                echo '<input type="hidden" id="booking_hash" name="booking_hash" value="'.esc_attr($booking_data->hash).'">'; 
+                echo '<input type="hidden" id="action_type" name="action_type" value="'.esc_attr('reschedule').'">'; 
+            }
+        ?>
     </div>  
     <div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo THB_URL.'assets/app/images/meeting-cover.png'; ?>) lightgray 50% / cover no-repeat;">
         <div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
@@ -99,6 +106,7 @@ $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
                 <?php 
                     if(!empty($time_zone)) {
                         $selected_timezone = $meeting['availability_custom']['time_zone'] ;
+                        $selected_timezone = isset($booking_data->attendee_time_zone) ? $booking_data->attendee_time_zone : $selected_timezone;
                         foreach($time_zone as $key => $zone) { 
                             $selected = ($zone['value'] == $selected_timezone) ? 'selected' : '';
                             echo '<option value="'.esc_attr($zone['value']).'" '.esc_attr($selected).'>'.esc_html($zone['name']).'</option>';
