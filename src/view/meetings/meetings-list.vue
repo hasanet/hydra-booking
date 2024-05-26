@@ -193,7 +193,7 @@ const copyMeeting = (link) => {
                                             <Icon name="Clock" size="16" /> 
                                         </div>
                                         <div class="user-info-title">
-                                            {{ smeeting.duration }}
+                                            {{ smeeting.duration }} minutes
                                         </div>
                                     </div>
                                 </li>
@@ -235,7 +235,7 @@ const copyMeeting = (link) => {
                                             <Icon name="User" size="16" /> 
                                         </div>
                                         <div class="user-info-title">
-                                            Jack Sparrow
+                                            {{ smeeting.host_first_name }} {{ smeeting.host_last_name }}
                                         </div>
                                     </div>
                                 </li>
