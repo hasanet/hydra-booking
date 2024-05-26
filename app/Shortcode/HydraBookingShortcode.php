@@ -6,6 +6,8 @@ use HydraBooking\DB\Availability;
 use HydraBooking\Admin\Controller\DateTimeController;
 use HydraBooking\DB\Booking;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
+use HydraBooking\Services\Integrations\Zoom\ZoomServices;
+
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -286,7 +288,7 @@ class HydraBookingShortcode {
         $data['meeting_locations'] = array();
         if(isset($_POST['meeting_locations']) && !empty($_POST['meeting_locations'])){ 
             foreach($_POST['meeting_locations'] as $key => $location){ 
-                $data['meeting_locations'][$key] = array(
+                $data['meeting_locations'][$location['location']] = array(
                     'location' => sanitize_text_field($location['location']),
                     'address' => sanitize_text_field($location['address']),
                 );
@@ -377,14 +379,64 @@ class HydraBookingShortcode {
             $booking->update($reschedule_data);
             $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
 
-            // Single Booking 
+            // Single Booking & Mail Notification
             $single_booking_meta = $booking->get($data['booking_id']);
-            do_action('hydra_booking/after_booking_completed', $single_booking_meta);
+            do_action('hydra_booking/after_booking_schedule', $single_booking_meta);
+
+
+            // Host Meta by Booking Id
+            $_tfhb_host_integration_settings = get_user_meta($single_booking_meta->host_id, '_tfhb_host_integration_settings', true);
+
+            // Booking Table Meeting Location Data
+            $meeting_location_data = json_decode($single_booking_meta->meeting_locations, true);
+
+            // Meeting Location Check
+            $meeting_locations = json_decode($single_booking_meta->meeting_location);
+            $zoom_exists = false;
+            if (is_array($meeting_locations)) {
+                foreach ($meeting_locations as $location) {
+                    if (isset($location->location) && $location->location === "zoom") {
+                        $zoom_exists = true;
+                        break;
+                    }
+                }
+            }
+
+            // Global Integration
+            $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+            if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
+                $account_id = $_tfhb_integration_settings['zoom_meeting']['account_id'];
+                $app_client_id = $_tfhb_integration_settings['zoom_meeting']['app_client_id'];
+                $app_secret_key = $_tfhb_integration_settings['zoom_meeting']['app_secret_key'];
+            }
+
+            // Host Integration
+            if( !empty($_tfhb_host_integration_settings['zoom_meeting']) && !empty($_tfhb_host_integration_settings['zoom_meeting']['connection_status'])){
+                $account_id = $_tfhb_host_integration_settings['zoom_meeting']['account_id'];
+                $app_client_id = $_tfhb_host_integration_settings['zoom_meeting']['app_client_id'];
+                $app_secret_key = $_tfhb_host_integration_settings['zoom_meeting']['app_secret_key'];
+            }
+            
+            if( $zoom_exists && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+                $zoom = new ZoomServices(
+                    sanitize_text_field($account_id), 
+                    sanitize_text_field($app_client_id),  
+                    sanitize_text_field($app_secret_key)
+                ); 
+                $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
+                $meeting_location_data["zoom"]['address'] = $meeting_creation;
+
+                // Get Post Meta 
+                $meeting_address_data = array(
+                    'id' => $single_booking_meta->id,
+                    'meeting_locations' =>  json_encode($meeting_location_data),
+                );
+                $booking->update($meeting_address_data);
+
+            }
 
             $response['message'] = 'Rescheduled Successfully';
-
             $response['confirmation_template'] = $confirmation_template;
-
             wp_send_json_success(  $response );
 
                 
@@ -404,13 +456,9 @@ class HydraBookingShortcode {
 
         // Insert the post into the database
         $meeting_post_id = wp_insert_post( $meeting_post_data );
-
-        
         update_post_meta($meeting_post_id, '_tfhb_booking_opt', $data);
 
-
         $data['post_id'] = $meeting_post_id;
-        
         $result = $booking->add($data);
 
 
@@ -426,8 +474,6 @@ class HydraBookingShortcode {
             $woo_booking = new WooBooking();
             $woo_booking->add_to_cart($product_id, $data); 
             $response['redirect'] =  wc_get_checkout_url();
-            
-
         }  
 
       
@@ -440,17 +486,66 @@ class HydraBookingShortcode {
         // After Booking Hooks
         do_action('hydra_booking/after_booking_confirmation', $data);
 
-        // Single Booking 
-        $single_booking_meta = $booking->get($data['booking_id']);
+        // Single Booking & Mail Notification
+        $single_booking_meta = $booking->get($result['insert_id'], false);
         do_action('hydra_booking/after_booking_completed', $single_booking_meta);
+
+        // Host Meta by Booking Id
+        $_tfhb_host_integration_settings = get_user_meta($single_booking_meta->host_id, '_tfhb_host_integration_settings', true);
+
+        // Booking Table Meeting Location Data
+        $meeting_location_data = json_decode($single_booking_meta->meeting_locations, true);
+
+        // Meeting Location Check
+        $meeting_locations = json_decode($single_booking_meta->meeting_location);
+        $zoom_exists = false;
+        if (is_array($meeting_locations)) {
+            foreach ($meeting_locations as $location) {
+                if (isset($location->location) && $location->location === "zoom") {
+                    $zoom_exists = true;
+                    break;
+                }
+            }
+        }
+
+        // Global Integration
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
+            $account_id = $_tfhb_integration_settings['zoom_meeting']['account_id'];
+            $app_client_id = $_tfhb_integration_settings['zoom_meeting']['app_client_id'];
+            $app_secret_key = $_tfhb_integration_settings['zoom_meeting']['app_secret_key'];
+        }
+
+        // Host Integration
+        if( !empty($_tfhb_host_integration_settings['zoom_meeting']) && !empty($_tfhb_host_integration_settings['zoom_meeting']['connection_status'])){
+            $account_id = $_tfhb_host_integration_settings['zoom_meeting']['account_id'];
+            $app_client_id = $_tfhb_host_integration_settings['zoom_meeting']['app_client_id'];
+            $app_secret_key = $_tfhb_host_integration_settings['zoom_meeting']['app_secret_key'];
+        }
         
+        if( $zoom_exists && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+            $zoom = new ZoomServices(
+                sanitize_text_field($account_id), 
+                sanitize_text_field($app_client_id),  
+                sanitize_text_field($app_secret_key)
+            ); 
+            $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
+            $meeting_location_data["zoom"]['address'] = $meeting_creation;
+
+            // Get Post Meta 
+            $meeting_address_data = array(
+                'id' => $single_booking_meta->id,
+                'meeting_locations' =>  json_encode($meeting_location_data),
+            );
+            $booking->update($meeting_address_data);
+
+        }
         
         $response['message'] = 'Booking Successful';
         $response['confirmation_template'] = $confirmation_template;
 
 
         wp_send_json_success(  $response );
-        
         wp_die();
     }
 
