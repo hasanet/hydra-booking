@@ -1,3 +1,6 @@
+.tfhb-meeting-box .tfhb-reschedule-box {
+  margin-bottom: 25px;
+}
 .tfhb-meeting-box .tfhb-meeting-card {
   border-radius: 16px;
   border: 0.5px solid #E3CFD7;
@@ -533,7 +536,7 @@
   justify-content: center;
   margin-top: 24px;
 }
-.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-action button {
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-action button, .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-confirmation .tfhb-meeting-confirmation-action a {
   border-radius: 8px;
   border: 1px solid #F6EEF2;
   background: #FFF;

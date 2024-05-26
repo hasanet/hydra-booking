@@ -36,6 +36,8 @@ class HydraBookingShortcode {
         $atts = shortcode_atts(
             array( 
                 'id' => 0, 
+                'hash' => '', 
+                'type' => 'create', 
             ),
             $atts,
             'hydra_booking'
@@ -53,8 +55,28 @@ class HydraBookingShortcode {
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
-  
+
+        //  Reschedule Booking
+        $booking_data = array();
+
+        if(!empty($atts['hash']) && 'reschedule' == $atts['type']){
  
+            $booking = new Booking();
+            $get_booking = $booking->get(
+                array('hash' => $atts['hash']),
+                false,
+                true 
+            ); 
+            // echo "<pre>";
+            // print_r($get_booking);
+            // echo "</pre>";
+
+            if(!$get_booking){
+                return 'Invalid Booking ID';
+            }
+
+            $booking_data = $get_booking;
+        } 
 
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
@@ -68,13 +90,24 @@ class HydraBookingShortcode {
         // Start Buffer
         ob_start();
 
-
+      
         //Before Load the Calendar.
         do_action('hydra_booking/before_meeting_render', $meta_data);
 
         ?>
         <div class="tfhb-meeting-box tfhb-meeting-<?php echo esc_attr($calendar_id) ?>" data-calendar="<?php echo esc_attr($calendar_id) ?>">
-
+            
+            <?php
+            
+                if(!empty($booking_data) &&  'reschedule' == $atts['type']){
+                    // Load Reschedule Template
+                    // You are rescheduling the booking: 3:15 pm - 3:30 pm, May 27, 2024 (Asia/Dhaka) 
+                    echo '<div class="tfhb-reschedule-box">';
+                    echo '<p>'.__('You are rescheduling the booking:', 'hydra-booking').' '.esc_html($booking_data->start_time).' - '.esc_html($booking_data->end_time).', '.esc_html(date('F j, Y', strtotime($booking_data->meeting_dates))).' ('.esc_html($booking_data->attendee_time_zone).')</p>';
+                    echo '</div>';
+                }
+    
+            ?>
             <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">
                 <div class="tfhb-meeting-card">
                         <?php  
@@ -84,6 +117,7 @@ class HydraBookingShortcode {
                                 'meeting' => $meta_data,
                                 'host' => $host_meta, 
                                 'time_zone' => $time_zone, 
+                                'booking_data' => $booking_data, 
                             ]); 
 
                             // Load Meeting Calendar Template
@@ -95,6 +129,7 @@ class HydraBookingShortcode {
                             // Load Meeting Form Template
                             load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
                                 'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
+                                'booking_data' => $booking_data,
                             ]);
                         ?>
                 </div>
@@ -205,13 +240,27 @@ class HydraBookingShortcode {
         if($_POST['meeting_id'] == 0){
             wp_send_json_error( array( 'message' => 'Invalid Meeting ID' ) );
         }
-
         $data = array();
         $response = array();
+
+        $booking = new Booking();
+
+        // Generate Meeting Hash Based on start time and end time and Date And Meeting id + random number  
+        if(isset($_POST['booking_hash'])){
+            $meeting_hash = sanitize_text_field($_POST['booking_hash']); 
+
+        }else{
+            $meeting_hash = md5(sanitize_text_field($_POST['meeting_dates']) . sanitize_text_field($_POST['meeting_time_start']) . sanitize_text_field($_POST['meeting_time_end']) . sanitize_text_field($_POST['meeting_id']) . rand(1000, 9999));
+        }
+        
+      
+       
+  
         // sanitize the data 
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
         $data['host_id'] = isset($_POST['host_id']) ? sanitize_text_field($_POST['host_id']) : 0;
         $data['attendee_id'] = isset($_POST['attendee_id']) ? sanitize_text_field($_POST['attendee_id']) : 0; 
+        $data['hash'] = $meeting_hash; 
         $data['order_id'] = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : 0; 
         $data['attendee_time_zone'] = isset($_POST['attendee_time_zone']) ? sanitize_text_field($_POST['attendee_time_zone']) : 0; 
         $data['meeting_dates'] = isset($_POST['meeting_dates']) ? sanitize_text_field($_POST['meeting_dates']) : '';
@@ -246,10 +295,13 @@ class HydraBookingShortcode {
         $data['cancelled_by'] = '';
         $data['status'] = 'pending';
         $data['booking_type'] = 'single';
+
+        
+       
       
 
         // Load The Thankyou Template 
-        $meeting = new Meeting();
+        $meeting = new Meeting(); 
         $MeetingData = $meeting->get( $data['meeting_id'] ); 
 
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
@@ -281,9 +333,7 @@ class HydraBookingShortcode {
 
         // Checked if the booking is already booked
 
-         
-        $booking = new Booking();
-
+          
         $check_booking = $booking->get(
             array(
                 'meeting_dates' => $data['meeting_dates'], 
@@ -297,17 +347,53 @@ class HydraBookingShortcode {
             wp_send_json_error( array( 'message' => 'Already Booked' ) );
         }
 
-        $result = $booking->add($data);
+
+        // Get booking Data using Hash
+
+        if(isset($_POST['action_type']) && 'reschedule' == $_POST['action_type']){ 
+            $get_booking = $booking->get(
+                array('hash' => $meeting_hash),
+                false,
+                true 
+            ); 
+            // Get Post Meta 
+            $booking_meta = get_post_meta($get_booking->post_id, '_tfhb_booking_opt', true);
+            $reschedule_data = array(
+                'id' => $get_booking->id,
+                'attendee_time_zone' =>  isset($_POST['attendee_time_zone']) ? sanitize_text_field($_POST['attendee_time_zone']) : '',
+                'meeting_dates' => sanitize_text_field($_POST['meeting_dates']), 
+                'start_time' => sanitize_text_field($_POST['meeting_time_start']),
+                'end_time' => sanitize_text_field($_POST['meeting_time_end']),
+                'status' =>  'rescheduled',
+            );
+            
+            $booking_meta = array_merge($booking_meta, $reschedule_data);
+
+            // Update Post Meta
+            update_post_meta($get_booking->post_id, '_tfhb_booking_opt',  $booking_meta);
+            
 
 
+            $booking->update($reschedule_data);
+            $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
 
-        if($result === false){
-            wp_send_json_error( array( 'message' => 'Booking Failed' ) );
+            // Single Booking 
+            $single_booking_meta = $booking->get($data['booking_id']);
+            do_action('hydra_booking/after_booking_completed', $single_booking_meta);
+
+            $response['message'] = 'Rescheduled Successfully';
+
+            $response['confirmation_template'] = $confirmation_template;
+
+            wp_send_json_success(  $response );
+
+                
         }
+            
 
+        // Create a new booking
 
-        $data['booking_id'] = $result['insert_id'];
-        $title = 'Booking  #' . $result['insert_id'];
+        $title = 'New booking Booking ';
 
         // Create an array to store the post data for meeting the current row
         $meeting_post_data = array(
@@ -322,8 +408,17 @@ class HydraBookingShortcode {
         
         update_post_meta($meeting_post_id, '_tfhb_booking_opt', $data);
 
-      
-    
+
+        $data['post_id'] = $meeting_post_id;
+        
+        $result = $booking->add($data);
+
+
+
+        if($result === false){
+            wp_send_json_error( array( 'message' => 'Booking Failed' ) );
+        } 
+
         if(true == $meta_data['payment_status'] && 'woo_payment' == $meta_data['payment_method']){
             // Add to cart
             $product_id = $meta_data['payment_meta']['product_id'];

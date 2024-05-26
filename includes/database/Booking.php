@@ -26,6 +26,8 @@ class Booking {
                 meeting_id INT(11) NULL,
                 host_id INT(11) NULL,
                 attendee_id INT(11) NULL, 
+                post_id INT(11) NULL, 
+                hash text NULL, 
                 order_id INT(11) NULL, 
                 attendee_time_zone VARCHAR(20) NULL,
                 meeting_dates LONGTEXT NULL, 
@@ -132,7 +134,7 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($where = null , $join = false) {
+    public function get($where = null , $join = false, $FirstOrFaill = false) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
@@ -150,9 +152,17 @@ class Booking {
                 }
                 $i++;
             }
-            $data = $wpdb->get_results(
-                $wpdb->prepare( $sql )
-            ); 
+            if($FirstOrFaill == true){
+                // only get first item 
+                $data = $wpdb->get_row(
+                    $wpdb->prepare( $sql )
+                );
+            }else{
+                $data = $wpdb->get_results(
+                    $wpdb->prepare( $sql )
+                ); 
+            }
+            
             // echo $sql;
         }elseif($where != null) {
             $sql = "
