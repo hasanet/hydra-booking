@@ -157,6 +157,7 @@ class Meeting {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
+        $host_table = $wpdb->prefix . 'tfhb_hosts';
 
         if($id){
             $sql = "SELECT * FROM $table_name WHERE id = $id";
@@ -194,7 +195,11 @@ class Meeting {
             $data = $wpdb->get_results($sql);
 
         }else{
-            $sql = "SELECT * FROM $table_name";
+            $sql = "SELECT $table_name.*,
+            $host_table.first_name AS host_first_name,
+            $host_table.last_name AS host_last_name
+            FROM $table_name INNER JOIN $host_table
+            ON $table_name.host_id=$host_table.id";
 
             $data = $wpdb->get_results(
                 $wpdb->prepare( $sql )
