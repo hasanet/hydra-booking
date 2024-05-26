@@ -226,6 +226,7 @@
   text-align: center;
   gap: 12px;
   padding: 0;
+  margin: 0;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li, .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li {
   border: 0.5px solid rgba(227, 207, 215, 0);
