@@ -4,7 +4,8 @@ namespace HydraBooking\App;
 
 // Use Classes
 use HydraBooking\App\Shortcode\HydraBookingShortcode;
-use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
+use HydraBooking\Services\Integrations\Woocommerce\WooBooking; 
+use HydraBooking\DB\Booking;
 
 class App {
     public function __construct() {
@@ -73,9 +74,34 @@ class App {
             $custom_template = load_template(THB_PATH . '/app/Content/Template/single-meeting.php', false);
             return $custom_template;
         }
+
         // Reschedule Page
-        if (get_query_var('hydra-booking') === 'booking' && get_query_var('hash')) { 
+        if (get_query_var('hydra-booking') === 'booking' && get_query_var('hash') && get_query_var('type') === 'reschedule') { 
             $custom_template = load_template(THB_PATH . '/app/Content/Template/reschedule.php', false);
+            return $custom_template;
+
+        }
+
+        // Cenceled Page
+        if (get_query_var('hydra-booking') === 'booking' && get_query_var('hash') && get_query_var('type') === 'cancel') { 
+            if(!wp_script_is('tfhb-app-script', 'enqueued')) {
+                wp_enqueue_script('tfhb-app-script');
+            } 
+    
+            $booking = new Booking();
+            $get_booking = $booking->get(
+                array('hash' =>  get_query_var('hash')),
+                false,
+                true 
+            );  
+            if(!$get_booking){
+                return $template;
+            }
+            $host_meta = get_user_meta($get_booking->host_id, '_tfhb_host', true);
+            $custom_template = load_template(THB_PATH . '/app/Content/Template/meeting-cencel.php', false, [ 
+                'host' => $host_meta,  
+                'booking_data' => $get_booking, 
+            ]);
             return $custom_template;
 
         }

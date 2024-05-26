@@ -41,10 +41,21 @@ defined( 'ABSPATH' ) || exit;
        
         <?php  
             if(is_array($questions) && !empty($questions)): 
+                $disable = !empty($booking_data) ? 'disabled' : '';
                   
                 foreach($questions as $key => $question): 
                     $name = 2  >= $key ? $question['label'] : 'question['.$question['label'].']';
-                 
+                    // $value = !empty($booking_data) ? $booking_data->data[$question['label']] : '';
+                    
+                    if($name == 'email'){
+                        $value = !empty($booking_data) ? $booking_data->email : '';
+                    }elseif($name == 'name'){
+                        $value = !empty($booking_data) ? $booking_data->attendee_name : '';
+                    }elseif($name == 'address'){
+                        $value = !empty($booking_data) ? $booking_data->address : '';
+                    }else{
+                        $value = '';
+                    }
                     if(empty($question['type'])){
                         continue;
                     }
@@ -56,7 +67,7 @@ defined( 'ABSPATH' ) || exit;
                             <label for="'.$name.'">'.$question['placeholder'].' '.$required_star.'</label>';
                             if($question['type'] == 'select'){
 
-                                echo '<select name="'.$name.'" id="'.$name.'" '.$required.'>';
+                                echo '<select name="'.$name.'" id="'.$name.'" '.$disable.' '.$required.'>';
                                     foreach($question['options'] as $option){
                                         echo '<option value="'.$option['value'].'">'.$option['label'].'</option>';
                                     }
@@ -64,41 +75,48 @@ defined( 'ABSPATH' ) || exit;
 
                             }elseif($question['type'] == 'textarea'){
 
-                                echo '<textarea name="'.$name.'" id="'.$name.'" '.$required.'></textarea>';
+                                echo '<textarea name="'.$name.'" id="'.$name.'" '.$disable.' '.$required.'>'.$value.'</textarea>';
 
                             }elseif($question['type'] == 'checkbox'){ 
 
                                 echo '<label for="'.$name.'">
-                                        <input name="'.$name.'" id="'.$name.'" type="'.$question['type'].'" '.$required.'>
+                                        <input name="'.$name.'" id="'.$name.'"  type="'.$question['type'].'" '.$disable.' '.$required.'>
                                         <span class="checkmark"></span> '.$question['placeholder'].'
                                     </label>';
 
                             }else{
                                 
-                                echo '<input name="'.$name.'" id="'.$name.'"  type="'.$question['type'].'" '.$required.' placeholder="'.$question['placeholder'].'">';
+                                echo '<input name="'.$name.'" id="'.$name.'"  value="'.$value.'" type="'.$question['type'].'" '.$required.' '.$disable.' placeholder="'.$question['placeholder'].'">';
                             }
                     echo '</div>';
          
                 endforeach;
             endif;
+
         ?> 
 
-        <div class="tfhb-confirmation-box tfhb-flexbox">
-            <div class="tfhb-swicher-wrap tfhb-flexbox tfhb-gap-8">
-                <label class="switch">
-                    <input required name="tfhb_booking_checkbox" type="checkbox">
-                    <div class="slider"></div>
-                </label>
-                <label class="swicher-label">Booking Confirmation</label>
-            </div>
+        <?php if(!empty( $booking_data )): ?>
+            <div class="tfhb-forms">
+                <div  class="tfhb-single-form">
+                    <label for="attendee_name"> Reason for Reschedule </label>
+                    <br>
 
-            <!-- <div class="tfhb-checkbox-wrap tfhb-flexbox tfhb-gap-8">
-                <label for="attendee_can_cancel">
-                    <input id="attendee_can_cancel" name="attendee_can_cancel" type="checkbox">
-                    <span class="checkmark"></span> Attendee can cancel this meeting 
-                </label>
-            </div> -->
-        </div>
+                    <textarea name="reason" required id="reason"></textarea>
+                </div> 
+            </div>
+        <?php else: ?>
+            <div class="tfhb-confirmation-box tfhb-flexbox">
+                <div class="tfhb-swicher-wrap tfhb-flexbox tfhb-gap-8">
+                    <label class="switch">
+                        <input required name="tfhb_booking_checkbox" type="checkbox">
+                        <div class="slider"></div>
+                    </label>
+                    <label class="swicher-label">Booking Confirmation</label>
+                </div>
+ 
+            </div>
+        <?php endif ?>
+      
 
         <div class="tfhb-confirmation-button">
             <button class="tfhb-flexbox tfhb-gap-8">
