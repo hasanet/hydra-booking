@@ -122,7 +122,13 @@ defined( 'ABSPATH' ) || exit;
         <?php  
             
             if(true == $meeting->attendee_can_cancel){ 
-                echo '<a href="">Cancel booking</a>';
+                $cancel = add_query_arg( array(
+                    'hydra-booking' => 'booking',
+                    'hash' => $booking['hash'],
+                    'meeting-id' => $booking['meeting_id'],
+                    'type' => 'cancel'
+                ), home_url() );
+                echo '<a href="'.esc_attr($cancel).'">Cancel booking</a>';
             }
             if( true == $meeting->attendee_can_reschedule){
                 // Create Url using wordpress methood 

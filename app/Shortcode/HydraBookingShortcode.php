@@ -25,6 +25,10 @@ class HydraBookingShortcode {
         // Form Submit 
         add_action('wp_ajax_nopriv_tfhb_meeting_form_submit', array($this, 'tfhb_meeting_form_submit_callback'));
         add_action('wp_ajax_tfhb_meeting_form_submit', array($this, 'tfhb_meeting_form_submit_callback'));
+
+        // Booking Cancel
+        add_action('wp_ajax_nopriv_tfhb_meeting_form_cencel', array($this, 'tfhb_meeting_form_cencel_callback'));
+        add_action('wp_ajax_tfhb_meeting_form_cencel', array($this, 'tfhb_meeting_form_cencel_callback'));
     }
 
     public function hydra_booking_shortcode($atts) { 
@@ -242,6 +246,7 @@ class HydraBookingShortcode {
         if($_POST['meeting_id'] == 0){
             wp_send_json_error( array( 'message' => 'Invalid Meeting ID' ) );
         }
+
         $data = array();
         $response = array();
 
@@ -249,14 +254,15 @@ class HydraBookingShortcode {
 
         // Generate Meeting Hash Based on start time and end time and Date And Meeting id + random number  
         if(isset($_POST['booking_hash'])){
+
             $meeting_hash = sanitize_text_field($_POST['booking_hash']); 
 
         }else{
+
             $meeting_hash = md5(sanitize_text_field($_POST['meeting_dates']) . sanitize_text_field($_POST['meeting_time_start']) . sanitize_text_field($_POST['meeting_time_end']) . sanitize_text_field($_POST['meeting_id']) . rand(1000, 9999));
+
         }
-        
-      
-       
+         
   
         // sanitize the data 
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
@@ -296,12 +302,10 @@ class HydraBookingShortcode {
         }
         $data['cancelled_by'] = '';
         $data['status'] = 'pending';
+        $data['reason'] = '';
         $data['booking_type'] = 'single';
 
-        
-       
-      
-
+          
         // Load The Thankyou Template 
         $meeting = new Meeting(); 
         $MeetingData = $meeting->get( $data['meeting_id'] ); 
@@ -366,6 +370,7 @@ class HydraBookingShortcode {
                 'meeting_dates' => sanitize_text_field($_POST['meeting_dates']), 
                 'start_time' => sanitize_text_field($_POST['meeting_time_start']),
                 'end_time' => sanitize_text_field($_POST['meeting_time_end']),
+                'reason' =>  isset($_POST['reason']) ? sanitize_text_field($_POST['reason']) : '',
                 'status' =>  'rescheduled',
             );
             
@@ -615,6 +620,60 @@ class HydraBookingShortcode {
 
         wp_send_json_success(  $disabled_times );
         wp_die();
+    }
+
+
+    // Booking Cancel Callback
+    public function tfhb_meeting_form_cencel_callback() {
+        // Checked Nonce validation.
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Nonce verification failed' ) );
+        } 
+
+        // Check if the request is POST.
+        if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+            wp_send_json_error( array( 'message' => 'Invalid request method' ) );
+        }
+
+        // Check if the request is not empty.
+        if ( empty( $_POST ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid request' ) );
+        }  
+
+        $data = array();
+        $response = array();
+
+        $booking_hash = isset($_POST['booking_hash']) ? sanitize_text_field($_POST['booking_hash']) : '';
+        $reason = isset($_POST['reason']) ? sanitize_text_field($_POST['reason']) : '';
+
+
+        $booking = new Booking();
+        $get_booking = $booking->get(
+            array('hash' => $booking_hash),
+            false,
+            true 
+        );
+        
+        if(!$get_booking){
+            wp_send_json_error( array( 'message' => 'Invalid Booking ID' ) );
+        }
+
+        $booking_data = array(
+            'id' => $get_booking->id,
+            'reason' => $reason,
+            'status' => 'cancelled',
+            'cancelled_by' => 'attendee',
+        );
+
+        $booking->update($booking_data);
+
+        $response['message'] = 'Booking Cancelled Successfully';
+
+        wp_send_json_success(  $response );
+
+        wp_die();
+
+ 
     }
 }
 
