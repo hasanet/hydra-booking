@@ -385,7 +385,7 @@ class HydraBookingShortcode {
             $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
 
             // Single Booking & Mail Notification
-            $single_booking_meta = $booking->get($data['booking_id']);
+            $single_booking_meta = $booking->get($get_booking->id);
             do_action('hydra_booking/after_booking_schedule', $single_booking_meta);
 
 
@@ -407,6 +407,7 @@ class HydraBookingShortcode {
                 }
             }
 
+            $meeting_schedule_id = !empty($meeting_location_data['zoom']['address']['id']) ? $meeting_location_data['zoom']['address']['id'] : '';
             // Global Integration
             $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
             if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
@@ -428,7 +429,7 @@ class HydraBookingShortcode {
                     sanitize_text_field($app_client_id),  
                     sanitize_text_field($app_secret_key)
                 ); 
-                $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
+                $meeting_creation = $zoom->update_zoom_meeting($meeting_schedule_id, $single_booking_meta);
                 $meeting_location_data["zoom"]['address'] = $meeting_creation;
 
                 // Get Post Meta 
@@ -443,7 +444,6 @@ class HydraBookingShortcode {
             $response['message'] = 'Rescheduled Successfully';
             $response['confirmation_template'] = $confirmation_template;
             wp_send_json_success(  $response );
-
                 
         }
             

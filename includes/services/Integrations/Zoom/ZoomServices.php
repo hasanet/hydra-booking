@@ -169,10 +169,12 @@ Class ZoomServices {
     public function create_zoom_meeting($meeting_data) {
         $access_response = $this->generateAccessToken(); 
         
+        $time_in_24_hour_format  = date("H:i:s", strtotime($meeting_data->start_time));
+
         $data = array(
             'topic' => !empty($meeting_data->meeting_title) ? $meeting_data->meeting_title : '',
             'type' => 2, // Scheduled Meeting
-            'start_time' => $meeting_data->meeting_dates.'T'.$meeting_data->start_time.'Z',
+            'start_time' => $meeting_data->meeting_dates.'T'.$time_in_24_hour_format.'Z',
             'timezone' => !empty($meeting_data->attendee_time_zone) ? $meeting_data->attendee_time_zone : '',
             'duration' => intval($meeting_data->meeting_duration) + intval($meeting_data->buffer_time_before) + intval($meeting_data->buffer_time_after),
             'password' => '123456',
@@ -201,13 +203,15 @@ Class ZoomServices {
         return json_decode($response_body, true);
     }
 
-    public function update_zoom_meeting($meeting_data) {
+    public function update_zoom_meeting($meeting_schedule_id, $meeting_data) {
         $access_response = $this->generateAccessToken(); 
-        
+
+        $time_in_24_hour_format  = date("H:i:s", strtotime($meeting_data->start_time));
+
         $data = array(
             'topic' => !empty($meeting_data->meeting_title) ? $meeting_data->meeting_title : '',
             'type' => 2, // Scheduled Meeting
-            'start_time' => $meeting_data->meeting_dates.'T'.$meeting_data->start_time.'Z',
+            'start_time' => $meeting_data->meeting_dates.'T'.$time_in_24_hour_format.'Z',
             'timezone' => !empty($meeting_data->attendee_time_zone) ? $meeting_data->attendee_time_zone : '',
             'duration' => intval($meeting_data->meeting_duration) + intval($meeting_data->buffer_time_before) + intval($meeting_data->buffer_time_after),
             'password' => '123456',
@@ -218,7 +222,8 @@ Class ZoomServices {
             )
         );
     
-        $response = wp_remote_post('https://api.zoom.us/v2/users/me/meetings', array(
+        $response = wp_remote_request('https://api.zoom.us/v2/meetings/'.$meeting_schedule_id, array(
+            'method' => 'PATCH',
             'body' => json_encode($data),
             'headers' => array(
                 'Authorization' => 'Bearer ' . $access_response['access_token'],
