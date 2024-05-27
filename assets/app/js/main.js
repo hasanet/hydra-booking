@@ -269,7 +269,17 @@
 			let calender_data = calenderData;
 			let availability = calender_data.availability;
 			let date_slots = availability.date_slots;  
-			 console.log(calender_data)
+			let time_slots = availability.time_slots;   
+			let dayNameText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			let DisableDays = [];
+
+			// Get Disable Days
+			for (var i = 0; i < time_slots.length; i++) { 
+				if(time_slots[i].status == false){
+					DisableDays.push(time_slots[i].day);
+				}
+			} 
+			 
 
 			// Get the first day of the month
 			let dayone = new Date(year, month, 1).getDay();
@@ -286,6 +296,7 @@
 			// Variable to store the generated tfhb-calendar HTML
 			let lit = "";
 	
+			// If Time slots status is not true disbale that day 
 			// Loop to add the last dates of the previous month
 			for (let i = dayone; i > 0; i--) {
 				lit += `<li class="inactive">${monthlastdate - i + 1}</li>`;
@@ -309,8 +320,12 @@
 					dataAvailable = "unavailable";
 				}
 
-				// Check if the cur
-		
+				// if current date day is disable then disable that day.
+				if(DisableDays.includes(dayNameText[new Date(year, month, i).getDay()])){
+					availabilityClass = "inactive ";
+					dataAvailable = "unavailable";
+				}
+ 
 				lit += `<li data-date="${dateKey}" data-available="${dataAvailable}" class="${isToday} current ${availabilityClass}">${i}</li>`;
 		   }
 	
