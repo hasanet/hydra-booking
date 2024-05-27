@@ -56,7 +56,9 @@ class HydraBookingShortcode {
         if(!$MeetingData){
             return 'Invalid Meeting ID';
         }
-
+        // echo "<pre>";
+        // print_r($MeetingData);
+        // echo "</pre>";
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
 
@@ -172,13 +174,24 @@ class HydraBookingShortcode {
             return;
         }
         
-        if( isset($data['availability_type']) && 'custom' === $data['availability_type']){
-            $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+        if( isset($data['availability_type']) && 'settings' === $data['availability_type']){  
+            $_tfhb_availability_settings = get_user_meta($host_id, '_tfhb_host', true);
 
+            if(in_array($data['availability_id'], array_keys($_tfhb_availability_settings['availability']))){
+                $availability_data = $_tfhb_availability_settings['availability'][$data['availability_id']]; 
+            }else{
+                $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+            } 
+         
         }else{ 
-            $availability = new Availability();
-            $availability_data =  isset($data['availability_id']) &&  0 != $data['availability_id'] ? $availability->get($data['availability_id']) : array();
+
+            $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
         }
+        // echo "<pre>";
+        // print_r($data['availability_custom']);
+        // echo "</pre>";
+       
+ 
 
         // Availability Range
         $availability_range = isset($data['availability_range']) ? $data['availability_range'] : array();

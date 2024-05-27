@@ -269,7 +269,7 @@
 			let calender_data = calenderData;
 			let availability = calender_data.availability;
 			let date_slots = availability.date_slots;  
-			 
+			 console.log(calender_data)
 
 			// Get the first day of the month
 			let dayone = new Date(year, month, 1).getDay();
@@ -302,6 +302,14 @@
 				let dateSlot = date_slots.find(slot => slot.date.match(dateKey) );
 				let availabilityClass = typeof dateSlot !== 'undefined' && dateSlot.available   ? "inactive " : " ";
 				let dataAvailable = typeof dateSlot !== 'undefined' && dateSlot.available != 1   ? "available" : "";
+				
+				// Before today Days Disable 
+				if(new Date() > new Date(year, month, i) && i !== date.getDate() ){
+					availabilityClass = "inactive ";
+					dataAvailable = "unavailable";
+				}
+
+				// Check if the cur
 		
 				lit += `<li data-date="${dateKey}" data-available="${dataAvailable}" class="${isToday} current ${availabilityClass}">${i}</li>`;
 		   }
@@ -359,6 +367,7 @@
 						var endTime = date_slot.times[i].end;
 						var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format, time_zone);
 						// merge with timesData 
+						// Current time 
 						timesData = timesData.concat(generatedSlots);
 					} 
 				}
@@ -442,10 +451,16 @@
 			var meeting_interval = meeting_interval * 60000;
 			var total_diff = diff +before_diff + after_diff;
 			while (current < end) {
+				
+				
 				// new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 				var start_time = formatTime(current, time_format, time_zone);
 				var end_time = formatTime(new Date(current.getTime() + total_diff), time_format, time_zone);
-			   
+			   // if current time is passed then skip
+			   if(new Date() > current){
+					current = new Date(current.getTime() + total_diff + meeting_interval);
+					continue;
+			   }
 				timeSlots.push({
 
 					start: start_time, 

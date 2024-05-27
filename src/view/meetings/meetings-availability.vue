@@ -73,9 +73,13 @@ const fetchHostAvailability = async (host) => {
             console.log(response.data.host.availability);
             Settings_avalibility.value = response.data.host;
         }else{
-            response.data.host.availability && response.data.host.availability.forEach((available, key) => {
-                HostAvailabilities[key] = available.title;
-            });
+            // response.data.host.availability && response.data.host.availability.forEach((available, key) => {
+            //     HostAvailabilities[key] = available.title;
+            // });
+            // use Each Loop
+            for (const key in response.data.host.availability) {
+                HostAvailabilities[response.data.host.availability[key].available_id] = response.data.host.availability[key].title;
+            }
         }
     } catch (error) {
         console.log(error);
