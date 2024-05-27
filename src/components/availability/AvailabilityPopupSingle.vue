@@ -98,16 +98,30 @@ const removeOverridesTime = (key, tkey = null) => {
 }
 
 const openOverridesCalendarDate = () => {
-    props.availabilityDataSingle.date_slots.push({
-        date: '',
-        available: '',
-        times: [
-            {
-                start: '09:00',
-                end: '17:00',
-            }
-        ]
-    });
+    
+    if(props.availabilityDataSingle.date_slots){
+        props.availabilityDataSingle.date_slots.push({
+            date: '',
+            available: '',
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        });
+    }else{
+        props.availabilityDataSingle.date_slots = [{
+            date: '',
+            available: '',
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        }];
+    }
 
     const lastIndexOfQuestion = props.availabilityDataSingle.date_slots.length - 1;
     OverridesDates.key = lastIndexOfQuestion;
