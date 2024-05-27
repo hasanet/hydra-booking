@@ -15,8 +15,7 @@
 		// Cencel Booking If .tfhb-meeting-cencel-form form submit using ajax
 		
 		$(document).on('submit', '.tfhb-meeting-cencel-form', function (e) { 
-			e.preventDefault(); 
-			alert(1);  
+			e.preventDefault();  
 			$this = $(this);
 			var data  = new FormData(this); 
 
@@ -272,6 +271,7 @@
 			let time_slots = availability.time_slots;   
 			let dayNameText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			let DisableDays = [];
+ 
 
 			// Get Disable Days
 			for (var i = 0; i < time_slots.length; i++) { 
@@ -310,9 +310,9 @@
 
 				// Check if the current date has availability slots
 				let dateKey = year + "-" + (month + 1).toString().padStart(2, '0') + "-" + i.toString().padStart(2, '0'); 
-				let dateSlot = date_slots.find(slot => slot.date.match(dateKey) );
-				let availabilityClass = typeof dateSlot !== 'undefined' && dateSlot.available   ? "inactive " : " ";
-				let dataAvailable = typeof dateSlot !== 'undefined' && dateSlot.available != 1   ? "available" : "";
+				let dateSlot = typeof date_slots !== 'undefined'  ? date_slots.find(slot => slot.date.match(dateKey) ) : "";
+				let availabilityClass = typeof dateSlot !== 'undefined' && dateSlot !== '' && dateSlot.available == true   ? "inactive " : " ";
+				let dataAvailable = typeof dateSlot !== 'undefined' && dateSlot !== '' && dateSlot.available != true   ? "available" : "";
 				
 				// Before today Days Disable 
 				if(new Date() > new Date(year, month, i) && i !== date.getDate() ){
@@ -375,9 +375,22 @@
 			
 			if(data_available == 'available'){
 				// Generate time slots  form date_slots
+				
 				for (var i = 0; i < date_slots.length; i++) {
 					var date_slot = date_slots[i]; 
+					// if In array current day 
+					if(date_slot.status == false){
+						continue;
+					}
+
+					//  has current date in this string 2024-05-17, 2024-06-29, 2024-06-28, 2024-06-26
+					$dates = date_slot.date.split(',');
+					if(!$dates.includes(selected_date)){ 
+						continue;
+					} 
 					for (var i = 0; i < date_slot.times.length; i++) {
+						
+
 						var startTime = date_slot.times[i].start;
 						var endTime = date_slot.times[i].end;
 						var generatedSlots = generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format, time_zone);
@@ -413,8 +426,7 @@
 					if(response.success){  
 
 						var already_booked_times = response.data;
-
-						console.log(already_booked_times);
+ 
 						$this.find('.tfhb-available-times ul').html('');
 
 						for (var i = 0; i < timesData.length; i++) {

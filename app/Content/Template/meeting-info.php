@@ -101,12 +101,19 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
             ?>
         </ul>
 
-        <div class="tfhb-timezone "> 
+        <div class="tfhb-timezone ">  
             <select class="tfhb-time-zone-select" name="attendee_time_zone" id="">
                 <?php 
                     if(!empty($time_zone)) {
-                        $selected_timezone = $meeting['availability_custom']['time_zone'] ;
-                        $selected_timezone = isset($booking_data->attendee_time_zone) ? $booking_data->attendee_time_zone : $selected_timezone;
+                        $selected_timezone = $meeting['availability_custom']['time_zone'] ; 
+                        if('settings' === $meeting['availability_type']){
+                            $_tfhb_availability_settings = get_user_meta($meeting['host_id'], '_tfhb_host', true); 
+                            if(in_array($meeting['availability_id'], array_keys($_tfhb_availability_settings['availability']))){
+                                $selected_timezone = $_tfhb_availability_settings['availability'][$meeting['availability_id']]['time_zone']; 
+                            }
+                        }
+                        $selected_timezone = isset($booking_data->attendee_time_zone) ? $booking_data->attendee_time_zone : $selected_timezone; 
+                        
                         foreach($time_zone as $key => $zone) { 
                             $selected = ($zone['value'] == $selected_timezone) ? 'selected' : '';
                             echo '<option value="'.esc_attr($zone['value']).'" '.esc_attr($selected).'>'.esc_html($zone['name']).'</option>';

@@ -177,8 +177,7 @@ class HydraBookingShortcode {
         }
         
         if( isset($data['availability_type']) && 'settings' === $data['availability_type']){  
-            $_tfhb_availability_settings = get_user_meta($host_id, '_tfhb_host', true);
-
+            $_tfhb_availability_settings = get_user_meta($host_id, '_tfhb_host', true); 
             if(in_array($data['availability_id'], array_keys($_tfhb_availability_settings['availability']))){
                 $availability_data = $_tfhb_availability_settings['availability'][$data['availability_id']]; 
             }else{
@@ -189,9 +188,7 @@ class HydraBookingShortcode {
 
             $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
         }
-        // echo "<pre>";
-        // print_r($data['availability_custom']);
-        // echo "</pre>";
+         
        
  
 
