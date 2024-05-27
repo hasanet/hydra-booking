@@ -3,7 +3,6 @@ namespace HydraBooking\Admin\Controller;
  
  //  Use Namespace
  use HydraBooking\Admin\Controller\RouteController;
- use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  
  // Use DB 
 use HydraBooking\DB\Booking;
@@ -149,46 +148,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Single Booking 
         $single_booking_meta = $booking->get($request['id']);
-        $_tfhb_host_integration_settings = get_user_meta($single_booking_meta->host_id, '_tfhb_host_integration_settings', true);
 
-        // Meeting Location Check
-        $meeting_locations = json_decode($single_booking_meta->meeting_location);
-        $zoom_exists = false;
-        if (is_array($meeting_locations)) {
-            foreach ($meeting_locations as $location) {
-                if (isset($location->location) && $location->location === "zoom") {
-                    $zoom_exists = true;
-                    break;
-                }
-            }
-        }
-
-        // Global Integration
-        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
-        if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
-            $account_id = $_tfhb_integration_settings['zoom_meeting']['account_id'];
-            $app_client_id = $_tfhb_integration_settings['zoom_meeting']['app_client_id'];
-            $app_secret_key = $_tfhb_integration_settings['zoom_meeting']['app_secret_key'];
-        }
-
-        // Host Integration
-        if( !empty($_tfhb_host_integration_settings['zoom_meeting']) && !empty($_tfhb_host_integration_settings['zoom_meeting']['connection_status'])){
-            $account_id = $_tfhb_host_integration_settings['zoom_meeting']['account_id'];
-            $app_client_id = $_tfhb_host_integration_settings['zoom_meeting']['app_client_id'];
-            $app_secret_key = $_tfhb_host_integration_settings['zoom_meeting']['app_secret_key'];
-        }
-        
-        if( $zoom_exists && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
-
-            $zoom = new ZoomServices(
-                sanitize_text_field($account_id), 
-                sanitize_text_field($app_client_id),  
-                sanitize_text_field($app_secret_key)
-            ); 
-
-            $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
-        }
-        
         if("approved"==$request['status']){
             do_action('hydra_booking/after_booking_completed', $single_booking_meta);
         }
