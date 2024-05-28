@@ -6,9 +6,9 @@
     
     .tfhb-meeting-card{
         border-radius: 16px;
-        border: 0.5px solid #E3CFD7;
-        background: #FFF;
-        box-shadow: 0px 0px 8px 2px rgba(255, 221, 236, 0.30) inset, 0px 0px 0px 16px #FEF1F7;
+        border: 0.5px solid $ui150;
+        background: $ui0;
+        box-shadow: 0px 0px 8px 2px rgba(255, 221, 236, 0.30) inset, 0px 0px 0px 16px $primary150;
         display: flex;
         gap: 24px;
         width: fit-content;
@@ -28,7 +28,7 @@
                 position: absolute;
                 left: 0; 
                 content: '';
-                background-color: #000 !important;
+                background-color: $ui1000 !important;
                 height: 100%; 
                 width: 100%;
                 opacity: 0.1;
@@ -37,8 +37,8 @@
 
         .tfhb-meeting-info{
             width: 322px;
-            border-right: 0.5px solid #E3CFD7;
-            background: #FFF;
+            border-right: 0.5px solid $ui150;
+            background: $ui0;
             border-radius: 16px 0 0 16px;
             box-shadow: -8px 0px 30px 0px rgba(40, 16, 26, 0.20);
             .tfhb-host-info{
@@ -52,7 +52,7 @@
                     }
                     .tfhb-host-name{
                         h3{
-                            color: #FFF;
+                            color: $ui0;
                             font-size: 15px;
                             font-style: normal;
                             font-weight: 600;
@@ -60,7 +60,7 @@
                             margin: 0;
                         }
                         p{
-                            color: #FFF;
+                            color: $ui0;
                             font-size: 13px;
                             font-style: normal;
                             font-weight: 400;
@@ -74,7 +74,7 @@
             .tfhb-meeting-details{
                 padding: 8px 16px 16px 16px;
                 h2{
-                    color: #3F2731;
+                    color: $ui800;
                     font-size: 22px;
                     font-style: normal;
                     font-weight: 600;
@@ -82,14 +82,14 @@
                     margin: 0 0 8px 0;
                 }
                 p{
-                    color:#765664;
+                    color:$ui600;
                     font-size: 15px;
                     font-style: normal;
                     font-weight: 400;
                     line-height: 24px; /* 160% */ 
                     margin: 0 0 16px 0;
                     span{
-                        color: #3F2731;
+                        color: $ui800;
                         cursor: pointer;
                     }
                 }
@@ -99,7 +99,7 @@
                     list-style: none;
                     margin-bottom: 40px;
                     li{
-                        color: #765664;
+                        color: $ui600;
                         font-size: 15px;
                         font-style: normal;
                         font-weight: 600;
@@ -110,14 +110,14 @@
                         }
                         span{
                             border-radius: 6px;
-                            border: 1px solid #F6EEF2;     
+                            border: 1px solid $ui50;     
                             padding: 0 16px;
                             margin: 0 8px;  
                         }
                         .tfhb-icon{
                             border-radius: 6px;
                             border: 0.2px solid rgba(227, 207, 215, 0.2);
-                            background: #FFF;
+                            background: $ui0;
                             width: 24px;
                             height: 24px; 
                             display: flex;
@@ -129,14 +129,14 @@
                 .tfhb-timezone{
                     border-radius: 8px;
                     border: 0.5px solid rgba(227, 207, 215, 0.2);
-                    background: #FFF;
+                    background: $ui0;
                     box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
                     padding: 8px 12px;
                     justify-content: space-between; 
                     padding: 0 !important;
                     position: relative;
                     .tfhb-timezone-title{
-                        color: #3F2731;
+                        color: $ui800;
                         font-size: 15px;
                         font-style: normal;
                         font-weight: 600;
@@ -179,7 +179,7 @@
                     display: flex;
                     border-radius: 8px;
                     border: 0.5px solid rgba(227, 207, 215, 0.00);
-                    background: #FFF;
+                    background: $ui0;
                     box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
                     width: 92px;
                     justify-content: space-between;
@@ -199,7 +199,7 @@
                             content: "";
                             width: 8px;
                             height: 8px;
-                            background-color: #765664;
+                            background-color: $ui600;
                             border-radius: 50%;
                             left: -30px;
                         }
@@ -208,7 +208,7 @@
             }
 
             .tfhb-calendar-current-date {
-                color: #3F2731;
+                color: $ui800;
                 font-size: 22px;
                 font-style: normal;
                 font-weight: 600;
@@ -224,7 +224,7 @@
                 margin: 12px 0 16px 0;
                 padding: 0;
                 li{
-                    color: #3F2731;
+                    color: $ui800;
                     text-align: center;
                     font-size: 15px;
                     font-style: normal;
@@ -244,27 +244,27 @@
                 li {
                     border: 0.5px solid rgba(227, 207, 215, 0.00);
                     width: 64px;
-                    color: #3F2731;
+                    color: $ui800;
                     font-size: 15px;
                     font-style: normal;
                     font-weight: 400;
                     line-height: 24px; /* 160% */
                     padding: 16px 0;
                     &.inactive{
-                        color: #765664;
+                        color: $ui600;
                         cursor: not-allowed !important;
                         background-color: transparent !important;
                     }
                     &.current {
                         border-radius: 8px;
                         border: 0.5px solid rgba(227, 207, 215, 0.00);
-                        background: #F6EEF2;
+                        background: $ui50;
                         cursor: pointer;
                     }
                     &.current.active{
-                        background: #F62881 !important;
+                        background: $primaryi !important;
                         box-shadow: 0px 8px 30px 0px rgba(229, 0, 99, 0.3);
-                        color: #FFF !important;
+                        color: $ui0 !important;
                         position: relative;
                         &::before{
                             position: absolute;
@@ -272,7 +272,7 @@
                             height: 2px;
                             width: 16px;
                             border-radius: 16px;
-                            background: #FFF;
+                            background: $ui0;
                             bottom: 9px;
                             left: 50%;
                             margin-left: -8px;
@@ -294,7 +294,7 @@
                     list-style: none;
                     border-radius: 8px;
                     border: 0.5px solid rgba(227, 207, 215, 0.2);
-                    background: #FFF;
+                    background: $ui0;
                     box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
                     padding: 4px;
                     display: inline-flex;
@@ -302,7 +302,7 @@
                         label{
                             display: inline-block;
                             padding: 4px 8px;
-                            color: #8F707D;
+                            color: $ui500;
                             font-size: 11px;
                             font-style: normal;
                             font-weight: 600;
@@ -316,15 +316,15 @@
                         &.active{
                             label{
                                 border-radius: 4px;
-                                background: #F6EEF2;
-                                color: #3F2731;
+                                background: $ui50;
+                                color: $ui800;
                             }
                         }
                     }
                 }
             }
             h3{
-                color: #3F2731;
+                color: $ui800;
                 font-size: 17px;
                 font-style: normal;
                 font-weight: 600;
@@ -346,10 +346,10 @@
                         width: 100%;
                         span{
                             border-radius: 8px;
-                            border: 0.5px solid #F62881;
-                            background: #FFF;
+                            border: 0.5px solid $primaryi;
+                            background: $ui0;
                             padding: 16px 10px;
-                            color: #F62881;
+                            color: $primaryi;
                             text-align: center;
                             font-size: 15px;
                             font-style: normal;
@@ -361,8 +361,8 @@
                         }
                         span.next{
                             border-radius: 8px;
-                            background: #F62881;
-                            color: #FFF;
+                            background: $primaryi;
+                            color: $ui0;
                             align-items: center;
                             justify-content: center;
                         }
@@ -378,7 +378,7 @@
                 align-items: center;
                 cursor: pointer;
                 h3{
-                    color: #3F2731;
+                    color: $ui800;
                     font-size: 17px;
                     font-style: normal;
                     font-weight: 600;
@@ -393,7 +393,7 @@
                 .tfhb-single-form{
                     width: 100%;
                     label{
-                        color: #3F2731;
+                        color: $ui800;
                         font-size: 13px;
                         font-style: normal;
                         font-weight: 400;
@@ -404,8 +404,8 @@
                     input[type="email"],
                     textarea{
                         border-radius: 8px;
-                        border: 0.5px solid #E3CFD7;
-                        background: #FFF;
+                        border: 0.5px solid $ui150;
+                        background: $ui0;
                         height: 40px;
                         width: 100%;
                         padding: 8px 12px;
@@ -426,7 +426,7 @@
                         width: 100%;
                         align-items: center;
                         .swicher-label{
-                            color: #3F2731;
+                            color: $ui800;
                             font-size: 15px;
                             font-style: normal;
                             font-weight: 400;
@@ -442,9 +442,9 @@
                     width: 100%;
                     button{
                         border-radius: 8px;
-                        background: #F62881;
+                        background: $primaryi;
                         padding: 16px;
-                        color: #FFF;
+                        color: $ui0;
                         justify-content: center;
                         font-size: 15px;
                         font-style: normal;
@@ -470,7 +470,7 @@
                     margin-bottom: 24px;
                 }
                 h3{
-                    color: #3F2731;
+                    color: $ui800;
                     font-size: 22px;
                     font-style: normal;
                     font-weight: 600;
@@ -478,7 +478,7 @@
                     margin: 0 0 16px 0;
                 }
                 p{
-                    color: #765664;
+                    color: $ui600;
                     font-size: 15px;
                     font-style: normal;
                     font-weight: 400;
@@ -488,10 +488,10 @@
             }
             .tfhb-meeting-hostinfo{
                 border-radius: 8px;
-                background: #FAF5F7;
+                background: $ui25;
                 padding: 24px;
                 h3{
-                    color: #3F2731;
+                    color: $ui800;
                     font-size: 17px;
                     font-style: normal;
                     font-weight: 600;
@@ -502,7 +502,7 @@
                     padding: 0;
                     list-style: none;
                     li{
-                        color: #765664;
+                        color: $ui600;
                         font-size: 15px;
                         font-style: normal;
                         font-weight: 400;
@@ -515,9 +515,9 @@
                         }
                         span{
                             border-radius: 16px;
-                            background: #EBEFFF;
+                            background: $info50;
                             padding: 4px 8px;
-                            color: #0037EB;
+                            color: $info600;
                             font-size: 11px;
                             font-style: normal;
                             font-weight: 600;
@@ -526,7 +526,7 @@
                         .tfhb-icon{
                             border-radius: 6px;
                             border: 0.2px solid rgba(227, 207, 215, 0.2);
-                            background: #FFF;
+                            background: $ui0;
                             width: 24px;
                             height: 24px; 
                             display: flex;
@@ -540,7 +540,7 @@
             .tfhb-meeting-confirmation-calender{
                 margin: 32px 0 0 0;
                 h3{
-                    color:#3F2731;
+                    color:$ui800;
                     text-align: center;
                     font-size: 15px;
                     font-style: normal;
@@ -569,11 +569,11 @@
                 margin-top: 24px;
                 button, a{
                     border-radius: 8px;
-                    border: 1px solid #F6EEF2;
-                    background: #FFF;
+                    border: 1px solid $ui50;
+                    background: $ui0;
                     padding: 8px 24px;
                     width: 158px;
-                    color: #765664;
+                    color: $ui600;
                     font-size: 15px;
                     font-style: normal;
                     font-weight: 400;
