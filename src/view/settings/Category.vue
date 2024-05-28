@@ -149,7 +149,7 @@ const prevPage = () => {
                     <table class="table" cellpadding="0" :cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th width="180">Name</th>
                                 <th>Description</th>
                                 <th width="120">Action</th>
                             </tr>

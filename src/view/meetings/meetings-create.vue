@@ -12,6 +12,7 @@ const route = useRoute();
 const router = useRouter();
 const skeleton = ref(true);
 const timeZone = reactive({});
+const meetingCategory = reactive({});
 const wcProduct = reactive({});
 
 const meetingData = reactive({
@@ -309,6 +310,7 @@ const meetingId = route.params.id;
             timeZone.value = response.data.time_zone;  
 
             wcProduct.value = response.data.wc_product;  
+            meetingCategory.value = response.data.meeting_category;
 
             meetingData.id = response.data.meeting.id
             meetingData.user_id = response.data.meeting.user_id
@@ -499,6 +501,7 @@ const TfhbPrevNavigator = () => {
             :meeting="meetingData" 
             :timeZone="timeZone.value" 
             :wcProduct="wcProduct.value" 
+            :meetingCategory="meetingCategory.value" 
             @add-more-location="addMoreLocations" 
             @remove-meeting-location="removeLocations" 
             @update-meeting="UpdateMeetingData" 

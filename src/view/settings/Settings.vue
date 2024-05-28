@@ -42,7 +42,7 @@ const updateEvent = async () => {
                     </li>
                     <li><router-link to="/settings/appearance" :class="{ 'active': $route.path === '/settings/appearance' }"> <Icon name="SwatchBook" /> Appearance</router-link></li>
 
-                    <li><router-link to="/settings/category" :class="{ 'active': $route.path === '/settings/category' }"> <Icon name="SwatchBook" /> Meeting Category</router-link></li>
+                    <li><router-link to="/settings/category" :class="{ 'active': $route.path === '/settings/category' }"> <Icon name="ClipboardList" /> Meeting Category</router-link></li>
 
                 </ul>  
             </nav>  

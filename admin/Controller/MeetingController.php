@@ -392,12 +392,28 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // WooCommerce Product
         $woo_commerce = new  WooBooking();
         $wc_product =  $woo_commerce->getAllProductList();
+
+        // Meeting Category
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'name' => $term->name,
+                'value' => "".$term->term_id."",
+            );
+        }
+
         // Return response
         $data = array(
             'status' => true, 
             'meeting' => $MeetingData,  
             'time_zone' => $time_zone,  
             'wc_product' => $wc_product,  
+            'meeting_category' => $term_array,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
