@@ -120,25 +120,28 @@ class HydraBookingShortcode {
                 <div class="tfhb-meeting-card">
                         <?php  
 
-                            // Load Meeting Info Template  
-                            load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
-                                'meeting' => $meta_data,
-                                'host' => $host_meta, 
-                                'time_zone' => $time_zone, 
-                                'booking_data' => $booking_data, 
-                            ]); 
-
+                        // Load Meeting Info Template  
+                        load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
+                            'meeting' => $meta_data,
+                            'host' => $host_meta, 
+                            'time_zone' => $time_zone, 
+                            'booking_data' => $booking_data, 
+                        ]); ?>
+                        <div class="tfhb-calander-times tfhb-flexbox">
+                            <?php
                             // Load Meeting Calendar Template
                             load_template(THB_PATH . '/app/Content/Template/meeting-calendar.php', false, $meta_data);
 
                             // Load Meeting Time Template
                             load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, $meta_data);
-
-                            // Load Meeting Form Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
-                                'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
-                                'booking_data' => $booking_data,
-                            ]);
+                            ?>
+                        </div>
+                        <?php 
+                        // Load Meeting Form Template
+                        load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
+                            'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
+                            'booking_data' => $booking_data,
+                        ]);
                         ?>
                 </div>
 

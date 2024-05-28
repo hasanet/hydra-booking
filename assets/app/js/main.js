@@ -188,8 +188,7 @@
 
 				setTimeout(function(){
 					// Your code here 
-					$this.find('.tfhb-meeting-calendar').hide();
-					$this.find('.tfhb-meeting-times').hide();
+					$this.find('.tfhb-calander-times').hide();
 					$this.find('.tfhb-meeting-booking-form').show(); 
 
 					$this.find('.tfhb-preloader').remove();
@@ -203,8 +202,7 @@
 
 				setTimeout(function(){
 					
-					$this.find('.tfhb-meeting-calendar').show();
-					$this.find('.tfhb-meeting-times').show();
+					$this.find('.tfhb-calander-times').css('display', 'flex');
 					$this.find('.tfhb-meeting-booking-form').hide();
 
 					$this.find('.tfhb-preloader').remove();

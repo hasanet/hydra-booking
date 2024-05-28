@@ -13,7 +13,9 @@
         gap: 24px;
         width: fit-content;
         position: relative;
-
+        @media #{$max1170}{
+            flex-wrap: wrap;
+        }
 
         .tfhb-preloader {
             position: absolute;
@@ -37,6 +39,10 @@
 
         .tfhb-meeting-info{
             width: 322px;
+            @media #{$max1170}{
+               width: 100%;
+               border-radius: 16px 16px 0 0;
+            }
             border-right: 0.5px solid $ui150;
             background: $ui0;
             border-radius: 16px 0 0 16px;
@@ -44,6 +50,9 @@
             .tfhb-host-info{
                 padding: 38px 16px 16px 16px;
                 border-radius: 16px 0 0 0;
+                @media #{$max1170}{
+                    border-radius: 16px 16px 0 0;
+                 }
                 .tfhb-host-profile{
                     img{
                         width: 40px;
@@ -143,29 +152,54 @@
                         line-height: 24px; /* 160% */
                         width: calc(100% - 24px);
                     }
+                    .select2-container{
+                        width: 100% !important;
+                    }
                     .select2-selection {
                         padding-left: 2em !important;
+                        border-radius: 8px;
+                        height: 40px;
+                        padding-top: 8px;
+                        padding-bottom: 8px;
                     }
                     .tfhb-timezone-icon {
                         position: absolute;
                         left: 0; 
-                        top: 0;
+                        top: 5px;
                         height: 100%;
                         width: 35px;
                         text-align: center;
-                        padding: 0.6em 0;
                     }
- 
-                    
                 }
+            }
+        }
+
+        .tfhb-calander-times{
+            @media #{$max1170}{
+                width: 100%;
+                padding: 0px 16px;
+                justify-content: space-between;
+            }
+            @media #{$max767}{
+                flex-wrap: wrap;
             }
         }
 
         .tfhb-meeting-calendar{
             padding: 16px 16px 16px 0;
             width: 536px;
+            @media #{$max1170}{
+                padding: 0 16px 16px 0;
+            }
+            @media #{$max767}{
+                width: 100%;
+                padding: 0 0 16px 0;
+            }
             .tfhb-calendar-container {
                 width: 520px;
+                @media #{$max767}{
+                    width: 100%;
+                }
             }
 
             .tfhb-calendar-container header {
@@ -220,7 +254,7 @@
                 flex-wrap: wrap;
                 display: flex;
                 text-align: center;
-                gap: 12px;
+                gap: 0;
                 margin: 12px 0 16px 0;
                 padding: 0;
                 li{
@@ -230,7 +264,7 @@
                     font-style: normal;
                     font-weight: 600;
                     line-height: 24px; /* 160% */
-                    width: 64px;
+                    width: calc(100% / 7);
                 }
             }
             .tfhb-calendar-body ul.tfhb-calendar-dates {
@@ -238,12 +272,12 @@
                 flex-wrap: wrap;
                 display: flex;
                 text-align: center;
-                gap: 12px;
+                gap: 0;
                 padding: 0;
                 margin: 0;
                 li {
                     border: 0.5px solid rgba(227, 207, 215, 0.00);
-                    width: 64px;
+                    width: calc(100% / 7);
                     color: $ui800;
                     font-size: 15px;
                     font-style: normal;
@@ -254,18 +288,48 @@
                         color: $ui600;
                         cursor: not-allowed !important;
                         background-color: transparent !important;
+                        &::after{
+                            position: static !important;
+                            margin: 0 !important;
+                            border: 0px solid !important;
+                        }
                     }
                     &.current {
-                        border-radius: 8px;
-                        border: 0.5px solid rgba(227, 207, 215, 0.00);
-                        background: $ui50;
+                        position: relative;
+                        z-index: 0;
                         cursor: pointer;
+                        &::after{
+                            position: absolute;
+                            content: "";
+                            border-radius: 8px;
+                            border: 0.5px solid rgba(227, 207, 215, 0.00);
+                            background: $ui50;
+                            height: 90%;
+                            width: 90%;
+                            left: 50%;
+                            z-index: -1;
+                            margin-left: -45%;
+                            top: 5%;
+                        }
                     }
                     &.current.active{
-                        background: $primaryi !important;
-                        box-shadow: 0px 8px 30px 0px rgba(229, 0, 99, 0.3);
                         color: $ui0 !important;
                         position: relative;
+                        &::after{
+                            position: absolute;
+                            content: "";
+                            border-radius: 8px;
+                            border: 0.5px solid rgba(227, 207, 215, 0.00);
+                            box-shadow: 0px 8px 30px 0px rgba(229, 0, 99, 0.3);
+                            background: $primaryi !important;
+                            height: 90%;
+                            width: 90%;
+                            left: 50%;
+                            z-index: -1;
+                            margin-left: -45%;
+                            top: 5%;
+                        }
+
                         &::before{
                             position: absolute;
                             content: "";
@@ -286,6 +350,15 @@
             width: 224px;
             padding: 16px 16px 16px 0;
             display: none;
+            @media #{$max1170}{
+                padding: 0 0 16px 0;
+            }
+            @media #{$max991}{
+                width: calc(100% - 536px);
+            }
+            @media #{$max767}{
+                width: 100%;
+            }
             .tfhb-timezone-tabs{
                 text-align: right;
                 ul{
@@ -358,6 +431,9 @@
                             width: 100%;
                             text-align: center;
                             cursor: pointer;
+                            @media #{$max991}{
+                                padding: 16px 1px;
+                            }
                         }
                         span.next{
                             border-radius: 8px;
@@ -374,6 +450,10 @@
         .tfhb-meeting-booking-form{
             width: calc(100% - 346px);
             padding: 16px 16px 16px 0;
+            @media #{$max1170}{
+                padding: 0 16px 16px 16px;
+                width: 100%;
+            }
             .tfhb-back-btn{
                 align-items: center;
                 cursor: pointer;
