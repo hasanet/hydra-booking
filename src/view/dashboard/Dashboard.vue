@@ -6,12 +6,18 @@ import { useRouter, RouterView } from 'vue-router'
 import Header from '@/components/Header.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
+
+
+// Store 
+import { Dashboard } from '@/store/dashboard';
+
 const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false); 
 
 
 onMounted(() => {
+    Dashboard.fetcDashboard();
     chartData.value = setChartData();
     chartOptions.value = setChartOptions();
 });
@@ -102,7 +108,11 @@ const setChartOptions = () => {
         }
     };
 }
-
+const updateDashboardDay = (day) => {
+    alert(1)
+    Dashboard.data_request.days = day;
+    Dashboard.fetcDashboard();
+}
 
 </script>
 <template>
@@ -110,7 +120,7 @@ const setChartOptions = () => {
 <!-- {{ tfhbClass }} -->
 <div class="tfhb-admin-dashboard tfhb-admin-meetings ">
     <Header title="Dashboard" />
-     
+     {{Dashboard}}
     <div class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="thb-admin-title">
             <h1>Data</h1>
@@ -120,10 +130,10 @@ const setChartOptions = () => {
             <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading"> Today  <Icon name="ChevronUp" size="15" /> </span>
             <div class="tfhb-dropdown-wrap"> 
                 <!-- route link -->
-                <span class="tfhb-dropdown-single">Today</span>
-                <span class="tfhb-dropdown-single">This week</span> 
-                <span class="tfhb-dropdown-single">This month</span> 
-                <span class="tfhb-dropdown-single">Last 3 months</span> 
+                <span @click="updateDashboardDay(1)" class="tfhb-dropdown-single">Today</span>
+                <span  @click="updateDashboardDay(7)" class="tfhb-dropdown-single">This week</span> 
+                <span  @click="updateDashboardDay(30)" class="tfhb-dropdown-single">This month</span> 
+                <span  @click="updateDashboardDay(60)" class="tfhb-dropdown-single">Last 3 months</span> 
                 <div class="tfhb-dropdown-single">
                     <div class="tfhb-filter-dates tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-filter-start-date">
@@ -165,7 +175,7 @@ const setChartOptions = () => {
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Total Booking</span> 
-                            <span class="cartbox-value ">0</span>
+                            <span class="cartbox-value ">{{Dashboard.data.total_bookings}}</span>
                             
                         </div>
                         <div class="tfhb-chartbox-icon">

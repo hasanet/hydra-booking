@@ -71,10 +71,9 @@ const validateSelect = (fieldName) => {
     <div class="tfhb-admin-card-box">   
         <div class="tfhb-single-form-field-wrap tfhb-flexbox">
             <div class="tfhb-field-image" > 
-                <img  class='avatar_display'  :src="host.avatar">
+                <img v-if="host.avatar != ''"  class='avatar_display'  :src="host.avatar">
                 <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">Change</button> 
-                <input  type="text"  :v-model="host.avatar"   /> 
-
+                <input  type="text"  :v-model="host.avatar"   />  
             </div>
             <div class="tfhb-image-box-content">  
             <h4 v-if="label !=''" :for="name">{{ $tfhb_trans['Profile image'] }} <span  v-if="required == 'true'"> *</span> </h4>

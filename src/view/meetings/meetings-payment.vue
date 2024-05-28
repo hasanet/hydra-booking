@@ -50,8 +50,9 @@ const changeTab = (e) => {
         <div class="tfhb-notification-wrap tfhb-admin-card-box tfhb-m-0 tfhb-gap-32">
             <div class="tfhb-admin-title tfhb-m-0 tfhb-full-width">
 
-                Payment for this Meeting  
                 <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
+
+                    Payment for this Meeting  
                     <HbSwitch 
                         v-model="meeting.payment_status"
                     />

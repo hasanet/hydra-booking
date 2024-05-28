@@ -14,7 +14,8 @@ const props = defineProps([
     'option',
     'errors',
     'filter',
-    'optionType'
+    'optionType',
+    'country'
   ])
 
  
@@ -33,8 +34,37 @@ const handleChange = (e) => {
       <div class="tfhb-single-form-field-wrap tfhb-field-dropdown"> 
           <label v-if="label" :for="name">{{ label }} <span  v-if="required == 'true'"> *</span> </label>
           <h4 v-if="subtitle">{{ subtitle }}</h4>
-          <p v-if="description">{{ description }}</p> 
-            <div>
+          <p v-if="description">{{ description }}</p>  
+            <div v-if="country">
+                <Dropdown 
+                      v-model="props.modelValue"  
+                      @change="handleChange"   
+                      :filter="filter == true ? true : false"
+                      :options="option"  
+                      :overlay="false"
+                      :placeholder="placeholder" 
+                      :style="{ 'width': '100%' }"  
+                
+                >
+                  <template #value="slotProps">
+                      <div v-if="slotProps.value" class="flex align-items-center">
+                          <img :alt="slotProps.value.label" :src="`https://flagsapi.com/${slotProps.value.value}/flat/64.png`" style="width: 18px" />
+                          <div>{{ slotProps.value.name }}</div>
+                      </div>
+                      <span v-else>
+                          {{ slotProps.placeholder }}
+                      </span>
+                  </template>
+                  <template #option="slotProps">
+                      <div class="flex align-items-center">
+                          <img :alt="slotProps.option.label"  :src="`https://flagsapi.com/${slotProps.value.value}/flat/64.png`"  style="width: 18px" />
+                          <div>{{ slotProps.option.name }}</div>
+                      </div>
+                  </template>
+              </Dropdown>
+            </div>
+
+            <div v-else>
                 <Dropdown 
                     v-if="optionType == 'array'"
                     v-model="props.modelValue"  

@@ -447,7 +447,7 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
 
 
                 <!-- Create Or Update Availability -->
-                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? 'Save Availability' : $tfhb_trans['Update General Settings'] }}</button>
+                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? $tfhb_trans['Save Availability'] : $tfhb_trans['Update Availability'] }}</button>
             </div>
         </div>
    </div>

@@ -66,6 +66,8 @@ namespace HydraBooking\Admin\Controller;
             'Category Title' => __('Category Title', 'hydra-booking'),
             'Save Category' => __('Save Category', 'hydra-booking'),
             'Update Category' => __('Update Category', 'hydra-booking'),
+            'Update Availability' => __('Update Availability', 'hydra-booking'),
+            'Save Availability' => __('Save Availability', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),

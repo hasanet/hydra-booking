@@ -135,7 +135,7 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($where = null , $join = false, $FirstOrFaill = false) {
+    public function get($where = null , $join = false, $FirstOrFaill = false, $between = false) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
@@ -166,21 +166,28 @@ class Booking {
             
             // echo $sql;
         }elseif($where != null) {
-            $sql = "
-                SELECT $table_name.*, 
-                $host_table.email AS host_email,
-                $meeting_table.post_id,
-                $meeting_table.title AS meeting_title,
-                $meeting_table.meeting_locations AS meeting_location,
-                $meeting_table.duration AS meeting_duration,
-                $meeting_table.buffer_time_before,
-                $meeting_table.buffer_time_after
-                FROM $table_name
-                INNER JOIN $host_table ON $table_name.host_id = $host_table.id
-                INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
-                WHERE $table_name.id = %d
-            ";
-            $data = $wpdb->get_row($wpdb->prepare($sql, $where));
+            if($between == true){ 
+                $sql = "SELECT * FROM $table_name WHERE $where";
+                $data = $wpdb->get_results(
+                    $wpdb->prepare( $sql )
+                ); 
+            }else{
+                $sql = "
+                    SELECT $table_name.*, 
+                    $host_table.email AS host_email,
+                    $meeting_table.post_id,
+                    $meeting_table.title AS meeting_title,
+                    $meeting_table.meeting_locations AS meeting_location,
+                    $meeting_table.duration AS meeting_duration,
+                    $meeting_table.buffer_time_before,
+                    $meeting_table.buffer_time_after
+                    FROM $table_name
+                    INNER JOIN $host_table ON $table_name.host_id = $host_table.id
+                    INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
+                    WHERE $table_name.id = %d
+                ";
+                $data = $wpdb->get_row($wpdb->prepare($sql, $where));
+            }
         } else {
             if($join == true){
                 $sql = "SELECT 

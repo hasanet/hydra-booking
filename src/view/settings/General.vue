@@ -231,10 +231,10 @@ onBeforeMount(() => {
                 <!-- Select countr -->
                 <HbDropdown 
                     
-                    v-model="generalSettings.country"  
+                    v-model="generalSettings.country" 
                     required= "true"
                     width="50"
-                    :filter="true"
+                    :filter="true" 
                     :label="$tfhb_trans['Select country for phone code']"   
                     selected = "1"
                     placeholder="Select Country"  

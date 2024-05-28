@@ -7,6 +7,7 @@ use HydraBooking\Admin\Controller\HostsController;
 use HydraBooking\Admin\Controller\MeetingController;
 use HydraBooking\Admin\Controller\BookingController;
 use HydraBooking\Admin\Controller\AuthController; 
+use HydraBooking\Admin\Controller\DashboardController;
 use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 
 // Use DB 
@@ -26,6 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $this->create(new BookingController(), 'create_endpoint');
         $this->create(new AuthController(), 'create_endpoint');
         $this->create(new GoogleCalendar(), 'create_endpoint');
+        $this->create(new DashboardController(), 'create_endpoint');
     }
 
     public function create($class, $function){
