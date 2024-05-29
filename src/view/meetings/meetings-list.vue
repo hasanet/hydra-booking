@@ -321,7 +321,7 @@ const copyMeeting = (link) => {
                             <ul class="tfhb-flexbox tfhb-gap-8">
                                 <li :class="'link'==shareData.share_type ? 'active' : ''" @click="ShareTabs('link')">Share link</li>
                                 <li :class="'short'==shareData.share_type ? 'active' : ''" @click="ShareTabs('short')">Short code</li>
-                                <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li>
+                                <!-- <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li> -->
                             </ul>
                         </div>
 
