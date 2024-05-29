@@ -156,7 +156,7 @@ class Booking {
             if($FirstOrFaill == true){
                 // only get first item 
                 $data = $wpdb->get_row(
-                    $wpdb->prepare( $sql )
+                    $sql
                 );
             }else{
                 $data = $wpdb->get_results(

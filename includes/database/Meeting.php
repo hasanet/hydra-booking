@@ -160,10 +160,8 @@ class Meeting {
         $host_table = $wpdb->prefix . 'tfhb_hosts';
 
         if($id){
-            $sql = "SELECT * FROM $table_name WHERE id = $id";
-
             $data = $wpdb->get_row(
-                $wpdb->prepare( $sql )
+                $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %s", $id )
             );
         }elseif(!empty($filterData['title']) || !empty($filterData['fhosts']) || !empty($filterData['fcategory']) || (!empty($filterData['startDate']) && !empty($filterData['endDate'])) ){
             $sql = "SELECT * FROM $table_name WHERE";
