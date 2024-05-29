@@ -292,7 +292,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             return rest_ensure_response(array('status' => false, 'message' => 'Error while creating meeting'));
         }
         $meetings_id = $meetingInsert['insert_id'];
-    
+
+        // Meetings Id into Post Meta
+        update_post_meta( $meeting_post_id, '__tfhb_meeting_id', $meetings_id );
+
         // meetings Lists 
         $meetingsList = $meeting->get();
 
@@ -480,6 +483,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'updated_by'                => $current_user_id
         ];
 
+        // Meeting Update into 
+        $meeting_post_data = array(
+            'ID'           => $MeetingData->post_id,
+            'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+            'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+            'post_author'  => $current_user_id,
+            'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
+        );
+        wp_update_post( $meeting_post_data ); 
+
+        $data['slug'] = get_post_field( 'post_name', $MeetingData->post_id );
+
         $meetingUpdate = $meeting->update($data);
         if(!$meetingUpdate['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while updating Meeting'));
@@ -487,14 +502,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         //Updated Meeting post meta
         if( $MeetingData->post_id ){
-            $meeting_post_data = array(
-                'ID'           => $MeetingData->post_id,
-                'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
-                'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
-                'post_author'  => $current_user_id,
-                'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
-            );
-            wp_update_post( $meeting_post_data ); 
 
             //Updated post meta
             update_post_meta( $MeetingData->post_id, '__tfhb_meeting_opt', $data );
