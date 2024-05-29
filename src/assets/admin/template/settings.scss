@@ -99,6 +99,9 @@
 				} 
 				.tfhb-integrations-single-block-btn {
 					margin-top: 32px;
+					svg{
+						margin-top: 2px;
+					}
 				}
 			} 
 		}
@@ -231,6 +234,13 @@
 					}
 				}
 			}
+		}
+
+		.tfhb-booking-details-pagination .tfhb-prev-next-button{
+			background-color: #f6eef2;
+		}
+		.tfhb-booking-details-pagination .tfhb-pagination ul li.active{
+			background-color: #f6eef2;
 		}
 	}
  

@@ -47,7 +47,7 @@ const changeTab = (e) => {
 
 <template>
     <div class="meeting-create-details tfhb-gap-24">
-        <div class="tfhb-notification-wrap tfhb-admin-card-box tfhb-m-0 tfhb-gap-32">
+        <div class="tfhb-notification-wrap tfhb-admin-card-box tfhb-m-0 tfhb-gap-32 tfhb-full-width">
             <div class="tfhb-admin-title tfhb-m-0 tfhb-full-width">
 
                 <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
