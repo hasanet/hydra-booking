@@ -135,7 +135,7 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($where = null , $join = false, $FirstOrFaill = false, $between = false) {
+    public function get($where = null , $join = false, $FirstOrFaill = false, $custom = false, $orderBy = null, $limit = null) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
@@ -165,8 +165,8 @@ class Booking {
             }
             
             // echo $sql;
-        }elseif($where != null) {
-            if($between == true){ 
+        }elseif($where != null && $join != true) {
+            if($custom == true){ 
                 $sql = "SELECT * FROM $table_name WHERE $where";
                 $data = $wpdb->get_results(
                     $wpdb->prepare( $sql )
@@ -195,16 +195,19 @@ class Booking {
                 $table_name.meeting_id,
                 $table_name.attendee_name,
                 $table_name.email AS attendee_email,
+                $table_name.attendee_time_zone AS attendee_time_zone,
                 $table_name.address,
                 $table_name.meeting_dates,
                 $table_name.start_time,
                 $table_name.end_time,
                 $table_name.status AS booking_status,
+                $table_name.payment_status AS payment_status,
                 $table_name.created_at AS booking_created_at,
                 $meeting_table.host_id,
                 $meeting_table.title,
                 $meeting_table.duration,
                 $meeting_table.meeting_locations,
+                $meeting_table.meeting_type,
                 $host_table.first_name AS host_first_name,
                 $host_table.last_name AS host_last_name,
                 $host_table.email AS host_email,
@@ -216,7 +219,15 @@ class Booking {
                 ON $meeting_table.host_id=$host_table.id";
             }else{
                 $sql = "SELECT * FROM $table_name";
+
             }
+            // custom where 
+            $sql .= $custom != null ? " WHERE $where" : "";
+            // Add Order by if exist
+            $sql .= $orderBy != null ? " ORDER BY $orderBy" : " ORDER BY id DESC";
+
+            // Add Limit if exist
+            $sql .= $limit != null ? " LIMIT $limit" : "";
     
 
     

@@ -93,7 +93,13 @@
               }
 
               &.badge-down {
-                color: #FF0000;
+                span{
+
+                  color: $warning600 !important;
+                }
+                svg{
+                  color: $warning600 !important;
+                }
               }
             }
           }
@@ -142,6 +148,11 @@
     .tfhb-dashboard-notice-box {
       .tfhb-dashboard-notice-box-inner {
         width: calc(50% - 12px);
+
+        .tfhb-dashboard-notice-box-content { 
+          max-height: 355px;
+          overflow: auto;
+        }
 
       }
     }

@@ -108,8 +108,13 @@ const setChartOptions = () => {
         }
     };
 }
-const updateDashboardDay = (day) => {
-    alert(1)
+const updateDashboardDay = (day) => { 
+    Dashboard.skeleton_chartbox = true;
+
+    // selected attribute data-name
+    const dropdown = document.getElementById('tfhb-datachart-filter');
+    dropdown.querySelector('span').innerText = event.target.getAttribute('data-name');
+    
     Dashboard.data_request.days = day;
     Dashboard.fetcDashboard();
 }
@@ -121,19 +126,19 @@ const updateDashboardDay = (day) => {
 <div class="tfhb-admin-dashboard tfhb-admin-meetings ">
     <Header title="Dashboard" />
      {{Dashboard}}
-    <div class="tfhb-dashboard-heading tfhb-flexbox">
+    <div  :class="{ 'tfhb-skeleton': Dashboard.skeleton }"  class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="thb-admin-title">
             <h1>Data</h1>
             <p>One-liner description</p> 
         </div>  
         <div class="tfhb-dropdown tfhb-mega-dropdown">
-            <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading"> Today  <Icon name="ChevronUp" size="15" /> </span>
+            <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading" id="tfhb-datachart-filter"> <span>Today</span>  <Icon name="ChevronDown" size="15" /> </span>
             <div class="tfhb-dropdown-wrap"> 
                 <!-- route link -->
-                <span @click="updateDashboardDay(1)" class="tfhb-dropdown-single">Today</span>
-                <span  @click="updateDashboardDay(7)" class="tfhb-dropdown-single">This week</span> 
-                <span  @click="updateDashboardDay(30)" class="tfhb-dropdown-single">This month</span> 
-                <span  @click="updateDashboardDay(60)" class="tfhb-dropdown-single">Last 3 months</span> 
+                <span @click="updateDashboardDay(1)" data-name="Today" class="tfhb-dropdown-single">Today</span>
+                <span  @click="updateDashboardDay(7)" data-name="This week" class="tfhb-dropdown-single">This week</span> 
+                <span  @click="updateDashboardDay(30)" data-name="This month" class="tfhb-dropdown-single">This month</span> 
+                <span  @click="updateDashboardDay(60)" data-name="Last 3 months" class="tfhb-dropdown-single">Last 3 months</span> 
                 <div class="tfhb-dropdown-single">
                     <div class="tfhb-filter-dates tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-filter-start-date">
@@ -162,9 +167,9 @@ const updateDashboardDay = (day) => {
             </div>
         </div>
     </div>
-    <div class="tfhb-dashboard-wrap">
+    <div  :class="{ 'tfhb-skeleton': Dashboard.skeleton }"  class="tfhb-dashboard-wrap">
       
-        <div class="tfhb-dashboard-chartbox tfhb-flexbox tfhb-gap-24">
+        <div :class="{ 'tfhb-skeleton': Dashboard.skeleton_chartbox }"  class="tfhb-dashboard-chartbox tfhb-flexbox tfhb-gap-24">
 
             <!-- Single Chartbox -->
             <div class="tfhb-single-chartbox">
@@ -175,7 +180,7 @@ const updateDashboardDay = (day) => {
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Total Booking</span> 
-                            <span class="cartbox-value ">{{Dashboard.data.total_bookings}}</span>
+                            <span class="cartbox-value ">{{Dashboard.data.total_bookings.total}}</span>
                             
                         </div>
                         <div class="tfhb-chartbox-icon">
@@ -276,12 +281,18 @@ const updateDashboardDay = (day) => {
                     </div>
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
-                        <span class="cartbox-badge badge-up tfhb-flexbox tfhb-gap-8">
-                            <Icon name="ArrowUp" :size="15"/>
-                            <span> 80%</span>
+                        <span class="cartbox-badge tfhb-flexbox tfhb-gap-8"
+                            :class = "{
+                                'badge-down': Dashboard.data.total_bookings.growth == 'decrease',
+                                'badge-up': Dashboard.data.total_bookings.growth == 'increase',
+                            }"
+                        >
+                            <Icon v-if="Dashboard.data.total_bookings.growth == 'increase'" name="ArrowUp" :size="15"/>
+                            <Icon v-else name="ArrowDown" :size="15"/>
+                            <span> {{Dashboard.data.total_bookings.percentage}}%</span>
                         </span>
                         <span> VS </span>
-                        <span class="cartbox-date">Last 30 days</span>
+                        <span class="cartbox-date">Last {{Dashboard.data_request.days}} days</span>
                     </div>
                 </div>
             </div>
@@ -416,7 +427,7 @@ const updateDashboardDay = (day) => {
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Completed Bookings</span> 
-                            <span class="cartbox-value ">0</span>
+                            <span class="cartbox-value ">{{Dashboard.data.total_completed_bookings.total}}</span>
                             
                         </div>
                         <div class="tfhb-chartbox-icon">
@@ -517,12 +528,18 @@ const updateDashboardDay = (day) => {
                     </div>
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
-                        <span class="cartbox-badge badge-up tfhb-flexbox tfhb-gap-8">
-                            <Icon name="ArrowUp" :size="15"/>
-                            <span> 80%</span>
+                        <span class="cartbox-badge tfhb-flexbox tfhb-gap-8"
+                            :class = "{
+                                'badge-down': Dashboard.data.total_completed_bookings.growth == 'decrease',
+                                'badge-up': Dashboard.data.total_completed_bookings.growth == 'increase',
+                            }"
+                        >
+                            <Icon v-if="Dashboard.data.total_completed_bookings.growth == 'increase'" name="ArrowUp" :size="15"/>
+                            <Icon v-else name="ArrowDown" :size="15"/>
+                            <span> {{Dashboard.data.total_completed_bookings.percentage}}%</span>
                         </span>
                         <span> VS </span>
-                        <span class="cartbox-date">Last 30 days</span>
+                        <span class="cartbox-date">Last {{Dashboard.data_request.days}} days</span>
                     </div>
                 </div>
             </div>
@@ -536,7 +553,7 @@ const updateDashboardDay = (day) => {
                     <div class="tfhb-single-cartbox-inner tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-single-chartbox-content">
                             <span class="cartbox-title">Canceled Bookings</span> 
-                            <span class="cartbox-value ">0</span>
+                            <span class="cartbox-value ">{{Dashboard.data.total_cancelled_bookings.total}}</span>
                             
                         </div>
                         <div class="tfhb-chartbox-icon">
@@ -637,12 +654,18 @@ const updateDashboardDay = (day) => {
                     </div>
                     
                     <div class="cartbox-meta tfhb-flexbox tfhb-gap-8">
-                        <span class="cartbox-badge badge-up tfhb-flexbox tfhb-gap-8">
-                            <Icon name="ArrowUp" :size="15"/>
-                            <span> 80%</span>
+                        <span class="cartbox-badge tfhb-flexbox tfhb-gap-8"
+                            :class = "{
+                                'badge-down': Dashboard.data.total_cancelled_bookings.growth == 'decrease',
+                                'badge-up': Dashboard.data.total_cancelled_bookings.growth == 'increase',
+                            }"
+                        >
+                            <Icon v-if="Dashboard.data.total_cancelled_bookings.growth == 'increase'" name="ArrowUp" :size="15"/>
+                            <Icon v-else name="ArrowDown" :size="15"/>
+                            <span> {{Dashboard.data.total_cancelled_bookings.percentage}}%</span>
                         </span>
                         <span> VS </span>
-                        <span class="cartbox-date">Last 30 days</span>
+                        <span class="cartbox-date">Last {{Dashboard.data_request.days}} days</span>
                     </div>
                 </div>
             </div>
@@ -653,118 +676,70 @@ const updateDashboardDay = (day) => {
 
         
         <!-- Notice Box -->
-        <div class="tfhb-flexbox tfhb-dashboard-notice-box tfhb-gap-24">
+        <div :class="{ 'tfhb-skeleton': Dashboard.skeleton_chartbox }"  class="tfhb-flexbox tfhb-dashboard-notice-box tfhb-gap-24">
 
             <div class="tfhb-dashboard-notice-box-inner">
                 <div class="tfhb-dashboard-notice-box-wrap tfhb-flexbox tfhb-gap-16">
-                    <h3 class="tfhb-dashboard-notice-box-title tfhb-m-0 tfhb-full-width">Upcoming Meetings</h3>
 
+                    <h3 class="tfhb-dashboard-notice-box-title tfhb-m-0 tfhb-full-width">Recent Bookings</h3>
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
-                        <span >  4:00 PM</span>
-                        <div class="tfhb-admin-card-box">
-                            <p>Jack Sparrow sent request to join  </p>
-                            <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
-                                <span class="tfhb-flexbox tfhb-gap-8"><Icon name="CalendarDays" :size="15"/> 25 Sep, 24</span> 
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> UserRound</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> Jack Sparrow</span>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Single Notice Box --> 
-                    <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
-                        <span >  4:00 PM</span>
-                        <div class="tfhb-admin-card-box">
-                            <p>Jack Sparrow sent request to join  </p>
-                            <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
-                                <span class="tfhb-flexbox tfhb-gap-8"><Icon name="CalendarDays" :size="15"/> 25 Sep, 24</span> 
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> UserRound</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> Jack Sparrow</span>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Single Notice Box --> 
-                    <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
-                        <span >  4:00 PM</span>
-                        <div class="tfhb-admin-card-box">
-                            <p>Jack Sparrow sent request to join  </p>
-                            <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
-                                <span class="tfhb-flexbox tfhb-gap-8"><Icon name="CalendarDays" :size="15"/> 25 Sep, 24</span> 
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> UserRound</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> Jack Sparrow</span>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Single Notice Box --> 
+                    <div class="tfhb-dashboard-notice-box-content  tfhb-flexbox tfhb-gap-16" >
+                        <div
+                            v-for="(data, index) in Dashboard.data.recent_booking"
+                                :key="index" 
+                            class="tfhb-dashboard-notice-single-box tfhb-full-width" >
+                            <div class="tfhb-admin-card-box">
+                                
+                                <p>{{data.title}}    </p>
+                                <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
+                                    <span class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/>{{ data.start_time}} </span>
+                                    <span  class="tfhb-flexbox tfhb-gap-8">
+                                        <Icon name="UserRound" :size="15"/> 
+                                        <Icon name="ArrowRight" :size="15"/> 
+                                        <Icon name="UserRound" :size="15"/> 
+                                        <Icon v-if="data.meeting_type != 'one-to-one'" name="UserRound" :size="15"/> 
+                                    </span>
 
+                                    <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Banknote" :size="15"/> {{data.payment_status}} </span>
+                                    <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> {{data.host_first_name}} {{ data.host_last_name}} </span>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <!-- Single Notice Box -->
+                    
+                </div>
+            </div>
 
+            <div class="tfhb-dashboard-notice-box-inner">
+                <div class="tfhb-dashboard-notice-box-wrap ">
+                    <h3 class="tfhb-dashboard-notice-box-title tfhb-mb-24 tfhb-full-width">Upcoming Meetings</h3>
+
+                    <div class="tfhb-dashboard-notice-box-content tfhb-flexbox tfhb-gap-16" >
+                        <!-- Single Notice Box -->
+                        <div 
+                            v-for="(data, index) in Dashboard.data.upcoming_booking"
+                            :key="index" 
+                            class="tfhb-dashboard-notice-single-box tfhb-flexbox tfhb-gap-8 tfhb-full-width" >
+                            <span > {{ data.start_time}} </span>
+                            <div class="tfhb-admin-card-box">
+                                <p>{{data.attendee_name}} ({{data.attendee_email}})  </p>
+                                <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
+                                    <span class="tfhb-flexbox tfhb-gap-8"><Icon name="CalendarDays" :size="15"/> 
+                                        <!-- convert 2024-05-29 to 25 Sep, 24 --> 
+                                        {{data.meeting_dates}}
+                                    </span> 
+                                    <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> {{ data.attendee_time_zone}}</span>
+                                    <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> {{data.host_first_name}} {{ data.host_last_name}}</span>
+                                </div>
+                            </div> 
+                        </div> 
+                    </div> 
 
                 </div>
             </div>
 
 
-            <div class="tfhb-dashboard-notice-box-inner">
-                <div class="tfhb-dashboard-notice-box-wrap tfhb-flexbox tfhb-gap-16">
-
-                    <h3 class="tfhb-dashboard-notice-box-title tfhb-m-0 tfhb-full-width">Upcoming Meetings</h3>
-                    <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-full-width" >
-                        <div class="tfhb-admin-card-box">
-                            <p>Jack Sparrow sent request to join Discussion about design system</p>
-                            <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
-                                <span class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> 4:00 PM</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8">
-                                    <Icon name="UserRound" :size="15"/> 
-                                    <Icon name="ArrowRight" :size="15"/> 
-                                    <Icon name="UserRound" :size="15"/> 
-                                    <Icon name="UserRound" :size="15"/> 
-                                </span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> $200</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Banknote" :size="15"/> Annette Black</span>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Single Notice Box -->
-                    <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-full-width" >
-                        <div class="tfhb-admin-card-box">
-                            <p>Jack Sparrow sent request to join Discussion about design system</p>
-                            <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
-                                <span class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> 4:00 PM</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8">
-                                    <Icon name="UserRound" :size="15"/> 
-                                    <Icon name="ArrowRight" :size="15"/> 
-                                    <Icon name="UserRound" :size="15"/> 
-                                    <Icon name="UserRound" :size="15"/> 
-                                </span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> $200</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Banknote" :size="15"/> Annette Black</span>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Single Notice Box -->
-                    <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-single-box tfhb-full-width" >
-                        <div class="tfhb-admin-card-box">
-                            <p>Jack Sparrow sent request to join Discussion about design system</p>
-                            <div class="tfhb-dashboard-notice-meta tfhb-flexbox tfhb-gap-8"> 
-                                <span class="tfhb-flexbox tfhb-gap-8"><Icon name="Clock" :size="15"/> 4:00 PM</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8">
-                                    <Icon name="UserRound" :size="15"/> 
-                                    <Icon name="ArrowRight" :size="15"/> 
-                                    <Icon name="UserRound" :size="15"/> 
-                                    <Icon name="UserRound" :size="15"/> 
-                                </span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="UserRound" :size="15"/> $200</span>
-                                <span  class="tfhb-flexbox tfhb-gap-8"><Icon name="Banknote" :size="15"/> Annette Black</span>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Single Notice Box -->
-                </div>
-            </div>
 
         </div>
 

@@ -4,6 +4,7 @@ import { toast } from "vue3-toastify";
 
 const Dashboard = reactive({
     skeleton: true,
+    skeleton_chartbox: false,
     data: { 
         total_bookings: {
             total: 0,
@@ -25,7 +26,8 @@ const Dashboard = reactive({
             percentage: 100,
             growth: 'increase',
         },
-        upcoming_bookings: [], 
+        upcoming_booking: {}, 
+        recent_booking: {}, 
         statistics: []
 
     }, 
@@ -48,7 +50,10 @@ const Dashboard = reactive({
                 this.data.total_bookings =  response.data.total_bookings != null ? response.data.total_bookings : 0;
                 this.data.total_completed_bookings =  response.data.total_completed_bookings != null ? response.data.total_completed_bookings : 0;
                 this.data.total_cancelled_bookings =  response.data.total_cancelled_bookings != null ? response.data.total_cancelled_bookings : 0;
+                this.data.upcoming_booking =  response.data.upcoming_booking != null ? response.data.upcoming_booking : {};
+                this.data.recent_booking =  response.data.recent_booking != null ? response.data.recent_booking : {};
                 this.skeleton = false;
+                this.skeleton_chartbox = false;
                  
             }
         } catch (error) {
