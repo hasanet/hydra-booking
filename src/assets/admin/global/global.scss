@@ -296,6 +296,10 @@
             visibility: visible;
             opacity: 1;
         }
+        &.tfhb-no-hover:hover .tfhb-dropdown-wrap {
+            visibility: hidden ;
+            opacity: 0;
+        }
     }
     .tfhb-swicher-wrap{
         .switch {

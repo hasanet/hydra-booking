@@ -27,6 +27,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));  
          
+        register_rest_route('hydra-booking/v1', '/dashboard/statistics', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getDashboardsStatisticsData'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));  
+         
         
     }
     
@@ -35,18 +41,24 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function getDashboardsData(){ 
 
         $request = json_decode(file_get_contents('php://input'), true);
-        $days = $request['days']; // exp 1  
+        $days = $request['days']; // exp 1
+        $from_date = $request['from_date']; // exp 2021-09-01  
+        $to_date = $request['to_date']; // exp 2021-09-01
+
+        // calculate Days based on form day and to day
+        $days = $from_date != null && $to_date != null ? (strtotime($to_date) - strtotime($from_date)) / (60 * 60 * 24) : $days; // exp 1
+
+
         // how to get current date start time 12:00:00 and end time 23:59:59 
-        $current_date = date('Y-m-d 23:59:59');
+        $current_date = $to_date != null ? date('Y-m-d 23:59:59', strtotime($to_date)) :  date('Y-m-d 23:59:59'); // exp 2021-09-01
+
 
  
         // $current_date  = date('Y-m-d H:i:s'); // exp 2021-09-01
         $previous_date = $days != 1 ? date('Y-m-d 00:00:00', strtotime('-'.$days.' days')) : date('Y-m-d 00:00:00'); // exp 2021-09-01 
-        $previous_date_before = $days != 1 ? date('Y-m-d 00:00:00', strtotime('-'.($days*2).' days')) : date('Y-m-d 00:00:00', strtotime('-1 days')); // exp 2021-09-01
-
-
+        $previous_date = $from_date != null ? date('Y-m-d 00:00:00', strtotime($from_date)) : $previous_date; // exp 2021-09-01
+        $previous_date_before = $days != 1 ? date('Y-m-d 00:00:00', strtotime('-'.($days*2).' days')) : date('Y-m-d 00:00:00', strtotime('-1 days')); // exp 2021-09-01 
  
-
         
         // Get booking
         $booking = new Booking();
@@ -118,7 +130,107 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'total_completed_bookings' => $completed,
             'upcoming_booking' => $upcoming_booking,   
             'recent_booking' => $recent_booking,   
+            'days' => $days,   
         );
+
+        return rest_ensure_response($data);
+
+    }
+    // get dashboard data
+    public function getDashboardsStatisticsData(){ 
+
+        $request = json_decode(file_get_contents('php://input'), true); 
+        $days = $request['statistics_days']; // exp 2021-09-01
+        $current_date = date('Y-m-d 23:59:59'); // exp 2021-09-01
+        $previous_date = date('Y-m-d 00:00:00',  strtotime('-'.$days.' days')); // exp 2021-09-01
+
+        $booking = new Booking();
+        $statistics['total_bookings'] = array();
+        $statistics['cancelled_bookings'] = array();
+        $statistics['completed_bookings'] = array();
+
+        $statistics = array();
+        if( $days == 7){ 
+            // store label as date 
+            for ($i=0; $i < 7; $i++) { 
+                $statistics['label'][] = date('Y-m-d', strtotime('-'.$i.' days'));
+            }
+             $statistics['label'] = array_reverse($statistics['label']);
+
+            
+        } 
+        if( $days == 30){ // This Month every Days
+            // store label as date  
+            // Count First how many days in this month
+            $days_in_month = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
+            $currentMonth = date('m');
+            $currentYear = date('Y');   
+            // Get Current month 
+             
+            for ($day = 1; $day <= $days_in_month; $day++) {
+                $statistics['label'][] = date('Y-m-d', strtotime("$currentYear-$currentMonth-$day"));
+            }
+            
+
+
+            
+        }
+        if( $days == 3){  // last 3 Months
+            // store label as Month Name  
+            for ($i=0; $i <= 2; $i++) { 
+                $statistics['label'][] = date('F', strtotime('-'.$i.' months'));
+            }
+             $statistics['label'] = array_reverse($statistics['label']);
+            
+             
+            
+        }
+        if( $days == 12){  // This year as month 
+            // store label as Month Name 
+            $statistics['label'] = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'); 
+        } else{
+            // $statistics['label'] = array_reverse($statistics['label']);
+        }
+
+
+        
+        foreach ($statistics['label'] as $key => $value) {
+            // $date = $value;
+            // $next_date = $key != 0 ? $statistics['label'][$key - 1] : $current_date;
+            if($days == 12 || $days == 3){
+                $date = date('Y-m-d', strtotime('first day of '.$value));
+                $next_date = date('Y-m-d', strtotime('last day of '.$value));
+            }
+            if($days == 30 || $days == 7){ // value is a date exp 2021-09-01 
+                $date = $value;
+                $next_date = $value;
+            }
+           
+            $bookings = $booking->get(
+                "created_at BETWEEN '$date 00:00:00' AND '$next_date 23:59:59'", 
+                false, 
+                false,
+                true
+            );
+            $statistics['total_bookings'][] = count($bookings);
+            $statistics['cancelled_bookings'][] = count(array_filter($bookings, function($booking){
+                return $booking->status == 'cancelled';
+            }));
+            $statistics['completed_bookings'][] = count(array_filter($bookings, function($booking){
+                return $booking->status == 'completed';
+            }));
+        }
+
+
+
+ 
+
+        $data = array (
+            'status' => true, 
+            'statistics' => $statistics,  
+            'data' => $days_in_month,  
+        );
+
         return rest_ensure_response($data);
 
     }

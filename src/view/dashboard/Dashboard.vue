@@ -10,104 +10,15 @@ import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 
 // Store 
 import { Dashboard } from '@/store/dashboard';
-
-const FilterPreview = ref(false);
-const FilterHostPreview = ref(false);
-const FilterCatgoryPreview = ref(false); 
-
+ 
+const datachart_box_dropdown = ref(false);
+const datachart_dropdown = ref(false);
 
 onMounted(() => {
-    Dashboard.fetcDashboard();
-    chartData.value = setChartData();
-    chartOptions.value = setChartOptions();
-});
+    Dashboard.fetcDashboard(); 
+    Dashboard.fetcDashboardStatistics();
+}); 
 
-const chartData = ref();
-const chartOptions = ref();
-        
-const setChartData = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-
-    return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-            {
-                label: 'Booked',
-                data: [65, 59, 80, 81, 56, 55, 40, 200],
-                fill: true,
-                tension: 0.4,
-                borderColor: '#F62881', 
-                pointBackgroundColor: '#F62881', 
-                backgroundColor: '#D9568F15'
-            },
-            {
-                label: 'Canceled',
-                data: [28, 48, 40, 19, 86, 27, 90, 100],
-                fill: true,
-                // borderDash: [5, 5],
-                tension: 0.4,
-                borderColor: '#C40859',
-                pointBackgroundColor: '#C40859', 
-                backgroundColor: '#C4085915'
-            },
-            {
-                label: 'Completed',
-                data: [12, 51, 62, 33, 21, 62, 45, 100],
-                fill: true,
-                borderColor: '#5E082D',
-                pointBackgroundColor: '#5E082D', 
-                tension: 0.4,
-                backgroundColor: '#5E082D15'
-            }
-        ]
-    };
-};
-const setChartOptions = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-    return {
-        maintainAspectRatio: true,
-        aspectRatio: 3,
-        plugins: {
-            legend: {
-                display: true,
-                labels: {
-                    color: textColor,
-                    usePointStyle: true, 
-                    padding: 20,
-                    height: 5,
-                    width: 5
-                }
-                
-                
-            }
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: textColorSecondary,
-                 
-                    
-                },
-                grid: {
-                    color: surfaceBorder
-                }
-            },
-            y: {
-                ticks: {
-                   
-                    color: textColorSecondary
-                },
-                grid: { 
-                    color: '#F6EEF2'
-                }
-            }
-        }
-    };
-}
 const updateDashboardDay = (day) => { 
     Dashboard.skeleton_chartbox = true;
 
@@ -117,33 +28,57 @@ const updateDashboardDay = (day) => {
     
     Dashboard.data_request.days = day;
     Dashboard.fetcDashboard();
+    datachart_box_dropdown.value = false;
 }
+
+const updateDashboardDateRange = () => { 
+    Dashboard.skeleton_chartbox = true;
+    Dashboard.fetcDashboard();
+    datachart_box_dropdown.value = false;
+}
+
+const  ChangeStatisticData = (day) => { 
+    Dashboard.data_request.statistics_days = day;  
+    Dashboard.skeleton_chart = true;
+    datachart_dropdown.value = false;
+    // selected attribute data-name
+    const dropdown = document.getElementById('tfhb-chart-filter');
+    dropdown.querySelector('span').innerText = event.target.getAttribute('data-name');
+    
+    Dashboard.fetcDashboardStatistics();
+    
+ 
+}
+
 
 </script>
 <template>
 
 <!-- {{ tfhbClass }} -->
 <div class="tfhb-admin-dashboard tfhb-admin-meetings ">
-    <Header title="Dashboard" />
-     {{Dashboard}}
+    <Header title="Dashboard" /> 
     <div  :class="{ 'tfhb-skeleton': Dashboard.skeleton }"  class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="thb-admin-title">
             <h1>Data</h1>
             <p>One-liner description</p> 
         </div>  
-        <div class="tfhb-dropdown tfhb-mega-dropdown">
-            <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading" id="tfhb-datachart-filter"> <span>Today</span>  <Icon name="ChevronDown" size="15" /> </span>
-            <div class="tfhb-dropdown-wrap"> 
+        <div class="tfhb-dropdown tfhb-mega-dropdown tfhb-no-hover">
+            <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading " @click="datachart_box_dropdown = !datachart_box_dropdown"  id="tfhb-datachart-filter"> <span>Today</span>  <Icon name="ChevronDown" size="15" /> </span>
+            <div 
+                :class="{ 'active': datachart_box_dropdown }"
+                class="tfhb-dropdown-wrap"
+            > 
                 <!-- route link -->
                 <span @click="updateDashboardDay(1)" data-name="Today" class="tfhb-dropdown-single">Today</span>
-                <span  @click="updateDashboardDay(7)" data-name="This week" class="tfhb-dropdown-single">This week</span> 
-                <span  @click="updateDashboardDay(30)" data-name="This month" class="tfhb-dropdown-single">This month</span> 
+                <span  @click="updateDashboardDay(7)" data-name="Last 7 week" class="tfhb-dropdown-single">Last 7 week</span> 
+                <span  @click="updateDashboardDay(30)" data-name="Last 30 Days" class="tfhb-dropdown-single">Last 30 Days</span> 
                 <span  @click="updateDashboardDay(60)" data-name="Last 3 months" class="tfhb-dropdown-single">Last 3 months</span> 
                 <div class="tfhb-dropdown-single">
                     <div class="tfhb-filter-dates tfhb-flexbox tfhb-gap-8">
                         <div class="tfhb-filter-start-date">
                             <span>From</span>
                             <HbDateTime 
+                                v-model="Dashboard.data_request.from_date"
                                 selected = "1" 
                                 enableTime='true'
                                 placeholder="From"  
@@ -156,6 +91,7 @@ const updateDashboardDay = (day) => {
                         <div class="tfhb-filter-end-date">
                             <span>To</span>
                             <HbDateTime 
+                                v-model="Dashboard.data_request.to_date"
                                 selected = "1" 
                                 enableTime='true'
                                 placeholder="To"   
@@ -163,6 +99,8 @@ const updateDashboardDay = (day) => {
                             />  
                         </div>
                     </div>
+
+                    <button class="tfhb-btn tfhb-btn-primary boxed-btn tfhb-mt-16 tfhb-full-width" @click="updateDashboardDateRange">Apply</button>
                 </div> 
             </div>
         </div>
@@ -687,7 +625,8 @@ const updateDashboardDay = (day) => {
                         <div
                             v-for="(data, index) in Dashboard.data.recent_booking"
                                 :key="index" 
-                            class="tfhb-dashboard-notice-single-box tfhb-full-width" >
+                            class="tfhb-dashboard-notice-single-box tfhb-full-width" 
+                        >
                             <div class="tfhb-admin-card-box">
                                 
                                 <p>{{data.title}}    </p>
@@ -744,28 +683,31 @@ const updateDashboardDay = (day) => {
         </div>
 
         <!-- Cart statistic -->
-        <div class="tfhb-chart-statistic-wrap tfhb-dashboard-notice-box"> 
+        <div   class="tfhb-chart-statistic-wrap tfhb-dashboard-notice-box"> 
             <div class="tfhb-dashboard-notice-box-wrap" >
                 <div  class="tfhb-dashboard-heading tfhb-flexbox">
                     <div class="tfhb-admin-title"> 
                         <h3 >{{ $tfhb_trans['Statistics'] }}</h3>  
                     </div>
                     <div class="thb-admin-btn right"> 
-                        <div class="tfhb-dropdown  ">
-                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"> {{ $tfhb_trans['This Week'] }}  <Icon name="ChevronDown" size="15" /> </a>
-                            <div class="tfhb-dropdown-wrap"> 
-                                <!-- route link -->
-                                <span class="tfhb-dropdown-single">Today</span>
-                                <span class="tfhb-dropdown-single">This week</span> 
-                                <span class="tfhb-dropdown-single">This month</span> 
-                                <span class="tfhb-dropdown-single">Last 3 months</span> 
+                        <div class="tfhb-dropdown  tfhb-no-hover">
+                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"  @click="datachart_dropdown = !datachart_dropdown" id="tfhb-chart-filter" > <span> {{ $tfhb_trans['This Week'] }}</span>  <Icon name="ChevronDown" size="15" /> </a>
+                            <div  
+                                :class="{ 'active': datachart_dropdown }"
+                                class="tfhb-dropdown-wrap"
+                            > 
+                                <!-- route link --> 
+                                <span class="tfhb-dropdown-single" data-name="Last 7 Days" @click="ChangeStatisticData(7)">Last 7 Days</span> 
+                                <span class="tfhb-dropdown-single" data-name="This month" @click="ChangeStatisticData(30)">This month</span> 
+                                <span class="tfhb-dropdown-single" data-name="Last 3 months" @click="ChangeStatisticData(3)">Last 3 months</span> 
+                                <span class="tfhb-dropdown-single" data-name="This Year" @click="ChangeStatisticData(12)">This Year</span> 
                                 
                             </div>
                         </div> 
                     </div> 
                 </div>
                 
-                <Chart type="line" :data="chartData" :options="chartOptions" />
+                <Chart :class="{ 'tfhb-skeleton': Dashboard.skeleton_chart }" type="line" :data="Dashboard.chartData" :options="Dashboard.chartOptions" />
     
             </div>
         </div>
