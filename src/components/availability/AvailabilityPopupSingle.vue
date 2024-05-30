@@ -7,6 +7,7 @@ import HbText from '../form-fields/HbText.vue';
 import HbDateTime from '../form-fields/HbDateTime.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
+import AvailabilityTime from '@/store/times'
 import { toast } from "vue3-toastify"; 
  
 
@@ -18,8 +19,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:availabilityData", "modal-close", "update-availability"]); 
 
- 
- 
+
 // Update Availability Settings
 const UpdateAvailabilitySettings = async () => {   
     try { 
@@ -278,41 +278,30 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                         </div>
                         <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap "> 
                             <div v-for="(time, tkey) in time_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
-                                <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                                    <HbDateTime  
-                                        v-model="time.start"    
-                                        selected = "1" 
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i',
-                                            defaultDate: time.start
-                                        }"
-                                        width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock4"
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+                                    <HbDropdown 
+                                        v-model="time.start"  
+                                        required= "true" 
+                                        width="50"
+                                        :selected = "1"
+                                        placeholder="Start"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                         @tfhb_start_change="TfhbStartDataEvent"
                                         :parent_key = "key"
                                         :single_key = "tkey"
-                                    /> 
+                                    />                
                                     <Icon name="MoveRight" size="20" /> 
-                                    <HbDateTime  
-                                        v-model="time.end"   
-                                        :label="$tfhb_trans['End']"  
-                                        selected = "1"
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i',
-                                            defaultDate: time.end
-                                        }"
-                                        width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock4"
+                                    <HbDropdown 
+                                        v-model="time.end"  
+                                        required= "true" 
+                                        width="50"
+                                        :selected = "1"
+                                        placeholder="End"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                         @tfhb_start_change="TfhbEndDataEvent"
                                         :parent_key = "key"
                                         :single_key = "tkey"
-                                    /> 
+                                    />     
 
                                 </div>
                                 <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">

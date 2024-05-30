@@ -8,6 +8,8 @@ import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
+import AvailabilityTime from '@/store/times'
+import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
 
@@ -210,6 +212,45 @@ function formatTime(time) {
     return `${formattedHour}:${minute} ${period}`;
 }
 
+const getLatestEndTime = (day) => {
+    let latestEndTime = day.times[0].end;
+    for (let i = 1; i < day.times.length; i++) {
+        const endTime = day.times[i].end;
+        if (endTime > latestEndTime) {
+            latestEndTime = endTime;
+        }
+    }
+    return latestEndTime;
+}
+
+const TfhbStartDataEvent = (key, skey, startTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const latestEndTime = getLatestEndTime(day);
+
+    if (startTime <= latestEndTime) {
+        toast.error("Your start time will be over the: " + latestEndTime);
+        return latestEndTime;
+    }
+}
+
+const TfhbEndDataEvent = (key, skey, endTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const nextDate = skey+1;
+    const NextdayData = day.times[nextDate] ? day.times[nextDate].start : '';
+
+    if(NextdayData){
+        if ( day.times[skey].start >= endTime || NextdayData <= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start +" And Less than " + NextdayData);
+            return;
+        }
+    }else{
+        if (day.times[skey].start >= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start);
+            return;
+        }
+    }
+    
+}
 
 </script>
 
@@ -418,8 +459,8 @@ function formatTime(time) {
                 </div>
                 <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
                     <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                        <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                            <HbDateTime   
+                        <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+                            <!-- <HbDateTime   
                                 v-model="time.start" 
                                 selected = "1" 
                                 :config="{
@@ -444,7 +485,31 @@ function formatTime(time) {
                                 width="45"
                                 placeholder="Type your schedule title"   
                                 icon="Clock4"
-                            /> 
+                            />  -->
+
+                            <HbDropdown 
+                                v-model="time.start"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="Start"   
+                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                @tfhb_start_change="TfhbStartDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />                
+                            <Icon name="MoveRight" size="20" /> 
+                            <HbDropdown 
+                                v-model="time.end"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="End"   
+                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                @tfhb_start_change="TfhbEndDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />  
 
                         </div>
                         <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">

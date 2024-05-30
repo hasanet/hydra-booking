@@ -7,7 +7,7 @@ import HbImageSelect from '@/components/form-fields/HbImageSelect.vue'
 import ColorPicker from 'primevue/colorpicker';
 import axios from 'axios' 
 import { toast } from "vue3-toastify";
-
+import LvColorpicker from 'lightvue/color-picker';
 const router = useRouter();
 
 const appearanceSettings = reactive({
@@ -111,7 +111,7 @@ onBeforeMount(() => {
                             Primary Color
                         </label>
                         <div class="color-select">
-                            <ColorPicker v-model="appearanceSettings.primary_color" />
+                            <LvColorpicker :value="appearanceSettings.primary_color" v-model="appearanceSettings.primary_color" :withoutInput="true"/>
                             <span>Select Color</span>
                         </div>
                     </div>
@@ -120,7 +120,7 @@ onBeforeMount(() => {
                             Secondary Color
                         </label>
                         <div class="color-select">
-                            <ColorPicker v-model="appearanceSettings.secondary_color" />
+                            <LvColorpicker :value="appearanceSettings.secondary_color" v-model="appearanceSettings.secondary_color" :withoutInput="true"/>
                             <span>Select Color</span>
                         </div>
                     </div>
