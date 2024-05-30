@@ -15,15 +15,18 @@ const props = defineProps([
     'errors',
     'filter',
     'optionType',
-    'country'
+    'country',
+    'parent_key',
+    'single_key'
   ])
 
  
-const emit = defineEmits(['update:modelValue', 'tfhb-onchange', 'add-change', 'add-click'])
+const emit = defineEmits(['update:modelValue', 'tfhb-onchange', 'add-change', 'add-click', 'tfhb_start_change'])
 const handleChange = (e) => {  
     emit('update:modelValue', e.value)
     emit('tfhb-onchange', e)
     emit('add-change', e)
+    emit('tfhb_start_change', props.parent_key, props.single_key, e.value)
 }
 </script>
 

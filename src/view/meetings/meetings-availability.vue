@@ -8,6 +8,7 @@ import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
+import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
 
@@ -210,6 +211,144 @@ function formatTime(time) {
     return `${formattedHour}:${minute} ${period}`;
 }
 
+const timeSchedule = [
+    { name: '00:00', value: '00:00' },
+    { name: '00:15', value: '00:15' },
+    { name: '00:30', value: '00:30' },
+    { name: '00:45', value: '00:45' },
+    { name: '01:00', value: '01:00' },
+    { name: '01:15', value: '01:15' },
+    { name: '01:30', value: '01:30' },
+    { name: '01:45', value: '01:45' },
+    { name: '02:00', value: '02:00' },
+    { name: '02:15', value: '02:15' },
+    { name: '02:30', value: '02:30' },
+    { name: '02:45', value: '02:45' },
+    { name: '03:00', value: '03:00' },
+    { name: '03:15', value: '03:15' },
+    { name: '03:30', value: '03:30' },
+    { name: '03:45', value: '03:45' },
+    { name: '04:00', value: '04:00' },
+    { name: '04:15', value: '04:15' },
+    { name: '04:30', value: '04:30' },
+    { name: '04:45', value: '04:45' },
+    { name: '05:00', value: '05:00' },
+    { name: '05:15', value: '05:15' },
+    { name: '05:30', value: '05:30' },
+    { name: '05:45', value: '05:45' },
+    { name: '06:00', value: '06:00' },
+    { name: '06:15', value: '06:15' },
+    { name: '06:30', value: '06:30' },
+    { name: '06:45', value: '06:45' },
+    { name: '07:00', value: '07:00' },
+    { name: '07:15', value: '07:15' },
+    { name: '07:30', value: '07:30' },
+    { name: '07:45', value: '07:45' },
+    { name: '08:00', value: '08:00' },
+    { name: '08:15', value: '08:15' },
+    { name: '08:30', value: '08:30' },
+    { name: '08:45', value: '08:45' },
+    { name: '09:00', value: '09:00' },
+    { name: '09:15', value: '09:15' },
+    { name: '09:30', value: '09:30' },
+    { name: '09:45', value: '09:45' },
+    { name: '10:00', value: '10:00' },
+    { name: '10:15', value: '10:15' },
+    { name: '10:30', value: '10:30' },
+    { name: '10:45', value: '10:45' },
+    { name: '11:00', value: '11:00' },
+    { name: '11:15', value: '11:15' },
+    { name: '11:30', value: '11:30' },
+    { name: '11:45', value: '11:45' },
+    { name: '12:00', value: '12:00' },
+    { name: '12:15', value: '12:15' },
+    { name: '12:30', value: '12:30' },
+    { name: '12:45', value: '12:45' },
+    { name: '13:00', value: '13:00' },
+    { name: '13:15', value: '13:15' },
+    { name: '13:30', value: '13:30' },
+    { name: '13:45', value: '13:45' },
+    { name: '14:00', value: '14:00' },
+    { name: '14:15', value: '14:15' },
+    { name: '14:30', value: '14:30' },
+    { name: '14:45', value: '14:45' },
+    { name: '15:00', value: '15:00' },
+    { name: '15:15', value: '15:15' },
+    { name: '15:30', value: '15:30' },
+    { name: '15:45', value: '15:45' },
+    { name: '16:00', value: '16:00' },
+    { name: '16:15', value: '16:15' },
+    { name: '16:30', value: '16:30' },
+    { name: '16:45', value: '16:45' },
+    { name: '17:00', value: '17:00' },
+    { name: '17:15', value: '17:15' },
+    { name: '17:30', value: '17:30' },
+    { name: '17:45', value: '17:45' },
+    { name: '18:00', value: '18:00' },
+    { name: '18:15', value: '18:15' },
+    { name: '18:30', value: '18:30' },
+    { name: '18:45', value: '18:45' },
+    { name: '19:00', value: '19:00' },
+    { name: '19:15', value: '19:15' },
+    { name: '19:30', value: '19:30' },
+    { name: '19:45', value: '19:45' },
+    { name: '20:00', value: '20:00' },
+    { name: '20:15', value: '20:15' },
+    { name: '20:30', value: '20:30' },
+    { name: '20:45', value: '20:45' },
+    { name: '21:00', value: '21:00' },
+    { name: '21:15', value: '21:15' },
+    { name: '21:30', value: '21:30' },
+    { name: '21:45', value: '21:45' },
+    { name: '22:00', value: '22:00' },
+    { name: '22:15', value: '22:15' },
+    { name: '22:30', value: '22:30' },
+    { name: '22:45', value: '22:45' },
+    { name: '23:00', value: '23:00' },
+    { name: '23:15', value: '23:15' },
+    { name: '23:30', value: '23:30' },
+    { name: '23:45', value: '23:45' }
+];
+
+const getLatestEndTime = (day) => {
+    let latestEndTime = day.times[0].end;
+    for (let i = 1; i < day.times.length; i++) {
+        const endTime = day.times[i].end;
+        if (endTime > latestEndTime) {
+            latestEndTime = endTime;
+        }
+    }
+    return latestEndTime;
+}
+
+const TfhbStartDataEvent = (key, skey, startTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const latestEndTime = getLatestEndTime(day);
+
+    if (startTime <= latestEndTime) {
+        toast.error("Your start time will be over the: " + latestEndTime);
+        return latestEndTime;
+    }
+}
+
+const TfhbEndDataEvent = (key, skey, endTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const nextDate = skey+1;
+    const NextdayData = day.times[nextDate] ? day.times[nextDate].start : '';
+
+    if(NextdayData){
+        if ( day.times[skey].start >= endTime || NextdayData <= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start +" And Less than " + NextdayData);
+            return;
+        }
+    }else{
+        if (day.times[skey].start >= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start);
+            return;
+        }
+    }
+    
+}
 
 </script>
 
@@ -418,8 +557,8 @@ function formatTime(time) {
                 </div>
                 <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
                     <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                        <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                            <HbDateTime   
+                        <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+                            <!-- <HbDateTime   
                                 v-model="time.start" 
                                 selected = "1" 
                                 :config="{
@@ -444,7 +583,31 @@ function formatTime(time) {
                                 width="45"
                                 placeholder="Type your schedule title"   
                                 icon="Clock4"
-                            /> 
+                            />  -->
+
+                            <HbDropdown 
+                                v-model="time.start"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="Start"   
+                                :option = "timeSchedule"
+                                @tfhb_start_change="TfhbStartDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />                
+                            <Icon name="MoveRight" size="20" /> 
+                            <HbDropdown 
+                                v-model="time.end"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="End"   
+                                :option = "timeSchedule"
+                                @tfhb_start_change="TfhbEndDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />  
 
                         </div>
                         <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">

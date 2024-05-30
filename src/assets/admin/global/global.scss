@@ -101,9 +101,13 @@
         padding: 0px !important;
     }
     
-    //no-wrap
+    //flow-root
     .tfhb-no-flexbox{
         display: flow-root !important;
+    }
+    //no-wrap
+    .tfhb-no-wrap{
+        flex-wrap: nowrap !important;
     }
 
     // Height auto
