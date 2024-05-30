@@ -12,6 +12,8 @@ const route = useRoute();
 const router = useRouter();
 const skeleton = ref(true);
 const timeZone = reactive({});
+const meetingCategory = reactive({});
+const wcProduct = reactive({});
 
 const meetingData = reactive({
     id: 0,
@@ -230,12 +232,9 @@ const meetingData = reactive({
     payment_status: 1,
     meeting_price: '',
     payment_currency: '',
+    payment_method: '',
     payment_meta: {
-        woo_payment : {
-            type: 'payment', 
-            status: 0, 
-            connection_status: 0,  
-        }
+        product_id: '',
     }
 });
 
@@ -310,6 +309,9 @@ const meetingId = route.params.id;
             // Time Zone = 
             timeZone.value = response.data.time_zone;  
 
+            wcProduct.value = response.data.wc_product;  
+            meetingCategory.value = response.data.meeting_category;
+
             meetingData.id = response.data.meeting.id
             meetingData.user_id = response.data.meeting.user_id
             meetingData.host_id = response.data.meeting.host_id
@@ -320,6 +322,8 @@ const meetingId = route.params.id;
             meetingData.duration = response.data.meeting.duration
             meetingData.custom_duration = response.data.meeting.custom_duration
             meetingData.meeting_category = response.data.meeting.meeting_category
+            meetingData.payment_method = response.data.meeting.payment_method
+
             if(response.data.meeting.meeting_locations){
                 meetingData.meeting_locations = JSON.parse(response.data.meeting.meeting_locations)
             }
@@ -496,6 +500,8 @@ const TfhbPrevNavigator = () => {
             :meetingId ="meetingId" 
             :meeting="meetingData" 
             :timeZone="timeZone.value" 
+            :wcProduct="wcProduct.value" 
+            :meetingCategory="meetingCategory.value" 
             @add-more-location="addMoreLocations" 
             @remove-meeting-location="removeLocations" 
             @update-meeting="UpdateMeetingData" 

@@ -19,7 +19,7 @@ const props = defineProps([
     'subtitle',
     'placeholder',
     'description', 
-    'icon', 
+    'icon'
 ])
 const emit = defineEmits(['update:modelValue'])
 

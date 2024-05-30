@@ -103,6 +103,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
 
+        // Appearance Settings.
+        register_rest_route('hydra-booking/v1', '/settings/appearance-settings', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'GetAppearanceSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+        register_rest_route('hydra-booking/v1', '/settings/appearance-settings/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'UpdateAppearanceSettings'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
+
      }
     // permission_callback
     public function GetGeneralSettings() {
@@ -217,11 +229,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $availability['date_slots'][$key]['date'] = sanitize_text_field($value['date']);
             $availability['date_slots'][$key]['available'] =  sanitize_text_field($value['available']);
 
-             foreach ($value['times'] as $key2 => $value2) {
+            foreach ($value['times'] as $key2 => $value2) {
                 $availability['date_slots'][$key]['times'][$key2]['start'] = sanitize_text_field($value2['start']);
                 $availability['date_slots'][$key]['times'][$key2]['end'] = sanitize_text_field($value2['end']);
-             }
- 
+            }
+
         }
 
         if($availability['id'] == 0){
@@ -532,6 +544,36 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true,  
             'message' => 'Hosts Settings Updated Successfully',
             'data' => $_tfhb_hosts_settings
+        );
+        return rest_ensure_response($data);
+    }
+
+
+    /**
+     * Get Appearance Settings
+     */
+    public function GetAppearanceSettings(){
+        $_tfhb_appearance_settings = get_option('_tfhb_appearance_settings');
+        $data = array(
+            'status' => true, 
+            'message' => 'Appearance Settings', 
+            'appearance_settings' => $_tfhb_appearance_settings,
+        );
+        return rest_ensure_response($data);
+    }
+
+    /**
+     * Update Appearance Settings.
+     */
+    public function UpdateAppearanceSettings(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        // update option
+        update_option('_tfhb_appearance_settings', $request);
+
+        $data = array(
+            'status' => true,  
+            'message' => 'Appearance Settings Updated Successfully',
+            'data' => $request
         );
         return rest_ensure_response($data);
     }

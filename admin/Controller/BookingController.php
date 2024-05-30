@@ -50,14 +50,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Booking Lists 
         $booking = new Booking();
-        $bookingsList = $booking->get();
-        $bookingsTotal = $booking->getTotal();
-
+        $bookingsList = $booking->get(null, true);
+        
         // Return response
         $data = array(
             'status' => true, 
             'bookings' => $bookingsList,  
-            'total_items' => !empty($bookingsTotal) ? count($bookingsTotal) : 0,
             'message' => 'Booking Data Successfully Retrieve!', 
         );
         return rest_ensure_response($data);
@@ -105,7 +103,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function DeleteBooking(){
         
         // Meeting Lists
-        $MeetingsList = $meeting->get();
+        $MeetingsList = $meeting->get(null, true);
         // Return response
         $data = array(
             'status' => true, 
@@ -146,8 +144,23 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $bookingUpdate = $booking->update($data);
 
         // Booking Lists 
-        $booking_List = $booking->get();
-        
+        $booking_List = $booking->get(null, true);
+
+        // Single Booking 
+        $single_booking_meta = $booking->get($request['id']);
+
+        if("approved"==$request['status']){
+            do_action('hydra_booking/after_booking_completed', $single_booking_meta);
+        }
+
+        if("canceled"==$request['status']){
+            do_action('hydra_booking/after_booking_canceled', $single_booking_meta);
+        }
+
+        if("schedule"==$request['status']){
+            do_action('hydra_booking/after_booking_schedule', $single_booking_meta);
+        }
+
         // Return response
         $data = array(
             'status' => true,  

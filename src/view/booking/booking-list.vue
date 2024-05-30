@@ -1,6 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
+import { ref, reactive, onBeforeMount, computed } from 'vue';
 import axios from 'axios'  
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -12,6 +11,7 @@ import { toast } from "vue3-toastify";
 import useDateFormat from '@/store/dateformat'
 const { Tfhb_Date, Tfhb_Time } = useDateFormat();
 import { Meeting } from '@/store/meetings'
+import { Booking } from '@/store/booking'
 
 const booking_data = reactive({
     meeting: '',
@@ -23,8 +23,8 @@ const booking_data = reactive({
 
 const BookingDetailsPopup = ref(false);
 const BackendBooking = ref(false);
-const bookings = reactive({});
-const meetings = reactive({}); 
+const itemsPerPage = ref(10);
+const currentPage = ref(1);
 
 // Add New Booking
 const Tfhb_BackendBooking = async () => {
@@ -39,7 +39,7 @@ const Tfhb_BackendBooking = async () => {
 
         // Api Response
         if (response.data.status) {  
-            bookings.data = response.data.booking;  
+            Booking.bookings = response.data.booking;  
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
@@ -62,20 +62,13 @@ const Tfhb_BackendBooking = async () => {
     } 
 }
 
-// Booking Data Fatching
-const fetchBookings = async () => {
-    try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists');
-        if (response.data.status) { 
-            bookings.data = response.data.bookings;  
-        }
-    } catch (error) {
-        console.log(error);
-    } 
-} 
+const TfhbFormatMeetingLocation = (address) => {
+    const meeting_address = JSON.parse(address)
+    return meeting_address.map(loc => loc.location).join(', ');
+}
 
 onBeforeMount(() => { 
-    fetchBookings();
+    Booking.fetchBookings();
     Meeting.fetchMeetings();
 });
 
@@ -101,8 +94,8 @@ const UpdateMeetingStatus = async (id, status) => {
         } );
 
         if (response.data.status) {  
-            bookings.data = response.data.booking; 
-            console.log(response.data.booking);
+            Booking.bookings = response.data.booking; 
+
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
@@ -123,6 +116,36 @@ const Tfhb_Booking_View = async (data) => {
     singleBookingData.value = data;
     BookingDetailsPopup.value = true;
 }
+
+// Pagination
+const totalPages = computed(() => {
+  return Math.ceil(Booking.bookings.length / itemsPerPage.value);
+});
+
+const paginatedBooking = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return Booking.bookings.slice(start, end);
+});
+
+const changePage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value += 1;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1;
+  }
+};
+
 </script>
 <template>
 
@@ -156,9 +179,9 @@ const Tfhb_Booking_View = async (data) => {
         <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16">
             <h3 class="tfhb-m-0 tfhb-full-width">Attendee</h3>
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
-                <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_first_name">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_name">
                     <h4>Name</h4>
-                    <p>{{ singleBookingData.attendee_first_name }} {{ singleBookingData.attendee_last_name }}</p>
+                    <p>{{ singleBookingData.attendee_name }}</p>
                 </div>
                 <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_email">
                     <h4>E-mail</h4>
@@ -168,9 +191,9 @@ const Tfhb_Booking_View = async (data) => {
                     <h4>Phone</h4>
                     <p>{{ singleBookingData.attendee_phone }}</p>
                 </div>
-                <div class="tfhb-attendee-name" v-if="singleBookingData.location_details">
+                <div class="tfhb-attendee-name" v-if="singleBookingData.address">
                     <h4>Address</h4>
-                    <p>{{ singleBookingData.location_details }}</p>
+                    <p>{{ singleBookingData.address }}</p>
                 </div>
                 <div class="tfhb-attendee-name" style="width: calc(66% - 4px);" v-if="singleBookingData.message">
                     <h4>Notes</h4>
@@ -202,15 +225,15 @@ const Tfhb_Booking_View = async (data) => {
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-pb-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
                 <div class="tfhb-attendee-name">
                     <h4>Time</h4>
-                    <p>11:00 pm - 12:00 am</p>
+                    <p>{{singleBookingData.start_time}} - {{singleBookingData.end_time}}</p>
                 </div>
                 <div class="tfhb-attendee-name">
                     <h4>Date</h4>
-                    <p>12 Sep, 24</p>
+                    <p>{{ Tfhb_Date(singleBookingData.meeting_dates) }}</p>
                 </div>
                 <div class="tfhb-attendee-name">
                     <h4>Location</h4>
-                    <p>Google meet</p>
+                    <p>{{ TfhbFormatMeetingLocation(singleBookingData.meeting_locations) }}</p>
                 </div>
             </div>
         </div>
@@ -284,8 +307,8 @@ const Tfhb_Booking_View = async (data) => {
             </tr>
         </thead>
 
-        <tbody>
-            <tr v-for="(book, key) in bookings.data" :key="key">
+        <tbody v-if="paginatedBooking">
+            <tr v-for="(book, key) in paginatedBooking" :key="key">
                 <td>
                     <div class="checkbox-lists">
                         <label>
@@ -295,8 +318,8 @@ const Tfhb_Booking_View = async (data) => {
                     </div>
                 </td>
                 <td>
-                    {{ Tfhb_Date(book.booking_created_at) }}
-                    <span>{{ Tfhb_Time(book.booking_created_at) }}</span>
+                    {{ Tfhb_Date(book.meeting_dates) }}
+                    <span>{{ book.start_time }} - {{ book.end_time }}</span>
                 </td>
                 <td>
                     {{ book.title }}
@@ -347,21 +370,19 @@ const Tfhb_Booking_View = async (data) => {
         </tbody>
     </table>
 
-    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32">
+    <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32" v-if="totalPages > 1">
         <div class="tfhb-prev-next-button">
-            <a href="" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"><Icon name="ArrowLeft" width="20" />Previous</a>
+            <a href="#" @click.prevent="prevPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === 1"><Icon name="ArrowLeft" width="20" />Previous</a>
         </div>
         <div class="tfhb-pagination">
             <ul class="tfhb-flexbox tfhb-gap-0 tfhb-justify-normal">
-                <li class="active">1</li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
+                <li v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
+                    <a href="#" @click.prevent="changePage(page)" :class="{ 'active-link': page === currentPage }">{{ page }}</a>
+                </li>
             </ul>
         </div>
         <div class="tfhb-prev-next-button">
-            <a href="" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">Next<Icon name="ArrowRight" width="20" /></a>
+            <a href="#" @click.prevent="nextPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === totalPages">Next<Icon name="ArrowRight" width="20" /></a>
         </div>
     </div>
 </div>

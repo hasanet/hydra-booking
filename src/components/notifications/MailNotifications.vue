@@ -35,8 +35,8 @@ const meetingShortcode = ref([
     '{{meeting.time}}', 
     '{{host.name}}', 
     '{{host.email}}',  
-    '{{{attendee.name}}', 
-    '{{{attendee.email}}', 
+    '{{attendee.name}}', 
+    '{{attendee.email}}', 
 ])
 const copyShortcode = (value) => { 
     //  copy to clipboard without navigator 

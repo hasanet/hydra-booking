@@ -9,7 +9,8 @@
             "HydraBooking\\DB\\": "includes/database/",
             "HydraBooking\\Services\\": "includes/services/",
             "HydraBooking\\PostType\\": "includes/post-type/",
-            "HydraBooking\\Hooks\\": "includes/hooks/"
+            "HydraBooking\\Hooks\\": "includes/hooks/",
+            "HydraBooking\\App\\": "app/"
         }
     }
 }

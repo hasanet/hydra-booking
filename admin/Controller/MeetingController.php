@@ -5,6 +5,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\RouteController;
  use HydraBooking\Admin\Controller\DateTimeController;
  use HydraBooking\Admin\Controller\CountryController;
+ use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
  
  // Use DB 
 use HydraBooking\DB\Meeting;
@@ -57,11 +58,27 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             ),
         ));
 
+        // Meeting Category Endpoint
         register_rest_route('hydra-booking/v1', '/meetings/categories', array(
             'methods' => 'GET',
             'callback' => array($this, 'getMeetingsCategories'),
         )); 
-       
+        register_rest_route('hydra-booking/v1', '/meetings/categories/create-update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'createupdateMeeting'),
+        ));  
+        register_rest_route('hydra-booking/v1', '/meetings/categories/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'DeleteCategory'),
+        )); 
+
+
+        // Get Single Host based on id
+        register_rest_route('hydra-booking/v1', '/meetings/single-host-availability/(?P<id>[0-9]+)', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'getTheHostAvailabilityData'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        ));
     }
     // Meeting List
     public function getMeetingsData() { 
@@ -82,19 +99,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // getMeetingsCategories List
     public function getMeetingsCategories() { 
 
-        global $wpdb;
-        $taxonomy = 'meeting_category';
-        $terms = $wpdb->get_results( "
-            SELECT t.*
-            FROM {$wpdb->terms} AS t
-            INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
-            WHERE tt.taxonomy = '{$taxonomy}'
-        " );
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
         $term_array = array();
-        foreach ( $terms as $term ) {
+        foreach ($terms as $term) {
             $term_array[] = array(
                 'id' => $term->term_id,
-                'name' => $term->name
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
             );
         }
 
@@ -106,6 +122,122 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }  
+
+    //createupdateMeeting
+    public function createupdateMeeting(){
+        $request = json_decode(file_get_contents('php://input'), true);
+    
+        // Sanitize data
+        $title = !empty($request['title']) ? sanitize_text_field($request['title']) : 'No Title';
+        $description = !empty($request['description']) ? sanitize_text_field($request['description']) : '';
+        
+        // Check if taxonomy is registered
+        if (!taxonomy_exists('meeting_category')) {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Invalid taxonomy.'
+            ));
+        }
+    
+        if (empty($request['id'])) {
+            // Insert the term
+            $term = wp_insert_term(
+                $title,   // The term
+                'meeting_category', // The taxonomy
+                array(
+                    'description' => $description,
+                    'slug'        => sanitize_title($title)
+                )
+            );
+    
+            // Check for errors
+            if (is_wp_error($term)) {
+                return rest_ensure_response(array(
+                    'status' => false,
+                    'message' => $term->get_error_message(),
+                ));
+            }
+
+        } else {
+            // Update the term
+            $term_id = intval($request['id']);
+            $term = wp_update_term(
+                $term_id,
+                'meeting_category',
+                array(
+                    'name'        => $title,
+                    'description' => $description,
+                    'slug'        => sanitize_title($title)
+                )
+            );
+    
+            // Check for errors
+            if (is_wp_error($term)) {
+                return rest_ensure_response(array(
+                    'status' => false,
+                    'message' => $term->get_error_message(),
+                ));
+            }
+        }
+
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
+            );
+        }
+
+        // Success response
+        return rest_ensure_response(array(
+            'status' => true,
+            'category' => $term_array,
+            'message' => empty($request['id']) ? 'Meeting Category Successfully Added!' : 'Meeting Category Successfully Updated!',
+        ));
+
+    }    
+
+    // Category Delete
+    public function DeleteCategory(){
+        $request = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($request['id'])) {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Term ID is required.'
+            ));
+        }
+        $term_id = intval($request['id']);
+        $result = wp_delete_term($term_id, 'meeting_category');
+
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'description' => $term->description,
+                'slug' => $term->slug
+            );
+        }
+        
+        return rest_ensure_response(array(
+            'status' => true,
+            'category' => $term_array,
+            'message' => 'Meeting Category Successfully Deleted!',
+        ));
+    }
 
     // Meeting Filter 
     public function filterMeetings($request) {
@@ -146,7 +278,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_type' => isset($request_data['meeting_type']) ? sanitize_text_field($request_data['meeting_type']) : '', 
             'post_id' => $meeting_post_id,
             'created_by' => $current_user_id,
-            'updated_by' => $current_user_id,
+            'updated_by' => $current_user_id, 
             'created_at' => date('Y-m-d'),
             'updated_at' => date('Y-m-d'),
             'status'    => 'draft'
@@ -160,7 +292,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             return rest_ensure_response(array('status' => false, 'message' => 'Error while creating meeting'));
         }
         $meetings_id = $meetingInsert['insert_id'];
-    
+
+        // Meetings Id into Post Meta
+        update_post_meta( $meeting_post_id, '__tfhb_meeting_id', $meetings_id );
+
         // meetings Lists 
         $meetingsList = $meeting->get();
 
@@ -256,12 +391,32 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Time Zone 
         $DateTimeZone = new DateTimeController('UTC');
         $time_zone = $DateTimeZone->TimeZone();
-        
+
+        // WooCommerce Product
+        $woo_commerce = new  WooBooking();
+        $wc_product =  $woo_commerce->getAllProductList();
+
+        // Meeting Category
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'name' => $term->name,
+                'value' => "".$term->term_id."",
+            );
+        }
+
         // Return response
         $data = array(
             'status' => true, 
             'meeting' => $MeetingData,  
             'time_zone' => $time_zone,  
+            'wc_product' => $wc_product,  
+            'meeting_category' => $term_array,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -292,40 +447,53 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         
         // Update Meeting
         $data = [ 
-            'id' => $request['id'],
-            'user_id' => $request['user_id'],
-            'title' => isset($request['title']) ? sanitize_text_field($request['title']) : '',
-            'host_id' => isset($request['host_id']) ? sanitize_key($request['host_id']) : '',
-            'description' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
-            'meeting_type' => isset($request['meeting_type']) ? sanitize_text_field($request['meeting_type']) : '',
-            'duration' => isset($request['duration']) ? sanitize_text_field($request['duration']) : '',
-            'custom_duration' => isset($request['custom_duration']) ? sanitize_text_field($request['custom_duration']) : '',
-            'meeting_locations' => isset($request['meeting_locations']) ? wp_json_encode($request['meeting_locations']) : '',
-            'meeting_category' => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
-            'availability_type' => isset($request['availability_type']) ? sanitize_text_field($request['availability_type']) : '',
-            'availability_range_type' => isset($request['availability_range_type']) ? sanitize_text_field($request['availability_range_type']) : '',
-            'availability_range' => isset($request['availability_range']) ? wp_json_encode($request['availability_range']) : '',
-            'availability_id' => isset($request['availability_id']) ? sanitize_text_field($request['availability_id']) : '',
-            'availability_custom' => isset($request['availability_custom']) ? wp_json_encode($request['availability_custom']) : '',
-            'buffer_time_before' => isset($request['buffer_time_before']) ? sanitize_text_field($request['buffer_time_before']) : '',
-            'buffer_time_after' => isset($request['buffer_time_after']) ? sanitize_text_field($request['buffer_time_after']) : '',
-            'booking_frequency' => isset($request['booking_frequency']) ? wp_json_encode($request['booking_frequency']) : '',
-            'meeting_interval' => isset($request['meeting_interval']) ? sanitize_text_field($request['meeting_interval']) : '',
-            'recurring_status' => isset($request['recurring_status']) ? sanitize_text_field($request['recurring_status']) : '',
-            'recurring_repeat' => isset($request['recurring_repeat']) ? wp_json_encode($request['recurring_repeat']) : '',
-            'recurring_maximum' => isset($request['recurring_maximum']) ? sanitize_text_field($request['recurring_maximum']) : '',
-            'attendee_can_cancel' => isset($request['attendee_can_cancel']) ? sanitize_text_field($request['attendee_can_cancel']) : '',
-            'attendee_can_reschedule' => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
-            'questions_status' => isset($request['questions_status']) ? sanitize_text_field($request['questions_status']) : '',
-            'questions' => isset($request['questions']) ? wp_json_encode($request['questions']) : '',
-            'notification' => isset($request['notification']) ? wp_json_encode($request['notification']) : '',
-            'payment_status' => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
-            'meeting_price' => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
-            'payment_currency' => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
-            'payment_meta' => isset($request['payment_meta']) ? wp_json_encode($request['payment_meta']) : '',
-            'updated_at' => date('Y-m-d'),
-            'updated_by' => $current_user_id
+            'id'                        => $request['id'],
+            'user_id'                   => $request['user_id'],
+            'title'                     => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+            'host_id'                   => isset($request['host_id']) ? sanitize_key($request['host_id']) : '',
+            'description'               => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+            'meeting_type'              => isset($request['meeting_type']) ? sanitize_text_field($request['meeting_type']) : '',
+            'duration'                  => isset($request['duration']) ? sanitize_text_field($request['duration']) : '',
+            'custom_duration'           => isset($request['custom_duration']) ? sanitize_text_field($request['custom_duration']) : '',
+            'meeting_locations'         => isset($request['meeting_locations']) ? $request['meeting_locations'] : '',
+            'meeting_category'          => isset($request['meeting_category']) ? sanitize_text_field($request['meeting_category']) : '',
+            'availability_type'         => isset($request['availability_type']) ? sanitize_text_field($request['availability_type']) : '',
+            'availability_range_type'   => isset($request['availability_range_type']) ? sanitize_text_field($request['availability_range_type']) : '',
+            'availability_range'        => isset($request['availability_range']) ? $request['availability_range'] : '',
+            'availability_id'           => isset($request['availability_id']) ? sanitize_text_field($request['availability_id']) : '',
+            'availability_custom'       => isset($request['availability_custom']) ?$request['availability_custom'] : '',
+            'buffer_time_before'        => isset($request['buffer_time_before']) ? sanitize_text_field($request['buffer_time_before']) : '',
+            'buffer_time_after'         => isset($request['buffer_time_after']) ? sanitize_text_field($request['buffer_time_after']) : '',
+            'booking_frequency'         => isset($request['booking_frequency']) ? $request['booking_frequency'] : '',
+            'meeting_interval'          => isset($request['meeting_interval']) ? sanitize_text_field($request['meeting_interval']) : '',
+            'recurring_status'          => isset($request['recurring_status']) ? sanitize_text_field($request['recurring_status']) : '',
+            'recurring_repeat'          => isset($request['recurring_repeat']) ? $request['recurring_repeat'] : '',
+            'recurring_maximum'         => isset($request['recurring_maximum']) ? sanitize_text_field($request['recurring_maximum']) : '',
+            'attendee_can_cancel'       => isset($request['attendee_can_cancel']) ? sanitize_text_field($request['attendee_can_cancel']) : '',
+            'attendee_can_reschedule'   => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
+            'questions_status'          => isset($request['questions_status']) ? sanitize_text_field($request['questions_status']) : '',
+            'questions'                 => isset($request['questions']) ? $request['questions'] : '',
+            'notification'              => isset($request['notification']) ? $request['notification'] : '',
+            'payment_status'            => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
+            'meeting_price'             => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
+            'payment_currency'          => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
+            'payment_method'            => isset($request['payment_method']) ? sanitize_text_field($request['payment_method'])  : '',
+            'payment_meta'              => isset($request['payment_meta']) ? $request['payment_meta'] : '',
+            'updated_at'                => date('Y-m-d'),
+            'updated_by'                => $current_user_id
         ];
+
+        // Meeting Update into 
+        $meeting_post_data = array(
+            'ID'           => $MeetingData->post_id,
+            'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+            'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+            'post_author'  => $current_user_id,
+            'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
+        );
+        wp_update_post( $meeting_post_data ); 
+
+        $data['slug'] = get_post_field( 'post_name', $MeetingData->post_id );
 
         $meetingUpdate = $meeting->update($data);
         if(!$meetingUpdate['status']) {
@@ -334,24 +502,72 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         //Updated Meeting post meta
         if( $MeetingData->post_id ){
-            $meeting_post_data = array(
-                'ID'           => $MeetingData->post_id,
-                'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
-                'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
-                'post_author'  => $current_user_id,
-                'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
-            );
-            wp_update_post( $meeting_post_data ); 
 
             //Updated post meta
             update_post_meta( $MeetingData->post_id, '__tfhb_meeting_opt', $data );
+ 
         }
 
         // Return response
         $data = array(
             'status' => true,  
             'message' => 'Meeting Updated Successfully', 
+            'data' => $data, 
         );
         return rest_ensure_response($data);
+    }
+
+    // Host availability
+    public function getTheHostAvailabilityData($request){
+
+        $id = $request['id']; 
+        // Check if user is selected
+        if (empty($id) || $id == 0) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+        }
+        // Get Host
+        $host = new Host();
+        $HostData = $host->get( $id );
+       
+        if("settings"==$HostData->availability_type){
+            if(!empty($HostData->availability_id)){
+                $availability_id = $HostData->availability_id; 
+                $availability = get_option('_tfhb_availability_settings');
+    
+                $filteredAvailability = array_filter($availability, function($item) use ($availability_id) {
+                    return $item['id'] == $availability_id;
+                });
+            
+                // If you expect only one result, you can extract the first item from the filtered array
+                $HostData->availability = reset($filteredAvailability);
+            }else{
+                $HostData->availability = '';
+            }
+            
+            
+        }else{
+            $_tfhb_host_availability_settings =  get_user_meta($HostData->user_id, '_tfhb_host', true);
+            if(!empty($_tfhb_host_availability_settings['availability'])){
+                $HostData->availability = $_tfhb_host_availability_settings['availability'];
+            }
+            if(empty($HostData)) {
+                return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
+            }
+        }
+        
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
+
+
+        // Return response
+        $data = array(
+            'status' => true, 
+            'host' => $HostData,  
+            'host_availble' => $HostData->availability_type,
+            'time_zone' => $time_zone,
+            'message' => 'Host Data',
+        );
+        return rest_ensure_response($data);
+
     }
 } 

@@ -10,5 +10,6 @@ return array(
     'HydraBooking\\PostType\\' => array($baseDir . '/includes/post-type'),
     'HydraBooking\\Hooks\\' => array($baseDir . '/includes/hooks'),
     'HydraBooking\\DB\\' => array($baseDir . '/includes/database'),
+    'HydraBooking\\App\\' => array($baseDir . '/app'),
     'HydraBooking\\Admin\\' => array($baseDir . '/admin'),
 );

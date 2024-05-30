@@ -1,6 +1,5 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router'  
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
@@ -16,6 +15,14 @@ const props = defineProps({
         required: true
     },
     meeting: {
+        type: Object,
+        required: true
+    },
+    meetingCategory: {
+        type: Object,
+        required: true
+    },
+    timeZone: {
         type: Object,
         required: true
     },
@@ -109,11 +116,11 @@ const validateSelect = (fieldName) => {
                         :placeholder="$tfhb_trans['Location']" 
                         :option = "[
                             {name: 'Zoom', value: 'zoom'}, 
-                            {name: 'In Person (Attendee Address)', value: 'attendee_address'},
-                            {name: 'In Person (Organizer Address)', value: 'organizer_address'},
-                            {name: 'Attendee Phone Number', value: 'attendee_phone'},
-                            {name: 'Organizer Phone Number', value: 'organizer_phone'},
-                            {name: 'Online Meeting', value: 'online_meeting'}
+                            {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)'},
+                            {name: 'In Person (Organizer Address)', value: 'In Person (Organizer Address)'},
+                            {name: 'Attendee Phone Number', value: 'Attendee Phone Number'},
+                            {name: 'Organizer Phone Number', value: 'Organizer Phone Number'},
+                            {name: 'Online Meeting', value: 'Online Meeting'}
                         ]" 
                         :width= "50"
                     />
@@ -125,7 +132,7 @@ const validateSelect = (fieldName) => {
                         selected = "1"
                         :placeholder="'Type Location Address'" 
                         :width= "50"
-                        v-if="'organizer_address'==slocation.location || 'organizer_phone'==slocation.location || 'online_meeting'==slocation.location"
+                        v-if="'In Person (Organizer Address)'==slocation.location || 'Organizer Phone Number'==slocation.location || 'Online Meeting'==slocation.location"
                     /> 
                 </div>
                 <div class="tfhb-meeting-location-removed" v-if="meeting.meeting_locations.length>1" @click="emit('remove-meeting-location', index)">
@@ -145,11 +152,9 @@ const validateSelect = (fieldName) => {
             v-model="meeting.meeting_category" 
             required= "true" 
             :label="$tfhb_trans['Select Category']"  
-            :selected = "1"
-            placeholder="Select Category"  
-            :option = "[
-                    {name: 'Design System', value: 'Design System'},  
-                ]"  
+            :selected = "meeting.meeting_category"
+            :placeholder="$tfhb_trans['Select Category']" 
+            :option = "meetingCategory" 
         />
         <div class="tfhb-submission-btn">
             <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['title', 'description', 'duration'])">{{ $tfhb_trans['Save & Continue'] }} </button>

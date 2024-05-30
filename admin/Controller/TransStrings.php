@@ -51,6 +51,23 @@ namespace HydraBooking\Admin\Controller;
             'Host Can Manage Settings' => __('Host Can Manage Settings', 'hydra-booking'),
             'Host Can Manage Custom Availability' => __('Host Can Manage Custom Availability', 'hydra-booking'),
             'Host Can Manage Integrations' => __('Host Can Manage Integrations', 'hydra-booking'),
+            'Appearance' => __('Appearance', 'hydra-booking'),
+            'Typography' => __('Typography', 'hydra-booking'),
+            'For title' => __('For title', 'hydra-booking'),
+            'For paragraph' => __('For paragraph', 'hydra-booking'),
+            'Set your own typography for your brand' => __('Set your own typography for your brand', 'hydra-booking'),
+            'This only applies to your attendee booking pages' => __('This only applies to your attendee booking pages', 'hydra-booking'),
+            'Theme' => __('Theme', 'hydra-booking'),
+            'Customize your own brand color into your booking page' => __('Customize your own brand color into your booking page', 'hydra-booking'),
+            'Custom brand colors' => __('Custom brand colors', 'hydra-booking'),
+            'Admin Email' => __('Admin Email', 'hydra-booking'),
+            'Type your Admin Email' => __('Type your Admin Email', 'hydra-booking'),
+            'Meeting Category' => __('Meeting Category', 'hydra-booking'),
+            'Category Title' => __('Category Title', 'hydra-booking'),
+            'Save Category' => __('Save Category', 'hydra-booking'),
+            'Update Category' => __('Update Category', 'hydra-booking'),
+            'Update Availability' => __('Update Availability', 'hydra-booking'),
+            'Save Availability' => __('Save Availability', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),
@@ -74,6 +91,7 @@ namespace HydraBooking\Admin\Controller;
             'Enter Secret Key' =>  __('Enter Secret Key', 'hydra-booking'),
             'Redirect Url' =>  __('Redirect Url', 'hydra-booking'),
             'Enter Redirect Url' =>  __('Enter Redirect Url', 'hydra-booking'),
+            'Payment Method' =>  __('Enter Redirect Url', 'hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 

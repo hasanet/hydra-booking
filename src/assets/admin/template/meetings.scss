@@ -192,6 +192,12 @@
             background: #fff;
             padding: 24px;
             box-sizing: border-box;
+            @media #{$max1240}{
+                width: calc(50% - 16px);
+            }
+            @media #{$max991}{
+                width: 100%;
+            }
             .single-meeting-content-box{
                 flex-wrap: nowrap !important;
                 align-items: baseline !important;
@@ -216,6 +222,11 @@
                                 .tfhb-flexbox{
                                     gap: 8px !important;
                                     justify-content: unset !important;
+                                    .user-info-icon{
+                                        svg{
+                                            margin-top: 3px;
+                                        }
+                                    }
                                     .user-info-title{
                                         color: $ui600;
                                         font-size: 13px;
@@ -286,7 +297,10 @@
         padding: 32px; 
         width: 980px;
         margin: 0 auto;
-
+        @media #{$max1240}{
+            width: calc(100% - 16px) !important;
+            margin-right: 16px !important;
+        }
         .tfhb-meeting-create-notice{
             .tfhb-meeting-heading{
                 justify-content: normal !important;
@@ -326,15 +340,10 @@
                 .tfhb-availability-schedule-single,
                 .tfhb-notification-single{
                     width: 100%; 
-				    margin-bottom: 16px;
                     &:last-child {
                         margin-bottom: 0;
                     }
                 }
-
-                // .tfhb-single-location-field-wrap{
-                //     width: 100%;
-                // }
                 .tfhb-add-new-question{
                     color: $primaryi;
                     font-size: 15px;
@@ -426,8 +435,16 @@
 
     // Meeting Range
     .tfhb-meeting-range{
+        .tfhb-flexbox{
+            @media #{$max767}{
+                gap: 24px !important;
+            }
+        }
         .tfhb-single-meeting-range{
             width: calc(50% - 12px);
+            @media #{$max767}{
+                width: 100% !important;
+            }
             .tfhb-range-checkbox{
                 position: relative;
                 width: 20px;
@@ -479,6 +496,68 @@
             }
             .tfhb-availability-schedule-time{
                 margin: 19px 0px 0px 35px;
+            }
+        }
+    }
+    .tfhb-meeting-durationinfo{
+        ul.tfhb-locationtype{
+            li{
+                .tfhb-flexbox{
+                    align-items: stretch !important;
+                }
+            }
+        }
+
+        .tfhb-share-type{
+            display: flex;
+            justify-content: center;
+            ul{
+                border-radius: 8px;
+                border: 1px solid#F6EEF2;
+                background: #FAF5F7;
+                padding: 6px !important;
+                width: fit-content;
+                li{
+                    color: #8F707D;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 24px; /* 160% */
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    &.active{
+                        color: #F62881;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px; /* 160% */
+                        border-radius: 4px;
+                        background: #FEE6F0;
+                        box-shadow: 0px 1px 3px 0px rgba(40, 16, 26, 0.10), 0px 1px 2px 0px rgba(40, 16, 26, 0.06);
+                    }
+                }
+            }
+        }
+        .tfhb-shareing-data{
+            input{
+                border-radius: 4px;
+                border: 1px solid #F6EEF2;  
+                padding: 8px 8px 8px 12px; 
+                color: #3F2731;
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px; /* 160% */
+                width: 100%;
+                background: transparent;
+                &:focus{
+                    outline: none;
+                    box-shadow: none;
+                }
+            }
+            .tfhb-copy-btn{
+                display: flex;
+                justify-content: right;
             }
         }
     }

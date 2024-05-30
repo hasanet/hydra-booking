@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import { toast } from "vue3-toastify"; 
-import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
 
 const Meeting = reactive({
@@ -117,7 +116,7 @@ const Meeting = reactive({
         try { 
             const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/categories');
             if (response.data.status) { 
-                this.meetingCategory.data = response.data.category;  
+                this.meetingCategory = response.data.category;  
             }
         } catch (error) {
             console.log(error);

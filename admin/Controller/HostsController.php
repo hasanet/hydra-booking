@@ -9,6 +9,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
  // Use DB 
 use HydraBooking\DB\Host;
+use HydraBooking\DB\Availability;
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -116,6 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             ),
         ));
        
+        
     }
     // permission_callback
     public function getHostsData() { 
@@ -223,7 +225,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(!$hostInsert['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while creating host'));
         }
-        $hosts_id = $hostInsert['insert_id'];
+        $hosts_id = $data['user_id'];
         unset($data['user_id']);
         $data['host_id'] = $hostInsert['insert_id'];
 
@@ -344,7 +346,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'avatar' => $request['avatar'],
             'featured_image' => $request['featured_image'],
             'availability_type' => $request['availability_type'],
-            'others_information' => json_encode($request['others_information']),
+            'others_information' => $request['others_information'],
             'availability_id' => $request['availability_id'],
             'time_zone' => $request['time_zone'],
             'status' => $request['status'], 
@@ -396,11 +398,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
 
         //  Get User MEta
-        $_tfhb_host = get_user_meta($host_id, '_tfhb_host');
+        $_tfhb_host = get_user_meta($host_id, '_tfhb_host', true);
         $_tfhb_host['status'] =  $status;
         
         // Update user Option 
-        update_user_meta($host_id, '_tfhb_host', $data); 
+        update_user_meta($host_id, '_tfhb_host', $_tfhb_host); 
 
         // Hosts Lists
         $HostsList = $host->get();
@@ -409,7 +411,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'hosts' => $HostsList,  
-            'message' => 'Host Status Updated Successfully', 
+            'message' => 'Host Status Updated Successfully',  
         );
 
         return rest_ensure_response($data);
@@ -426,9 +428,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $user_id = $hostData->user_id;
 
 
-        $_tfhb_host_integration_settings =  is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array();
-
-        
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array(); 
+ 
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
  
         $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
@@ -436,15 +437,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if($_tfhb_integration_settings['google_calendar']['status'] == true){  
 
             $google_calendar['type'] = 'google_calendar';
-            $GoogleCalendar = new GoogleCalendar(
-                $_tfhb_integration_settings['google_calendar']['client_id'], 
-                $_tfhb_integration_settings['google_calendar']['secret_key'], 
-                $_tfhb_integration_settings['google_calendar']['redirect_url']
-            );
-            $site_url = get_site_url();
-            $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id); 
+            $GoogleCalendar = new GoogleCalendar();  
+            $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id, ); 
             $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
-            $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status']; 
+            $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status'];  
+            
+            
         } 
         
 
@@ -453,9 +451,64 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'integration_settings' => $_tfhb_host_integration_settings,
-            'google_calendar' => $google_calendar,
+            'google_calendar' => $google_calendar,  
         );
         return rest_ensure_response($data);
+    }
+
+       // Update Integration Settings.
+       public function UpdateIntegrationSettings (){
+        
+        $request = json_decode(file_get_contents('php://input'), true);
+        $key = sanitize_text_field($request['key']);
+        $data = $request['value'];
+        $host_id = $request['id'];
+        $user_id = $request['user_id'];
+        
+        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        if($key == 'zoom_meeting'){ 
+
+            $zoom = new ZoomServices(
+                sanitize_text_field($data['account_id']), 
+                sanitize_text_field($data['app_client_id']),  
+                sanitize_text_field($data['app_secret_key'])
+            ); 
+            return rest_ensure_response($zoom->updateHostsZoomSettings($data, $user_id));
+            
+        }elseif($key == 'woo_payment'){
+            $_tfhb_host_integration_settings['woo_payment']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['woo_payment']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['woo_payment']['woo_payment'] =  sanitize_text_field($data['woo_payment']);
+
+            // update User Meta 
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'message' => 'Integration Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'google_calendar'){
+            // Get Global Settings 
+            $_tfhb_host_integration_settings['google_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['google_calendar']['status'] =  sanitize_text_field($data['status']);     
+            $_tfhb_host_integration_settings['google_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar'] =  $data['tfhb_google_calendar'];
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+            
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Google Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }
     }
 
     // Get Availability Settings
@@ -480,11 +533,38 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function GetSingleAvailabilitySettings() {
         $request = json_decode(file_get_contents('php://input'), true);
 
-        // Get Single Host Data 
-        $_tfhb_host_availability_settings =  get_user_meta($request['user_id'], '_tfhb_host', true);
+        // Check if user is selected
+        if (empty($request['host_id'])) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Host id is Empty'));
+        }
+
+        $host = new Host();
+        $HostData = $host->get( $request['host_id'] );
+        
+        // If Host Use existing availability
+        if(!empty($HostData->availability_type) && "settings"==$HostData->availability_type){
+            if(!empty($HostData->availability_id)){
+                $availability_id = $HostData->availability_id; 
+                $availability = get_option('_tfhb_availability_settings');
+    
+                $filteredAvailability = array_filter($availability, function($item) use ($availability_id) {
+                    return $item['id'] == $availability_id;
+                });
+            
+                // If you expect only one result, you can extract the first item from the filtered array
+                $defult_availability = reset($filteredAvailability);
+            }else{
+                $defult_availability = [];
+            }
+        }else{
+            // Get Single Host Data 
+            $_tfhb_host_availability_settings =  get_user_meta($request['host_id'], '_tfhb_host', true);
+            $defult_availability = !empty($_tfhb_host_availability_settings['availability']) ? $_tfhb_host_availability_settings['availability'][$request['availability_id']] : [];
+        }
+
         $data = array(
             'status' => true,  
-            'availability' => !empty($_tfhb_host_availability_settings['availability']) ? $_tfhb_host_availability_settings['availability'][$request['availability_id']] : [],
+            'availability' => $defult_availability,
         );
         return rest_ensure_response($data);
     }
@@ -521,7 +601,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
             return rest_ensure_response($data);
         }
- 
+
         $_tfhb_host_info = get_user_meta($request['user_id'], '_tfhb_host', true);
         $tfhb_host_availability = !empty($_tfhb_host_info['availability']) ? $_tfhb_host_info['availability'] : [];
 
@@ -574,6 +654,51 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
            
         } 
+        if($availability['id'] == ''){
+            // Host Availability DB
+            $availbility_data = [ 
+                'host' => isset($request['host']) ? sanitize_text_field($request['host']) : '', 
+                'title' => $availability['title'],
+                'time_zone' => $availability['time_zone'],
+                'override' => '',
+                'time_slots' => $request['time_slots'],
+                'date_status' => $availability['date_status'],
+                'date_slots' => $request['date_slots'],
+                'status' => 'active',
+                'created_at' => date('y-m-d'), 
+                'updated_at' => date('y-m-d'), 
+            ];
+
+            $hostAvailability = new Availability(); 
+            $insert = $hostAvailability->add($availbility_data);
+
+            if(!$insert['status']) {
+                return rest_ensure_response(array('status' => false, 'message' => 'Error while creating host'));
+            }
+            $host_insert_availablekey = count($tfhb_host_availability);
+            $_tfhb_host_info['availability'][$host_insert_availablekey]['available_id'] = $insert['insert_id'];
+        }else{
+            // Host Availability DB
+            $availbility_data = [ 
+                'id' => $request['available_id'],
+                'host' => isset($request['host']) ? sanitize_text_field($request['host']) : '', 
+                'title' => $availability['title'],
+                'time_zone' => $availability['time_zone'],
+                'override' => '',
+                'time_slots' => serialize($request['time_slots']),
+                'date_status' => $availability['date_status'],
+                'date_slots' => serialize($request['date_slots']),
+                'status' => 'active',
+                'created_at' => date('y-m-d'), 
+                'updated_at' => date('y-m-d'), 
+            ];
+
+            $hostAvailability = new Availability(); 
+            $hostAvailability->update($availbility_data);
+
+            $_tfhb_host_info['availability'][$request['id']]['available_id'] = $request['available_id']; 
+        }
+        
          // update user meta
          $_tfhb_availability_settings = update_user_meta($request['user_id'], '_tfhb_host', $_tfhb_host_info);
 
@@ -586,63 +711,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }
-    // Update Integration Settings.
-    public function UpdateIntegrationSettings (){
-        
-        $request = json_decode(file_get_contents('php://input'), true);
-        $key = sanitize_text_field($request['key']);
-        $data = $request['value'];
-        $host_id = $request['id'];
-        $user_id = $request['user_id'];
-        
-        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
-        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
-        if($key == 'zoom_meeting'){ 
-
-            $zoom = new ZoomServices(
-                sanitize_text_field($data['account_id']), 
-                sanitize_text_field($data['app_client_id']),  
-                sanitize_text_field($data['app_secret_key'])
-            ); 
-            return rest_ensure_response($zoom->updateHostsZoomSettings($data, $user_id));
-            
-        }elseif($key == 'woo_payment'){
-            $_tfhb_host_integration_settings['woo_payment']['type'] =  sanitize_text_field($data['type']);
-            $_tfhb_host_integration_settings['woo_payment']['status'] =  sanitize_text_field($data['status']);
-            $_tfhb_host_integration_settings['woo_payment']['woo_payment'] =  sanitize_text_field($data['woo_payment']);
-
-            // update User Meta 
-            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
-
-            //  woocommerce payment   
-            $data = array(
-                'status' => true,  
-                'message' => 'Integration Settings Updated Successfully',
-            );
-            return rest_ensure_response($data);
-        }elseif($key == 'google_calendar'){
-            // Get Global Settings 
-            $_tfhb_host_integration_settings['google_calendar']['type'] =  sanitize_text_field($data['type']);
-            $_tfhb_host_integration_settings['google_calendar']['status'] =  sanitize_text_field($data['status']); 
-            $_tfhb_host_integration_settings['google_calendar']['client_id'] =  sanitize_text_field($data['client_id']); 
-            $_tfhb_host_integration_settings['google_calendar']['secret_key'] =  sanitize_text_field($data['secret_key']); 
-            $_tfhb_host_integration_settings['google_calendar']['redirect_url'] =  sanitize_text_field($data['redirect_url']); 
-            $_tfhb_host_integration_settings['google_calendar']['access_token'] =  sanitize_text_field($data['access_token']); 
-            $_tfhb_host_integration_settings['google_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']); 
-
-            // update User Meta  
-            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
-            
-
-
-            //  woocommerce payment   
-            $data = array(
-                'status' => true,   
-                'message' => 'Google Calendar Settings Updated Successfully',
-            );
-            return rest_ensure_response($data);
-        }
-    }
+ 
     
 
     /**

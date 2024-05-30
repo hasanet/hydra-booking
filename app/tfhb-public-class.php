@@ -68,7 +68,36 @@ class Tfhb_APP {
                 </div>
 
                 <div class="tfhb-meeting-calendar">
-
+                    <div class="tfhb-calendar-container">
+                        <header class="tfhb-calendar-header">
+                            <p class="tfhb-calendar-current-date"></p>
+                            <div class="tfhb-calendar-navigation">
+                                <span id="tfhb-calendar-prev">
+                                    <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.5 15L6.5 10L11.5 5" stroke="#F62881" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span id="tfhb-calendar-next">
+                                    <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.5 15L12.5 10L7.5 5" stroke="#F62881" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </header>
+                
+                        <div class="tfhb-calendar-body">
+                            <ul class="tfhb-calendar-weekdays">
+                                <li>Sun</li>
+                                <li>Mon</li>
+                                <li>Tue</li>
+                                <li>Wed</li>
+                                <li>Thu</li>
+                                <li>Fri</li>
+                                <li>Sat</li>
+                            </ul>
+                            <ul class="tfhb-calendar-dates"></ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tfhb-meeting-times">
@@ -78,44 +107,38 @@ class Tfhb_APP {
                             <li>24h</li>
                         </ul>
                     </div>
-                    <h3>Saturday, 11 April, 2024</h3>
+                    <h3 class="tfhb-select-date">Saturday, 11 April, 2024</h3>
 
                     <div class="tfhb-available-times">
                         <ul>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
+                                <span class="time">09:00 AM</span>
                             </li>
 
                             <li class="tfhb-flexbox">
-                                <span>09:00 AM</span>
-                                <span class="next tfhb-flexbox tfhb-gap-8">
-                                    Next
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 10L14 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M9 4.16666L14.8333 9.99999L9 15.8333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
+                                <span class="time">09:00 AM</span>
+                                
                             </li>
                         </ul>
                     </div>

@@ -8,12 +8,12 @@
  * Author URI: https://themefic.com/
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain: thb-hydra-booking
+ * Text Domain: hydra-booking
  * Domain Path: /languages
  */
 
 // don't load directly
-defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || exit; 
 
 class THB_INIT{
     // CONSTARACT 
@@ -21,7 +21,7 @@ class THB_INIT{
         // DEFINE PATH 
         define('THB_PATH', plugin_dir_path(__FILE__));
         define('THB_URL', plugin_dir_url(__FILE__));
-        define('THB_VERSION', '1.0.0');  
+        define('THB_VERSION', '1.0.0'); 
 
         // Load Vendor Auto Load
         if(file_exists(THB_PATH . '/vendor/autoload.php')) {
@@ -35,29 +35,38 @@ class THB_INIT{
         // Deactivation Hooks
         new HydraBooking\Hooks\DeactivationHooks(); 
 
+        // Mail Hooks
+        new HydraBooking\Hooks\MailHooks(); 
+
         add_action('init', array($this, 'init'));
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
         add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
-        // Load Front-End App File
-        if(file_exists(THB_PATH . '/app/tfhb-public-class.php')) {
-            require_once THB_PATH . '/app/tfhb-public-class.php'; 
-        }
    }
 
-    public function init() {    
+    public function init() {   
+        
+        
+        // Post Type 
+        new HydraBooking\PostType\Meeting\Meeting_CPT();
+        new HydraBooking\PostType\Booking\Booking_CPT(); 
+
         // Create a New host Role 
         new HydraBooking\Admin\Controller\RouteController();   
+ 
         
-        if(is_admin()) {
-            
+        if(is_admin()) { 
             // Load Admin Class
             new HydraBooking\Admin\Admin(); 
-        } else {
-            // Load Frontend Class
-            // new HydraBooking\Frontend\Frontend(); 
         } 
+
+        // Load App Class 
+        new HydraBooking\App\App();
+
     }  
+
+   
+ 
  
     public function tfhb_get_plugin_screen()
     {
@@ -76,9 +85,29 @@ class THB_INIT{
 
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
+        wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
+
+        $tfhb_theme_css = "
+        :root {
+            --tfhb-primary-color: red;
+          }
+        ";
+        wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );
+
+        // register script 
+        wp_register_script( 'tfhb-select2-script', THB_URL . 'assets/app/js/select2.min.js', array('jquery', 'tfhb-app-script'), THB_VERSION, true );
+        wp_register_script( 'tfhb-app-script', THB_URL . 'assets/app/js/main.js', array('jquery'), THB_VERSION, true ); 
+
+        wp_localize_script( 'tfhb-app-script', 'tfhb_app_booking', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'tfhb_nonce' ),
+        ) );
+
     }
     
 }
+
+
 
 new THB_INIT();
  

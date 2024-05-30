@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount, } from 'vue'; 
+import { ref, reactive, onBeforeMount } from 'vue'; 
 import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -7,6 +7,7 @@ import HbText from '../form-fields/HbText.vue';
 import HbDateTime from '../form-fields/HbDateTime.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
+import AvailabilityTime from '@/store/times'
 import { toast } from "vue3-toastify"; 
  
 
@@ -18,8 +19,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:availabilityData", "modal-close", "update-availability"]); 
 
- 
- 
+
 // Update Availability Settings
 const UpdateAvailabilitySettings = async () => {   
     try { 
@@ -73,8 +73,8 @@ const removeAvailabilityTime = (key, tkey = null) => {
 // Add new time slot
 const addAvailabilityTime = (key) => {
     props.availabilityDataSingle.time_slots[key].times.push({
-        start: '09:00',
-        end: '17:00',
+        start: '',
+        end: '',
     });
 }
 
@@ -98,16 +98,30 @@ const removeOverridesTime = (key, tkey = null) => {
 }
 
 const openOverridesCalendarDate = () => {
-    props.availabilityDataSingle.date_slots.push({
-        date: '',
-        available: '',
-        times: [
-            {
-                start: '09:00',
-                end: '17:00',
-            }
-        ]
-    });
+    
+    if(props.availabilityDataSingle.date_slots){
+        props.availabilityDataSingle.date_slots.push({
+            date: '',
+            available: '',
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        });
+    }else{
+        props.availabilityDataSingle.date_slots = [{
+            date: '',
+            available: '',
+            times: [
+                {
+                    start: '09:00',
+                    end: '17:00',
+                }
+            ]
+        }];
+    }
 
     const lastIndexOfQuestion = props.availabilityDataSingle.date_slots.length - 1;
     OverridesDates.key = lastIndexOfQuestion;
@@ -163,7 +177,47 @@ function formatTime(time) {
     const period = parseInt(hour) < 12 ? 'AM' : 'PM';
     return `${formattedHour}:${minute} ${period}`;
 }
-  
+
+const getLatestEndTime = (day) => {
+    let latestEndTime = day.times[0].end;
+    for (let i = 1; i < day.times.length; i++) {
+        const endTime = day.times[i].end;
+        if (endTime > latestEndTime) {
+            latestEndTime = endTime;
+        }
+    }
+    return latestEndTime;
+}
+
+const TfhbStartDataEvent = (key, skey, startTime) => {
+    const day = props.availabilityDataSingle.time_slots[key];
+    const latestEndTime = getLatestEndTime(day);
+
+    if (startTime <= latestEndTime) {
+        toast.error("Your start time will be over the: " + latestEndTime);
+        return latestEndTime;
+    }
+}
+
+const TfhbEndDataEvent = (key, skey, endTime) => {
+    const day = props.availabilityDataSingle.time_slots[key];
+    const nextDate = skey+1;
+    const NextdayData = day.times[nextDate] ? day.times[nextDate].start : '';
+
+    if(NextdayData){
+        if ( day.times[skey].start >= endTime || NextdayData <= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start +" And Less than " + NextdayData);
+            return;
+        }
+    }else{
+        if (day.times[skey].start >= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start);
+            return;
+        }
+    }
+    
+}
+
 </script>
  
 
@@ -224,35 +278,30 @@ function formatTime(time) {
                         </div>
                         <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap "> 
                             <div v-for="(time, tkey) in time_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
-                                <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                                    <HbDateTime  
-                                        v-model="time.start"    
-                                        selected = "1" 
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i',
-                                            defaultDate: time.start
-                                        }"
-                                        width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock4"
-                                    /> 
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+                                    <HbDropdown 
+                                        v-model="time.start"  
+                                        required= "true" 
+                                        width="50"
+                                        :selected = "1"
+                                        placeholder="Start"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                        @tfhb_start_change="TfhbStartDataEvent"
+                                        :parent_key = "key"
+                                        :single_key = "tkey"
+                                    />                
                                     <Icon name="MoveRight" size="20" /> 
-                                    <HbDateTime  
-                                        v-model="time.end"   
-                                        :label="$tfhb_trans['End']"  
-                                        selected = "1"
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i',
-                                            defaultDate: time.end
-                                        }"
-                                        width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock4"
-                                    /> 
+                                    <HbDropdown 
+                                        v-model="time.end"  
+                                        required= "true" 
+                                        width="50"
+                                        :selected = "1"
+                                        placeholder="End"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                        @tfhb_start_change="TfhbEndDataEvent"
+                                        :parent_key = "key"
+                                        :single_key = "tkey"
+                                    />     
 
                                 </div>
                                 <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
@@ -387,7 +436,7 @@ function formatTime(time) {
 
 
                 <!-- Create Or Update Availability -->
-                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? 'Save Availability' : $tfhb_trans['Update General Settings'] }}</button>
+                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? $tfhb_trans['Save Availability'] : $tfhb_trans['Update Availability'] }}</button>
             </div>
         </div>
    </div>

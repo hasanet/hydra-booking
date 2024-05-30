@@ -6,7 +6,10 @@ import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
+import AvailabilityTime from '@/store/times'
+import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
 
@@ -31,7 +34,7 @@ const props = defineProps({
 const Settings_avalibility = ref();
 const fetchAvailabilitySettings = async (availability_id) => {
     let data = {
-        user_id: props.meeting.user_id,
+        host_id: props.meeting.host_id,
         availability_id: availability_id
     };  
     try { 
@@ -40,7 +43,7 @@ const fetchAvailabilitySettings = async (availability_id) => {
                 'X-WP-Nonce': tfhb_core_apps.rest_nonce
             } 
         } );
-        if (response.data.status && response.data.availability.length > 0) { 
+        if (response.data.status && response.data.availability) { 
             Settings_avalibility.value = response.data;
         }
     } catch (error) {
@@ -62,16 +65,24 @@ const validateSelect = (fieldName) => {
 const HostAvailabilities = reactive({});
 const fetchHostAvailability = async (host) => {
     try { 
-        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/'+host); 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/single-host-availability/'+host); 
         
         // Clear existing data before updating
         for (const key in HostAvailabilities) {
             delete HostAvailabilities[key];
         }
-        
-        response.data.host.availability && response.data.host.availability.forEach((available, key) => {
-            HostAvailabilities[key] = available.title;
-        });
+        if("settings"==response.data.host_availble){
+            console.log(response.data.host.availability);
+            Settings_avalibility.value = response.data.host;
+        }else{
+            // response.data.host.availability && response.data.host.availability.forEach((available, key) => {
+            //     HostAvailabilities[key] = available.title;
+            // });
+            // use Each Loop
+            for (const key in response.data.host.availability) {
+                HostAvailabilities[key] = response.data.host.availability[key].title;
+            }
+        }
     } catch (error) {
         console.log(error);
     } 
@@ -84,9 +95,9 @@ const Host_Avalibility_Callback = (e) => {
 }
 
 // Host Default Availability
-const fetchSingleAvailabilitySettings = async (user_id, availability_id) => {
+const fetchSingleAvailabilitySettings = async (host_id, availability_id) => {
     let data = {
-        user_id: user_id,
+        host_id: host_id,
         availability_id: availability_id
     };  
     try { 
@@ -108,8 +119,8 @@ onBeforeMount(() => {
     Host.fetchHosts().then(() => {
         if(props.meeting.host_id!=0){
             fetchHostAvailability(props.meeting.host_id);
+            fetchSingleAvailabilitySettings(props.meeting.host_id, props.meeting.availability_id);
         }
-        fetchSingleAvailabilitySettings(props.meeting.user_id, props.meeting.availability_id);
     });
 });
 
@@ -201,6 +212,45 @@ function formatTime(time) {
     return `${formattedHour}:${minute} ${period}`;
 }
 
+const getLatestEndTime = (day) => {
+    let latestEndTime = day.times[0].end;
+    for (let i = 1; i < day.times.length; i++) {
+        const endTime = day.times[i].end;
+        if (endTime > latestEndTime) {
+            latestEndTime = endTime;
+        }
+    }
+    return latestEndTime;
+}
+
+const TfhbStartDataEvent = (key, skey, startTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const latestEndTime = getLatestEndTime(day);
+
+    if (startTime <= latestEndTime) {
+        toast.error("Your start time will be over the: " + latestEndTime);
+        return latestEndTime;
+    }
+}
+
+const TfhbEndDataEvent = (key, skey, endTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const nextDate = skey+1;
+    const NextdayData = day.times[nextDate] ? day.times[nextDate].start : '';
+
+    if(NextdayData){
+        if ( day.times[skey].start >= endTime || NextdayData <= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start +" And Less than " + NextdayData);
+            return;
+        }
+    }else{
+        if (day.times[skey].start >= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start);
+            return;
+        }
+    }
+    
+}
 
 </script>
 
@@ -284,6 +334,7 @@ function formatTime(time) {
             </ul>
         </div>
         <!-- Choose Schedule -->
+
         <HbSelect 
             v-model="meeting.availability_id"
             required= "true" 
@@ -303,11 +354,12 @@ function formatTime(time) {
             v-if="'custom'==meeting.availability_type"
         /> 
         <!-- Time Zone -->
-        <HbSelect 
+        <HbDropdown 
             
             v-model="meeting.availability_custom.time_zone"  
             required= "true"  
             :label="$tfhb_trans['Time zone']"  
+            :filter="true"
             selected = "1"
             placeholder="Select Time Zone"  
             :option = "props.timeZone" 
@@ -407,8 +459,8 @@ function formatTime(time) {
                 </div>
                 <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
                     <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                        <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                            <HbDateTime   
+                        <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+                            <!-- <HbDateTime   
                                 v-model="time.start" 
                                 selected = "1" 
                                 :config="{
@@ -433,7 +485,31 @@ function formatTime(time) {
                                 width="45"
                                 placeholder="Type your schedule title"   
                                 icon="Clock4"
-                            /> 
+                            />  -->
+
+                            <HbDropdown 
+                                v-model="time.start"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="Start"   
+                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                @tfhb_start_change="TfhbStartDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />                
+                            <Icon name="MoveRight" size="20" /> 
+                            <HbDropdown 
+                                v-model="time.end"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="End"   
+                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                @tfhb_start_change="TfhbEndDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />  
 
                         </div>
                         <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
@@ -487,7 +563,9 @@ function formatTime(time) {
                                     inline: true,
                                     monthSelectorType: 'static',
                                     yearSelectorType: 'static',
-                                    mode: 'multiple'
+                                    mode: 'multiple',
+                                    nextArrow: `<svg width='19' height='20' viewBox='0 0 19 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g id='chevron-right'><path id='Vector' d='M7.5 15L12.5 10L7.5 5' stroke='#F62881' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></g></svg>`,
+                                    prevArrow: `<svg width='19' height='20' viewBox='0 0 19 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11.5 15L6.5 10L11.5 5' stroke='#F62881' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>`
                                 }"
                                 placeholder="Type your schedule title"   
                             /> 

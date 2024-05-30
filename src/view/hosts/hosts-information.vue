@@ -12,6 +12,9 @@ import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
 import HbRadio from '@/components/form-fields/HbRadio.vue'
 import { Upload } from 'lucide-vue-next';
+import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
+
 const emit = defineEmits(["save-host-info"]); 
 
 // Get Current Route url 
@@ -51,7 +54,16 @@ const UploadImage = () => {
     };  
     wp.media.editor.open(); 
 }
- 
+
+const validateInput = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, props.host[fieldValueKey]);
+};
+
+const validateSelect = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, props.host[fieldValueKey]);
+};
 
 </script>
 
@@ -59,10 +71,9 @@ const UploadImage = () => {
     <div class="tfhb-admin-card-box">   
         <div class="tfhb-single-form-field-wrap tfhb-flexbox">
             <div class="tfhb-field-image" > 
-                <img  class='avatar_display'  :src="host.avatar">
+                <img v-if="host.avatar != ''"  class='avatar_display'  :src="host.avatar">
                 <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">Change</button> 
-                <input  type="text"  :v-model="host.avatar"   /> 
-
+                <input  type="text"  :v-model="host.avatar"   />  
             </div>
             <div class="tfhb-image-box-content">  
             <h4 v-if="label !=''" :for="name">{{ $tfhb_trans['Profile image'] }} <span  v-if="required == 'true'"> *</span> </h4>
@@ -81,6 +92,9 @@ const UploadImage = () => {
             selected = "1"
             :placeholder="$tfhb_trans['Type your first name']" 
             width="50"
+            @keyup="() => validateInput('first_name')"
+            @click="() => validateInput('first_name')"
+            :errors="errors.first_name"
         /> 
         <HbText  
             v-model="host.last_name"  
@@ -89,6 +103,9 @@ const UploadImage = () => {
             selected = "1"
             :placeholder="$tfhb_trans['Type your last name']" 
             width="50"
+            @keyup="() => validateInput('last_name')"
+            @click="() => validateInput('last_name')"
+            :errors="errors.last_name"
         />  
         <HbText  
             v-model="host.email"  
@@ -101,7 +118,6 @@ const UploadImage = () => {
         /> 
         <!-- Time Zone -->
         <HbDropdown 
-            
             v-model="host.time_zone"  
             required= "true"  
             :label="$tfhb_trans['Time zone']"  
@@ -110,6 +126,9 @@ const UploadImage = () => {
             placeholder="Select Time Zone"  
             :option = "time_zone" 
             width="50" 
+            @add-change="validateSelect('time_zone')" 
+            @add-click="validateSelect('time_zone')" 
+            :errors="errors.time_zone"
         /> 
         <HbText  
             v-model="host.phone_number"  
@@ -118,6 +137,9 @@ const UploadImage = () => {
             selected = "1"
             :placeholder="$tfhb_trans['Type your mobile no']" 
             width="50" 
+            @keyup="() => validateInput('phone_number')"
+            @click="() => validateInput('phone_number')"
+            :errors="errors.phone_number"
         />  
          
     <!-- Time Zone -->
@@ -187,7 +209,7 @@ const UploadImage = () => {
 
 
     <!--  Update Hosts Information -->
-    <button class="tfhb-btn boxed-btn" @click="emit('save-host-info')">{{ $tfhb_trans['Save'] }}</button>
+    <button class="tfhb-btn boxed-btn" @click="emit('save-host-info', ['first_name', 'last_name', 'time_zone', 'phone_number'])">{{ $tfhb_trans['Save'] }}</button>
 </template>
 
 

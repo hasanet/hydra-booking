@@ -1,9 +1,10 @@
 <script setup>
 import { ref, reactive, onBeforeMount } from 'vue';
-import axios from 'axios'  
+import { toast } from "vue3-toastify"; 
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import CreateMeetingPopup from '@/components/meetings/CreateMeetingPopup.vue';
+import HbPopup from '@/components/widgets/HbPopup.vue'; 
 import { Host } from '@/store/hosts'
 import { Meeting } from '@/store/meetings'
 
@@ -12,6 +13,7 @@ const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false);
 const isModalOpened = ref(false);
 const skeleton = ref(true);
+const sharePopup = ref(false)
 
 const openModal = () => {
   isModalOpened.value = true;
@@ -35,6 +37,48 @@ const filterData = reactive({
     endDate: ''
 })
 
+// Share Popup Data
+const shareData = reactive({
+    title: '',
+    time: '',
+    meeting_type: '',
+    share_type: 'link',
+    link: '',
+    shortcode: ''
+})
+
+const ShareTabs = (tab) => {
+    shareData.share_type = tab;
+}
+
+const sharePopupData = (data) => {
+
+    shareData.share_type = 'link'
+    shareData.title = data.title
+    shareData.time = data.duration
+    shareData.meeting_type = data.meeting_type
+    shareData.shortcode = '[hydra_booking id="'+data.id+'"]'
+    shareData.link = tfhb_core_apps.admin_url + '/' + data.slug
+
+    // Popup open
+    sharePopup.value = true;
+}
+
+const copyMeeting = (link) => {
+    //  copy to clipboard without navigator 
+    const textarea = document.createElement('textarea');
+    textarea.value = link;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    
+    // Show a toast notification or perform any other action
+    toast.success(link + ' is Copied');
+}
 
 </script>
 <template>
@@ -149,7 +193,7 @@ const filterData = reactive({
                                             <Icon name="Clock" size="16" /> 
                                         </div>
                                         <div class="user-info-title">
-                                            {{ smeeting.duration }}
+                                            {{ smeeting.duration }} minutes
                                         </div>
                                     </div>
                                 </li>
@@ -185,13 +229,13 @@ const filterData = reactive({
                                         </div>
                                     </div>
                                 </li>
-                                <li>
+                                <li v-if="smeeting.host_first_name">
                                     <div class="tfhb-flexbox">
                                         <div class="user-info-icon">
                                             <Icon name="User" size="16" /> 
                                         </div>
                                         <div class="user-info-title">
-                                            Jack Sparrow
+                                            {{ smeeting.host_first_name }} {{ smeeting.host_last_name }}
                                         </div>
                                     </div>
                                 </li>
@@ -219,16 +263,87 @@ const filterData = reactive({
                     </div>
                 </div>
                 <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a href="#" class="tfhb-flexbox">
+                    <a :href="'/' + smeeting.slug" class="tfhb-flexbox" target="_blank">
                         <Icon name="Eye" size="20" /> 
                         Preview
                     </a>
-                    <a href="#" class="tfhb-flexbox">
+                    <a href="#" class="tfhb-flexbox" @click.prevent="sharePopupData(smeeting)">
                         <Icon name="Share2" size="20" /> 
                         Share
                     </a>
                 </div>
             </div>
+
+
+            <HbPopup :isOpen="sharePopup" @modal-close="sharePopup = false" max_width="600px" name="first-modal">
+                <template #header> 
+                    <h3>{{ shareData.title }}</h3>
+                </template>
+
+                <template #content>  
+                    <div class="tfhb-meeting-durationinfo tfhb-flexbox tfhb-gap-32 tfhb-full-width">
+                        <ul class="tfhb-locationtype tfhb-flexbox tfhb-justify-normal tfhb-full-width tfhb-gap-32">
+                            <li v-if="shareData.time">
+                                <div class="tfhb-flexbox tfhb-gap-8">
+                                    <div class="user-info-icon">
+                                        <Icon name="Clock" size="16" /> 
+                                    </div>
+                                    <div class="user-info-title">
+                                        {{ shareData.time }}
+                                    </div>
+                                </div>
+                            </li>
+                            <li v-if="shareData.meeting_type">
+                                <div class="tfhb-flexbox tfhb-gap-8" v-if="'one-to-one'==shareData.meeting_type">
+                                    <div class="user-info-icon">
+                                        <Icon name="UserRound" size="16" /> 
+                                        <Icon name="ArrowRight" size="16" /> 
+                                        <Icon name="UserRound" size="16" /> 
+                                    </div>
+                                    <div class="user-info-title">
+                                        One to One
+                                    </div>
+                                </div>
+                                <div class="tfhb-flexbox tfhb-gap-8" v-if="'one-to-group'==shareData.meeting_type">
+                                    <div class="user-info-icon">
+                                        <Icon name="UserRound" size="16" /> 
+                                        <Icon name="ArrowRight" size="16" /> 
+                                        <Icon name="UsersRound" size="16" /> 
+                                    </div>
+                                    <div class="user-info-title">
+                                        One to Group
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="tfhb-share-type tfhb-full-width">
+                            <ul class="tfhb-flexbox tfhb-gap-8">
+                                <li :class="'link'==shareData.share_type ? 'active' : ''" @click="ShareTabs('link')">Share link</li>
+                                <li :class="'short'==shareData.share_type ? 'active' : ''" @click="ShareTabs('short')">Short code</li>
+                                <!-- <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li> -->
+                            </ul>
+                        </div>
+
+                        <div class="tfhb-shareing-data tfhb-full-width">
+                            <div class="share-link" v-if="'link'==shareData.share_type">
+                                <input type="text" :value="shareData.link" readonly>
+
+                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.link)">Copy link</button>
+                                </div>
+                            </div>
+                            <div class="share-link" v-if="'short'==shareData.share_type">
+                                <input type="text" :value="shareData.shortcode" readonly>
+
+                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.shortcode)">Copy Code</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template> 
+            </HbPopup>
             
         </div>
     </div>

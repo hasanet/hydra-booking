@@ -23,7 +23,9 @@
 
 		.tfhb-availability-single-box{
 			width: calc(50% - 12px);
-
+			@media #{$max991}{
+				width: 100% !important;
+			}
 			.tfhb-availability-single-box-wrap {
 				border-radius: 8px;
 				border: 1px solid $ui50;
@@ -68,15 +70,25 @@
 		.tfhb-popup.tfhb-availability-popup{
 			.tfhb-popup-wrap{
 				max-width: 980px !important;
+				@media #{$max991}{
+					max-width: 100% !important;
+				}
 			}
 		}
 
 		.tfhb-integrations-wrap{
 			width: 100% !important; 
 			justify-content: normal !important;
+			flex-wrap: nowrap !important;
+			@media #{$max1240}{
+				flex-wrap: wrap !important;
+			}
 			.tfhb-integrations-single-block{
-				margin: 0;
-  				width: calc(30% - 48px);
+				margin: 0 !important;
+				width: calc(33% - 12px);
+				@media #{$max1240}{
+                    width: calc(50% - 12px);
+                }
 				h3 {
 					font-weight: 600;
 					line-height: 1.5;
@@ -87,6 +99,9 @@
 				} 
 				.tfhb-integrations-single-block-btn {
 					margin-top: 32px;
+					svg{
+						margin-top: 2px;
+					}
 				}
 			} 
 		}
@@ -113,6 +128,9 @@
 				}
 
 				.tfhb-availability-schedule-wrap{
+					@media #{$max570}{
+						width: 100%;
+					}
 					.tfhb-availability-schedule-inner{
 						margin-bottom: 24px;
 						// last child
@@ -174,6 +192,55 @@
 					}
 				}
 			}
+		}
+	}
+
+	.tfhb-category-warp{
+		.tfhb-category-create-box{
+			width: 45%;
+		}
+		.tfhb-category-list{
+			width: calc(55% - 24px);
+			table{
+				width: 100%;
+				border-radius: 8px;
+				background: $ui50;
+				thead{
+					border-bottom: 1px solid $ui50;
+					th{
+						padding: 12px 16px;
+						color: $ui600;
+						font-size: 15px;
+						font-style: normal;
+						font-weight: 400;
+						line-height: 24px; /* 160% */
+						text-align: left;
+					}
+				}
+				tbody{
+					border-left: 1px solid $ui50;
+					tr{
+						background-color: #fff;
+						td{
+							padding: 16px;
+							color: $ui600;
+							font-size: 15px;
+							font-style: normal;
+							font-weight: 400;
+							line-height: 24px;
+							border: 0px solid;
+							border-bottom: 1px solid $ui50;
+						}
+					}
+				}
+			}
+		}
+
+		.tfhb-booking-details-pagination .tfhb-prev-next-button{
+			background-color: #f6eef2;
+		}
+		.tfhb-booking-details-pagination .tfhb-pagination ul li.active{
+			background-color: #f6eef2;
 		}
 	}
  

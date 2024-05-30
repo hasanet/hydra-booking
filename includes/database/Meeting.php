@@ -90,7 +90,6 @@ class Meeting {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
-
         // insert meeting
         $result =  $wpdb->insert(
             $table_name,
@@ -120,6 +119,18 @@ class Meeting {
 
         $id = $request['id'];
         unset($request['id']);
+
+        // encode json in array data
+        $request['meeting_locations'] = wp_json_encode($request['meeting_locations']);
+        $request['availability_range'] = wp_json_encode($request['availability_range']);
+        $request['availability_custom'] = wp_json_encode($request['availability_custom']);
+        $request['booking_frequency'] = wp_json_encode($request['booking_frequency']);
+        $request['recurring_repeat'] = wp_json_encode($request['recurring_repeat']);
+        $request['questions'] = wp_json_encode($request['questions']);
+        $request['notification'] = wp_json_encode($request['notification']);
+        $request['payment_meta'] = wp_json_encode($request['payment_meta']);
+
+
         // Update meeting
         $result =  $wpdb->update(
             $table_name,
@@ -146,12 +157,11 @@ class Meeting {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
+        $host_table = $wpdb->prefix . 'tfhb_hosts';
 
         if($id){
-            $sql = "SELECT * FROM $table_name WHERE id = $id";
-
             $data = $wpdb->get_row(
-                $wpdb->prepare( $sql )
+                $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %s", $id )
             );
         }elseif(!empty($filterData['title']) || !empty($filterData['fhosts']) || !empty($filterData['fcategory']) || (!empty($filterData['startDate']) && !empty($filterData['endDate'])) ){
             $sql = "SELECT * FROM $table_name WHERE";
@@ -190,6 +200,8 @@ class Meeting {
             ); 
         }
 
+        // if any data has json data decode that data
+       
         
         // Get all data
        
