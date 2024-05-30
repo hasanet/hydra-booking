@@ -256,10 +256,11 @@
     .color-select{
         background-color: #fff;
         border-radius: 6px;
-        input[type="text"]{
-            height: 32px;
-            width: 32px;
-            border-radius: 6px 0 0 6px;
+        .lv-colorpicker__colorblock-wrap{
+            height: 36px;
+            width: 36px;
+            border-radius: 6px 0 0 6px !important;
+            display: block;
         }
         span{
             color: #765664;
