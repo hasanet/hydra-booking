@@ -62,7 +62,7 @@ const validateSelect = (fieldName) => {
 };
 
 // Host Wise Availability
-const HostAvailabilities = reactive({});
+const HostAvailabilities = reactive([]);
 const fetchHostAvailability = async (host) => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/single-host-availability/'+host); 
@@ -75,12 +75,12 @@ const fetchHostAvailability = async (host) => {
             console.log(response.data.host.availability);
             Settings_avalibility.value = response.data.host;
         }else{
-            // response.data.host.availability && response.data.host.availability.forEach((available, key) => {
-            //     HostAvailabilities[key] = available.title;
-            // });
             // use Each Loop
             for (const key in response.data.host.availability) {
-                HostAvailabilities[key] = response.data.host.availability[key].title;
+                HostAvailabilities.push({
+                    name: response.data.host.availability[key].title,
+                    value: key // Adjust 'someValue' as per your data structure
+                });
             }
         }
     } catch (error) {
@@ -89,8 +89,8 @@ const fetchHostAvailability = async (host) => {
 }
 
 const Host_Avalibility_Callback = (e) => {
-    if(e.target.value){
-        fetchHostAvailability(e.target.value);
+    if(e.value){
+        fetchHostAvailability(e.value);
     }
 }
 
@@ -317,15 +317,16 @@ const isobjectempty = (data) => {
             </div>
         </div>
         <!-- Select Host -->
-        <HbSelect 
+
+        <HbDropdown 
             v-model="meeting.host_id"
             required= "true" 
             :label="$tfhb_trans['Select Host']"  
             name="host_id"
             :placeholder="$tfhb_trans['Select Host']"  
             :option = "Host.hosts" 
-            @change="() => validateSelect('host_id')"
-            @click="() => validateSelect('host_id')"
+            @add-change="validateSelect('host_id')" 
+            @add-click="validateSelect('host_id')" 
             :errors="errors.host_id"
             @tfhb-onchange="Host_Avalibility_Callback"
         />
@@ -345,7 +346,7 @@ const isobjectempty = (data) => {
         </div>
         <!-- Choose Schedule -->
 
-        <HbSelect 
+        <HbDropdown 
             v-model="meeting.availability_id"
             required= "true" 
             :label="$tfhb_trans['Choose Schedule']"  
@@ -470,32 +471,6 @@ const isobjectempty = (data) => {
                 <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
                     <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
                         <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
-                            <!-- <HbDateTime   
-                                v-model="time.start" 
-                                selected = "1" 
-                                :config="{
-                                    enableTime: true,
-                                    noCalendar: true,
-                                    dateFormat: 'H:i',
-                                }"
-                                width="45"
-                                placeholder="Type your schedule title"   
-                                icon="Clock4"
-                            /> 
-                            <Icon name="MoveRight" size="20" /> 
-                            <HbDateTime  
-                                v-model="time.end"  
-                                :label="$tfhb_trans['End']"  
-                                selected = "1"
-                                :config="{
-                                    enableTime: true,
-                                    noCalendar: true,
-                                    dateFormat: 'H:i',
-                                }"
-                                width="45"
-                                placeholder="Type your schedule title"   
-                                icon="Clock4"
-                            />  -->
 
                             <HbDropdown 
                                 v-model="time.start"  
