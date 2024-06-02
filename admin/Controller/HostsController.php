@@ -374,7 +374,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         
 
         $host_id = $request['user_id']; 
-        $status = $request['status'] == 1 || $request['status'] == 'activate' ? 'deactivate' : 'activate';
+        if($request['status'] == 1 || 'deactivate' == $request['status']){
+            $status = 'activate';
+        }
+        if('activate' == $request['status']){
+            $status = 'deactivate';
+        }
+        
         if (empty($host_id) || $host_id == 0) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
