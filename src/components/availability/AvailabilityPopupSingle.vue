@@ -9,6 +9,8 @@ import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import AvailabilityTime from '@/store/times'
 import { toast } from "vue3-toastify"; 
+import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
  
 
 const props = defineProps({
@@ -21,7 +23,25 @@ const emit = defineEmits(["update:availabilityData", "modal-close", "update-avai
 
 
 // Update Availability Settings
-const UpdateAvailabilitySettings = async () => {   
+const UpdateAvailabilitySettings = async (validator_field) => {  
+    
+    // Errors Added
+    if(validator_field){
+        validator_field.forEach(field => {
+            if(!props.availabilityDataSingle[field]){
+                errors[field] = 'Required this field';
+            }
+        });
+    }
+
+    // Errors Checked
+    const isEmpty = Object.keys(errors).length === 0;
+    if(!isEmpty){
+        toast.error('Fill Up The Required Fields'); 
+        return
+    }
+
+    // Api Submission
     try { 
         if(props.is_host){
             const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/update', props.availabilityDataSingle, {
@@ -218,6 +238,16 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
     
 }
 
+const validateInput = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, props.availabilityDataSingle[fieldValueKey]);
+};
+
+const validateSelect = (fieldName) => {
+    const fieldValueKey = fieldName;
+    isEmpty(fieldName, props.availabilityDataSingle[fieldValueKey]);
+};
+
 </script>
  
 
@@ -240,6 +270,9 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                     :label="$tfhb_trans['Title']"  
                     selected = "1"
                     placeholder="Type your schedule title"   
+                    @keyup="() => validateInput('title')"
+                    @click="() => validateInput('title')"
+                    :errors="errors.title"
                 /> 
                 <!-- Title -->
                 <!-- Time Zone -->
@@ -252,6 +285,9 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                     :filter="true"
                     placeholder="Select Time Zone"  
                     :option = "props.timeZone" 
+                    @add-change="validateSelect('time_zone')" 
+                    @add-click="validateSelect('time_zone')" 
+                    :errors="errors.time_zone"
                 /> 
                 <!-- Time Zone --> 
             </div>
@@ -436,7 +472,7 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
 
 
                 <!-- Create Or Update Availability -->
-                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? $tfhb_trans['Save Availability'] : $tfhb_trans['Update Availability'] }}</button>
+                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings(['title', 'time_zone'])">{{ is_host ? $tfhb_trans['Save Availability'] : $tfhb_trans['Update Availability'] }}</button>
             </div>
         </div>
    </div>
