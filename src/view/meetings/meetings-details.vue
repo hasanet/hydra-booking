@@ -156,6 +156,12 @@ const validateSelect = (fieldName) => {
             :placeholder="$tfhb_trans['Select Category']" 
             :option = "meetingCategory" 
         />
+        <div class="tfhb-add-moreinfo tfhb-full-width" >
+            <router-link :to="'/settings/category'" exact :class="'tfhb-btn tfhb-inline-flex tfhb-gap-8 tfhb-justify-normal tfhb-height-auto'">
+                <Icon name="PlusCircle" :width="20"/>
+                Create Category
+            </router-link>
+        </div>
         <div class="tfhb-submission-btn">
             <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['title', 'description', 'duration'])">{{ $tfhb_trans['Save & Continue'] }} </button>
         </div>
