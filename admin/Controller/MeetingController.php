@@ -512,7 +512,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'message' => 'Meeting Updated Successfully', 
-            'data' => $data, 
+            'data' => $data,  
         );
         return rest_ensure_response($data);
     }

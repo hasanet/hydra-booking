@@ -70,8 +70,10 @@
 		.tfhb-popup.tfhb-availability-popup{
 			.tfhb-popup-wrap{
 				max-width: 980px !important;
+				width: 980px !important;
 				@media #{$max991}{
 					max-width: 100% !important;
+					width: 100% !important;
 				}
 			}
 		}

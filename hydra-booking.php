@@ -14,6 +14,7 @@
 
 // don't load directly
 defined( 'ABSPATH' ) || exit; 
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 class THB_INIT{
     // CONSTARACT 

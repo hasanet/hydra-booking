@@ -110,6 +110,12 @@
         flex-wrap: nowrap !important;
     }
 
+    //inline-flex
+    .tfhb-inline-flex{
+        display: inline-flex;
+        align-items: center;
+    }
+
     // Height auto
     .tfhb-height-auto{
         height: auto !important;

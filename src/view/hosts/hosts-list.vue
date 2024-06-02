@@ -1,12 +1,6 @@
 <script setup>
-import { reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
-import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
-import { User } from 'lucide-vue-next';
-import { toast } from "vue3-toastify";
-
-const emit = defineEmits(["delete-host"]); 
+const emit = defineEmits(["delete-host", "update-host-status"]); 
 const props = defineProps({
     host_list: {
         type: Object,
@@ -27,7 +21,7 @@ const props = defineProps({
             <div   v-for="(host, key) in host_list"  class="tfhb-single-hosts"> 
                 <div class="tfhb-single-hosts-wrap ">
                     <span class="tfhb-hosts-status" v-if="host.status == 'activate'">Activate</span> 
-                    <span class="tfhb-hosts-status tfhb-hosts-status-warning" v-else>Deactiavte</span>
+                    <span class="tfhb-hosts-status tfhb-hosts-status-warning" v-else>Deactivate</span>
 
                     <div class="tfhb-hosts-info tfhb-flexbox">
                         <div class="hosts-avatar" v-if="host.avatar !='' " >
@@ -49,7 +43,7 @@ const props = defineProps({
                             <!-- route link -->
                             <router-link :to="{ name: 'HostsProfile', params: { id: host.user_id } }" class="tfhb-dropdown-single">Edit</router-link>
                             <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                            <span class="tfhb-dropdown-single" @click="emit('update-host-status',host.id, host.user_id, host.status)">{{host.status == 'activate' ? 'Deactiavte' : 'Actiavte'}}</span>
+                            <span class="tfhb-dropdown-single" @click="emit('update-host-status',host.id, host.user_id, host.status)">{{host.status == 'activate' ? 'Deactivate' : 'Activate'}}</span>
                        
                             <span class="tfhb-dropdown-single" @click="emit('delete-host', host.id, host.user_id)">Delete</span>
                          </div>

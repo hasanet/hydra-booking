@@ -10,9 +10,13 @@
     }
     .tfhb-dashboard-chartbox {
       .tfhb-single-chartbox {
-        // padding: 24px;
         width: calc(25% - 18px);
-
+        @media #{$max1399}{
+          width: calc(50% - 18px);
+        }
+        @media #{$max640}{
+          width: 100%;
+        }
         .tfhb-single-chartbox-wrap {
           position: relative; 
           padding: 24px;
@@ -148,7 +152,9 @@
     .tfhb-dashboard-notice-box {
       .tfhb-dashboard-notice-box-inner {
         width: calc(50% - 12px);
-
+        @media #{$max1366}{
+          width: 100%;
+        }
         .tfhb-dashboard-notice-box-content { 
           max-height: 355px;
           overflow: auto;

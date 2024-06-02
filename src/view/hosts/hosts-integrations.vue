@@ -45,7 +45,7 @@ const Integration = reactive( {
         type: 'meeting', 
         status: 0, 
         connection_status: 0, 
-        tfhb_google_calendar: [],
+        tfhb_google_calendar: {},
 
     },
 });
@@ -68,7 +68,7 @@ const fetchIntegration = async () => {
 
         if (response.data.status) {   
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
-            Integration.google_calendar= response.data.google_calendar ? response.data.google_calendar : Integration.google_calendar; 
+            Integration.google_calendar= response.data.google_calendar ? response.data.google_calendar : Integration.google_calendar;  
             
 
             skeleton.value = false;

@@ -155,9 +155,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             for ($i=0; $i < 7; $i++) { 
                 $statistics['label'][] = date('Y-m-d', strtotime('-'.$i.' days'));
             }
-             $statistics['label'] = array_reverse($statistics['label']);
-
-            
+             $statistics['label'] = array_reverse($statistics['label']); 
         } 
         if( $days == 30){ // This Month every Days
             // store label as date  
