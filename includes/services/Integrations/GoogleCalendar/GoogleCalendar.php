@@ -34,10 +34,18 @@ class GoogleCalendar{
 
         // Set the Client Data
         $this->clientId = isset($google_calendar['client_id']) ? $google_calendar['client_id'] : '';
-        $this->clientSecret = isset($google_calendar['client_secret']) ? $google_calendar['client_secret'] : '';
+        $this->clientSecret = isset($google_calendar['secret_key']) ? $google_calendar['secret_key'] : '';
         $this->redirectUrl =  isset($google_calendar['redirect_url']) ? $google_calendar['redirect_url'] : '';
     }
-    
+    // Set Access Token
+    public function setAccessToken($host_id){
+
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($host_id, '_tfhb_host_integration_settings', true) : array();
+        $accessToken = isset($_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar']['access_token']) ? $_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar']['access_token'] : '';
+
+
+        $this->accessToken = $accessToken;
+    }
 
     public function create_endpoint(){
         register_rest_route('hydra-booking/v1', '/integration/google-api', array(
@@ -51,15 +59,18 @@ class GoogleCalendar{
 
     public function GetAccessData(){
 
+
+        // Set the Client Data 
         if(isset($_GET['code']) && isset($_GET['state'])) {
+           
 			try { 
 				
                 $host_id = $_GET['state'];
-				// Get the access token 
-				$data = $this->GetAccessToken( $_GET['code']);
+            
+				$data = $this->GetAccessToken( $_GET['code']); 
                 $data = json_decode($data, true);
                 $email = $this->getEmailByIdToken($data['id_token']);
-
+         
                 // Get all calendar in the account 
                 $url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList';
                 $response = wp_remote_get($url, array( 'headers' => array('Authorization' => 'Bearer ' . $data['access_token'])));
@@ -82,10 +93,10 @@ class GoogleCalendar{
 
                 $_tfhb_host_integration_settings =  is_array(get_user_meta($host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($host_id, '_tfhb_host_integration_settings', true) : array();
 
-                 $_tfhb_host_integration_settings['tfhb_google_calendar'] = $data;
+                $_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar'] = $data;
 
                 // save to user metadata
-                update_user_meta($host_id, '_tfhb_google_calendar', $_tfhb_host_integration_settings);
+                update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings, true);
  
                 $redirect_url = get_site_url() . '/wp-admin/admin.php?page=hydra-booking#/hosts/profile/' . $host_id . '/integrations';
                  
@@ -119,10 +130,7 @@ class GoogleCalendar{
             'body' => $post_fields
         ));
         $body = wp_remote_retrieve_body($response);
-
-        return $body;
-        exit;
-
+ 
         return json_decode($body, true);
     }
 
@@ -176,6 +184,40 @@ class GoogleCalendar{
 
         $request = wp_remote_request($url, $args);
  
+    }
+
+    
+
+    // Insert Booking to Google Calendar
+    public function InsertGoogleCalender(){ 
+
+            
+            $data = array(
+                'summary' => 'Event Title Hydra Booking',
+                'location' => 'Event Location',
+                'description' => 'Event Description',
+                'start' => array(
+                    'dateTime' => '2024-06-02T10:00:00',
+                    'timeZone' => 'Asia/Dhaka',
+                ),
+                'end' => array(
+                    'dateTime' => '2024-06-02T12:00:00',
+                    'timeZone' => 'Asia/Dhaka',
+                ),
+            );
+
+            $url = 'https://www.googleapis.com/calendar/v3/calendars/primary/events/';
+            $response = wp_remote_post($url, array(
+                'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
+                'body' => json_encode($data),
+                'method' => 'POST',
+                'data_format' => 'body',
+            )); 
+            // event id
+            $body = wp_remote_retrieve_body($response); 
+            return $body;
+
+                    
     }
 
 }

@@ -33,7 +33,10 @@ const meetingData = reactive({
     ],
     meeting_category: '',
     availability_range_type: 'indefinitely',
-    availability_range: {},
+    availability_range: {
+        start: '',
+        end: ''
+    },
     availability_type: 'settings',
     availability_id : '',
     availability_custom: 

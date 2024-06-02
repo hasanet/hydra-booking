@@ -8,6 +8,7 @@ use HydraBooking\DB\Booking;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
 use HydraBooking\Admin\Controller\CountryController;
+use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -59,12 +60,21 @@ class HydraBookingShortcode {
         if(!$MeetingData){
             return 'Invalid Meeting ID';
         }
-        // echo "<pre>";
-        // print_r($MeetingData);
-        // echo "</pre>";
+     
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
+        // $_tfhb_host_integration_settings =  is_array(get_user_meta(3, '_tfhb_host_integration_settings', true)) ? get_user_meta(3, '_tfhb_host_integration_settings', true) : array();
 
+       
+        // // echo "<pre>";
+        // // print_r( $_tfhb_host_integration_settings);
+        // // echo "</pre>";
+        // $google = new GoogleCalendar();
+        // $google->setAccessToken(3);
+        // $google->InsertGoogleCalender();
+        // echo "<pre>";
+        // print_r($meta_data);
+        // echo "</pre>";
         //  Reschedule Booking
         $booking_data = array();
 

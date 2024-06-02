@@ -22,7 +22,7 @@ const props = defineProps([
 const emit = defineEmits([ "update-integrations", ]);  
 </script>
  
-<template>
+<template> 
       <!-- Zoom Integrations  -->
       <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box ">
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">

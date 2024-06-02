@@ -42,10 +42,10 @@ const props = defineProps({
 }); 
  
 
-const imageChange = (attachment) => {  
+const imageChange = (attachment) => {   
+    props.host.avatar = attachment.url; 
     const image = document.querySelector('.avatar_display'); 
     image.src = attachment.url; 
-    props.host.avatar = attachment.url; 
 }
 const UploadImage = () => {   
     wp.media.editor.send.attachment = (props, attachment) => { 
@@ -69,6 +69,7 @@ const validateSelect = (fieldName) => {
 
 <template>  
     <div class="tfhb-admin-card-box">   
+
         <div class="tfhb-single-form-field-wrap tfhb-flexbox">
             <div class="tfhb-field-image" > 
                 <img v-if="host.avatar != ''"  class='avatar_display'  :src="host.avatar">
