@@ -34,7 +34,7 @@ class GoogleCalendar{
 
         // Set the Client Data
         $this->clientId = isset($google_calendar['client_id']) ? $google_calendar['client_id'] : '';
-        $this->clientSecret = isset($google_calendar['client_secret']) ? $google_calendar['client_secret'] : '';
+        $this->clientSecret = isset($google_calendar['secret_key']) ? $google_calendar['secret_key'] : '';
         $this->redirectUrl =  isset($google_calendar['redirect_url']) ? $google_calendar['redirect_url'] : '';
     }
     
@@ -51,15 +51,20 @@ class GoogleCalendar{
 
     public function GetAccessData(){
 
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings'); 
+        $google_calendar = isset($_tfhb_integration_settings['google_calendar']) ? $_tfhb_integration_settings['google_calendar'] : array();
+
+        // Set the Client Data 
         if(isset($_GET['code']) && isset($_GET['state'])) {
+           
 			try { 
 				
                 $host_id = $_GET['state'];
-				// Get the access token 
-				$data = $this->GetAccessToken( $_GET['code']);
+            
+				$data = $this->GetAccessToken( $_GET['code']); 
                 $data = json_decode($data, true);
                 $email = $this->getEmailByIdToken($data['id_token']);
-
+         
                 // Get all calendar in the account 
                 $url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList';
                 $response = wp_remote_get($url, array( 'headers' => array('Authorization' => 'Bearer ' . $data['access_token'])));
@@ -82,10 +87,10 @@ class GoogleCalendar{
 
                 $_tfhb_host_integration_settings =  is_array(get_user_meta($host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($host_id, '_tfhb_host_integration_settings', true) : array();
 
-                 $_tfhb_host_integration_settings['tfhb_google_calendar'] = $data;
+                $_tfhb_host_integration_settings['tfhb_google_calendar'] = $data;
 
                 // save to user metadata
-                update_user_meta($host_id, '_tfhb_google_calendar', $_tfhb_host_integration_settings);
+                update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
  
                 $redirect_url = get_site_url() . '/wp-admin/admin.php?page=hydra-booking#/hosts/profile/' . $host_id . '/integrations';
                  

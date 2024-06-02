@@ -441,6 +441,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id, ); 
             $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
             $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status'];  
+          
             
             
         } 

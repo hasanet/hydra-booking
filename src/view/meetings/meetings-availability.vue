@@ -255,12 +255,13 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
 </script>
 
 <template>
-
+   
     <div class="meeting-create-details tfhb-gap-24">
         <div class="tfhb-meeting-range tfhb-full-width">
             <div class="tfhb-admin-title" >
                 <h2>Availability Range for this Booking</h2> 
                 <p>How many days can the invitee schedule?</p>
+                {{meeting}}
             </div>
 
             <div class="tfhb-flexbox tfhb-gap-0 tfhb-align-normal">
@@ -276,7 +277,7 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                         </div>
                     </label>
                 </div>
-                <div class="tfhb-single-meeting-range tfhb-admin-card-box tfhb-border-box tfhb-m-0 tfhb-align-baseline">
+                <div class="tfhb-single-meeting-range tfhb-admin-card-box tfhb-border-box tfhb-m-0 tfhb-align-baseline"> 
                     <label for="tfhb_specific_date" class="tfhb-m-0 tfhb-flexbox tfhb-gap-16 tfhb-align-normal">
                         <div class="tfhb-range-checkbox">
                             <input id="tfhb_specific_date" name="tfhb_range_date" type="radio" value="range" v-model="meeting.availability_range_type" :checked="meeting.availability_range_type == 'range' ? true : false">

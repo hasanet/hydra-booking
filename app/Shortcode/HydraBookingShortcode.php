@@ -59,12 +59,12 @@ class HydraBookingShortcode {
         if(!$MeetingData){
             return 'Invalid Meeting ID';
         }
-        // echo "<pre>";
-        // print_r($MeetingData);
-        // echo "</pre>";
+     
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
 
-
+        // echo "<pre>";
+        // print_r($meta_data);
+        // echo "</pre>";
         //  Reschedule Booking
         $booking_data = array();
 
