@@ -249,7 +249,10 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
             return;
         }
     }
-    
+}
+
+const isobjectempty = (data) => {
+    return Object.keys(data).length === 0;
 }
 
 </script>
@@ -327,6 +330,13 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
             :errors="errors.host_id"
             @tfhb-onchange="Host_Avalibility_Callback"
         />
+
+        <div class="tfhb-add-moreinfo tfhb-full-width" v-if="isobjectempty(Host.hosts)">
+            <router-link :to="'/hosts/list'" exact :class="'tfhb-btn tfhb-inline-flex tfhb-gap-8 tfhb-justify-normal tfhb-height-auto'">
+                <Icon name="PlusCircle" :width="20"/>
+                Create Host
+            </router-link>
+        </div>
 
         <div class="tfhb-availaility-tabs">
             <ul class="tfhb-flexbox tfhb-gap-16">

@@ -261,6 +261,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(!$hostDelete) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while deleting host'));
         }
+
+        // Delete the user
+        require_once(ABSPATH.'wp-admin/includes/user.php' );
+        $user_meta = get_userdata( $user_id );
+        $user_roles = !empty($user_meta->roles[0]) ? $user_meta->roles[0] : '';
+        if(!empty($user_roles) && "administrator"!=$user_roles){
+            $deleted = wp_delete_user($user_id);
+        }
+
         // Update user Option
         delete_user_meta($user_id, '_tfhb_host');
         // Hosts Lists
@@ -374,7 +383,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         
 
         $host_id = $request['user_id']; 
-        $status = $request['status'] == 1 || $request['status'] == 'activate' ? 'deactivate' : 'activate';
+        if($request['status'] == 1 || 'deactivate' == $request['status']){
+            $status = 'activate';
+        }
+        if('activate' == $request['status']){
+            $status = 'deactivate';
+        }
+        
         if (empty($host_id) || $host_id == 0) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Host'));
         }
