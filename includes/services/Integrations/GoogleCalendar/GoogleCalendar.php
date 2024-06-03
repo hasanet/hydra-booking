@@ -1,7 +1,7 @@
 <?php
 
 namespace HydraBooking\Services\Integrations\GoogleCalendar;
-
+use HydraBooking\DB\Booking;
 class GoogleCalendar{
 
     public $clientId;
@@ -15,7 +15,7 @@ class GoogleCalendar{
     private $refreshTokenUrl = 'https://www.googleapis.com/oauth2/v3/token';
     public $authUrl = 'https://accounts.google.com/o/oauth2/auth';
  
-    public $calendarEvent = 'https://www.googleapis.com/calendar/v3/calendars/primary/events/';
+    public $calendarEvent = 'https://www.googleapis.com/calendar/v3/calendars/';
 
     public $authScope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events';
 
@@ -24,6 +24,8 @@ class GoogleCalendar{
     public function __construct( ) { 
 
         $this->setClientData();  
+
+        // add_action('hydra_booking/after_booking_completed', array($this, 'InsertGoogleCalender'));
     }
 
     // Set Client Data
@@ -50,8 +52,7 @@ class GoogleCalendar{
     public function create_endpoint(){
         register_rest_route('hydra-booking/v1', '/integration/google-api', array(
             'methods' => 'GET',
-            'callback' => array($this, 'GetAccessData'),
-            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+            'callback' => array($this, 'GetAccessData'), 
         ));  
         
         
@@ -80,12 +81,13 @@ class GoogleCalendar{
                 $data['email'] = $email;
 
                 foreach($body['items'] as $calendar){ 
-                    $data['items'][] = array(
-                        'id' => $calendar['id'],
-                        'title' => $calendar['summary'],
-                        'write_status' => 0,
-                    );
-
+                    if($calendar['accessRole'] == 'owner' || $calendar['accessRole'] == 'writer'){
+                        $data['items'][] = array(
+                            'id' => $calendar['id'],
+                            'title' => $calendar['summary'],
+                            'write_status' => 0,
+                        );
+                    } 
                 }
 
                 // remove the Id Token
@@ -112,6 +114,40 @@ class GoogleCalendar{
 		}
     }
 
+    
+    // if Access token is experired
+    public function refreshToken($host_id){
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($host_id, '_tfhb_host_integration_settings', true) : array();
+        $refreshToken =  isset($_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar']['refresh_token']) ? $_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar']['refresh_token'] : '';
+      
+
+        $url = $this->refreshTokenUrl;
+        $clientId = $this->clientId;
+        $clientSecret = $this->clientSecret;
+        $post_fields = array(
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'refresh_token' => $refreshToken,
+            'grant_type' => 'refresh_token'
+        ); 
+        // use Wp Remote Request
+        $response = wp_remote_post($url, array(
+            'body' => $post_fields
+        ));
+        $body = wp_remote_retrieve_body($response); 
+        $body = json_decode($body, true);
+ 
+        if($body['access_token']){
+
+            $this->accessToken = $body['access_token'];
+        }
+        else{
+            $this->setAccessToken($host_id);
+        }
+ 
+
+        return $body;
+    }
 
     public function GetAccessToken( $code){
         $url = $this->tokenUrl;
@@ -189,33 +225,85 @@ class GoogleCalendar{
     
 
     // Insert Booking to Google Calendar
-    public function InsertGoogleCalender(){ 
+    public function InsertGoogleCalender( ){ 
+        $booking = new Booking();
 
-            
-            $data = array(
-                'summary' => 'Event Title Hydra Booking',
-                'location' => 'Event Location',
-                'description' => 'Event Description',
-                'start' => array(
-                    'dateTime' => '2024-06-02T10:00:00',
-                    'timeZone' => 'Asia/Dhaka',
-                ),
-                'end' => array(
-                    'dateTime' => '2024-06-02T12:00:00',
-                    'timeZone' => 'Asia/Dhaka',
-                ),
-            );
+        $data = $booking->get(10, false);
+      
+       
+        //  set event data google meet shedule 
+        $start_time = strtotime($data->start_time); // 03:45 AM
+        $end_time = strtotime($data->end_time); // 04:30 AM
+        $meeting_dates = $data->meeting_dates; // 2024-06-12
+        // 2024-06-02T10:00:00 
+        $start_date = date('Y-m-d', strtotime($meeting_dates)) . 'T' . date('H:i:s', $start_time);
+        $end_date = date('Y-m-d', strtotime($meeting_dates)) . 'T' . date('H:i:s', $end_time);
 
-            $url = 'https://www.googleapis.com/calendar/v3/calendars/primary/events/';
-            $response = wp_remote_post($url, array(
-                'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
-                'body' => json_encode($data),
-                'method' => 'POST',
-                'data_format' => 'body',
-            )); 
-            // event id
-            $body = wp_remote_retrieve_body($response); 
-            return $body;
+      
+
+        // Meeting location google meeting 
+        $setData = array(
+            'title' => 'Meeting with ' . $data->attendee_name,
+            'summary' => 'Title: ' . $data->meeting_title,
+            'location' => 'Location: ' . $data->meeting_location,
+            'description' => 'Description: ',
+            'start' => array(
+                'dateTime' =>  $start_date,
+                'timeZone' => $data->attendee_time_zone,
+            ),
+            'end' => array(
+                'dateTime' => $end_date,
+                'timeZone' => $data->attendee_time_zone,
+            ),
+            'attendees' => array(
+                array('email' => $data->email),
+                array('email' => $data->host_email),
+            ),
+            'reminders' => array(
+                'useDefault' => false,
+                'overrides' => array(
+                    array('method' => 'email', 'minutes' => 24 * 60),
+                    array('method' => 'popup', 'minutes' => 10),
+                ),
+            ),
+            'conferenceData' => array(
+                'createRequest' => array(
+                    'requestId' => 'random_id', // Provide a unique ID for the request
+                    'conferenceSolutionKey' => array(
+                        'type' => 'hangoutsMeet'
+                    )
+                )
+            )
+        );  
+
+        // Set the Access Token
+        $this->refreshToken($data->host_id);
+ 
+ 
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($data->host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($data->host_id, '_tfhb_host_integration_settings', true) : array();
+        $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
+        $items = isset($google_calendar['tfhb_google_calendar']['items']) ? $google_calendar['tfhb_google_calendar']['items'] : array();
+        foreach($items as $item){
+            if($item['write_status'] == 1){
+               
+                $calendarId = $item['id'];
+                $url =  $this->calendarEvent . $calendarId . '/events';
+      
+       
+
+                $response = wp_remote_post($url, array(
+                    'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
+                    'body' => json_encode($setData),
+                    'method' => 'POST',
+                    'data_format' => 'body',
+                )); 
+                // event id
+                $body = wp_remote_retrieve_body($response);   
+                
+        
+            }
+        } 
+         
 
                     
     }

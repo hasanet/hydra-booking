@@ -65,16 +65,10 @@ class HydraBookingShortcode {
 
         // $_tfhb_host_integration_settings =  is_array(get_user_meta(3, '_tfhb_host_integration_settings', true)) ? get_user_meta(3, '_tfhb_host_integration_settings', true) : array();
 
-       
-        // // echo "<pre>";
-        // // print_r( $_tfhb_host_integration_settings);
-        // // echo "</pre>";
-        // $google = new GoogleCalendar();
-        // $google->setAccessToken(3);
-        // $google->InsertGoogleCalender();
-        // echo "<pre>";
-        // print_r($meta_data);
-        // echo "</pre>";
+        $google = new GoogleCalendar();
+        $google->InsertGoogleCalender();
+        exit;
+ 
         //  Reschedule Booking
         $booking_data = array();
 
@@ -85,10 +79,7 @@ class HydraBookingShortcode {
                 array('hash' => $atts['hash']),
                 false,
                 true 
-            ); 
-            // echo "<pre>";
-            // print_r($get_booking);
-            // echo "</pre>";
+            );  
 
             if(!$get_booking){
                 return 'Invalid Booking ID';
@@ -513,7 +504,7 @@ class HydraBookingShortcode {
  
 
         // After Booking Hooks
-        do_action('hydra_booking/after_booking_confirmation', $data);
+        // do_action('hydra_booking/after_booking_confirmation', $data);
 
         // Single Booking & Mail Notification
         $single_booking_meta = $booking->get($result['insert_id'], false);

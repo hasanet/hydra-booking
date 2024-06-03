@@ -45,6 +45,7 @@ const Integration = reactive( {
         type: 'meeting', 
         status: 0, 
         connection_status: 0, 
+        selected_calendar_id: '', 
         tfhb_google_calendar: {},
 
     },
@@ -116,7 +117,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box tfhb-m-0">  
+    <div class="tfhb-admin-card-box tfhb-m-0">   
         <!-- Woo  Integrations  --> 
         <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
 

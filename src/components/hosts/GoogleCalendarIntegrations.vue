@@ -9,7 +9,7 @@ import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue';  
-import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import HbRadio from '@/components/form-fields/HbRadio.vue';
 const gCalPopup = ref(false);
 
  
@@ -20,6 +20,18 @@ const props = defineProps([
     'display', 
 ])
 const emit = defineEmits([ "update-integrations", ]);  
+
+const storedOptionData = (data) => {
+    let options = [];
+    // data suild be array single array
+    data.forEach((item, index) => {  
+        options.push({
+            value: item.id,
+            label: item.title,
+        });
+    }); 
+    return options;
+}
 </script>
  
 <template> 
@@ -60,12 +72,13 @@ const emit = defineEmits([ "update-integrations", ]);
                     Enable the calendars you want to check for conflicts to prevent double bookings.
                 </p> 
                 <div class="tfhb-admin-card-box tfhb-flexbox  tfhb-gap-16  tfhb-m-0"  >   
-
-                    <HbCheckbox 
-                        v-for="(item, index) in google_calendar.tfhb_google_calendar.items"
-                        v-model="google_calendar.tfhb_google_calendar.items[index].write_status"
-                        :label="item.title"
+                  
+                    <HbRadio 
+                        v-model="google_calendar.selected_calendar_id" 
+                        :groups="true" 
+                        :object="true"  
                         :name="'tfhb_calendar_items_'+index"
+                        :options="storedOptionData(google_calendar.tfhb_google_calendar.items)"
                     />  
                 </div>
                 <div class="tfhb-submission-btn tfhb-mt-8 tfhb-mb-8">
