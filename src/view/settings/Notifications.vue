@@ -17,6 +17,13 @@ import MailNotifications from '@/components/notifications/MailNotifications.vue'
 const skeleton = ref(true);   
 const host = ref(true);
 const attendee = ref(false);
+const popup = ref(false);
+const isPopupOpen = () => {
+    popup.value = true;
+}
+const isPopupClose = (data) => {
+    popup.value = false;
+}
 
 const Notification = reactive(  { 
      host : {
@@ -139,11 +146,15 @@ const UpdateNotification = async () => {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
             }); 
+
+            popup.value = false;
             
         }else{
             toast.error(response.data.message, {
                 position: 'bottom-right', // Set the desired position
             });
+
+            popup.value = false;
         }
     } catch (error) {
         toast.error('Action successful', {
@@ -152,7 +163,6 @@ const UpdateNotification = async () => {
     }
 }
 onBeforeMount(() => {  
-
     fetchNotification();
 });
 
@@ -184,6 +194,9 @@ onBeforeMount(() => {
                     label="Booking Confirmation" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_confirmation"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -194,6 +207,9 @@ onBeforeMount(() => {
                     label="Booking Cancel" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_cancel"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -203,6 +219,9 @@ onBeforeMount(() => {
                     label="Booking Reschedule" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_reschedule"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -212,6 +231,9 @@ onBeforeMount(() => {
                     label="Booking Reminder" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_reminder"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
  
@@ -225,6 +247,9 @@ onBeforeMount(() => {
                     label="Booking Confirmation" 
                     @update-notification="UpdateNotification"
                     :data="Notification.attendee.booking_confirmation"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -235,6 +260,9 @@ onBeforeMount(() => {
                     label="Booking Cancel" 
                     @update-notification="UpdateNotification"
                     :data="Notification.attendee.booking_cancel"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -243,6 +271,9 @@ onBeforeMount(() => {
                     title="Send Email to Attendee" 
                     label="Booking Reschedule" 
                     :data="Notification.attendee.booking_reschedule"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -252,6 +283,9 @@ onBeforeMount(() => {
                     label="Booking Reminder" 
                     @update-notification="UpdateNotification"
                     :data="Notification.attendee.booking_reminder"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
  

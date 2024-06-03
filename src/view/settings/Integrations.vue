@@ -11,10 +11,6 @@ import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/integrations/GoogleCalendarIntegrations.vue'; 
 
 // import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue' 
-import HbText from '@/components/form-fields/HbText.vue'
-import HbSwitch from '@/components/form-fields/HbSwitch.vue';
-import HbPopup from '@/components/widgets/HbPopup.vue'; 
 import Icon from '@/components/icon/LucideIcon.vue' 
 
 //  Load Time Zone 
@@ -22,8 +18,20 @@ const skeleton = ref(true);
  
  
 
-// Const for Modal
-const wooPopup = ref(false);
+const popup = ref(false);
+const gpopup = ref(false);
+const isPopupOpen = () => {
+    popup.value = true;
+}
+const isPopupClose = (data) => {
+    popup.value = false;
+}
+const isgPopupOpen = () => {
+    gpopup.value = true;
+}
+const isgPopupClose = (data) => {
+    gpopup.value = false;
+}
 
 
 const Integration = reactive( {
@@ -91,11 +99,17 @@ const UpdateIntegration = async (key, value) => {
                 position: 'bottom-right', // Set the desired position
                 "autoClose": 1500,
             }); 
+
+            popup.value = false;
+            gpopup.value = false;
             
         }else{
             toast.error(response.data.message, {
                 position: 'bottom-right', // Set the desired position
             });
+
+            popup.value = false;
+            gpopup.value = false;
         }
     } catch (error) {
         toast.error('Action successful', {
@@ -130,11 +144,23 @@ onBeforeMount(() => {
                 <!-- Woo Integrations  -->
 
                 <!-- zoom intrigation -->
-                <ZoomIntregration :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
+                <ZoomIntregration 
+                :zoom_meeting="Integration.zoom_meeting" 
+                @update-integrations="UpdateIntegration" 
+                :ispopup="popup"
+                @popup-open-control="isPopupOpen"
+                @popup-close-control="isPopupClose"
+                />
                 <!-- zoom intrigation -->
 
                 <!-- zoom intrigation -->
-                <GoogleCalendarIntegrations :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
+                <GoogleCalendarIntegrations 
+                :google_calendar="Integration.google_calendar" 
+                @update-integrations="UpdateIntegration"
+                :ispopup="gpopup"
+                @popup-open-control="isgPopupOpen"
+                @popup-close-control="isgPopupClose" 
+                />
                 <!-- zoom intrigation -->
           
 

@@ -17,15 +17,15 @@ import Editor from 'primevue/editor';
 
 //  Load Time Zone 
 const skeleton = ref(false);
-const isPopup = ref(false);
 
 
 const props = defineProps([
     'title', 
     'label', 
-    'data'
+    'data',
+    'ispopup'
 ])
-const emit = defineEmits(['update-notification']);
+const emit = defineEmits(['update-notification', 'popup-open-control', 'popup-close-control']);
 
 const meetingShortcode = ref([
     '{{meeting.title}}',
@@ -53,6 +53,10 @@ const copyShortcode = (value) => {
     // Show a toast notification or perform any other action
     toast.success(value + ' is Copied');
 }
+
+const closePopup = () => { 
+    emit('popup-close-control', false)
+}
 </script>
 <template>
     <!-- Single Notification  -->
@@ -64,9 +68,9 @@ const copyShortcode = (value) => {
 
         </div>
 
-        <button class="tfhb-btn tfhb-edit flex-btn" @click="isPopup = true" ><Icon name="PencilLine" size="15" /> Edit </button>
+        <button class="tfhb-btn tfhb-edit flex-btn" @click="emit('popup-open-control')" ><Icon name="PencilLine" size="15" /> Edit </button>
 
-        <HbPopup :isOpen="isPopup" @modal-close="isPopup = false" max_width="700px" name="first-modal">
+        <HbPopup :isOpen="ispopup" @modal-close="closePopup" max_width="700px" name="first-modal">
             <template #header> 
                 <h3>{{ title }}</h3>
                 
