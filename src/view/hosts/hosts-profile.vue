@@ -45,9 +45,19 @@ const UpdateHostsInformation = async (validator_field) => {
     // Errors Added
     if(validator_field){
         validator_field.forEach(field => {
-            if(!hostData[field]){
-                errors[field] = 'Required this field';
+
+        const fieldParts = field.split('___'); // Split the field into parts
+        if(fieldParts[0] && !fieldParts[1]){
+            if(!hostData[fieldParts[0]]){
+                errors[fieldParts[0]] = 'Required this field';
             }
+        }
+        if(fieldParts[0] && fieldParts[1]){
+            if(!hostData[fieldParts[0]][fieldParts[1]]){
+                errors[fieldParts[0]+'___'+[fieldParts[1]]] = 'Required this field';
+            }
+        }
+            
         });
     }
 

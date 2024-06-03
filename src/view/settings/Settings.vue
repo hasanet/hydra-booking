@@ -1,27 +1,8 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
 import { useRouter, RouterView } from 'vue-router' 
-import axios from 'axios'  
 import Icon from '@/components/icon/LucideIcon.vue'
 
-
- 
-
-const event = reactive({
-    data : {
-        title: 'Hello World',
-        description: 'This is a First Event',
-        duration: '2s0',
-        location: 'online',
-        host: 'sydur',
-    }
-});  
-
-
-
-const updateEvent = async () => {
- 
-}
 </script>
 
 <template>

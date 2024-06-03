@@ -29,14 +29,14 @@ const props = defineProps({
 
 });
 
-const validateInput = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.meeting[fieldValueKey]);
-};
-
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.meeting[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.meeting[fieldParts[0]][fieldParts[1]]);
+    }
 };
 
 </script>
@@ -50,8 +50,8 @@ const validateSelect = (fieldName) => {
             name="title"
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
-            @keyup="() => validateInput('title')"
-            @click="() => validateInput('title')"
+            @keyup="() => tfhbValidateInput('title')"
+            @click="() => tfhbValidateInput('title')"
             :errors="errors.title"
         /> 
         <HbTextarea  
@@ -60,8 +60,8 @@ const validateSelect = (fieldName) => {
             name="description"
             :label="$tfhb_trans['Description']"  
             :placeholder="$tfhb_trans['Describe about meeting']"
-            @keyup="() => validateInput('description')"
-            @click="() => validateInput('description')"
+            @keyup="() => tfhbValidateInput('description')"
+            @click="() => tfhbValidateInput('description')"
             :errors="errors.description"
         /> 
 
@@ -81,8 +81,8 @@ const validateSelect = (fieldName) => {
                     {name: '60 minutes', value: '60'},
                     {name: 'Custom', value: 'custom'} 
                 ]" 
-                @add-change="validateSelect('duration')" 
-                @add-click="validateSelect('duration')" 
+                @add-change="tfhbValidateInput('duration')" 
+                @add-click="tfhbValidateInput('duration')" 
                 :errors="errors.duration"
             />
             <!-- Duration -->
