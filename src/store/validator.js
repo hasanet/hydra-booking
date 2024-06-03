@@ -3,7 +3,6 @@ const errors = reactive({});
 export default function useValidators() {
 
     const isEmpty = (fieldName, fieldValue) => {
-
         if(!fieldValue){
             errors[fieldName] = "The " + fieldName + " field is required";
         }else{

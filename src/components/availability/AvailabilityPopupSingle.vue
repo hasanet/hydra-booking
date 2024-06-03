@@ -28,9 +28,19 @@ const UpdateAvailabilitySettings = async (validator_field) => {
     // Errors Added
     if(validator_field){
         validator_field.forEach(field => {
-            if(!props.availabilityDataSingle[field]){
-                errors[field] = 'Required this field';
+
+        const fieldParts = field.split('___'); // Split the field into parts
+        if(fieldParts[0] && !fieldParts[1]){
+            if(!props.availabilityDataSingle[fieldParts[0]]){
+                errors[fieldParts[0]] = 'Required this field';
             }
+        }
+        if(fieldParts[0] && fieldParts[1]){
+            if(!props.availabilityDataSingle[fieldParts[0]][fieldParts[1]]){
+                errors[fieldParts[0]+'___'+[fieldParts[1]]] = 'Required this field';
+            }
+        }
+            
         });
     }
 
@@ -238,14 +248,14 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
     
 }
 
-const validateInput = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.availabilityDataSingle[fieldValueKey]);
-};
-
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.availabilityDataSingle[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.availabilityDataSingle[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.availabilityDataSingle[fieldParts[0]][fieldParts[1]]);
+    }
 };
 
 </script>
@@ -270,8 +280,8 @@ const validateSelect = (fieldName) => {
                     :label="$tfhb_trans['Title']"  
                     selected = "1"
                     placeholder="Type your schedule title"   
-                    @keyup="() => validateInput('title')"
-                    @click="() => validateInput('title')"
+                    @keyup="() => tfhbValidateInput('title')"
+                    @click="() => tfhbValidateInput('title')"
                     :errors="errors.title"
                 /> 
                 <!-- Title -->
@@ -285,8 +295,8 @@ const validateSelect = (fieldName) => {
                     :filter="true"
                     placeholder="Select Time Zone"  
                     :option = "props.timeZone" 
-                    @add-change="validateSelect('time_zone')" 
-                    @add-click="validateSelect('time_zone')" 
+                    @add-change="tfhbValidateInput('time_zone')" 
+                    @add-click="tfhbValidateInput('time_zone')" 
                     :errors="errors.time_zone"
                 /> 
                 <!-- Time Zone --> 

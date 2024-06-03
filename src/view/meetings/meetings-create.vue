@@ -317,7 +317,7 @@ const meetingId = route.params.id;
 
             meetingData.id = response.data.meeting.id
             meetingData.user_id = response.data.meeting.user_id
-            meetingData.host_id = response.data.meeting.host_id
+            meetingData.host_id = response.data.meeting.host_id && response.data.meeting.host_id!=0 ? response.data.meeting.host_id : '';
             meetingData.post_id = response.data.meeting.post_id
             meetingData.title = response.data.meeting.title
             meetingData.description = response.data.meeting.description
@@ -401,13 +401,23 @@ onBeforeMount(() => {
 
 
 const UpdateMeetingData = async (validator_field) => {
-
+    
     // Errors Added
     if(validator_field){
         validator_field.forEach(field => {
-            if(!meetingData[field]){
-                errors[field] = 'Required this field';
+
+        const fieldParts = field.split('___'); // Split the field into parts
+        if(fieldParts[0] && !fieldParts[1]){
+            if(!meetingData[fieldParts[0]]){
+                errors[fieldParts[0]] = 'Required this field';
             }
+        }
+        if(fieldParts[0] && fieldParts[1]){
+            if(!meetingData[fieldParts[0]][fieldParts[1]]){
+                errors[fieldParts[0]+'___'+[fieldParts[1]]] = 'Required this field';
+            }
+        }
+            
         });
     }
 

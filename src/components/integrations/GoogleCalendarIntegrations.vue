@@ -10,18 +10,17 @@ import HbText from '@/components/form-fields/HbText.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue';  
 
-const gCalPopup = ref(false);
-
- 
-
 const props = defineProps([
     'google_calendar', 
     'class', 
     'display', 
+    'ispopup'
 ])
-const emit = defineEmits([ "update-integrations", ]); 
+const emit = defineEmits([ "update-integrations", 'popup-open-control', 'popup-close-control' ]); 
 
-
+const closePopup = () => { 
+    emit('popup-close-control', false)
+}
 </script>
  
 <template>
@@ -39,14 +38,14 @@ const emit = defineEmits([ "update-integrations", ]);
             </div>
         </div>
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-            <button @click="gCalPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ google_calendar.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
+            <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ google_calendar.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
                 <HbSwitch v-if="google_calendar.connection_status" @change="emit('update-integrations', 'google_calendar', google_calendar)" v-model="google_calendar.status"    />
             <!-- Swicher --> 
         </div>
 
-        <HbPopup :isOpen="gCalPopup" @modal-close="gCalPopup = false" max_width="600px" name="first-modal">
+        <HbPopup :isOpen="ispopup" @modal-close="closePopup" max_width="600px" name="first-modal">
             <template #header> 
                 <!-- {{ google_calendar }} -->
                 <h2>Add Google Calendar</h2>

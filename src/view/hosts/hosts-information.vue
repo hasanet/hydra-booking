@@ -55,14 +55,14 @@ const UploadImage = () => {
     wp.media.editor.open(); 
 }
 
-const validateInput = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.host[fieldValueKey]);
-};
-
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.host[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.host[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.host[fieldParts[0]][fieldParts[1]]);
+    }
 };
 
 </script>
@@ -93,8 +93,8 @@ const validateSelect = (fieldName) => {
             selected = "1"
             :placeholder="$tfhb_trans['Type your first name']" 
             width="50"
-            @keyup="() => validateInput('first_name')"
-            @click="() => validateInput('first_name')"
+            @keyup="() => tfhbValidateInput('first_name')"
+            @click="() => tfhbValidateInput('first_name')"
             :errors="errors.first_name"
         /> 
         <HbText  
@@ -104,8 +104,8 @@ const validateSelect = (fieldName) => {
             selected = "1"
             :placeholder="$tfhb_trans['Type your last name']" 
             width="50"
-            @keyup="() => validateInput('last_name')"
-            @click="() => validateInput('last_name')"
+            @keyup="() => tfhbValidateInput('last_name')"
+            @click="() => tfhbValidateInput('last_name')"
             :errors="errors.last_name"
         />  
         <HbText  
@@ -127,8 +127,8 @@ const validateSelect = (fieldName) => {
             placeholder="Select Time Zone"  
             :option = "time_zone" 
             width="50" 
-            @add-change="validateSelect('time_zone')" 
-            @add-click="validateSelect('time_zone')" 
+            @add-change="tfhbValidateInput('time_zone')" 
+            @add-click="tfhbValidateInput('time_zone')" 
             :errors="errors.time_zone"
         /> 
         <HbText  
@@ -138,8 +138,8 @@ const validateSelect = (fieldName) => {
             selected = "1"
             :placeholder="$tfhb_trans['Type your mobile no']" 
             width="50" 
-            @keyup="() => validateInput('phone_number')"
-            @click="() => validateInput('phone_number')"
+            @keyup="() => tfhbValidateInput('phone_number')"
+            @click="() => tfhbValidateInput('phone_number')"
             :errors="errors.phone_number"
         />  
          

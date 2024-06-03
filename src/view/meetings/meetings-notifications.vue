@@ -20,6 +20,17 @@ const props = defineProps({
 const host = ref(true);
 const attendee = ref(false);
 
+const popup = ref(false);
+const isPopupOpen = () => {
+    popup.value = true;
+}
+const isPopupClose = (data) => {
+    popup.value = false;
+}
+
+const UpdateNotification = async () => {  
+    popup.value = false;
+}
 // Update Notification 
 const changeTab = (e) => {  
     // get data-tab attribute value of clicked button
@@ -54,6 +65,9 @@ const changeTab = (e) => {
                     label="Booking Confirmation" 
                     @update-notification="UpdateNotification"
                     :data="meeting.notification.host.booking_confirmation"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -64,6 +78,9 @@ const changeTab = (e) => {
                     label="Booking Cancel" 
                     @update-notification="UpdateNotification"
                     :data="meeting.notification.host.booking_cancel"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -72,7 +89,10 @@ const changeTab = (e) => {
                     title="Send Email to Host" 
                     label="Booking Reschedule" 
                     @update-notification="UpdateNotification"
-                    :data="meeting.notification.host.booking_reschedule"  
+                    :data="meeting.notification.host.booking_reschedule" 
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -82,6 +102,9 @@ const changeTab = (e) => {
                     label="Booking Reminder" 
                     @update-notification="UpdateNotification"
                     :data="meeting.notification.host.booking_reminder"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
  
@@ -95,6 +118,9 @@ const changeTab = (e) => {
                     label="Booking Confirmation" 
                     @update-notification="UpdateNotification"
                     :data="meeting.notification.attendee.booking_confirmation"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -105,6 +131,9 @@ const changeTab = (e) => {
                     label="Booking Cancel" 
                     @update-notification="UpdateNotification"
                     :data="meeting.notification.attendee.booking_cancel"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -113,6 +142,9 @@ const changeTab = (e) => {
                     title="Send Email to Attendee" 
                     label="Booking Reschedule" 
                     :data="meeting.notification.attendee.booking_reschedule"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -122,6 +154,9 @@ const changeTab = (e) => {
                     label="Booking Reminder" 
                     @update-notification="UpdateNotification"
                     :data="meeting.notification.attendee.booking_reminder"  
+                    :ispopup="popup"
+                    @popup-open-control="isPopupOpen"
+                    @popup-close-control="isPopupClose"
                 /> 
                 <!-- Single Integrations  -->
  
