@@ -168,6 +168,9 @@ class Booking {
         }elseif($where != null && $join != true) {
             if($custom == true){ 
                 $sql = "SELECT * FROM $table_name WHERE $where";
+                if(!empty($where)){
+                    $sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : "";
+                }
                 $data = $wpdb->get_results(
                     $wpdb->prepare( $sql )
                 ); 

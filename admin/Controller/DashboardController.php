@@ -157,6 +157,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $current_date = date('Y-m-d 23:59:59'); // exp 2021-09-01
         $previous_date = date('Y-m-d 00:00:00',  strtotime('-'.$days.' days')); // exp 2021-09-01
 
+        $current_user = wp_get_current_user();
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+        $host = new Host();
+        $HostData = $host->get( $current_user_id  );
+
         $booking = new Booking();
         $statistics['total_bookings'] = array();
         $statistics['cancelled_bookings'] = array();
@@ -221,7 +228,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 "created_at BETWEEN '$date 00:00:00' AND '$next_date 23:59:59'", 
                 false, 
                 false,
-                true
+                true,
+                null,
+                null,
+                !empty($current_user_role) && "tfhb_host"==$current_user_role ? $HostData->id : false
             );
             $statistics['total_bookings'][] = count($bookings);
             $statistics['cancelled_bookings'][] = count(array_filter($bookings, function($booking){
