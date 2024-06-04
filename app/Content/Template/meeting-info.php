@@ -24,7 +24,7 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
 <div class="tfhb-meeting-info">
     <div class="hidden-field">
         <input type="hidden" id="meeting_id" name="meeting_id" value="<?php echo $meeting['id']; ?>">
-        <input type="hidden" id="host_id" name="host_id" value="<?php echo $host['id']; ?>"> 
+        <input type="hidden" id="host_id" name="host_id" value="<?php echo $host['host_id']; ?>"> 
         <input type="hidden" id="meeting_duration" name="meeting_dates" value="<?php echo $meeting['duration'] ?>">
         <input type="hidden" id="meeting_dates" name="meeting_dates" value="">
         <input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">

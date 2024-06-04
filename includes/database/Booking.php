@@ -135,14 +135,14 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($where = null , $join = false, $FirstOrFaill = false, $custom = false, $orderBy = null, $limit = null) {
+    public function get($where = null , $join = false, $FirstOrFaill = false, $custom = false, $orderBy = null, $limit = null, $user_id = null) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
         $meeting_table = $wpdb->prefix . 'tfhb_meetings';
         $host_table = $wpdb->prefix . 'tfhb_hosts';
 
-        if(is_array($where)){
+        if(is_array($where) && $join==false){
             $sql = "SELECT * FROM $table_name WHERE ";
             $i = 0;
             foreach($where as $k => $v){
@@ -192,6 +192,7 @@ class Booking {
             if($join == true){
                 $sql = "SELECT 
                 $table_name.id,
+                $table_name.host_id,
                 $table_name.meeting_id,
                 $table_name.attendee_name,
                 $table_name.email AS attendee_email,
@@ -216,11 +217,13 @@ class Booking {
                 INNER JOIN $meeting_table
                 ON $table_name.meeting_id=$meeting_table.id
                 INNER JOIN $host_table
-                ON $meeting_table.host_id=$host_table.id";
+                ON $meeting_table.host_id=$host_table.user_id";
             }else{
                 $sql = "SELECT * FROM $table_name";
 
             }
+            // userwise 
+            $sql .= $user_id != null ? " WHERE $table_name.host_id = $user_id" : "";
             // custom where 
             $sql .= $custom != null ? " WHERE $where" : "";
             // Add Order by if exist

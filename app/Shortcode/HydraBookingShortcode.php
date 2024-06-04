@@ -65,9 +65,9 @@ class HydraBookingShortcode {
 
         // $_tfhb_host_integration_settings =  is_array(get_user_meta(3, '_tfhb_host_integration_settings', true)) ? get_user_meta(3, '_tfhb_host_integration_settings', true) : array();
 
-        $google = new GoogleCalendar();
-        $google->InsertGoogleCalender();
-        exit;
+        // $google = new GoogleCalendar();
+        // $google->InsertGoogleCalender();
+        // exit;
  
         //  Reschedule Booking
         $booking_data = array();
