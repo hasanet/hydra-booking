@@ -177,26 +177,26 @@ const prevPage = () => {
     <template #content> 
 
         <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16">
-            <h3 class="tfhb-m-0 tfhb-full-width">Attendee</h3>
+            <h3 class="tfhb-m-0 tfhb-full-width">{{ $tfhb_trans['Attendee'] }}</h3>
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
                 <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_name">
-                    <h4>Name</h4>
+                    <h4>{{ $tfhb_trans['Name'] }}</h4>
                     <p>{{ singleBookingData.attendee_name }}</p>
                 </div>
                 <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_email">
-                    <h4>E-mail</h4>
+                    <h4>{{ $tfhb_trans['E-mail'] }}</h4>
                     <p>{{ singleBookingData.attendee_email }}</p>
                 </div>
                 <div class="tfhb-attendee-name" v-if="singleBookingData.attendee_phone">
-                    <h4>Phone</h4>
+                    <h4>{{ $tfhb_trans['Phone'] }}</h4>
                     <p>{{ singleBookingData.attendee_phone }}</p>
                 </div>
                 <div class="tfhb-attendee-name" v-if="singleBookingData.address">
-                    <h4>Address</h4>
+                    <h4>{{ $tfhb_trans['Address'] }}</h4>
                     <p>{{ singleBookingData.address }}</p>
                 </div>
                 <div class="tfhb-attendee-name" style="width: calc(66% - 4px);" v-if="singleBookingData.message">
-                    <h4>Notes</h4>
+                    <h4>{{ $tfhb_trans['Notes'] }}</h4>
                     <p>{{ singleBookingData.message }}</p>
                 </div>
             </div>
@@ -206,33 +206,33 @@ const prevPage = () => {
             <h3 class="tfhb-m-0 tfhb-full-width">Host</h3>
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
                 <div class="tfhb-attendee-name" v-if="singleBookingData.host_first_name">
-                    <h4>Name</h4>
+                    <h4>{{ $tfhb_trans['Name'] }}</h4>
                     <p>{{ singleBookingData.host_first_name }} {{ singleBookingData.host_last_name }}</p>
                 </div>
                 <div class="tfhb-attendee-name" v-if="singleBookingData.host_email">
-                    <h4>E-mail</h4>
+                    <h4>{{ $tfhb_trans['E-mail'] }}</h4>
                     <p>{{ singleBookingData.host_email }}</p>
                 </div>
                 <div class="tfhb-attendee-name" v-if="singleBookingData.host_time_zone">
-                    <h4>Time zone</h4>
+                    <h4>{{ $tfhb_trans['Time zone'] }}</h4>
                     <p>{{ singleBookingData.host_time_zone }}</p>
                 </div>
             </div>
         </div>
 
         <div class="tfhb-attendee-info tfhb-full-width tfhb-flexbox tfhb-gap-16 tfhb-border-none">
-            <h3 class="tfhb-m-0 tfhb-full-width">Meeting</h3>
+            <h3 class="tfhb-m-0 tfhb-full-width">{{ $tfhb_trans['Meeting'] }}</h3>
             <div class="tfhb-attendee-box tfhb-p-24 tfhb-pt-0 tfhb-pb-0 tfhb-flexbox tfhb-align-baseline tfhb-full-width">
                 <div class="tfhb-attendee-name">
-                    <h4>Time</h4>
+                    <h4>{{ $tfhb_trans['Time'] }}</h4>
                     <p>{{singleBookingData.start_time}} - {{singleBookingData.end_time}}</p>
                 </div>
                 <div class="tfhb-attendee-name">
-                    <h4>Date</h4>
+                    <h4>{{ $tfhb_trans['Date'] }}</h4>
                     <p>{{ Tfhb_Date(singleBookingData.meeting_dates) }}</p>
                 </div>
                 <div class="tfhb-attendee-name">
-                    <h4>Location</h4>
+                    <h4>{{ $tfhb_trans['Location'] }}</h4>
                     <p>{{ TfhbFormatMeetingLocation(singleBookingData.meeting_locations) }}</p>
                 </div>
             </div>
@@ -247,7 +247,7 @@ const prevPage = () => {
 
 <HbPopup :isOpen="BackendBooking" @modal-close="BackendBooking = false" max_width="400px" name="first-modal" gap="24px">
     <template #header> 
-        <h3>Add New Booking</h3>
+        <h3>{{ $tfhb_trans['Add New Booking'] }}</h3>
     </template>
 
     <template #content> 
@@ -346,10 +346,10 @@ const prevPage = () => {
                             </svg>
                             <div class="tfhb-status-popup">
                                 <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li @click="UpdateMeetingStatus(book.id, 'approved')">Approved</li>
-                                    <li class="pending" @click="UpdateMeetingStatus(book.id, 'pending')">Pending</li>
-                                    <li class="schedule" @click="UpdateMeetingStatus(book.id, 'schedule')">Re-schedule</li>
-                                    <li class="canceled" @click="UpdateMeetingStatus(book.id, 'canceled')">Canceled</li>
+                                    <li @click="UpdateMeetingStatus(book.id, 'approved')">{{ $tfhb_trans['Approved'] }}</li>
+                                    <li class="pending" @click="UpdateMeetingStatus(book.id, 'pending')">{{ $tfhb_trans['Pending'] }}</li>
+                                    <li class="schedule" @click="UpdateMeetingStatus(book.id, 'schedule')">{{ $tfhb_trans['Re-schedule'] }}</li>
+                                    <li class="canceled" @click="UpdateMeetingStatus(book.id, 'canceled')">{{ $tfhb_trans['Canceled'] }}</li>
                                 </ul>
                             </div>
                         </div>

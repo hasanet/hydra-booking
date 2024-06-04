@@ -111,20 +111,20 @@ onBeforeMount(() => {
                 <div class="tfhb-colorbox tfhb-full-width">
                     <div class="tfhb-single-colorbox tfhb-flexbox tfhb-mb-16">
                         <label>
-                            Primary Color
+                            {{ $tfhb_trans['Primary Color'] }}
                         </label>
                         <div class="color-select">
                             <LvColorpicker :value="appearanceSettings.primary_color" v-model="appearanceSettings.primary_color" :withoutInput="true"/>
-                            <span>Select Color</span>
+                            <span>{{ $tfhb_trans['Select Color'] }}</span>
                         </div>
                     </div>
                     <div class="tfhb-single-colorbox tfhb-flexbox">
                         <label>
-                            Secondary Color
+                            {{ $tfhb_trans['Secondary Color'] }}
                         </label>
                         <div class="color-select">
                             <LvColorpicker :value="appearanceSettings.secondary_color" v-model="appearanceSettings.secondary_color" :withoutInput="true"/>
-                            <span>Select Color</span>
+                            <span>{{ $tfhb_trans['Select Color'] }}</span>
                         </div>
                     </div>
                 </div>

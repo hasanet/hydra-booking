@@ -73,7 +73,7 @@ const tfhbValidateInput = (fieldName) => {
         <div class="tfhb-single-form-field-wrap tfhb-flexbox">
             <div class="tfhb-field-image" > 
                 <img v-if="host.avatar != ''"  class='avatar_display'  :src="host.avatar">
-                <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">Change</button> 
+                <button class="tfhb-image-btn tfhb-btn" @click="UploadImage">{{ $tfhb_trans['Change'] }}</button> 
                 <input  type="text"  :v-model="host.avatar"   />  
             </div>
             <div class="tfhb-image-box-content">  
