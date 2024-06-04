@@ -6,8 +6,9 @@ use HydraBooking\DB\Availability;
 use HydraBooking\Admin\Controller\DateTimeController;
 use HydraBooking\DB\Booking;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
-use HydraBooking\Services\Integrations\Zoom\ZoomServices;
-
+use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
+use HydraBooking\Admin\Controller\CountryController;
+use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -33,6 +34,7 @@ class HydraBookingShortcode {
 
     public function hydra_booking_shortcode($atts) { 
 
+        // Country List form josn file 
         
         if(!isset($atts['id']) || $atts['id'] == 0){
             return 'Please provide a valid Meeting id';
@@ -58,12 +60,11 @@ class HydraBookingShortcode {
         if(!$MeetingData){
             return 'Invalid Meeting ID';
         }
-        // echo "<pre>";
-        // print_r($MeetingData);
-        // echo "</pre>";
+     
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-
-
+  
+        
+ 
         //  Reschedule Booking
         $booking_data = array();
 
@@ -74,10 +75,7 @@ class HydraBookingShortcode {
                 array('hash' => $atts['hash']),
                 false,
                 true 
-            ); 
-            // echo "<pre>";
-            // print_r($get_booking);
-            // echo "</pre>";
+            );  
 
             if(!$get_booking){
                 return 'Invalid Booking ID';
@@ -120,25 +118,28 @@ class HydraBookingShortcode {
                 <div class="tfhb-meeting-card">
                         <?php  
 
-                            // Load Meeting Info Template  
-                            load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
-                                'meeting' => $meta_data,
-                                'host' => $host_meta, 
-                                'time_zone' => $time_zone, 
-                                'booking_data' => $booking_data, 
-                            ]); 
-
+                        // Load Meeting Info Template  
+                        load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
+                            'meeting' => $meta_data,
+                            'host' => $host_meta, 
+                            'time_zone' => $time_zone, 
+                            'booking_data' => $booking_data, 
+                        ]); ?>
+                        <div class="tfhb-calander-times tfhb-flexbox">
+                            <?php
                             // Load Meeting Calendar Template
                             load_template(THB_PATH . '/app/Content/Template/meeting-calendar.php', false, $meta_data);
 
                             // Load Meeting Time Template
                             load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, $meta_data);
-
-                            // Load Meeting Form Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
-                                'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
-                                'booking_data' => $booking_data,
-                            ]);
+                            ?>
+                        </div>
+                        <?php 
+                        // Load Meeting Form Template
+                        load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
+                            'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
+                            'booking_data' => $booking_data,
+                        ]);
                         ?>
                 </div>
 
@@ -498,11 +499,12 @@ class HydraBookingShortcode {
 
  
 
-        // After Booking Hooks
-        do_action('hydra_booking/after_booking_confirmation', $data);
-
-        // Single Booking & Mail Notification
         $single_booking_meta = $booking->get($result['insert_id'], false);
+
+        // After Booking Hooks
+        do_action('hydra_booking/after_booking_confirmation', $single_booking_meta);
+
+        // Single Booking & Mail Notification, Google Calendar 
         do_action('hydra_booking/after_booking_completed', $single_booking_meta);
 
         // Host Meta by Booking Id

@@ -97,12 +97,12 @@ const questions_data =  reactive({});
         
         <button class="tfhb-btn tfhb-flexbox tfhb-gap-8"  @click="QuestionPopupOpen()" >
             <Icon name="PlusCircle" :width="20"/>
-            Add more questions
+            Add more Information
         </button>
 
         <HbPopup :isOpen="informationPopup" @modal-close="informationPopup = false" max_width="400px" name="first-modal">
             <template #header> 
-                <h3>Add Question for Attendee</h3>
+                <h3>Add Information for Hosts</h3>
             </template>
 
             <template #content>  

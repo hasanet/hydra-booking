@@ -83,9 +83,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Meeting List
     public function getMeetingsData() { 
 
+        $current_user = wp_get_current_user();
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+
         // Meeting Lists 
         $meeting = new Meeting();
-        $MeetingsList = $meeting->get();
+
+        if(!empty($current_user_role) && "administrator"==$current_user_role){
+            $MeetingsList = $meeting->get();
+        }
+
+        if(!empty($current_user_role) && "tfhb_host"==$current_user_role){
+            $MeetingsList = $meeting->get(null, null, $current_user_id);
+        }
 
         // Return response
         $data = array(
@@ -292,7 +304,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             return rest_ensure_response(array('status' => false, 'message' => 'Error while creating meeting'));
         }
         $meetings_id = $meetingInsert['insert_id'];
-    
+
+        // Meetings Id into Post Meta
+        update_post_meta( $meeting_post_id, '__tfhb_meeting_id', $meetings_id );
+
         // meetings Lists 
         $meetingsList = $meeting->get();
 
@@ -392,12 +407,28 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // WooCommerce Product
         $woo_commerce = new  WooBooking();
         $wc_product =  $woo_commerce->getAllProductList();
+
+        // Meeting Category
+        $terms = get_terms(array(
+            'taxonomy' => 'meeting_category',
+            'hide_empty' => false, // Set to true to hide empty terms
+        ));
+        // Prepare the response data
+        $term_array = array();
+        foreach ($terms as $term) {
+            $term_array[] = array(
+                'name' => $term->name,
+                'value' => "".$term->term_id."",
+            );
+        }
+
         // Return response
         $data = array(
             'status' => true, 
             'meeting' => $MeetingData,  
             'time_zone' => $time_zone,  
             'wc_product' => $wc_product,  
+            'meeting_category' => $term_array,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -464,6 +495,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'updated_by'                => $current_user_id
         ];
 
+        // Meeting Update into 
+        $meeting_post_data = array(
+            'ID'           => $MeetingData->post_id,
+            'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
+            'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
+            'post_author'  => $current_user_id,
+            'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
+        );
+        wp_update_post( $meeting_post_data ); 
+
+        $data['slug'] = get_post_field( 'post_name', $MeetingData->post_id );
+
         $meetingUpdate = $meeting->update($data);
         if(!$meetingUpdate['status']) {
             return rest_ensure_response(array('status' => false, 'message' => 'Error while updating Meeting'));
@@ -471,14 +514,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         //Updated Meeting post meta
         if( $MeetingData->post_id ){
-            $meeting_post_data = array(
-                'ID'           => $MeetingData->post_id,
-                'post_title'   => isset($request['title']) ? sanitize_text_field($request['title']) : '',
-                'post_content' => isset($request['description']) ? sanitize_text_field($request['description']) : '',
-                'post_author'  => $current_user_id,
-                'post_name'    => isset($request['title']) ? sanitize_title($request['title']) : '',
-            );
-            wp_update_post( $meeting_post_data ); 
 
             //Updated post meta
             update_post_meta( $MeetingData->post_id, '__tfhb_meeting_opt', $data );
@@ -489,7 +524,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true,  
             'message' => 'Meeting Updated Successfully', 
-            'data' => $data, 
+            'data' => $data,  
         );
         return rest_ensure_response($data);
     }

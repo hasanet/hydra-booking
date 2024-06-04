@@ -62,6 +62,7 @@
 			$this.find('.tfhb-time-zone-select').select2({
 				dropdownCssClass: 'tfhb-select2-dropdown',
 			});
+			console.log(calenderData);
 
 			let date = new Date();
 			let year = date.getFullYear();
@@ -188,8 +189,7 @@
 
 				setTimeout(function(){
 					// Your code here 
-					$this.find('.tfhb-meeting-calendar').hide();
-					$this.find('.tfhb-meeting-times').hide();
+					$this.find('.tfhb-calander-times').hide();
 					$this.find('.tfhb-meeting-booking-form').show(); 
 
 					$this.find('.tfhb-preloader').remove();
@@ -203,8 +203,7 @@
 
 				setTimeout(function(){
 					
-					$this.find('.tfhb-meeting-calendar').show();
-					$this.find('.tfhb-meeting-times').show();
+					$this.find('.tfhb-calander-times').css('display', 'flex');
 					$this.find('.tfhb-meeting-booking-form').hide();
 
 					$this.find('.tfhb-preloader').remove();
@@ -269,6 +268,9 @@
 			let availability = calender_data.availability;
 			let date_slots = availability.date_slots;  
 			let time_slots = availability.time_slots;   
+			let availability_range = calender_data.availability_range;   
+			let availabilitys_range_start = calender_data.availability_range.start;   
+			let availabilitys_range_end = calender_data.availability_range.end;   
 			let dayNameText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			let DisableDays = [];
  
@@ -324,6 +326,12 @@
 				if(DisableDays.includes(dayNameText[new Date(year, month, i).getDay()])){
 					availabilityClass = "inactive ";
 					dataAvailable = "unavailable";
+				}
+				// if current date is out of range then disable that day.
+				if(new Date(year, month, i) < new Date(availabilitys_range_start) || new Date(year, month, i) > new Date(availabilitys_range_end)){
+					availabilityClass = "inactive ";
+					dataAvailable = "unavailable";
+					isToday = "";
 				}
  
 				lit += `<li data-date="${dateKey}" data-available="${dataAvailable}" class="${isToday} current ${availabilityClass}">${i}</li>`;

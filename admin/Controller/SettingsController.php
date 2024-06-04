@@ -163,10 +163,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $DateTimeZone = new DateTimeController('UTC');
         $time_zone = $DateTimeZone->TimeZone();
         $availability = get_option('_tfhb_availability_settings');
+        $general_settings = get_option('_tfhb_general_settings');
         $data = array(
             'status' => true, 
             'time_zone' => $time_zone,
             'availability' => $availability,
+            'general_settings' => $general_settings,
         );
         return rest_ensure_response($data);
     }

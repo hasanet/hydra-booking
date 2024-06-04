@@ -8,19 +8,17 @@ const Meeting = reactive({
 
     // Meeting List
     async fetchMeetings() {
-        const apiUrl = tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists';
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'GET'
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const meetingsData = await response.json();
-            this.meetings = meetingsData.meetings;
-        } catch (error) {
-            console.error('Error fetching Meetings:', error);
+
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/lists', {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        if (response.data.status) { 
+            this.meetings = response.data.meetings;
         }
+
     },
 
     // Delete Meeting

@@ -5,6 +5,8 @@ import { useRouter, RouterView,} from 'vue-router'
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import { toast } from "vue3-toastify";
+import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
 
 
 // import Form Field  
@@ -26,20 +28,16 @@ const generalSettings = reactive({
 });
 
 // Field Validator
-import useValidators from '@/store/validator'
-const { errors, isEmpty } = useValidators();
-const error = reactive({})
 
-const validateInput = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, generalSettings[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], generalSettings[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], generalSettings[fieldParts[0]][fieldParts[1]]);
+    }
 };
-
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, generalSettings[fieldValueKey]);
-};
-
 
 //  Load Time Zone
 const timeZone = reactive({});
@@ -78,9 +76,19 @@ const UpdateGeneralSettings = async () => {
     let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'date_format', 'country']
     if(validator_field){
         validator_field.forEach(field => {
-            if(!generalSettings[field]){
-                errors[field] = 'Required this field';
+
+        const fieldParts = field.split('___'); // Split the field into parts
+        if(fieldParts[0] && !fieldParts[1]){
+            if(!generalSettings[fieldParts[0]]){
+                errors[fieldParts[0]] = 'Required this field';
             }
+        }
+        if(fieldParts[0] && fieldParts[1]){
+            if(!generalSettings[fieldParts[0]][fieldParts[1]]){
+                errors[fieldParts[0]+'___'+[fieldParts[1]]] = 'Required this field';
+            }
+        }
+            
         });
     }
 
@@ -117,7 +125,7 @@ onBeforeMount(() => {
 </script>
 <template>
     
-    <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard ">
+    <div :class="{ 'tfhb-skeleton': skeleton }" class="thb-event-dashboard">
   
         <div  class="tfhb-dashboard-heading ">
             <div class="tfhb-admin-title tfhb-m-0"> 
@@ -145,8 +153,8 @@ onBeforeMount(() => {
                     selected = "1"
                     :placeholder="$tfhb_trans['Type your Admin Email']" 
                     width="50"
-                    @keyup="() => validateInput('admin_email')"
-                    @click="() => validateInput('admin_email')"
+                    @keyup="() => tfhbValidateInput('admin_email')"
+                    @click="() => tfhbValidateInput('admin_email')"
                     :errors="errors.admin_email"
                 /> 
 
@@ -161,8 +169,8 @@ onBeforeMount(() => {
                     selected = "1"
                     placeholder="Select Time Zone"  
                     :option = "timeZone.value" 
-                    @add-change="validateSelect('time_zone')" 
-                    @add-click="validateSelect('time_zone')" 
+                    @add-change="tfhbValidateInput('time_zone')" 
+                    @add-click="tfhbValidateInput('time_zone')" 
                     :errors="errors.time_zone"
                 />  
                 <!-- Time Zone -->
@@ -180,8 +188,8 @@ onBeforeMount(() => {
                         {'name': '12 Hours', 'value': '12_hours'}, 
                         {'name': '24 Hours', 'value': '24_hours'}
                     ]"
-                    @add-change="validateSelect('time_format')" 
-                    @add-click="validateSelect('time_format')" 
+                    @add-change="tfhbValidateInput('time_format')" 
+                    @add-click="tfhbValidateInput('time_format')" 
                     :errors="errors.time_format"
                 />
                 <!-- Time format --> 
@@ -195,16 +203,16 @@ onBeforeMount(() => {
                     selected = "1"
                     placeholder="Select Time Format"  
                     :option = "[
-                        {'name': 'Sunday', 'value': 'sunday'}, 
-                        {'name': 'Monday', 'value': 'monday'},
-                        {'name': 'Tuesday', 'value': 'tuesday'},
-                        {'name': 'Wednesday', 'value': 'wednesday'},
-                        {'name': 'Thursday', 'value': 'thursday'},
-                        {'name': 'Friday', 'value': 'friday'},
-                        {'name': 'Saturday', 'value': 'saturday'}
+                        {'name': 'Sunday', 'value': 'Sunday'}, 
+                        {'name': 'Monday', 'value': 'Monday'},
+                        {'name': 'Tuesday', 'value': 'Tuesday'},
+                        {'name': 'Wednesday', 'value': 'Wednesday'},
+                        {'name': 'Thursday', 'value': 'Thursday'},
+                        {'name': 'Friday', 'value': 'Friday'},
+                        {'name': 'Saturday', 'value': 'Saturday'}
                     ]"
-                    @add-change="validateSelect('week_start_from')" 
-                    @add-click="validateSelect('week_start_from')" 
+                    @add-change="tfhbValidateInput('week_start_from')" 
+                    @add-click="tfhbValidateInput('week_start_from')" 
                     :errors="errors.week_start_from"
                     
                 />
@@ -222,8 +230,8 @@ onBeforeMount(() => {
                     :option = "[
                         {'name': 'g:i a', 'value': 'g:i a'},  
                     ]"
-                    @add-change="validateSelect('date_format')" 
-                    @add-click="validateSelect('date_format')" 
+                    @add-change="tfhbValidateInput('date_format')" 
+                    @add-click="tfhbValidateInput('date_format')" 
                     :errors="errors.date_format"
                 />
                 <!-- Date Format -->
@@ -231,16 +239,16 @@ onBeforeMount(() => {
                 <!-- Select countr -->
                 <HbDropdown 
                     
-                    v-model="generalSettings.country"  
+                    v-model="generalSettings.country" 
                     required= "true"
                     width="50"
-                    :filter="true"
+                    :filter="true" 
                     :label="$tfhb_trans['Select country for phone code']"   
                     selected = "1"
                     placeholder="Select Country"  
                     :option = "countryList.value"
-                    @add-change="validateSelect('country')" 
-                    @add-click="validateSelect('country')" 
+                    @add-change="tfhbValidateInput('country')" 
+                    @add-click="tfhbValidateInput('country')" 
                     :errors="errors.country"
                 />
                 <!-- Select countr --> 

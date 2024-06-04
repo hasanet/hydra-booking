@@ -45,18 +45,54 @@ class App {
             'index.php?hydra-booking=meeting&meeting=$matches[1]',
             'top'
         );
-
-        // add_rewrite_rule(
-        //     '^booking/([0-9]+)/?$',
-        //     'index.php?hydra-booking=booking&hash=$matches[1]&type=$matches[2]',
-        //     'top'
-        // );
         // Create Rewrite Rule for Reschedule hydra-booking.local/?hydra-booking=booking&hash=2121&type=reschedule
         add_rewrite_rule(
             '^booking/([0-9]+)/?$',
             'index.php?hydra-booking=booking&hash=$matches[1]&meeting-id=$matches[2]&type=$matches[3]',
             'top'
         );
+
+        add_action( 'pre_get_posts', array($this, 'tfhb_remove_posttype_request' ));
+        add_filter( 'single_template', array($this, 'tfhb_single_meeting_template' ));
+    }
+
+    public function tfhb_single_meeting_template($single_template){
+        global $post;
+
+		/**
+		 * Single Meeting
+		 *
+		 * single-meeting.php
+		 */
+		if ( 'tfhb_meeting' === $post->post_type ) {
+			return THB_PATH . '/app/Content/Template/single-meeting.php';
+		}
+
+        return $single_template;
+    }
+
+    public function tfhb_remove_posttype_request($query){
+        // Only noop the main query.
+        if ( ! $query->is_main_query() ){
+        return;
+        }
+
+        // Only noop our very specific rewrite rule match.
+        if ( 2 != count( $query->query ) || ! isset( $query->query['page'] ) ) {
+        return;
+        }
+
+        // 'name' will be set if post permalinks are just post_name, otherwise the page rule will match.
+        if ( ! empty( $query->query['name'] ) ) {
+            $post_types = array(
+            'post', // important to  not break your standard posts
+            'page', // important to  not break your standard pages
+            'tfhb_meeting',
+        );
+
+        $query->set( 'post_type', $post_types );
+
+        }
     }
 
     public function tfhb_single_query_vars( $query_vars ) {

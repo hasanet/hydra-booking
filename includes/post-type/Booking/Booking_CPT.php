@@ -33,7 +33,7 @@ class Booking_CPT extends \HydraBooking\PostType\Post_Type {
 			'capability'    => 'post',
 			'rewrite_slug'  => 'tfhb_booking',
 			'show_ui'  => true,
-			'show_in_menu' => true
+			'show_in_menu' => false
 		);
 
 		$tax_args = array(

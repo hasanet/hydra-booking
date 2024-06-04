@@ -1,5 +1,5 @@
 <script setup> 
-import {reactive, onBeforeMount} from 'vue'
+import {ref, reactive, onBeforeMount} from 'vue'
 import { useRouter, RouterView,} from 'vue-router'  
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
@@ -7,8 +7,9 @@ import HbImageSelect from '@/components/form-fields/HbImageSelect.vue'
 import ColorPicker from 'primevue/colorpicker';
 import axios from 'axios' 
 import { toast } from "vue3-toastify";
-
+import LvColorpicker from 'lightvue/color-picker';
 const router = useRouter();
+
 
 const appearanceSettings = reactive({
   themes: 'System default',
@@ -18,6 +19,7 @@ const appearanceSettings = reactive({
   desTypo: '',
 });
 
+const skeleton = ref(true);
 // Fetch Appearance
 const fetchAppearanceSettings = async () => {
 
@@ -31,6 +33,7 @@ try {
         appearanceSettings.secondary_color = response.data.appearance_settings.secondary_color ? response.data.appearance_settings.secondary_color : '3F2731';
         appearanceSettings.titleTypo = response.data.appearance_settings.titleTypo ? response.data.appearance_settings.titleTypo : '';
         appearanceSettings.desTypo = response.data.appearance_settings.desTypo ? response.data.appearance_settings.desTypo : '';
+        skeleton.value = false;
     }
 } catch (error) {
     console.log(error);
@@ -63,7 +66,7 @@ onBeforeMount(() => {
 
 </script>
 <template>
-    <div class="thb-event-dashboard">
+    <div :class="{ 'tfhb-skeleton': skeleton }"  class="thb-event-dashboard">
 
         <div  class="tfhb-dashboard-heading ">
             <div class="tfhb-admin-title tfhb-m-0"> 
@@ -108,20 +111,20 @@ onBeforeMount(() => {
                 <div class="tfhb-colorbox tfhb-full-width">
                     <div class="tfhb-single-colorbox tfhb-flexbox tfhb-mb-16">
                         <label>
-                            Primary Color
+                            {{ $tfhb_trans['Primary Color'] }}
                         </label>
                         <div class="color-select">
-                            <ColorPicker v-model="appearanceSettings.primary_color" />
-                            <span>Select Color</span>
+                            <LvColorpicker :value="appearanceSettings.primary_color" v-model="appearanceSettings.primary_color" :withoutInput="true"/>
+                            <span>{{ $tfhb_trans['Select Color'] }}</span>
                         </div>
                     </div>
                     <div class="tfhb-single-colorbox tfhb-flexbox">
                         <label>
-                            Secondary Color
+                            {{ $tfhb_trans['Secondary Color'] }}
                         </label>
                         <div class="color-select">
-                            <ColorPicker v-model="appearanceSettings.secondary_color" />
-                            <span>Select Color</span>
+                            <LvColorpicker :value="appearanceSettings.secondary_color" v-model="appearanceSettings.secondary_color" :withoutInput="true"/>
+                            <span>{{ $tfhb_trans['Select Color'] }}</span>
                         </div>
                     </div>
                 </div>

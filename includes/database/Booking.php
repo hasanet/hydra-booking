@@ -43,6 +43,7 @@ class Booking {
                 ip_address VARCHAR(50) NULL, 
                 device VARCHAR(50) NULL, 
                 meeting_locations LONGTEXT NOT NULL,
+                meeting_calendar LONGTEXT NULL,
                 cancelled_by VARCHAR(255) NULL,
                 status VARCHAR(50) NOT NULL, 
                 reason VARCHAR(255) NULL, 
@@ -135,14 +136,14 @@ class Booking {
      /**
      * Get all  Booking Data. 
      */
-    public function get($where = null , $join = false, $FirstOrFaill = false) {
+    public function get($where = null , $join = false, $FirstOrFaill = false, $custom = false, $orderBy = null, $limit = null, $user_id = null) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . $this->table;
         $meeting_table = $wpdb->prefix . 'tfhb_meetings';
         $host_table = $wpdb->prefix . 'tfhb_hosts';
 
-        if(is_array($where)){
+        if(is_array($where) && $join==false){
             $sql = "SELECT * FROM $table_name WHERE ";
             $i = 0;
             foreach($where as $k => $v){
@@ -156,7 +157,7 @@ class Booking {
             if($FirstOrFaill == true){
                 // only get first item 
                 $data = $wpdb->get_row(
-                    $wpdb->prepare( $sql )
+                    $sql
                 );
             }else{
                 $data = $wpdb->get_results(
@@ -165,39 +166,53 @@ class Booking {
             }
             
             // echo $sql;
-        }elseif($where != null) {
-            $sql = "
-                SELECT $table_name.*, 
-                $host_table.email AS host_email,
-                $meeting_table.post_id,
-                $meeting_table.title AS meeting_title,
-                $meeting_table.meeting_locations AS meeting_location,
-                $meeting_table.duration AS meeting_duration,
-                $meeting_table.buffer_time_before,
-                $meeting_table.buffer_time_after
-                FROM $table_name
-                INNER JOIN $host_table ON $table_name.host_id = $host_table.id
-                INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
-                WHERE $table_name.id = %d
-            ";
-            $data = $wpdb->get_row($wpdb->prepare($sql, $where));
+        }elseif($where != null && $join != true) {
+            if($custom == true){ 
+                $sql = "SELECT * FROM $table_name WHERE $where";
+                if(!empty($where)){
+                    $sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : "";
+                }
+                $data = $wpdb->get_results(
+                    $wpdb->prepare( $sql )
+                ); 
+            }else{
+                $sql = "
+                    SELECT $table_name.*, 
+                    $host_table.email AS host_email,
+                    $meeting_table.post_id,
+                    $meeting_table.title AS meeting_title,
+                    $meeting_table.meeting_locations AS meeting_location,
+                    $meeting_table.duration AS meeting_duration,
+                    $meeting_table.buffer_time_before,
+                    $meeting_table.buffer_time_after
+                    FROM $table_name
+                    INNER JOIN $host_table ON $table_name.host_id = $host_table.id
+                    INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
+                    WHERE $table_name.id = %d
+                ";
+                $data = $wpdb->get_row($wpdb->prepare($sql, $where));
+            }
         } else {
             if($join == true){
                 $sql = "SELECT 
                 $table_name.id,
+                $table_name.host_id,
                 $table_name.meeting_id,
                 $table_name.attendee_name,
                 $table_name.email AS attendee_email,
+                $table_name.attendee_time_zone AS attendee_time_zone,
                 $table_name.address,
                 $table_name.meeting_dates,
                 $table_name.start_time,
                 $table_name.end_time,
                 $table_name.status AS booking_status,
+                $table_name.payment_status AS payment_status,
                 $table_name.created_at AS booking_created_at,
                 $meeting_table.host_id,
                 $meeting_table.title,
                 $meeting_table.duration,
                 $meeting_table.meeting_locations,
+                $meeting_table.meeting_type,
                 $host_table.first_name AS host_first_name,
                 $host_table.last_name AS host_last_name,
                 $host_table.email AS host_email,
@@ -206,10 +221,26 @@ class Booking {
                 INNER JOIN $meeting_table
                 ON $table_name.meeting_id=$meeting_table.id
                 INNER JOIN $host_table
-                ON $meeting_table.host_id=$host_table.id";
+                ON $meeting_table.host_id=$host_table.user_id";
             }else{
                 $sql = "SELECT * FROM $table_name";
+
             }
+            // userwise 
+            if(empty($where)){
+                $sql .= $user_id != null ? " WHERE $table_name.host_id = $user_id" : "";
+            }
+            // custom where 
+            $sql .= $custom != null ? " WHERE $where" : "";
+
+            if(!empty($where)){
+                $sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : "";
+            }
+            // Add Order by if exist
+            $sql .= $orderBy != null ? " ORDER BY $orderBy" : " ORDER BY id DESC";
+
+            // Add Limit if exist
+            $sql .= $limit != null ? " LIMIT $limit" : "";
     
 
     

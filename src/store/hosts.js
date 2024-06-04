@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 
 const Host = reactive({
-    hosts: {},
+    hosts: [],
     hostInfo: "",
     async fetchHosts() {
         const apiUrl = tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/lists';
@@ -14,10 +14,12 @@ const Host = reactive({
             }
             const hostsData = await response.json();
             // Create an object where each key-value pair corresponds to a host's user_id and their combined name
-            this.hosts = hostsData.hosts.reduce((acc, host) => {
-                acc[host.user_id] = host.first_name + ' ' + host.last_name;
-                return acc;
-            }, {});
+            this.hosts = hostsData.hosts.map(host => {
+                return {
+                    name: host.first_name + ' ' + host.last_name,
+                    value: host.user_id.toString()
+                };
+            });
         } catch (error) {
             console.error('Error fetching Hosts:', error);
         }

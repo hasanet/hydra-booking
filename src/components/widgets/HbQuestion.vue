@@ -24,8 +24,9 @@ const emit = defineEmits(['update:modelValue', 'question-edit', 'question-remove
                     /> 
                     <HbSwitch 
                         v-model="question.required"
+                        v-if="key > skip_remove"
                     />
-                    <button class="question-edit-btn">
+                    <button class="question-edit-btn" v-if="key > skip_remove">
                         <Icon name="PencilLine" :width="16" @click="emit('question-edit', key)"/>
                     </button>
                     <button class="question-edit-btn" v-if="key > skip_remove" @click="emit('question-remove', key)">

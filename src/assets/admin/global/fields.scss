@@ -164,6 +164,7 @@
         height: 72px;
         width: 72px;
         overflow: hidden;
+        border: 1px solid #ddd !important;
         &:hover{
             .tfhb-image-btn{
                 opacity: 1;
@@ -255,10 +256,11 @@
     .color-select{
         background-color: #fff;
         border-radius: 6px;
-        input[type="text"]{
-            height: 32px;
-            width: 32px;
-            border-radius: 6px 0 0 6px;
+        .lv-colorpicker__colorblock-wrap{
+            height: 36px;
+            width: 36px;
+            border-radius: 6px 0 0 6px !important;
+            display: block;
         }
         span{
             color: #765664;
@@ -267,6 +269,57 @@
             font-weight: 400;
             line-height: 20px; /* 153.846% */
             padding: 6px 8px;
+        }
+    }
+}
+
+.tfhb-startendtime{
+    .tfhb-times-field{
+        padding: 8px 8px 8px 12px;
+        min-width: 100%;
+        margin-top: 4px;
+        border-radius: 4px;
+        border: 1px solid #F6EEF2;
+        background-color: transparent;
+        line-height: 20px;
+        height: 40px;
+        margin: 0;
+        box-shadow: none;
+        font-family: "Inter", sans-serif;
+        display: flex;
+        cursor: pointer;
+        input{
+            border: 0px solid !important;
+            color: #8F707D !important;
+            padding: 0;
+            min-height: auto;
+            background-color: transparent !important;
+            cursor: pointer;
+            &:focus{
+                outline: none;
+                box-shadow: none;
+            }
+        }
+        .tfhb-flat-icon{
+            margin: 0 !important;
+        }
+    }
+    ul{
+        li{
+            border-radius: 8px;
+            color: #8F707D;
+            font-weight: 500;
+            display: block;
+            text-align: center;
+            line-height: 24px;
+            margin: 0;
+            padding: 4px 16px;
+            text-align: left;
+            cursor: pointer;
+            &:hover{
+                background: #f5f6f7;
+                font-weight: 500;
+            }
         }
     }
 }

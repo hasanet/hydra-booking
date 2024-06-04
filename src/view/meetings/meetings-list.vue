@@ -58,7 +58,7 @@ const sharePopupData = (data) => {
     shareData.time = data.duration
     shareData.meeting_type = data.meeting_type
     shareData.shortcode = '[hydra_booking id="'+data.id+'"]'
-    shareData.link = tfhb_core_apps.admin_url + '/?hydra-booking=meeting&meeting=' + data.id
+    shareData.link = tfhb_core_apps.admin_url + '/' + data.slug
 
     // Popup open
     sharePopup.value = true;
@@ -229,7 +229,7 @@ const copyMeeting = (link) => {
                                         </div>
                                     </div>
                                 </li>
-                                <li>
+                                <li v-if="smeeting.host_first_name">
                                     <div class="tfhb-flexbox">
                                         <div class="user-info-icon">
                                             <Icon name="User" size="16" /> 
@@ -263,7 +263,7 @@ const copyMeeting = (link) => {
                     </div>
                 </div>
                 <div class="single-meeting-action-btn tfhb-flexbox">
-                    <a :href="'/?hydra-booking=meeting&meeting=' + smeeting.id" class="tfhb-flexbox" target="_blank">
+                    <a :href="'/' + smeeting.slug" class="tfhb-flexbox" target="_blank">
                         <Icon name="Eye" size="20" /> 
                         Preview
                     </a>
@@ -321,7 +321,7 @@ const copyMeeting = (link) => {
                             <ul class="tfhb-flexbox tfhb-gap-8">
                                 <li :class="'link'==shareData.share_type ? 'active' : ''" @click="ShareTabs('link')">Share link</li>
                                 <li :class="'short'==shareData.share_type ? 'active' : ''" @click="ShareTabs('short')">Short code</li>
-                                <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li>
+                                <!-- <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li> -->
                             </ul>
                         </div>
 

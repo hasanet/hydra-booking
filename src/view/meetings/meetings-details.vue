@@ -1,6 +1,5 @@
 <script setup>
 import { reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView } from 'vue-router'  
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
@@ -19,17 +18,25 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    meetingCategory: {
+        type: Object,
+        required: true
+    },
+    timeZone: {
+        type: Object,
+        required: true
+    },
 
 });
 
-const validateInput = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.meeting[fieldValueKey]);
-};
-
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.meeting[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.meeting[fieldParts[0]][fieldParts[1]]);
+    }
 };
 
 </script>
@@ -43,8 +50,8 @@ const validateSelect = (fieldName) => {
             name="title"
             selected = "1"
             :placeholder="$tfhb_trans['Type meeting title']" 
-            @keyup="() => validateInput('title')"
-            @click="() => validateInput('title')"
+            @keyup="() => tfhbValidateInput('title')"
+            @click="() => tfhbValidateInput('title')"
             :errors="errors.title"
         /> 
         <HbTextarea  
@@ -53,8 +60,8 @@ const validateSelect = (fieldName) => {
             name="description"
             :label="$tfhb_trans['Description']"  
             :placeholder="$tfhb_trans['Describe about meeting']"
-            @keyup="() => validateInput('description')"
-            @click="() => validateInput('description')"
+            @keyup="() => tfhbValidateInput('description')"
+            @click="() => tfhbValidateInput('description')"
             :errors="errors.description"
         /> 
 
@@ -74,8 +81,8 @@ const validateSelect = (fieldName) => {
                     {name: '60 minutes', value: '60'},
                     {name: 'Custom', value: 'custom'} 
                 ]" 
-                @add-change="validateSelect('duration')" 
-                @add-click="validateSelect('duration')" 
+                @add-change="tfhbValidateInput('duration')" 
+                @add-click="tfhbValidateInput('duration')" 
                 :errors="errors.duration"
             />
             <!-- Duration -->
@@ -145,12 +152,16 @@ const validateSelect = (fieldName) => {
             v-model="meeting.meeting_category" 
             required= "true" 
             :label="$tfhb_trans['Select Category']"  
-            :selected = "1"
-            placeholder="Select Category"  
-            :option = "[
-                    {name: 'Design System', value: 'Design System'},  
-                ]"  
+            :selected = "meeting.meeting_category"
+            :placeholder="$tfhb_trans['Select Category']" 
+            :option = "meetingCategory" 
         />
+        <div class="tfhb-add-moreinfo tfhb-full-width" >
+            <router-link :to="'/settings/category'" exact :class="'tfhb-btn tfhb-inline-flex tfhb-gap-8 tfhb-justify-normal tfhb-height-auto'">
+                <Icon name="PlusCircle" :width="20"/>
+                Create Category
+            </router-link>
+        </div>
         <div class="tfhb-submission-btn">
             <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['title', 'description', 'duration'])">{{ $tfhb_trans['Save & Continue'] }} </button>
         </div>

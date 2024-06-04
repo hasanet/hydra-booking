@@ -101,9 +101,19 @@
         padding: 0px !important;
     }
     
-    //no-wrap
+    //flow-root
     .tfhb-no-flexbox{
         display: flow-root !important;
+    }
+    //no-wrap
+    .tfhb-no-wrap{
+        flex-wrap: nowrap !important;
+    }
+
+    //inline-flex
+    .tfhb-inline-flex{
+        display: inline-flex;
+        align-items: center;
     }
 
     // Height auto
@@ -296,6 +306,10 @@
             visibility: visible;
             opacity: 1;
         }
+        &.tfhb-no-hover:hover .tfhb-dropdown-wrap {
+            visibility: hidden ;
+            opacity: 0;
+        }
     }
     .tfhb-swicher-wrap{
         .switch {
@@ -435,6 +449,9 @@
 		height: 100%;
 		background-color: #ffffff63;
 		z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 		
 		.tfhb-popup-wrap {
 			max-width: 800px;
@@ -442,7 +459,7 @@
 			background-color: #ffffff;
 			box-shadow: 0px 8px 30px 0px rgba(40, 16, 26, 0.1019607843); 
 			overflow: auto;
-			margin: 50px auto; 
+			// margin: 50px auto; 
 			max-height: 75%;  
 			border-radius: 8px;
             
@@ -676,7 +693,7 @@
         font-weight: inherit !important;
         line-height: 37px !important;
         &.flatpickr-day{
-            border-radius: 8px !important;
+            border-radius: 0 !important;
             border: 0px solid;
             color: #3F2731 !important;
             text-align: center;
@@ -684,24 +701,40 @@
             font-style: normal;
             font-weight: 400 !important;
             height: 48px;
-            max-width: 48px;
+            width: calc(100% / 7);
+            max-width: calc(100% / 7);
+            min-width: calc(100% / 7);
             line-height: 48px !important;
-            &:hover{
-                background: #F6EEF2 !important; 
+            position: relative;
+            z-index: 0;
+            &::after{
+                position: absolute;
+                content: "";
+                border-radius: 8px;
+                height: 90%;
+                width: 90%;
+                left: 50%;
+                z-index: -1;
+                margin-left: -45%;
+                top: 5%;
             }
-            @media #{$max991}{
-                width: calc(100% / 7);
-                max-width: none;
+            &:hover{
+                background-color: transparent !important;
             }
         }
         &.flatpickr-day.today{
-            background: #F6EEF2 !important; 
+            &::after{
+                background: #F6EEF2 !important; 
+            }
         }
         &.flatpickr-day.selected{
-            background: #F62881 !important;
-            box-shadow: 0px 8px 30px 0px rgba(229, 0, 99, 0.30);
+            background: transparent !important;
             color: #FFF !important;
             position: relative;
+            &::after{
+                background: #F62881 !important;
+                box-shadow: 0px 8px 30px 0px rgba(229, 0, 99, 0.30);
+            }
             &::before{
                 position: absolute;
                 content: "";
@@ -815,10 +848,7 @@
                     width: 100%;
                     min-width: auto;
                     max-width: none;
-                    gap: 8px;
-                    @media #{$max991}{
-                        gap: 0px;
-                    }
+                    gap: 0px;
                 }
             }
         }

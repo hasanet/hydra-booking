@@ -58,18 +58,22 @@ const MulticheckedValue = (e) => {
                 <span class="checkmark"></span>
                 {{ label }} <span  v-if="required == 'true'"> *</span> 
             </label>
-            <label v-else-if="groups == true && options" v-for="(value, key) in options"  :for="key+'-'+name">  
+            <div style="display: inline-block !important; width: 100%;"  v-else-if="groups == true && options" v-for="(value, key) in options">
+            <label   :for="key+'-'+name">  
                 <input
                 :id="key+'-'+name"
                 :v-model="groupsvalue"
                 @change="MulticheckedValue"
                 :name="name"
-                :value="value"
+                :checked="props.modelValue == value.value ? true : false"
+                :value="groups == true ? value.value : key"
                 type="radio"
                 /> 
                 <span class="checkmark"></span>
-                {{ value }} <span  v-if="required == 'true'"> *</span>
+                {{ value.label }} <span  v-if="required == 'true'"> *</span>
             </label>
+            </div>
+            
         </div>
     </div> 
   </div>

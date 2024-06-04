@@ -14,6 +14,7 @@
 
 // don't load directly
 defined( 'ABSPATH' ) || exit; 
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 class THB_INIT{
     // CONSTARACT 
@@ -86,6 +87,13 @@ class THB_INIT{
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
         wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
+
+        $tfhb_theme_css = "
+        :root {
+            --tfhb-primary-color: red;
+          }
+        ";
+        wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );
 
         // register script 
         wp_register_script( 'tfhb-select2-script', THB_URL . 'assets/app/js/select2.min.js', array('jquery', 'tfhb-app-script'), THB_VERSION, true );

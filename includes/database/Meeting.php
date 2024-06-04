@@ -152,7 +152,7 @@ class Meeting {
      /**
      * Get all  meeting Data. 
      */
-    public function get($id = null, $filterData = null) {
+    public function get($id = null, $filterData = null, $user_id = null) {
         
         global $wpdb;
 
@@ -160,10 +160,8 @@ class Meeting {
         $host_table = $wpdb->prefix . 'tfhb_hosts';
 
         if($id){
-            $sql = "SELECT * FROM $table_name WHERE id = $id";
-
             $data = $wpdb->get_row(
-                $wpdb->prepare( $sql )
+                $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %s", $id )
             );
         }elseif(!empty($filterData['title']) || !empty($filterData['fhosts']) || !empty($filterData['fcategory']) || (!empty($filterData['startDate']) && !empty($filterData['endDate'])) ){
             $sql = "SELECT * FROM $table_name WHERE";
@@ -191,9 +189,13 @@ class Meeting {
                 $endDate = date('Y-m-d', strtotime($filterData['endDate']));
                 $sql .= " JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$startDate'), '$') AND JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$endDate'), '$')";
             }
-            // var_dump($sql);
+
             $data = $wpdb->get_results($sql);
 
+        }elseif(!empty($user_id)){
+            $data = $wpdb->get_results(
+                $wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %s", $user_id )
+            );
         }else{
             $sql = "SELECT * FROM $table_name";
 

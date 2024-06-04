@@ -8,6 +8,8 @@ import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
+import AvailabilityTime from '@/store/times'
+import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
 
@@ -49,18 +51,23 @@ const fetchAvailabilitySettings = async (availability_id) => {
     } 
 }
 const Settings_Avalibility_Callback = (e) => {
-    if(e.target.value){
-        fetchAvailabilitySettings(e.target.value);
+    if(e.value){
+        fetchAvailabilitySettings(e.value);
     }
 }
 
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.meeting[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.meeting[fieldParts[0]][fieldParts[1]]);
+    }
 };
 
 // Host Wise Availability
-const HostAvailabilities = reactive({});
+const HostAvailabilities = reactive([]);
 const fetchHostAvailability = async (host) => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/single-host-availability/'+host); 
@@ -73,12 +80,12 @@ const fetchHostAvailability = async (host) => {
             console.log(response.data.host.availability);
             Settings_avalibility.value = response.data.host;
         }else{
-            // response.data.host.availability && response.data.host.availability.forEach((available, key) => {
-            //     HostAvailabilities[key] = available.title;
-            // });
             // use Each Loop
             for (const key in response.data.host.availability) {
-                HostAvailabilities[key] = response.data.host.availability[key].title;
+                HostAvailabilities.push({
+                    name: response.data.host.availability[key].title,
+                    value: key // Adjust 'someValue' as per your data structure
+                });
             }
         }
     } catch (error) {
@@ -87,8 +94,8 @@ const fetchHostAvailability = async (host) => {
 }
 
 const Host_Avalibility_Callback = (e) => {
-    if(e.target.value){
-        fetchHostAvailability(e.target.value);
+    if(e.value){
+        fetchHostAvailability(e.value);
     }
 }
 
@@ -210,16 +217,58 @@ function formatTime(time) {
     return `${formattedHour}:${minute} ${period}`;
 }
 
+const getLatestEndTime = (day) => {
+    let latestEndTime = day.times[0].end;
+    for (let i = 1; i < day.times.length; i++) {
+        const endTime = day.times[i].end;
+        if (endTime > latestEndTime) {
+            latestEndTime = endTime;
+        }
+    }
+    return latestEndTime;
+}
+
+const TfhbStartDataEvent = (key, skey, startTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const latestEndTime = getLatestEndTime(day);
+
+    if (startTime <= latestEndTime) {
+        toast.error("Your start time will be over the: " + latestEndTime);
+        return latestEndTime;
+    }
+}
+
+const TfhbEndDataEvent = (key, skey, endTime) => {
+    const day = props.meeting.availability_custom.time_slots[key];
+    const nextDate = skey+1;
+    const NextdayData = day.times[nextDate] ? day.times[nextDate].start : '';
+
+    if(NextdayData){
+        if ( day.times[skey].start >= endTime || NextdayData <= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start +" And Less than " + NextdayData);
+            return;
+        }
+    }else{
+        if (day.times[skey].start >= endTime) {
+            toast.error("Your End time will be over the: " + day.times[[skey]].start);
+            return;
+        }
+    }
+}
+
+const isobjectempty = (data) => {
+    return Object.keys(data).length === 0;
+}
 
 </script>
 
 <template>
-
+   
     <div class="meeting-create-details tfhb-gap-24">
         <div class="tfhb-meeting-range tfhb-full-width">
             <div class="tfhb-admin-title" >
-                <h2>Availability Range for this Booking</h2> 
-                <p>How many days can the invitee schedule?</p>
+                <h2>{{ $tfhb_trans['Availability Range for this Booking'] }}</h2> 
+                <p>{{ $tfhb_trans['How many days can the invitee schedule?'] }}</p>
             </div>
 
             <div class="tfhb-flexbox tfhb-gap-0 tfhb-align-normal">
@@ -230,20 +279,20 @@ function formatTime(time) {
                             <span class="checkmark"></span> 
                         </div>
                         <div class="tfhb-range-title">
-                            <h4 class="tfhb-m-0">Indefinitely into the future</h4> 
-                            <p class="tfhb-m-0">Meeting will be go for indefinitely into the future</p>
+                            <h4 class="tfhb-m-0">{{ $tfhb_trans['Indefinitely into the future'] }}</h4> 
+                            <p class="tfhb-m-0">{{ $tfhb_trans['Meeting will be go for indefinitely into the future'] }}</p>
                         </div>
                     </label>
                 </div>
-                <div class="tfhb-single-meeting-range tfhb-admin-card-box tfhb-border-box tfhb-m-0 tfhb-align-baseline">
+                <div class="tfhb-single-meeting-range tfhb-admin-card-box tfhb-border-box tfhb-m-0 tfhb-align-baseline"> 
                     <label for="tfhb_specific_date" class="tfhb-m-0 tfhb-flexbox tfhb-gap-16 tfhb-align-normal">
                         <div class="tfhb-range-checkbox">
                             <input id="tfhb_specific_date" name="tfhb_range_date" type="radio" value="range" v-model="meeting.availability_range_type" :checked="meeting.availability_range_type == 'range' ? true : false">
                             <span class="checkmark"></span> 
                         </div>
                         <div class="tfhb-range-title">
-                            <h4 class="tfhb-m-0">Specific date range</h4> 
-                            <p class="tfhb-m-0">Meeting will be only available on specific dates</p>
+                            <h4 class="tfhb-m-0">{{ $tfhb_trans['Specific date range'] }}</h4> 
+                            <p class="tfhb-m-0">{{ $tfhb_trans['Meeting will be only available on specific dates'] }}</p>
                         </div>
                     </label>
                     <div class="tfhb-availability-schedule-time tfhb-flexbox" v-if="meeting.availability_range_type == 'range'">
@@ -273,28 +322,36 @@ function formatTime(time) {
             </div>
         </div>
         <!-- Select Host -->
-        <HbSelect 
+
+        <HbDropdown 
             v-model="meeting.host_id"
             required= "true" 
             :label="$tfhb_trans['Select Host']"  
             name="host_id"
             :placeholder="$tfhb_trans['Select Host']"  
             :option = "Host.hosts" 
-            @change="() => validateSelect('host_id')"
-            @click="() => validateSelect('host_id')"
+            @add-change="tfhbValidateInput('host_id')" 
+            @add-click="tfhbValidateInput('host_id')" 
             :errors="errors.host_id"
             @tfhb-onchange="Host_Avalibility_Callback"
         />
 
+        <div class="tfhb-add-moreinfo tfhb-full-width" v-if="isobjectempty(Host.hosts)">
+            <router-link :to="'/hosts/list'" exact :class="'tfhb-btn tfhb-inline-flex tfhb-gap-8 tfhb-justify-normal tfhb-height-auto'">
+                <Icon name="PlusCircle" :width="20"/>
+                Create Host
+            </router-link>
+        </div>
+
         <div class="tfhb-availaility-tabs">
             <ul class="tfhb-flexbox tfhb-gap-16">
-                <li class="tfhb-flexbox tfhb-gap-8" :class="'settings'==meeting.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'settings')"><Icon name="Heart" :width="20" /> Use existing availability</li>
-                <li class="tfhb-flexbox tfhb-gap-8" :class="'custom'==meeting.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'custom')"><Icon name="PencilLine" :width="20" /> Custom availability</li>
+                <li class="tfhb-flexbox tfhb-gap-8" :class="'settings'==meeting.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'settings')"><Icon name="Heart" :width="20" /> {{ $tfhb_trans['Use existing availability'] }}</li>
+                <li class="tfhb-flexbox tfhb-gap-8" :class="'custom'==meeting.availability_type ? 'active' : ''" @click="emit('availability-tabs', 'custom')"><Icon name="PencilLine" :width="20" /> {{ $tfhb_trans['Custom availability'] }}</li>
             </ul>
         </div>
         <!-- Choose Schedule -->
 
-        <HbSelect 
+        <HbDropdown 
             v-model="meeting.availability_id"
             required= "true" 
             :label="$tfhb_trans['Choose Schedule']"  
@@ -302,6 +359,9 @@ function formatTime(time) {
             :placeholder="$tfhb_trans['Choose Schedule']"   
             :option="HostAvailabilities"
             v-if="'settings'==meeting.availability_type"
+            @add-change="tfhbValidateInput('availability_id')" 
+            @add-click="tfhbValidateInput('availability_id')" 
+            :errors="errors.availability_id"
             @tfhb-onchange="Settings_Avalibility_Callback"
         />
 
@@ -311,6 +371,9 @@ function formatTime(time) {
             :label="$tfhb_trans['Choose Schedule']"  
             :placeholder="$tfhb_trans['Availability title']"   
             v-if="'custom'==meeting.availability_type"
+            @keyup="() => tfhbValidateInput('availability_custom.title')"
+            @click="() => tfhbValidateInput('availability_custom.title')"
+            :errors="errors.availability_custom___title"
         /> 
         <!-- Time Zone -->
         <HbDropdown 
@@ -323,6 +386,9 @@ function formatTime(time) {
             placeholder="Select Time Zone"  
             :option = "props.timeZone" 
             v-if="'custom'==meeting.availability_type"
+            @add-change="tfhbValidateInput('availability_custom.time_zone')" 
+            @add-click="tfhbValidateInput('availability_custom.time_zone')" 
+            :errors="errors.availability_custom___time_zone"
         /> 
         <!-- Time Zone --> 
         <!-- Settings Data -->
@@ -330,7 +396,7 @@ function formatTime(time) {
         <div class="tfhb-admin-card-box tfhb-gap-24 tfhb-full-width" v-if="Settings_avalibility && 'settings'==meeting.availability_type">  
             <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
                 <div class="tfhb-admin-title"> 
-                    <h3 >Weekly hours </h3>  
+                    <h3> {{ $tfhb_trans['Weekly hours'] }} </h3>  
                 </div>
                 <div class="thb-admin-btn right"> 
                     <span>{{ Settings_avalibility.availability.time_zone }}</span> 
@@ -376,8 +442,8 @@ function formatTime(time) {
             <div class="tfhb-admin-card-box tfhb-m-0 tfhb-flexbox tfhb-full-width" v-if="Settings_avalibility.availability.date_slots">  
                 <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
                     <div class="tfhb-admin-title tfhb-m-0"> 
-                        <h3>Add date overrides </h3>  
-                        <p>Add dates when your availability changes from your daily hours</p>
+                        <h3>{{ $tfhb_trans['Add date overrides'] }} </h3>  
+                        <p>{{ $tfhb_trans['Add dates when your availability changes from your daily hours'] }}</p>
                     </div> 
                 </div>
 
@@ -399,7 +465,7 @@ function formatTime(time) {
         <div class="tfhb-admin-card-box tfhb-gap-24" v-if="'custom'==meeting.availability_type">  
             <div  class="tfhb-availability-schedule-single tfhb-schedule-heading tfhb-flexbox">
                 <div class="tfhb-admin-title"> 
-                    <h3 >Weekly hours </h3>  
+                    <h3> {{ $tfhb_trans['Weekly hours'] }} </h3>  
                 </div>
                 <div class="thb-admin-btn right"> 
                     <span>{{ meeting.availability_custom.time_zone }}</span> 
@@ -418,33 +484,31 @@ function formatTime(time) {
                 </div>
                 <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap"> 
                     <div v-for="(time, tkey) in time_slot.times" :key="tkey" class="tfhb-availability-schedule-inner tfhb-flexbox">
-                        <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                            <HbDateTime   
-                                v-model="time.start" 
-                                selected = "1" 
-                                :config="{
-                                    enableTime: true,
-                                    noCalendar: true,
-                                    dateFormat: 'H:i',
-                                }"
-                                width="45"
-                                placeholder="Type your schedule title"   
-                                icon="Clock4"
-                            /> 
+                        <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+
+                            <HbDropdown 
+                                v-model="time.start"  
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="Start"   
+                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                @tfhb_start_change="TfhbStartDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />                
                             <Icon name="MoveRight" size="20" /> 
-                            <HbDateTime  
+                            <HbDropdown 
                                 v-model="time.end"  
-                                :label="$tfhb_trans['End']"  
-                                selected = "1"
-                                :config="{
-                                    enableTime: true,
-                                    noCalendar: true,
-                                    dateFormat: 'H:i',
-                                }"
-                                width="45"
-                                placeholder="Type your schedule title"   
-                                icon="Clock4"
-                            /> 
+                                required= "true" 
+                                width="50"
+                                :selected = "1"
+                                placeholder="End"   
+                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                @tfhb_start_change="TfhbEndDataEvent"
+                                :parent_key = "key"
+                                :single_key = "tkey"
+                            />  
 
                         </div>
                         <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
@@ -464,8 +528,8 @@ function formatTime(time) {
 
                 <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
                     <div class="tfhb-admin-title"> 
-                        <h3>Add date overrides </h3>  
-                        <p>Add dates when your availability changes from your daily hours</p>
+                        <h3>{{ $tfhb_trans['Add date overrides'] }} </h3>  
+                        <p>{{ $tfhb_trans['Add dates when your availability changes from your daily hours'] }}</p>
                     </div> 
                 </div>
 
@@ -506,7 +570,7 @@ function formatTime(time) {
                             /> 
                         </div>
                         <div class="tfhb-override-times">
-                            <h3>Which hours are you free?</h3>
+                            <h3>{{ $tfhb_trans['Which hours are you free?'] }}</h3>
 
                             <div class="tfhb-availability-schedule-inner tfhb-flexbox tfhb-gap-16 tfhb-mt-16" v-for="(time, tkey) in OverridesDates.times" :key="tkey" v-if="OverridesDates.available!=1">
                                 <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
@@ -559,22 +623,23 @@ function formatTime(time) {
                     </div>
 
                     <div class="tfhb-overrides-store tfhb-flexbox tfhb-gap-16 tfhb-justify-end tfhb-full-width">
-                        <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">Cancel</button>
-                        <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">Add override</button>
+                        <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">{{ $tfhb_trans['Cancel'] }}</button>
+                        <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">{{ $tfhb_trans['Add override'] }}</button>
                     </div>
                 </div>
 
 
                 <button class="tfhb-btn tfhb-flexbox tfhb-gap-8 tfhb-p-0 tfhb-height-auto" @click="openOverridesCalendarDate()">
                     <Icon name="PlusCircle" :width="20"/>
-                    Add an override
+                    {{ $tfhb_trans['Add an override'] }}
                 </button>
 
             </div>  
         
         </div>  
         <div class="tfhb-submission-btn">
-            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['host_id'])">{{ $tfhb_trans['Save & Continue'] }} </button>
+            <button v-if="'settings'==meeting.availability_type" class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['host_id', 'availability_id'])">{{ $tfhb_trans['Save & Continue'] }} </button>
+            <button v-if="'custom'==meeting.availability_type" class="tfhb-btn boxed-btn tfhb-flexbox" @click="emit('update-meeting', ['host_id', 'availability_custom___title', 'availability_custom___time_zone'])">{{ $tfhb_trans['Save & Continue'] }} </button>
         </div>
         <!--Bookings -->
     </div>

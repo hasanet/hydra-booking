@@ -7,7 +7,10 @@ import HbText from '../form-fields/HbText.vue';
 import HbDateTime from '../form-fields/HbDateTime.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
+import AvailabilityTime from '@/store/times'
 import { toast } from "vue3-toastify"; 
+import useValidators from '@/store/validator'
+const { errors, isEmpty } = useValidators();
  
 
 const props = defineProps({
@@ -18,10 +21,37 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:availabilityData", "modal-close", "update-availability"]); 
 
- 
- 
+
 // Update Availability Settings
-const UpdateAvailabilitySettings = async () => {   
+const UpdateAvailabilitySettings = async (validator_field) => {  
+    
+    // Errors Added
+    if(validator_field){
+        validator_field.forEach(field => {
+
+        const fieldParts = field.split('___'); // Split the field into parts
+        if(fieldParts[0] && !fieldParts[1]){
+            if(!props.availabilityDataSingle[fieldParts[0]]){
+                errors[fieldParts[0]] = 'Required this field';
+            }
+        }
+        if(fieldParts[0] && fieldParts[1]){
+            if(!props.availabilityDataSingle[fieldParts[0]][fieldParts[1]]){
+                errors[fieldParts[0]+'___'+[fieldParts[1]]] = 'Required this field';
+            }
+        }
+            
+        });
+    }
+
+    // Errors Checked
+    const isEmpty = Object.keys(errors).length === 0;
+    if(!isEmpty){
+        toast.error('Fill Up The Required Fields'); 
+        return
+    }
+
+    // Api Submission
     try { 
         if(props.is_host){
             const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/availability/update', props.availabilityDataSingle, {
@@ -218,6 +248,16 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
     
 }
 
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.availabilityDataSingle[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.availabilityDataSingle[fieldParts[0]][fieldParts[1]]);
+    }
+};
+
 </script>
  
 
@@ -240,6 +280,9 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                     :label="$tfhb_trans['Title']"  
                     selected = "1"
                     placeholder="Type your schedule title"   
+                    @keyup="() => tfhbValidateInput('title')"
+                    @click="() => tfhbValidateInput('title')"
+                    :errors="errors.title"
                 /> 
                 <!-- Title -->
                 <!-- Time Zone -->
@@ -252,6 +295,9 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                     :filter="true"
                     placeholder="Select Time Zone"  
                     :option = "props.timeZone" 
+                    @add-change="tfhbValidateInput('time_zone')" 
+                    @add-click="tfhbValidateInput('time_zone')" 
+                    :errors="errors.time_zone"
                 /> 
                 <!-- Time Zone --> 
             </div>
@@ -278,41 +324,30 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
                         </div>
                         <div v-if="time_slot.status == 1" class="tfhb-availability-schedule-wrap "> 
                             <div v-for="(time, tkey) in time_slot.times" :key="tkey"  class="tfhb-availability-schedule-inner tfhb-flexbox">
-                                <div class="tfhb-availability-schedule-time tfhb-flexbox">
-                                    <HbDateTime  
-                                        v-model="time.start"    
-                                        selected = "1" 
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i',
-                                            defaultDate: time.start
-                                        }"
-                                        width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock4"
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-no-wrap">
+                                    <HbDropdown 
+                                        v-model="time.start"  
+                                        required= "true" 
+                                        width="50"
+                                        :selected = "1"
+                                        placeholder="Start"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                         @tfhb_start_change="TfhbStartDataEvent"
                                         :parent_key = "key"
                                         :single_key = "tkey"
-                                    /> 
+                                    />                
                                     <Icon name="MoveRight" size="20" /> 
-                                    <HbDateTime  
-                                        v-model="time.end"   
-                                        :label="$tfhb_trans['End']"  
-                                        selected = "1"
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i',
-                                            defaultDate: time.end
-                                        }"
-                                        width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock4"
+                                    <HbDropdown 
+                                        v-model="time.end"  
+                                        required= "true" 
+                                        width="50"
+                                        :selected = "1"
+                                        placeholder="End"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                         @tfhb_start_change="TfhbEndDataEvent"
                                         :parent_key = "key"
                                         :single_key = "tkey"
-                                    /> 
+                                    />     
 
                                 </div>
                                 <div v-if="tkey == 0" class="tfhb-availability-schedule-clone-single">
@@ -447,7 +482,7 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
 
 
                 <!-- Create Or Update Availability -->
-                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings">{{ is_host ? 'Save Availability' : $tfhb_trans['Update General Settings'] }}</button>
+                <button class="tfhb-btn boxed-btn" @click="UpdateAvailabilitySettings(['title', 'time_zone'])">{{ is_host ? $tfhb_trans['Save Availability'] : $tfhb_trans['Update Availability'] }}</button>
             </div>
         </div>
    </div>
