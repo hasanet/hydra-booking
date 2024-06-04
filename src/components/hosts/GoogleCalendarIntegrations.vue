@@ -47,19 +47,19 @@ const storedOptionData = (data) => {
                 <p>New standard in online payment</p>
 
             </div>
-        </div>
+        </div> 
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
+            <!-- Checke -->
             <!-- <button @click="gCalPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ google_calendar.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button> -->
              <!-- a tag for get access token  -->
             <!-- <a   :href="'https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&redirect_uri='+google_calendar.redirect_url+'&response_type=code&client_id='+google_calendar.client_id+'&access_type=online'" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a> -->
-            <a  v-if="google_calendar.connection_status == 1 && google_calendar.tfhb_google_calendar == '' "  :href="google_calendar.access_url" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a>
-
-            <button v-else @click="gCalPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8"> Settings <Icon name="ChevronRight" size="18" /></button>
+            <button   v-if="google_calendar.connection_status == 1 && google_calendar.tfhb_google_calendar !== undefined "  @click="gCalPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8"> Settings <Icon name="ChevronRight" size="18" /></button>
              
-            
+            <a v-else :href="google_calendar.access_url" target="_blank"class="tfhb-btn tfhb-flexbox tfhb-gap-8">Get Access Token</a>
+
         </div>
 
-        <HbPopup :isOpen="gCalPopup" @modal-close="gCalPopup = false" max_width="800px" name="first-modal">
+        <HbPopup v-if="google_calendar.tfhb_google_calendar !== undefined " :isOpen="gCalPopup" @modal-close="gCalPopup = false" max_width="800px" name="first-modal">
             <template #header> 
                 <!-- {{ google_calendar }} -->
                 <h3>Google Calendar</h3>

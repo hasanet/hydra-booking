@@ -43,6 +43,7 @@ class Booking {
                 ip_address VARCHAR(50) NULL, 
                 device VARCHAR(50) NULL, 
                 meeting_locations LONGTEXT NOT NULL,
+                meeting_calendar LONGTEXT NULL,
                 cancelled_by VARCHAR(255) NULL,
                 status VARCHAR(50) NOT NULL, 
                 reason VARCHAR(255) NULL, 

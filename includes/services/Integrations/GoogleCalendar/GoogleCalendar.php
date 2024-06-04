@@ -25,7 +25,8 @@ class GoogleCalendar{
 
         $this->setClientData();  
 
-        // add_action('hydra_booking/after_booking_completed', array($this, 'InsertGoogleCalender'));
+        add_action('hydra_booking/after_booking_completed', array($this, 'InsertGoogleCalender'));
+        add_action('hydra_booking/after_booking_schedule', array($this, 'InsertGoogleCalender'));
     }
 
     // Set Client Data
@@ -225,12 +226,12 @@ class GoogleCalendar{
     
 
     // Insert Booking to Google Calendar
-    public function InsertGoogleCalender( ){ 
-        $booking = new Booking();
+    public function InsertGoogleCalender( $data ){ 
 
-        $data = $booking->get(10, false);
-      
-       
+        if(!isset($data->id)){
+            return;
+        }
+   
         //  set event data google meet shedule 
         $start_time = strtotime($data->start_time); // 03:45 AM
         $end_time = strtotime($data->end_time); // 04:30 AM
@@ -245,7 +246,7 @@ class GoogleCalendar{
         $setData = array(
             'title' => 'Meeting with ' . $data->attendee_name,
             'summary' => 'Title: ' . $data->meeting_title,
-            'location' => 'Location: ' . $data->meeting_location,
+            // 'location' => 'Location: ' . $data->meeting_location,
             'description' => 'Description: ',
             'start' => array(
                 'dateTime' =>  $start_date,
@@ -282,14 +283,23 @@ class GoogleCalendar{
  
         $_tfhb_host_integration_settings =  is_array(get_user_meta($data->host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($data->host_id, '_tfhb_host_integration_settings', true) : array();
         $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
-        $items = isset($google_calendar['tfhb_google_calendar']['items']) ? $google_calendar['tfhb_google_calendar']['items'] : array();
-        foreach($items as $item){
-            if($item['write_status'] == 1){
-               
-                $calendarId = $item['id'];
-                $url =  $this->calendarEvent . $calendarId . '/events';
-      
-       
+        $calendarId = isset($google_calendar['selected_calendar_id']) ? $google_calendar['selected_calendar_id'] : '';
+    
+        if($calendarId){
+
+            $meeting_calendar = json_decode($data->meeting_calendar, true);
+
+            if($meeting_calendar != '' && isset($meeting_calendar['google_calendar']['id'])){ 
+                $url =  $this->calendarEvent . $calendarId . '/events/' . $meeting_calendar['google_calendar']['id'];
+                $response = wp_remote_post($url, array(
+                    'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
+                    'body' => json_encode($setData),
+                    'method' => 'PUT',
+                    'data_format' => 'body',
+                )); 
+                
+            }else{
+                $url =  $this->calendarEvent . $calendarId . '/events'; 
 
                 $response = wp_remote_post($url, array(
                     'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
@@ -297,15 +307,25 @@ class GoogleCalendar{
                     'method' => 'POST',
                     'data_format' => 'body',
                 )); 
-                // event id
-                $body = wp_remote_retrieve_body($response);   
-                
-        
-            }
-        } 
-         
+    
 
-                    
+            }
+
+        
+            
+            $body = wp_remote_retrieve_body($response);  
+          
+            // Update the Booking
+            $google_calendar_data['google_calendar'] = json_decode($body, true);
+            $update = array();
+            $update['id'] = $data->id;
+            $update['meeting_calendar'] = json_encode($google_calendar_data, true);
+    
+            $booking = new Booking();
+    
+            $booking->update($update);  
+        }
+       
     }
 
 }
