@@ -12,6 +12,7 @@ const timeZone = reactive({});
 const AvailabilityGet = reactive({
   data: [],
 });
+const GeneralSettings = reactive({});
 const availabilityDataSingle = reactive({}) 
 const skeleton = ref(true);
 // 
@@ -99,6 +100,21 @@ const openModal = () => {
     date_slots: [
     ]
   };
+//   console.log(GeneralSettings);
+//   availabilityDataSingle.value.time_zone = GeneralSettings.value.time_zone ? GeneralSettings.value.time_zone : '';
+//   if( GeneralSettings.value.week_start_from ){
+//     // make week start from as time slot rearrainge
+//     let week_start_from = GeneralSettings.value.week_start_from; 
+//     let week_start_from_index = availabilityDataSingle.value.time_slots.findIndex( x => x.day === week_start_from );
+//     let week_start_from_data = availabilityDataSingle.value.time_slots[week_start_from_index];
+//     // Arrage Day as per week start from and sequnce must be same day sequence 
+//     let week_start_from_data_index = availabilityDataSingle.value.time_slots.findIndex( x => x.day === week_start_from );
+//     availabilityDataSingle.value.time_slots.splice(week_start_from_data_index, 1);
+//     availabilityDataSingle.value.time_slots.unshift(week_start_from_data);
+
+
+
+//   }
   isModalOpened.value = true;
 };
 
@@ -122,6 +138,7 @@ const fetchAvailabilitySettings = async () => {
       if (response.data.status) { 
           timeZone.value = response.data.time_zone;     
           AvailabilityGet.data = response.data.availability; 
+          GeneralSettings.value = response.data.general_settings; 
 
 
           skeleton.value = false;

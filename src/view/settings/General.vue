@@ -203,13 +203,13 @@ onBeforeMount(() => {
                     selected = "1"
                     placeholder="Select Time Format"  
                     :option = "[
-                        {'name': 'Sunday', 'value': 'sunday'}, 
-                        {'name': 'Monday', 'value': 'monday'},
-                        {'name': 'Tuesday', 'value': 'tuesday'},
-                        {'name': 'Wednesday', 'value': 'wednesday'},
-                        {'name': 'Thursday', 'value': 'thursday'},
-                        {'name': 'Friday', 'value': 'friday'},
-                        {'name': 'Saturday', 'value': 'saturday'}
+                        {'name': 'Sunday', 'value': 'Sunday'}, 
+                        {'name': 'Monday', 'value': 'Monday'},
+                        {'name': 'Tuesday', 'value': 'Tuesday'},
+                        {'name': 'Wednesday', 'value': 'Wednesday'},
+                        {'name': 'Thursday', 'value': 'Thursday'},
+                        {'name': 'Friday', 'value': 'Friday'},
+                        {'name': 'Saturday', 'value': 'Saturday'}
                     ]"
                     @add-change="tfhbValidateInput('week_start_from')" 
                     @add-click="tfhbValidateInput('week_start_from')" 
