@@ -14,8 +14,8 @@ const hostsSettings = reactive({
             tfhb_manage_meetings: true,
             tfhb_manage_booking: true,
             tfhb_manage_settings: false, 
-            tfhb_manage_custom_availability: false,
-            tfhb_manage_integrations: false,
+            tfhb_manage_custom_availability: true,
+            tfhb_manage_integrations: true,
 
         }
     }, 
