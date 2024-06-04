@@ -145,7 +145,7 @@ const Tfhb_Host_Filter = async (e) =>{
 <template>
 
     <!-- {{ tfhbClass }} -->
-    <div class="tfhb-admin-hosts">
+    <div :class="{ 'tfhb-skeleton': skeleton }"  class="tfhb-admin-hosts">
         <Header title="Hosts" />
         <div class="tfhb-dashboard-heading tfhb-flexbox">
            <div class="tfhb-header-filters">

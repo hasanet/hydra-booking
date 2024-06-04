@@ -1,48 +1,69 @@
-
 .tfhb-skeleton {
-    h1, h2, h3, h4, h5, h6, span, p, label, .tfhb-single-form-field, a, button, .tfhb-single-chartbox-wrap, ul li, .tfhb-single-hosts-action, .tfhb-single-chartbox {
-        display: block;
-        position: relative;
-        overflow: hidden;
-        // background-color: #e8e7e7;
-    
-        &::before {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        transform: translateX(-100%);
-        background-image: linear-gradient(
-            to right,
-            rgba(255, 255, 255, 0),
-            rgba(255, 255, 255, 0.5) 50%,
-            rgba(255, 255, 255, 0) 80%
-        ) ;
-            background-repeat: repeat-y;
-            background-size: 200px 500px;
-            background-position: 0 0; 
-        animation: shimmer 2s infinite;
-        content: '';
-        z-index: 4;
-        }
-        &::after {
-        background-color: #ececec;
-        position: absolute;
-        top: 0;
-        left: 0; 
-        height: 100%;
-            width: 100%;
-        content: '';
-        z-index: 3;
-        border-radius: 4px;
-        }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  .tfhb-single-form-field,
+  a,
+  button,
+  .tfhb-single-chartbox-wrap,
+  ul li,
+  .tfhb-single-hosts-action,
+  .tfhb-single-chartbox,
+  .tfhb-single-colorbox,
+  .tfhb-category-list,
+  .tfhb-header-filters,
+  .hosts-avatar,
+  .tfhb-info-icon-text,
+  .table,
+  .tfhb-hosts-status,
+  .tfhb-integrations-single-block-icon {
+    border: none !important;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    // background-color: #e8e7e7;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+      animation: shimmer 2s infinite;
+      content: '';
+      z-index: 4;
     }
-  
-   
-  }
-  @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
+
+    &::after {
+      background-color: #ececec;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      content: '';
+      z-index: 3;
+      border-radius: 4px;
+    }
+  } 
+  .table{
+    button, a{
+      &::before {
+        display: none;
+      }
     }
   }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

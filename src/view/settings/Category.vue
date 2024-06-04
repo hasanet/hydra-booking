@@ -13,7 +13,7 @@ import HbTextarea from '@/components/form-fields/HbTextarea.vue';
 
 const itemsPerPage = ref(5);
 const currentPage = ref(1);
-
+const skeleton = ref(true);
 const CategoryData = reactive({
   id: '',
   title: '',
@@ -81,6 +81,7 @@ const removeCategory = async (key) => {
 
 onBeforeMount(() => { 
     Meeting.fetchMeetingCategory();
+    skeleton.value = false;
 });
 
 

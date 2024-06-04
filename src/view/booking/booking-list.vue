@@ -150,7 +150,7 @@ const prevPage = () => {
 <template>
 
 <!-- {{ tfhbClass }} -->
-<div class="tfhb-dashboard-heading tfhb-flexbox">
+<div :class="{ 'tfhb-skeleton': Booking.skeleton }" class="tfhb-dashboard-heading tfhb-flexbox">
     <div class="tfhb-filter-box tfhb-flexbox">
         <div class="tfhb-header-filters">
             <input type="text" placeholder="Host name or meeting title" /> 
@@ -292,7 +292,7 @@ const prevPage = () => {
 
 <!-- Backend Booking Popup End -->
 
-<div class="tfhb-booking-details tfhb-mt-32">
+<div :class="{ 'tfhb-skeleton': Booking.skeleton }"  class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
         <thead>
             <tr>

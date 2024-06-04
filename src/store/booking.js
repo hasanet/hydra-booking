@@ -1,8 +1,9 @@
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import axios from 'axios'  
 
 const Booking = reactive({
     bookings: [],
+    skeleton : ref(true),
 
     // booking List
     async fetchBookings() {
@@ -15,6 +16,7 @@ const Booking = reactive({
 
         if (response.data.status) { 
             this.bookings = response.data.bookings;
+            this.skeleton = false;
         }
 
         // const apiUrl = tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists';
