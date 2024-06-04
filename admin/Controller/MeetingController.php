@@ -83,9 +83,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Meeting List
     public function getMeetingsData() { 
 
+        $current_user = wp_get_current_user();
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+
         // Meeting Lists 
         $meeting = new Meeting();
-        $MeetingsList = $meeting->get();
+
+        if(!empty($current_user_role) && "administrator"==$current_user_role){
+            $MeetingsList = $meeting->get();
+        }
+
+        if(!empty($current_user_role) && "tfhb_host"==$current_user_role){
+            $MeetingsList = $meeting->get(null, null, $current_user_id);
+        }
 
         // Return response
         $data = array(

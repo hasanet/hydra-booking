@@ -6,6 +6,7 @@ namespace HydraBooking\Admin\Controller;
  
  // Use DB 
 use HydraBooking\DB\Booking;
+use HydraBooking\DB\Host;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -48,9 +49,23 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     // Booking List
     public function getBookingsData() { 
 
+        $current_user = wp_get_current_user();
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+
         // Booking Lists 
         $booking = new Booking();
-        $bookingsList = $booking->get(null, true);
+
+        if(!empty($current_user_role) && "administrator"==$current_user_role){
+            $bookingsList = $booking->get(null, true);
+        }
+        if(!empty($current_user_role) && "tfhb_host"==$current_user_role){
+            $host = new Host();
+            $HostData = $host->get( $current_user_id  );
+
+            $bookingsList = $booking->get(null, true, false, false, false, false, $HostData->id);
+        }
         
         // Return response
         $data = array(
