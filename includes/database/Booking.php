@@ -169,6 +169,9 @@ class Booking {
         }elseif($where != null && $join != true) {
             if($custom == true){ 
                 $sql = "SELECT * FROM $table_name WHERE $where";
+                if(!empty($where)){
+                    $sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : "";
+                }
                 $data = $wpdb->get_results(
                     $wpdb->prepare( $sql )
                 ); 
@@ -224,9 +227,15 @@ class Booking {
 
             }
             // userwise 
-            $sql .= $user_id != null ? " WHERE $table_name.host_id = $user_id" : "";
+            if(empty($where)){
+                $sql .= $user_id != null ? " WHERE $table_name.host_id = $user_id" : "";
+            }
             // custom where 
             $sql .= $custom != null ? " WHERE $where" : "";
+
+            if(!empty($where)){
+                $sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : "";
+            }
             // Add Order by if exist
             $sql .= $orderBy != null ? " ORDER BY $orderBy" : " ORDER BY id DESC";
 

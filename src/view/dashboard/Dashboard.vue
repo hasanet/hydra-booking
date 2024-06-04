@@ -621,7 +621,7 @@ const  ChangeStatisticData = (day) => {
 
                     <h3 class="tfhb-dashboard-notice-box-title tfhb-m-0 tfhb-full-width">Recent Bookings</h3>
                     <!-- Single Notice Box -->
-                    <div class="tfhb-dashboard-notice-box-content  tfhb-flexbox tfhb-gap-16" >
+                    <div class="tfhb-dashboard-notice-box-content tfhb-flexbox tfhb-gap-16 tfhb-full-width">
                         <div
                             v-for="(data, index) in Dashboard.data.recent_booking"
                                 :key="index" 
