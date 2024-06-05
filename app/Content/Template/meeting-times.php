@@ -14,7 +14,9 @@ defined( 'ABSPATH' ) || exit;
  * 
  */
 
-
+ $meeting = isset($args['meeting']) ? $args['meeting'] : array();
+ $general_settings = isset($args['general_settings']) ? $args['general_settings'] : array(); 
+ $time_format = isset($general_settings['time_format']) ? $general_settings['time_format'] : '12';
 ?> 
 <div class="tfhb-meeting-times">
 
@@ -25,19 +27,19 @@ defined( 'ABSPATH' ) || exit;
     ?>
     <div class="tfhb-timezone-tabs">
         <ul>
-            <li class="active">
-                <label for="tfhb_time_format_12" for="">12h
-                    <input id="tfhb_time_format_12" type="radio" checked name="tfhb_time_format" value="12">
+            <li class="<?php echo  $time_format == '12' ? 'active' : ''; ?>">
+                <label for="tfhb_time_format_12" for=""><?php echo esc_html(__('12h', 'hydra-booking')) ?>
+                    <input id="tfhb_time_format_12" type="radio" <?php echo  $time_format == '12' ? 'checked' : ''; ?>  name="tfhb_time_format" value="12">
                 </label> 
             </li>
-            <li>
-                <label for="tfhb_time_format_24" for="">24h
-                    <input id="tfhb_time_format_24" type="radio" name="tfhb_time_format" value="24">
+            <li class="<?php echo  $time_format == '24' ? 'active' : ''; ?>">
+                <label for="tfhb_time_format_24" for=""><?php echo esc_html(__('24h', 'hydra-booking')) ?>
+                    <input id="tfhb_time_format_24" type="radio" <?php echo  $time_format == '24' ? 'checked' : ''; ?> name="tfhb_time_format" value="24">
                 </label>
             </li>
         </ul>
     </div>
-    <h3 class="tfhb-select-date">Saturday, 11 April, 2024</h3>
+    <h3 class="tfhb-select-date"> </h3>
 
     <div class="tfhb-available-times">
         <ul>
