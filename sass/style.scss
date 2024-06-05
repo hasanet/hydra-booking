@@ -149,6 +149,10 @@
                     justify-content: space-between; 
                     padding: 0 !important;
                     position: relative;
+                    select{
+                        background-image: none !important;
+                        background-size: 0 !important;
+                    }
                     .tfhb-timezone-title{
                         color: $ui800;
                         font-size: 15px;
@@ -168,6 +172,17 @@
                         padding-bottom: 8px;
                         .select2-selection__rendered{
                             color: $ui800;
+                            padding: 0px !important;
+                            line-height: normal;
+                        }
+                        .select2-selection__arrow{
+                            top: 50%;
+                            width: 1.7em;
+                            transform: translateY(-50%);
+                            b{
+                                border-color: $primaryi transparent transparent transparent;
+                                display: block;
+                            }
                         }
                     }
                     .tfhb-timezone-icon {
