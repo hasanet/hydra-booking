@@ -87,6 +87,10 @@ class THB_INIT{
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
         wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
+
+        // Global General Settings
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+
         $_tfhb_appearance_settings = get_option('_tfhb_appearance_settings');
         // var_dump($_tfhb_appearance_settings);
         $tfhb_primary_color = !empty($_tfhb_appearance_settings['primary_color']) ? $_tfhb_appearance_settings['primary_color'] : '#F62881';
@@ -108,6 +112,7 @@ class THB_INIT{
         wp_localize_script( 'tfhb-app-script', 'tfhb_app_booking', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce' => wp_create_nonce( 'tfhb_nonce' ),
+            'general_settings' => $general_settings,
         ) );
 
     }

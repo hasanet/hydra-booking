@@ -4,6 +4,7 @@ import HbCounter from '@/components/meetings/HbCounter.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 const emit = defineEmits(["update-meeting", "limits-frequency-add"]); 
+
 const props = defineProps({
     meetingId: {
         type: Number,

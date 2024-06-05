@@ -8,6 +8,7 @@ import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
+import { Availability } from '@/store/availability';
 import AvailabilityTime from '@/store/times'
 import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts';
@@ -45,6 +46,8 @@ const fetchAvailabilitySettings = async (availability_id) => {
         } );
         if (response.data.status && response.data.availability) { 
             Settings_avalibility.value = response.data;
+            Settings_avalibility.value.availability.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, Settings_avalibility.value.availability.time_slots) : Settings_avalibility.value.availability.time_slots;
+            
         }
     } catch (error) {
         console.log(error);
@@ -121,6 +124,7 @@ const fetchSingleAvailabilitySettings = async (host_id, availability_id) => {
 
 // Mount
 onBeforeMount(() => { 
+    Availability.getGeneralSettings();
     Host.fetchHosts().then(() => {
         if(props.meeting.host_id!=0){
             fetchHostAvailability(props.meeting.host_id);

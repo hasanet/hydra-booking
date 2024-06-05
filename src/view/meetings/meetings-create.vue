@@ -5,6 +5,7 @@ import { useRouter, useRoute, RouterView } from 'vue-router'
 import axios from 'axios'  
 import { toast } from "vue3-toastify"; 
 import useValidators from '@/store/validator'
+import { Availability } from '@/store/availability';
 const { errors } = useValidators();
 const error = reactive({})
 
@@ -334,10 +335,17 @@ const meetingId = route.params.id;
             meetingData.availability_range_type = response.data.meeting.availability_range_type ? response.data.meeting.availability_range_type : 'indefinitely'
 
             meetingData.availability_range = response.data.meeting.availability_range ? JSON.parse(response.data.meeting.availability_range) : {}
-
+           
             if(response.data.meeting.availability_custom){
+                 
                 meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
-            }
+             
+                
+            } 
+            meetingData.availability_custom.time_zone = Availability.GeneralSettings.time_zone ? Availability.GeneralSettings.time_zone : '';
+
+            meetingData.availability_custom.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, meetingData.availability_custom.time_slots) : meetingData.availability_custom.time_slots;
+            
             if(response.data.meeting.availability_type){
                 meetingData.availability_type = response.data.meeting.availability_type
             }
@@ -396,7 +404,9 @@ const meetingId = route.params.id;
 } 
 
 onBeforeMount(() => { 
+
     fetchMeeting();
+    Availability.getGeneralSettings();
 });
 
 

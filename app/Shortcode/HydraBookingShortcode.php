@@ -180,6 +180,7 @@ class HydraBookingShortcode {
         $id = isset($data['id']) ? $data['id'] : 0;
         $host_id = isset($data['host_id']) ? $data['host_id'] : 0;
 
+
         // Check if id is not set
         if(0 === $id && 0 === $host_id) {
             return;
@@ -198,11 +199,11 @@ class HydraBookingShortcode {
             $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
         }
          
-       
- 
+        
 
         // Availability Range
         $availability_range = isset($data['availability_range']) ? $data['availability_range'] : array();
+        $availability_range_type = isset($data['availability_range_type']) ? $data['availability_range_type'] : array();
 
         // Duration
         $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
@@ -240,6 +241,7 @@ class HydraBookingShortcode {
             'buffer_time_after' => $buffer_time_after,
             'availability' => $availability_data,
             'availability_range' => $availability_range,
+            'availability_range_type' => $availability_range_type,
         ));
 
     }
@@ -270,6 +272,11 @@ class HydraBookingShortcode {
         $response = array();
 
         $booking = new Booking();
+
+        // General Settings
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+
+
 
         // Generate Meeting Hash Based on start time and end time and Date And Meeting id + random number  
         if(isset($_POST['booking_hash'])){
@@ -320,7 +327,7 @@ class HydraBookingShortcode {
             } 
         }
         $data['cancelled_by'] = '';
-        $data['status'] = 'pending';
+        $data['status'] = isset($general_settings['booking_status']) && $general_settings['booking_status'] == 1 ? 'confirmed' : 'pending'; 
         $data['reason'] = '';
         $data['booking_type'] = 'single';
 
@@ -376,6 +383,19 @@ class HydraBookingShortcode {
         // Get booking Data using Hash
 
         if(isset($_POST['action_type']) && 'reschedule' == $_POST['action_type']){ 
+
+            // if general_settings['allowed_reschedule_before_meeting_start'] is available exp 100 then check the time before reschedule
+            // if(isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start'])){
+            //     $allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
+            //     $current_time = strtotime(date('Y-m-d H:i:s'));
+            //     $meeting_time = strtotime($data['meeting_dates'].' '.$data['start_time']);
+            //     $time_diff = $meeting_time - $current_time;
+            //     $time_diff = $time_diff / 60; // convert to minutes
+            //     if($time_diff < $allowed_reschedule_before_meeting_start){
+            //         wp_send_json_error( array( 'message' => 'You can not reschedule the meeting' ) );
+            //     }
+            // }
+
             $get_booking = $booking->get(
                 array('hash' => $meeting_hash),
                 false,
