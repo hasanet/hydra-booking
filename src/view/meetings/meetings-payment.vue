@@ -51,13 +51,13 @@ const changeTab = (e) => {
             <div class="tfhb-admin-title tfhb-m-0 tfhb-full-width">
 
                 <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
-
-                    Payment for this Meeting  
+                    {{ $tfhb_trans['Payment for this Meeting '] }}
+                     
                     <HbSwitch 
                         v-model="meeting.payment_status"
                     />
                 </h2> 
-                <p>You can enable or disable payment for this meeting by toggle switch</p>
+                <p>{{ $tfhb_trans['You can enable or disable payment for this meeting by toggle switch'] }}</p>
             </div> 
             <div v-if="meeting.payment_status == 1"  class="tfhb-content-wrap tfhb-full-width"> 
                 <div class="tfhb-integrations-wrap tfhb-flexbox">

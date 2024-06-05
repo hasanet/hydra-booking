@@ -68,7 +68,7 @@ const closePopup = () => {
 
         </div>
 
-        <button class="tfhb-btn tfhb-edit flex-btn" @click="emit('popup-open-control')" ><Icon name="PencilLine" size="15" /> Edit </button>
+        <button class="tfhb-btn tfhb-edit flex-btn" @click="emit('popup-open-control')" ><Icon name="PencilLine" size="15" /> {{ $tfhb_trans['Edit'] }} </button>
 
         <HbPopup :isOpen="ispopup" @modal-close="closePopup" max_width="700px" name="first-modal">
             <template #header> 

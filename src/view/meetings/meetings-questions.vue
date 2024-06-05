@@ -83,12 +83,12 @@ function QuestionPopupClose(){
     <div class="meeting-create-details tfhb-gap-24"> 
         <div class="tfhb-admin-title tfhb-m-0 tfhb-full-width">
             <h2 class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal">
-                Meeting Questions for Attendee
+                {{ $tfhb_trans['Meeting Questions for Attendee'] }}
                 <HbSwitch 
                     v-model="meeting.questions_status" 
                 />
             </h2> 
-            <p>Create your own booking page questions</p>
+            <p>{{ $tfhb_trans['Create your own booking page questions'] }}</p>
         </div>
 
         <div class="tfhb-admin-card-box tfhb-gap-24 tfhb-m-0 tfhb-full-width" v-if="meeting.questions_status!=0">  
@@ -102,12 +102,12 @@ function QuestionPopupClose(){
 
             <div class="tfhb-add-new-question tfhb-flexbox tfhb-gap-8"  @click="QuestionPopupAdd()" >
                 <Icon name="PlusCircle" :width="20"/>
-                Add more questions
+                {{ $tfhb_trans['Add more questions'] }}
             </div>
 
             <HbPopup :isOpen="QuestionPopup" @modal-close="QuestionPopup = false" max_width="400px" name="first-modal">
                 <template #header> 
-                    <h3>Add Question for Attendee</h3>
+                    <h3>{{ $tfhb_trans['Add Question for Attendee'] }}</h3>
                 </template>
 
                 <template #content>  

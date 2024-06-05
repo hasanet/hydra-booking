@@ -32,9 +32,9 @@ const editAvailability = () => {
                         <path d="M10.0001 16.6667C10.4603 16.6667 10.8334 16.2936 10.8334 15.8333C10.8334 15.3731 10.4603 15 10.0001 15C9.53984 15 9.16675 15.3731 9.16675 15.8333C9.16675 16.2936 9.53984 16.6667 10.0001 16.6667Z" stroke="#765664" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <div class="tfhb-dropdown-wrap">
-                        <span class="tfhb-dropdown-single" @click="editAvailability">Edit</span>
+                        <span class="tfhb-dropdown-single" @click="editAvailability">{{ $tfhb_trans['Edit'] }}</span>
                         <!-- <span class="tfhb-dropdown-single">Duplicate</span> -->
-                        <span class="tfhb-dropdown-single" @click="deleteAvailability">Delete</span>
+                        <span class="tfhb-dropdown-single" @click="deleteAvailability">{{ $tfhb_trans['Delete'] }}</span>
                     </div>
                 </div>
             </div> 
