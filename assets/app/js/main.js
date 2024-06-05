@@ -233,10 +233,16 @@
 								window.location.href = response.data.redirect;
 								return;
 
-							}else{
-
+							}else{ 
 								$this.find('.tfhb-meeting-card').html(''); 
 								$this.find('.tfhb-meeting-card').append(response.data.confirmation_template); 
+								if(response.data.action == 'rescheduled'){
+									$this.find('.tfhb-meeting-hostinfo').append(`
+											<div class="tfhb-notice " > 
+											<span>`+response.data.message+` </span>
+										</div>`
+									)
+								}
 
 							}
 							$this.find('.tfhb-preloader').remove();
@@ -437,15 +443,17 @@
 					if(response.success){  
 
 						var already_booked_times = response.data;
+						console.log(already_booked_times);
  
 						$this.find('.tfhb-available-times ul').html('');
 
 						for (var i = 0; i < timesData.length; i++) {
-
-							// check already booked times 
-							var already_booked = already_booked_times.find( time => time.start_time == timesData[i].start && time.end_time == timesData[i].end );
+ 
+							// if 24 hours format then convert to 12 hours format
+							var already_booked = already_booked_times.find( slot => slot.start_time == timesData[i].start && slot.end_time == timesData[i].end );
 						 
 							if(already_booked){ 
+								
 								// Remove
 								continue;
 							}

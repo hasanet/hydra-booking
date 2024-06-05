@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
  $meeting = isset($args['meeting']) ? $args['meeting'] : array();
  $general_settings = isset($args['general_settings']) ? $args['general_settings'] : array(); 
- $time_format = isset($general_settings['time_format']) ? $general_settings['time_format'] : '12';
+ $time_format = isset($general_settings['time_format']) && !empty($general_settings['time_format']) ? $general_settings['time_format'] : '12';
 ?> 
 <div class="tfhb-meeting-times">
 

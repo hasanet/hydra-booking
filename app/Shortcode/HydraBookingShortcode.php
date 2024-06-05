@@ -410,7 +410,7 @@ class HydraBookingShortcode {
                 'start_time' => sanitize_text_field($_POST['meeting_time_start']),
                 'end_time' => sanitize_text_field($_POST['meeting_time_end']),
                 'reason' =>  isset($_POST['reason']) ? sanitize_text_field($_POST['reason']) : '',
-                'status' =>  'rescheduled',
+                'status' =>  isset($general_settings['reschedule_status']) && $general_settings['reschedule_status'] == 1 ? 'rescheduled' : 'pending',
             );
             
             $booking_meta = array_merge($booking_meta, $reschedule_data);
@@ -421,7 +421,7 @@ class HydraBookingShortcode {
 
 
             $booking->update($reschedule_data);
-            $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
+            $confirmation_template =  $this->tfhb_booking_confirmation($booking_meta, $MeetingData, $host_meta);
 
             // Single Booking & Mail Notification
             $single_booking_meta = $booking->get($get_booking->id);
@@ -481,7 +481,9 @@ class HydraBookingShortcode {
             }
 
             $response['message'] = 'Rescheduled Successfully';
-            $response['confirmation_template'] = $confirmation_template;
+            $response['action'] = 'rescheduled';
+            $response['confirmation_template'] = $confirmation_template; 
+            // $booking_meta, $MeetingData, $host_meta
             wp_send_json_success(  $response );
                 
         }
@@ -587,6 +589,7 @@ class HydraBookingShortcode {
         }
         
         $response['message'] = 'Booking Successful';
+        $response['action'] = 'create';
         $response['confirmation_template'] = $confirmation_template;
 
 

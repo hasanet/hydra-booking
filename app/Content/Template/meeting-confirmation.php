@@ -38,12 +38,12 @@ defined( 'ABSPATH' ) || exit;
     ?>
     <div class="tfhb-confirmation-seccess">
         <img src="<?php echo THB_URL.'assets/app/images/sucess.gif'; ?>" alt="Success"> 
-        <h3><?php echo esc_html(__('Booking Confirmed!', 'hydra-booking')) ?></h3>
-        <p>Please check your email for more information. Now you can reschedule or cancel booking from here.</p>
+        <h3><?php echo esc_html(__('Booking', 'hydra-booking')) ?> <?php echo esc_html($booking['status']) ?></h3>
+        <!-- <p>Please check your email for more information. Now you can reschedule or cancel booking from here.</p> -->
     </div>
 
     <div class="tfhb-meeting-hostinfo">
-        <h4>Discussion about design system to work faster</h4>
+        <h4><?php echo $meeting->title ?></h4>
         <ul>
             <li class="tfhb-flexbox tfhb-gap-8">
                 <div class="tfhb-icon">
