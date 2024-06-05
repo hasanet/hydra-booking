@@ -27,12 +27,12 @@ const props = defineProps([
         </div>
         <div class="tfhb-header-notification">
             <div class="tfhb-dropdown tfhb-mega-dropdown">
-            <span  > <Icon name="BellDot" size="24" /> </span>
+            <span> <Icon name="BellDot" size="24" /> </span>
            
             <div class="tfhb-dropdown-wrap ">   <!-- active class-->
                 <div class="tfhb-flexbox">
-                    <h3> Notifications</h3>
-                    <a href="#" class="tfhb-btn">Mark as read</a>
+                    <h3>{{ $tfhb_trans['Notifications'] }}</h3>
+                    <a href="#" class="tfhb-btn">{{ $tfhb_trans['Mark as read'] }}</a>
                 </div>
 
                 <div class="tfhb-notification-wrap">
