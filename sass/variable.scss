@@ -10,16 +10,16 @@ $ui200 : #D8C0CA;
 $ui300 : #C2A4B1;
 $ui400 : #A98997;
 $ui500 : #8F707D;
-$ui600 : #765664;
+$ui600 : var(--tfhb-paragraph-color);
 $ui700 : #5C3D4A;
 $ui750 : #4E323E;
-$ui800 : #3F2731;
+$ui800 : var(--tfhb-secondary-color);
 $ui850 : #301C25;
 $ui900 : #211319;
 $ui1000 : #000000;
 
 // Primary
-$primaryi : #F62881; 
+$primaryi : var(--tfhb-primary-color); 
 $primaryi25 : #FFF5F9; 
 $primaryi50 : #FEE6F0;
 $primaryi100 : #FECDE2;
