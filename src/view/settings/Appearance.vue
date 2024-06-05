@@ -13,8 +13,9 @@ const router = useRouter();
 
 const appearanceSettings = reactive({
   themes: 'System default',
-  primary_color: 'F62881',
-  secondary_color: '3F2731',
+  primary_color: '#F62881',
+  secondary_color: '#3F2731',
+  paragraph_color: '#765664',
   titleTypo: '',
   desTypo: '',
 });
@@ -29,8 +30,9 @@ try {
   
         // Set Appearance Settings
         appearanceSettings.themes = response.data.appearance_settings.themes ? response.data.appearance_settings.themes : 'System default';
-        appearanceSettings.primary_color = response.data.appearance_settings.primary_color ? response.data.appearance_settings.primary_color : 'F62881';
-        appearanceSettings.secondary_color = response.data.appearance_settings.secondary_color ? response.data.appearance_settings.secondary_color : '3F2731';
+        appearanceSettings.primary_color = response.data.appearance_settings.primary_color ? response.data.appearance_settings.primary_color : '#F62881';
+        appearanceSettings.secondary_color = response.data.appearance_settings.secondary_color ? response.data.appearance_settings.secondary_color : '#3F2731';
+        appearanceSettings.paragraph_color = response.data.appearance_settings.paragraph_color ? response.data.appearance_settings.paragraph_color : '#765664';
         appearanceSettings.titleTypo = response.data.appearance_settings.titleTypo ? response.data.appearance_settings.titleTypo : '';
         appearanceSettings.desTypo = response.data.appearance_settings.desTypo ? response.data.appearance_settings.desTypo : '';
         skeleton.value = false;
@@ -118,12 +120,21 @@ onBeforeMount(() => {
                             <span>{{ $tfhb_trans['Select Color'] }}</span>
                         </div>
                     </div>
-                    <div class="tfhb-single-colorbox tfhb-flexbox">
+                    <div class="tfhb-single-colorbox tfhb-flexbox tfhb-mb-16">
                         <label>
                             {{ $tfhb_trans['Secondary Color'] }}
                         </label>
                         <div class="color-select">
                             <LvColorpicker :value="appearanceSettings.secondary_color" v-model="appearanceSettings.secondary_color" :withoutInput="true"/>
+                            <span>{{ $tfhb_trans['Select Color'] }}</span>
+                        </div>
+                    </div>
+                    <div class="tfhb-single-colorbox tfhb-flexbox">
+                        <label>
+                            {{ $tfhb_trans['Paragraph Color'] }}
+                        </label>
+                        <div class="color-select">
+                            <LvColorpicker :value="appearanceSettings.paragraph_color" v-model="appearanceSettings.paragraph_color" :withoutInput="true"/>
                             <span>{{ $tfhb_trans['Select Color'] }}</span>
                         </div>
                     </div>
