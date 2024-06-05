@@ -61,9 +61,7 @@
 			// Select 2 Time Zone 
 			$this.find('.tfhb-time-zone-select').select2({
 				dropdownCssClass: 'tfhb-select2-dropdown',
-			});
-			console.log(calenderData);
-
+			}); 
 			let date = new Date();
 			let year = date.getFullYear();
 			let month = date.getMonth();
@@ -269,18 +267,19 @@
 			let date_slots = availability.date_slots;  
 			let time_slots = availability.time_slots;   
 			let availability_range = calender_data.availability_range;   
+			let availability_range_type = calender_data.availability_range_type;   
 			let availabilitys_range_start = calender_data.availability_range.start;   
 			let availabilitys_range_end = calender_data.availability_range.end;   
 			let dayNameText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			let DisableDays = [];
- 
-
-			// Get Disable Days
-			for (var i = 0; i < time_slots.length; i++) { 
-				if(time_slots[i].status == false){
-					DisableDays.push(time_slots[i].day);
-				}
-			} 
+  
+			// Get Disable Days 
+				for (var i = 0; i < time_slots.length; i++) { 
+					if(time_slots[i].status == false){
+						DisableDays.push(time_slots[i].day);
+					}
+				}  
+			
 			 
 
 			// Get the first day of the month
@@ -328,10 +327,13 @@
 					dataAvailable = "unavailable";
 				}
 				// if current date is out of range then disable that day.
-				if(new Date(year, month, i) < new Date(availabilitys_range_start) || new Date(year, month, i) > new Date(availabilitys_range_end)){
-					availabilityClass = "inactive ";
-					dataAvailable = "unavailable";
-					isToday = "";
+
+				if(availability_range_type != 'indefinitely'){
+					if(new Date(year, month, i) < new Date(availabilitys_range_start) || new Date(year, month, i) > new Date(availabilitys_range_end)){
+						availabilityClass = "inactive ";
+						dataAvailable = "unavailable";
+						isToday = "";
+					}
 				}
  
 				lit += `<li data-date="${dateKey}" data-available="${dataAvailable}" class="${isToday} current ${availabilityClass}">${i}</li>`;
@@ -360,14 +362,15 @@
 			var time_format = $this.find('input[name="tfhb_time_format"]:checked').val();  
 			var time_zone = $this.find('.tfhb-time-zone-select').val();
 			$this.find('.tfhb-meeting-times .tfhb-select-date').html(selected_date);
-
+			
 			$this.find("input[name='meeting_dates']").val(selected_date);
 			
-			// Get Disable Times based on booking using ajax
-
 			
+
+			let dayNameText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 
 			// Get Selected Date day
 			let selected_date_day = new Date(selected_date).getDay(),
+				selected_date_day_name = dayNameText[selected_date_day],
 			 	calender_data = calenderData,
 			 	duration = calender_data.duration,
 			 	meeting_interval = calender_data.meeting_interval,
@@ -376,10 +379,10 @@
 			 	availability = calender_data.availability,
 				date_slots = availability.date_slots,
 				time_slots = availability.time_slots, 
-				selected_date_slots =time_slots[selected_date_day],
+				selected_date_slots = time_slots.find( slot => slot.day == selected_date_day_name ),
 				times = selected_date_slots.times, //array  
 				timesData = []; //array 
- 
+  
 			
 			if(data_available == 'available'){
 				// Generate time slots  form date_slots
@@ -474,6 +477,8 @@
 		// Generate Time Slots
 		function generateTimeSlots(startTime, endTime, duration, meeting_interval, buffer_time_before, buffer_time_after, selected_date, time_format, time_zone) {
 			var timeSlots = [];
+
+			var skip_before_meeting_start = tfhb_app_booking.general_settings.allowed_reschedule_before_meeting_start; // exp 100 minutes
 			// start date data format =   2024-05-04 
 			var start = new Date(selected_date + " " + startTime);
 			var end = new Date(selected_date + " " + endTime);
@@ -491,11 +496,13 @@
 				// new Date(current.getTime() + total_diff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 				var start_time = formatTime(current, time_format, time_zone);
 				var end_time = formatTime(new Date(current.getTime() + total_diff), time_format, time_zone);
-			   // if current time is passed then skip
-			   if(new Date() > current){
+
+			   // if current time is passed then skip skip_before_meeting_start
+			  
+			   if(new Date() > new Date(current.getTime() - skip_before_meeting_start * 60000)){
 					current = new Date(current.getTime() + total_diff + meeting_interval);
 					continue;
-			   }
+				}
 				timeSlots.push({
 
 					start: start_time, 

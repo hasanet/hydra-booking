@@ -34,6 +34,7 @@ const AvailabilityGet = reactive({
 const availabilityDataSingle = reactive({}) 
 const skeleton = ref(true);
 
+const GeneralSettings = reactive({});
 
 const openModal = () => {
   availabilityDataSingle.value = {
@@ -120,6 +121,11 @@ const openModal = () => {
     ],
     availability_id: ''
   };
+
+  availabilityDataSingle.value.time_zone = Availability.GeneralSettings.time_zone ? Availability.GeneralSettings.time_zone : '';
+  
+  availabilityDataSingle.value.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, availabilityDataSingle.value.time_slots) : availabilityDataSingle.value.time_slots;
+
   isModalOpened.value = true;
 };
 
@@ -134,6 +140,9 @@ const fetchAvailabilitySingle = async (setting) => {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+setting); 
         if (response.data.status) { 
             Settings_avalibility.value = response.data;
+            console.log(response.data);
+            Settings_avalibility.value.availability.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, Settings_avalibility.value.availability.time_slots) : Settings_avalibility.value.availability.time_slots;
+            
         }
     } catch (error) {
         console.log(error);
@@ -160,7 +169,7 @@ const fetchAvailabilitySettings = async () => {
         
         if (response.data.status) {    
             AvailabilityGet.data = response.data.availability; 
-            timeZone.value = response.data.time_zone;     
+            timeZone.value = response.data.time_zone;      
         }else{
             toast.error(response.data.message, {
                 position: 'bottom-right', // Set the desired position
@@ -182,6 +191,8 @@ onBeforeMount(() => {
 
 // Edit availability
 const EditAvailabilitySettings = async (key, id, availability ) => { 
+  availability.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, availability.time_slots) : availability.time_slots;
+
   availabilityDataSingle.value = availability;
   availabilityDataSingle.value.id = key;
   availabilityDataSingle.value.host = props.hostId;
@@ -224,6 +235,7 @@ const fetchDefaultAvailabilitySingle = async (setting) => {
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/settings/availability/'+setting); 
         if (response.data.status) { 
             Settings_avalibility.value = response.data;
+            Settings_avalibility.value.availability.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, Settings_avalibility.value.availability.time_slots) : Settings_avalibility.value.availability.time_slots;
         }
     } catch (error) {
         console.log(error);

@@ -88,6 +88,9 @@ class THB_INIT{
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
         wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
 
+        // Global General Settings
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+
         $tfhb_theme_css = "
         :root {
             --tfhb-primary-color: red;
@@ -102,6 +105,7 @@ class THB_INIT{
         wp_localize_script( 'tfhb-app-script', 'tfhb_app_booking', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce' => wp_create_nonce( 'tfhb_nonce' ),
+            'general_settings' => $general_settings,
         ) );
 
     }
