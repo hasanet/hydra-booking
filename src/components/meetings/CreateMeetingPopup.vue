@@ -20,7 +20,7 @@ const TfhbMeetingType = (type, router) => {
     <div class="tfhb-popup tfhb-p-24">
         <div class="tfhb-flexbox tfhb-gap-16 tfhb-popup-wrap" :style="{ 'max-width': '400px' }">
             <div class="question-header tfhb-flexbox tfhb-full-width">
-                <h3>Create New Meeting Type</h3>
+                <h3>{{ $tfhb_trans['Create New Meeting Type'] }}</h3>
                 <div class="tfhb-question-times" @click.stop="emit('modal-close')">
                     <Icon name="X" :width="20"/>
                 </div>
@@ -34,9 +34,9 @@ const TfhbMeetingType = (type, router) => {
                                 <Icon name="ArrowRight" size="20" /> 
                                 <Icon name="UserRound" size="20" /> 
                             </div>
-                            <h3>One to One</h3>
+                            <h3>{{ $tfhb_trans['One to One'] }}</h3>
                         </div>
-                        <p>One host with one invitee. Good for: 1:1 interview, coffee chats</p>
+                        <p>{{ $tfhb_trans['One host with one invitee. Good for: 1:1 interview, coffee chats'] }}</p>
                     </div>
                     <div class="tfhb-meeting-type-icon">
                         <Icon name="ArrowRight" width="20"/>
@@ -52,9 +52,9 @@ const TfhbMeetingType = (type, router) => {
                                 <Icon name="ArrowRight" size="20" /> 
                                 <Icon name="UsersRound" size="20" /> 
                             </div>
-                            <h3>One to Group</h3>
+                            <h3>{{ $tfhb_trans['One to Group'] }}</h3>
                         </div>
-                        <p>One host with group of invitee. Good for: webinars, online clasess</p>
+                        <p>{{ $tfhb_trans['One host with group of invitee. Good for: webinars, online clasess'] }}</p>
                     </div>
                     <div class="tfhb-meeting-type-icon">
                         <Icon name="ArrowRight" width="20"/>

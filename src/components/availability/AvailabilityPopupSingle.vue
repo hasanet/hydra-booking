@@ -266,7 +266,7 @@ const tfhbValidateInput = (fieldName) => {
         <div class="tfhb-popup-wrap tfhb-availability-popup-wrap">
             <div  class="tfhb-dashboard-heading ">
                 <div class="tfhb-admin-title"> 
-                    <h2 >Add New Availability  </h2>    
+                    <h2> {{ $tfhb_trans['Add New Availability'] }} </h2>    
                 </div>
                 <div class="thb-admin-btn"> 
                     <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
@@ -306,7 +306,7 @@ const tfhbValidateInput = (fieldName) => {
                 <div class="tfhb-admin-card-box ">  
                     <div  class="tfhb-dashboard-heading ">
                         <div class="tfhb-admin-title"> 
-                            <h3 >Weekly hours </h3>  
+                            <h3> {{ $tfhb_trans['Weekly hours'] }} </h3>  
                         </div>
                         <div class="thb-admin-btn right"> 
                             <span>{{props.availabilityDataSingle.time_zone}}</span> 
@@ -367,8 +367,8 @@ const tfhbValidateInput = (fieldName) => {
 
                         <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
                             <div class="tfhb-admin-title"> 
-                                <h3>Add date overrides </h3>  
-                                <p>Add dates when your availability changes from your daily hours</p>
+                                <h3>{{ $tfhb_trans['Add date overrides'] }}</h3>  
+                                <p>{{ $tfhb_trans['Add dates when your availability changes from your daily hours'] }}</p>
                             </div> 
                         </div>
 
@@ -409,7 +409,7 @@ const tfhbValidateInput = (fieldName) => {
                                     /> 
                                 </div>
                                 <div class="tfhb-override-times">
-                                    <h3>Which hours are you free?</h3>
+                                    <h3>{{ $tfhb_trans['Which hours are you free?'] }}</h3>
 
                                     <div class="tfhb-availability-schedule-inner tfhb-flexbox tfhb-gap-16 tfhb-mt-16" v-for="(time, tkey) in OverridesDates.times" :key="tkey" v-if="OverridesDates.available!=1">
                                         <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
@@ -462,15 +462,15 @@ const tfhbValidateInput = (fieldName) => {
                             </div>
 
                             <div class="tfhb-overrides-store tfhb-flexbox tfhb-gap-16 tfhb-justify-end tfhb-full-width">
-                                <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">Cancel</button>
-                                <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">Add override</button>
+                                <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">{{ $tfhb_trans['Cancel'] }}</button>
+                                <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">{{ $tfhb_trans['Add override'] }}</button>
                             </div>
                         </div>
 
 
                         <button class="tfhb-btn tfhb-flexbox tfhb-gap-8 tfhb-p-0 tfhb-height-auto" @click="openOverridesCalendarDate()">
                             <Icon name="PlusCircle" :width="20"/>
-                            Add an override
+                            {{ $tfhb_trans['Add an override'] }}
                         </button>
                         
                     </div>  

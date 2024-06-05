@@ -37,7 +37,7 @@ function CounterDec(key){
                         <div class="tfhb-dec" @click="CounterDec(key)">
                             <Icon name="Minus" />
                         </div>
-                        <span>{{ counter.limit = counter.limit}} Booking</span>
+                        <span>{{ counter.limit = counter.limit}} {{ $tfhb_trans['Booking'] }}</span>
                         <div class="tfhb-inc" @click="CounterInc(key)">
                             <Icon name="Plus" />
                         </div>

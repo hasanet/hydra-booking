@@ -1,11 +1,9 @@
 <script setup>
 
 import { ref, reactive, onBeforeMount, } from 'vue'; 
-import { useRouter, RouterView,} from 'vue-router' 
 import Icon from '@/components/icon/LucideIcon.vue'
 
 // import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue' 
 import HbText from '@/components/form-fields/HbText.vue' 
 import HbPopup from '@/components/widgets/HbPopup.vue';  
 
@@ -39,8 +37,8 @@ const closePopup = () => {
             </span> 
 
             <div class="cartbox-text">
-                <h3>Zoom</h3> 
-                <p>New standard in online payment</p>
+                <h3>{{ $tfhb_trans['Zoom'] }}</h3>
+                <p>{{ $tfhb_trans['New standard in online payment'] }}</p>
             </div>
         </div>
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
@@ -53,13 +51,13 @@ const closePopup = () => {
 
         <HbPopup :isOpen="ispopup" @modal-close="closePopup" max_width="600px" name="first-modal">
             <template #header> 
-                <h2>Add New Zoom User Account</h2>
+                <h2>{{ $tfhb_trans['Add New Zoom User Account'] }}</h2>
                 
             </template>
 
             <template #content>  
                 <p>
-                    Please read the documentation here for step by step guide to know how you can get api credentials from Zoom Account
+                    {{ $tfhb_trans['Please read the documentation here for step by step guide to know how you can get api credentials from Zoom Account'] }}
                 </p>
                 <HbText  
                     v-model="zoom_meeting.account_id"  
