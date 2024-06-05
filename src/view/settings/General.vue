@@ -185,8 +185,8 @@ onBeforeMount(() => {
                     :selected = "1"
                     placeholder="Select Time Format"   
                     :option = "[
-                        {'name': '12 Hours', 'value': '12_hours'}, 
-                        {'name': '24 Hours', 'value': '24_hours'}
+                        {'name': '12 Hours', 'value': '12'}, 
+                        {'name': '24 Hours', 'value': '24'}
                     ]"
                     @add-change="tfhbValidateInput('time_format')" 
                     @add-click="tfhbValidateInput('time_format')" 

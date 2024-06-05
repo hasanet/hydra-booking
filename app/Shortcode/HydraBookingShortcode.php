@@ -62,6 +62,11 @@ class HydraBookingShortcode {
         }
      
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+
+        echo "<pre>";
+        print_r($general_settings);
+        echo "</pre>";
   
         
  
@@ -131,7 +136,10 @@ class HydraBookingShortcode {
                             load_template(THB_PATH . '/app/Content/Template/meeting-calendar.php', false, $meta_data);
 
                             // Load Meeting Time Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, $meta_data);
+                            load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, [
+                                'meeting' => $meta_data,
+                                'general_settings' => $general_settings,
+                            ]);
                             ?>
                         </div>
                         <?php 

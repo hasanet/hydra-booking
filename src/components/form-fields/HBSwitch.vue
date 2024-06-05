@@ -18,7 +18,6 @@ const checkedValue = (e) => {
     }else{
         emit('update:modelValue', 0);
     } 
- 
 }
 </script>
 
