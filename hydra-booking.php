@@ -87,10 +87,16 @@ class THB_INIT{
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
         wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
-
+        $_tfhb_appearance_settings = get_option('_tfhb_appearance_settings');
+        // var_dump($_tfhb_appearance_settings);
+        $tfhb_primary_color = !empty($_tfhb_appearance_settings['primary_color']) ? $_tfhb_appearance_settings['primary_color'] : '#F62881';
+        $tfhb_secondary_color = !empty($_tfhb_appearance_settings['secondary_color']) ? $_tfhb_appearance_settings['secondary_color'] : '#3F2731';
+        $tfhb_paragraph_color = !empty($_tfhb_appearance_settings['paragraph_color']) ? $_tfhb_appearance_settings['paragraph_color'] : '#765664';
         $tfhb_theme_css = "
         :root {
-            --tfhb-primary-color: red;
+            --tfhb-primary-color: $tfhb_primary_color;
+            --tfhb-secondary-color: $tfhb_secondary_color;
+            --tfhb-paragraph-color: $tfhb_paragraph_color;
           }
         ";
         wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );

@@ -69,7 +69,7 @@ const DeleteOptions = (index) => {
         class="tfhb-single-form-field"   :style="{ 'width': '100%' }" 
     > 
         <div class="tfhb-single-form-field-wrap tfhb-field-options"> 
-            <label   for="name">Options <span  > *</span> </label>
+            <label   for="name">{{ $tfhb_trans['Options'] }} <span  > *</span> </label>
             <div  class="tfhb-options-fields tfhb-flexbox tfhb-gap-16" v-for="(option, index) in questions_data.options" :key="index"> 
                 <input 
                     v-model="questions_data.options[index]"
@@ -82,7 +82,7 @@ const DeleteOptions = (index) => {
             </div>
             <button class="tfhb-btn tfhb-flexbox tfhb-gap-8" @click="AddNewOptions" >
                 <Icon name="PlusCircle" :width="20"/>
-                Add New Option
+                {{ $tfhb_trans['Add New Option'] }}
             </button>
         </div> 
     </div>

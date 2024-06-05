@@ -28,9 +28,19 @@ const UpdateAvailabilitySettings = async (validator_field) => {
     // Errors Added
     if(validator_field){
         validator_field.forEach(field => {
-            if(!props.availabilityDataSingle[field]){
-                errors[field] = 'Required this field';
+
+        const fieldParts = field.split('___'); // Split the field into parts
+        if(fieldParts[0] && !fieldParts[1]){
+            if(!props.availabilityDataSingle[fieldParts[0]]){
+                errors[fieldParts[0]] = 'Required this field';
             }
+        }
+        if(fieldParts[0] && fieldParts[1]){
+            if(!props.availabilityDataSingle[fieldParts[0]][fieldParts[1]]){
+                errors[fieldParts[0]+'___'+[fieldParts[1]]] = 'Required this field';
+            }
+        }
+            
         });
     }
 
@@ -238,14 +248,14 @@ const TfhbEndDataEvent = (key, skey, endTime) => {
     
 }
 
-const validateInput = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.availabilityDataSingle[fieldValueKey]);
-};
-
-const validateSelect = (fieldName) => {
-    const fieldValueKey = fieldName;
-    isEmpty(fieldName, props.availabilityDataSingle[fieldValueKey]);
+const tfhbValidateInput = (fieldName) => {
+    const fieldParts = fieldName.split('.');
+    if(fieldParts[0] && !fieldParts[1]){
+        isEmpty(fieldParts[0], props.availabilityDataSingle[fieldParts[0]]);
+    }
+    if(fieldParts[0] && fieldParts[1]){
+        isEmpty(fieldParts[0]+'___'+[fieldParts[1]], props.availabilityDataSingle[fieldParts[0]][fieldParts[1]]);
+    }
 };
 
 </script>
@@ -256,7 +266,7 @@ const validateSelect = (fieldName) => {
         <div class="tfhb-popup-wrap tfhb-availability-popup-wrap">
             <div  class="tfhb-dashboard-heading ">
                 <div class="tfhb-admin-title"> 
-                    <h2 >Add New Availability  </h2>    
+                    <h2> {{ $tfhb_trans['Add New Availability'] }} </h2>    
                 </div>
                 <div class="thb-admin-btn"> 
                     <button class="tfhb-popup-close" @click.stop="emit('modal-close')"><Icon name="X" size="20px" /> </button> 
@@ -270,8 +280,8 @@ const validateSelect = (fieldName) => {
                     :label="$tfhb_trans['Title']"  
                     selected = "1"
                     placeholder="Type your schedule title"   
-                    @keyup="() => validateInput('title')"
-                    @click="() => validateInput('title')"
+                    @keyup="() => tfhbValidateInput('title')"
+                    @click="() => tfhbValidateInput('title')"
                     :errors="errors.title"
                 /> 
                 <!-- Title -->
@@ -285,8 +295,8 @@ const validateSelect = (fieldName) => {
                     :filter="true"
                     placeholder="Select Time Zone"  
                     :option = "props.timeZone" 
-                    @add-change="validateSelect('time_zone')" 
-                    @add-click="validateSelect('time_zone')" 
+                    @add-change="tfhbValidateInput('time_zone')" 
+                    @add-click="tfhbValidateInput('time_zone')" 
                     :errors="errors.time_zone"
                 /> 
                 <!-- Time Zone --> 
@@ -296,7 +306,7 @@ const validateSelect = (fieldName) => {
                 <div class="tfhb-admin-card-box ">  
                     <div  class="tfhb-dashboard-heading ">
                         <div class="tfhb-admin-title"> 
-                            <h3 >Weekly hours </h3>  
+                            <h3> {{ $tfhb_trans['Weekly hours'] }} </h3>  
                         </div>
                         <div class="thb-admin-btn right"> 
                             <span>{{props.availabilityDataSingle.time_zone}}</span> 
@@ -357,8 +367,8 @@ const validateSelect = (fieldName) => {
 
                         <div  class="tfhb-dashboard-heading tfhb-full-width" :style="{margin: '0 !important'}">
                             <div class="tfhb-admin-title"> 
-                                <h3>Add date overrides </h3>  
-                                <p>Add dates when your availability changes from your daily hours</p>
+                                <h3>{{ $tfhb_trans['Add date overrides'] }}</h3>  
+                                <p>{{ $tfhb_trans['Add dates when your availability changes from your daily hours'] }}</p>
                             </div> 
                         </div>
 
@@ -399,7 +409,7 @@ const validateSelect = (fieldName) => {
                                     /> 
                                 </div>
                                 <div class="tfhb-override-times">
-                                    <h3>Which hours are you free?</h3>
+                                    <h3>{{ $tfhb_trans['Which hours are you free?'] }}</h3>
 
                                     <div class="tfhb-availability-schedule-inner tfhb-flexbox tfhb-gap-16 tfhb-mt-16" v-for="(time, tkey) in OverridesDates.times" :key="tkey" v-if="OverridesDates.available!=1">
                                         <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
@@ -452,15 +462,15 @@ const validateSelect = (fieldName) => {
                             </div>
 
                             <div class="tfhb-overrides-store tfhb-flexbox tfhb-gap-16 tfhb-justify-end tfhb-full-width">
-                                <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">Cancel</button>
-                                <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">Add override</button>
+                                <button class="tfhb-btn secondary-btn" @click="OverridesOpen=false">{{ $tfhb_trans['Cancel'] }}</button>
+                                <button class="tfhb-btn boxed-btn" @click="addAvailabilityDate(key)">{{ $tfhb_trans['Add override'] }}</button>
                             </div>
                         </div>
 
 
                         <button class="tfhb-btn tfhb-flexbox tfhb-gap-8 tfhb-p-0 tfhb-height-auto" @click="openOverridesCalendarDate()">
                             <Icon name="PlusCircle" :width="20"/>
-                            Add an override
+                            {{ $tfhb_trans['Add an override'] }}
                         </button>
                         
                     </div>  

@@ -13,7 +13,7 @@ import HbTextarea from '@/components/form-fields/HbTextarea.vue';
 
 const itemsPerPage = ref(5);
 const currentPage = ref(1);
-
+const skeleton = ref(true);
 const CategoryData = reactive({
   id: '',
   title: '',
@@ -81,6 +81,7 @@ const removeCategory = async (key) => {
 
 onBeforeMount(() => { 
     Meeting.fetchMeetingCategory();
+    skeleton.value = false;
 });
 
 
@@ -149,9 +150,9 @@ const prevPage = () => {
                     <table class="table" cellpadding="0" :cellspacing="0">
                         <thead>
                             <tr>
-                                <th width="180">Name</th>
-                                <th>Description</th>
-                                <th width="120">Action</th>
+                                <th width="180">{{ $tfhb_trans['Name'] }}</th>
+                                <th>{{ $tfhb_trans['Description'] }}</th>
+                                <th width="120">{{ $tfhb_trans['Action'] }}</th>
                             </tr>
                         </thead>
                         <tbody v-if="paginatedCategories">
@@ -178,7 +179,7 @@ const prevPage = () => {
 
                     <div class="tfhb-booking-details-pagination tfhb-flexbox tfhb-mt-32" v-if="totalPages > 1">
                         <div class="tfhb-prev-next-button">
-                            <a href="#" @click.prevent="prevPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === 1"><Icon name="ArrowLeft" width="20" />Previous</a>
+                            <a href="#" @click.prevent="prevPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === 1"><Icon name="ArrowLeft" width="20" />{{ $tfhb_trans['Previous'] }}</a>
                         </div>
                         <div class="tfhb-pagination">
                             <ul class="tfhb-flexbox tfhb-gap-0 tfhb-justify-normal">
@@ -188,7 +189,7 @@ const prevPage = () => {
                             </ul>
                         </div>
                         <div class="tfhb-prev-next-button">
-                            <a href="#" @click.prevent="nextPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === totalPages">Next<Icon name="ArrowRight" width="20" /></a>
+                            <a href="#" @click.prevent="nextPage" class="tfhb-flexbox tfhb-gap-8 tfhb-justify-normal" :disabled="currentPage === totalPages">{{ $tfhb_trans['Next'] }}<Icon name="ArrowRight" width="20" /></a>
                         </div>
                     </div>
                     

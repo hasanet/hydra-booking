@@ -511,6 +511,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $_tfhb_host_integration_settings['google_calendar']['type'] =  sanitize_text_field($data['type']);
             $_tfhb_host_integration_settings['google_calendar']['status'] =  sanitize_text_field($data['status']);     
             $_tfhb_host_integration_settings['google_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['google_calendar']['selected_calendar_id'] =  $data['selected_calendar_id'];
             $_tfhb_host_integration_settings['google_calendar']['tfhb_google_calendar'] =  $data['tfhb_google_calendar'];
 
             // update User Meta  

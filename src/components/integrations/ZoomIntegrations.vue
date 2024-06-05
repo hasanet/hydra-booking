@@ -1,11 +1,9 @@
 <script setup>
 
 import { ref, reactive, onBeforeMount, } from 'vue'; 
-import { useRouter, RouterView,} from 'vue-router' 
 import Icon from '@/components/icon/LucideIcon.vue'
 
 // import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue' 
 import HbText from '@/components/form-fields/HbText.vue' 
 import HbPopup from '@/components/widgets/HbPopup.vue';  
 
@@ -20,9 +18,13 @@ const props = defineProps([
     'class', 
     'display', 
     'zoom_meeting', 
+    'ispopup'
 ])
-const emit = defineEmits([ "update-integrations", ]); 
+const emit = defineEmits([ "update-integrations", 'popup-open-control', 'popup-close-control' ]); 
 
+const closePopup = () => { 
+    emit('popup-close-control', false)
+}
 
 </script>
 
@@ -35,27 +37,27 @@ const emit = defineEmits([ "update-integrations", ]);
             </span> 
 
             <div class="cartbox-text">
-                <h3>Zoom</h3> 
-                <p>New standard in online payment</p>
+                <h3>{{ $tfhb_trans['Zoom'] }}</h3>
+                <p>{{ $tfhb_trans['New standard in online payment'] }}</p>
             </div>
         </div>
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-            <button @click="zoomPopup = true" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ zoom_meeting.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
+            <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ zoom_meeting.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
                 <HbSwitch v-if="zoom_meeting.connection_status" @change="emit('update-integrations', 'zoom_meeting', zoom_meeting)" v-model="zoom_meeting.status"    />
             <!-- Swicher --> 
         </div>
 
-        <HbPopup :isOpen="zoomPopup" @modal-close="zoomPopup = false" max_width="600px" name="first-modal">
+        <HbPopup :isOpen="ispopup" @modal-close="closePopup" max_width="600px" name="first-modal">
             <template #header> 
-                <h2>Add New Zoom User Account</h2>
+                <h2>{{ $tfhb_trans['Add New Zoom User Account'] }}</h2>
                 
             </template>
 
             <template #content>  
                 <p>
-                    Please read the documentation here for step by step guide to know how you can get api credentials from Zoom Account
+                    {{ $tfhb_trans['Please read the documentation here for step by step guide to know how you can get api credentials from Zoom Account'] }}
                 </p>
                 <HbText  
                     v-model="zoom_meeting.account_id"  

@@ -29,7 +29,10 @@ defined( 'ABSPATH' ) || exit;
     ?>
 
     <div class="tfhb-back-btn tfhb-flexbox tfhb-gap-8">
-        <img src="<?php echo THB_URL.'assets/app/images/arrow-left.svg'; ?>" alt="arrow"> 
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.99935 15.8334L4.16602 10L9.99935 4.16669" stroke="#F62881" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15.8327 10H4.16602" stroke="#F62881" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         <h3>Details</h3>
     </div>
     <div class="tfhb-notice notice-error" style="display:none;"> 

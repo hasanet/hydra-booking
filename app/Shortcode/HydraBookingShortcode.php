@@ -8,6 +8,7 @@ use HydraBooking\DB\Booking;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
 use HydraBooking\Admin\Controller\CountryController;
+use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -61,10 +62,14 @@ class HydraBookingShortcode {
         }
      
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
 
-        // echo "<pre>";
-        // print_r($meta_data);
-        // echo "</pre>";
+        echo "<pre>";
+        print_r($general_settings);
+        echo "</pre>";
+  
+        
+ 
         //  Reschedule Booking
         $booking_data = array();
 
@@ -75,10 +80,7 @@ class HydraBookingShortcode {
                 array('hash' => $atts['hash']),
                 false,
                 true 
-            ); 
-            // echo "<pre>";
-            // print_r($get_booking);
-            // echo "</pre>";
+            );  
 
             if(!$get_booking){
                 return 'Invalid Booking ID';
@@ -134,7 +136,10 @@ class HydraBookingShortcode {
                             load_template(THB_PATH . '/app/Content/Template/meeting-calendar.php', false, $meta_data);
 
                             // Load Meeting Time Template
-                            load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, $meta_data);
+                            load_template(THB_PATH . '/app/Content/Template/meeting-times.php', false, [
+                                'meeting' => $meta_data,
+                                'general_settings' => $general_settings,
+                            ]);
                             ?>
                         </div>
                         <?php 
@@ -502,11 +507,12 @@ class HydraBookingShortcode {
 
  
 
-        // After Booking Hooks
-        do_action('hydra_booking/after_booking_confirmation', $data);
-
-        // Single Booking & Mail Notification
         $single_booking_meta = $booking->get($result['insert_id'], false);
+
+        // After Booking Hooks
+        do_action('hydra_booking/after_booking_confirmation', $single_booking_meta);
+
+        // Single Booking & Mail Notification, Google Calendar 
         do_action('hydra_booking/after_booking_completed', $single_booking_meta);
 
         // Host Meta by Booking Id
