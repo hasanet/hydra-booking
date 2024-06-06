@@ -289,7 +289,7 @@ const copyMeeting = (link) => {
                                         <Icon name="Clock" size="16" /> 
                                     </div>
                                     <div class="user-info-title">
-                                        {{ shareData.time }}
+                                        {{ shareData.time }} {{ $tfhb_trans['minutes'] }}
                                     </div>
                                 </div>
                             </li>

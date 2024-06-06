@@ -33,6 +33,12 @@ const routes = [
                 meta: { Capabilities: 'tfhb_manage_options' },
                 component: () => import('../view/booking/booking-list.vue')
             }, 
+            {
+                path: 'create-new',
+                name: 'BookingCreate',
+                meta: { Capabilities: 'tfhb_manage_settings' },
+                component: () => import('../view/booking/booking-create.vue')
+            }, 
         ]
     }, 
     // Hosts routes

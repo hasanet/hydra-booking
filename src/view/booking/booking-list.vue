@@ -163,7 +163,7 @@ const prevPage = () => {
             placeholder="Status"  
             :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
         />
-        <button class="tfhb-btn boxed-btn flex-btn" @click="BackendBooking = true"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</button>
+        <router-link :to="{ name: 'BookingCreate' }" class="tfhb-btn boxed-btn flex-btn"><Icon name="PlusCircle" size="20" /> {{ $tfhb_trans['Add New Booking'] }}</router-link>
     </div> 
 </div>
 
@@ -333,7 +333,7 @@ const prevPage = () => {
                     <span>{{ book.attendee_email }}</span>
                 </td>
                 <td>
-                    {{ book.duration }}
+                    {{ book.duration }} {{ $tfhb_trans['minutes'] }}
                 </td>
                 <td>
                     <div class="tfhb-details-status tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
