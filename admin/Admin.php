@@ -5,7 +5,7 @@ namespace HydraBooking\Admin;
 use HydraBooking\Admin\Controller\Enqueue;
 use HydraBooking\Admin\Controller\AdminMenu; 
 use HydraBooking\Admin\Controller\AvailabilityController;
-use HydraBooking\Services\Integrations\Zoom\ZoomServices;
+use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
 
 //  Load Migrator
 use HydraBooking\DB\Migrator;
@@ -22,6 +22,7 @@ use HydraBooking\DB\Migrator;
       new Migrator();
       // enqueue
       new Enqueue();
+ 
 
       // admin menu
       new AdminMenu();
@@ -44,6 +45,8 @@ use HydraBooking\DB\Migrator;
     public function activate() {
         // $Migrator = new Migrator();
         new Migrator();
+
+     
 
 
 

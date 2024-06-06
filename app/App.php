@@ -9,6 +9,7 @@ use HydraBooking\DB\Booking;
 
 class App {
     public function __construct() {
+        
         $this->init();
     }
 

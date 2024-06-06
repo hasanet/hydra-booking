@@ -9,6 +9,8 @@ use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
 use HydraBooking\Admin\Controller\CountryController;
 use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
+
+ 
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -63,12 +65,12 @@ class HydraBookingShortcode {
      
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
         $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+        // Get Wp Cron all  Schedules Event list
+        echo '<pre>';
+        print_r(_get_cron_array());
+        echo '</pre>';
 
-        echo "<pre>";
-        print_r($general_settings);
-        echo "</pre>";
-  
-        
+      exit;
  
         //  Reschedule Booking
         $booking_data = array();
@@ -116,13 +118,13 @@ class HydraBookingShortcode {
                     echo '<div class="tfhb-reschedule-box">';
                     echo '<p>'.__('You are rescheduling the booking:', 'hydra-booking').' '.esc_html($booking_data->start_time).' - '.esc_html($booking_data->end_time).', '.esc_html(date('F j, Y', strtotime($booking_data->meeting_dates))).' ('.esc_html($booking_data->attendee_time_zone).')</p>';
                     echo '</div>';
+
                 }
     
             ?>
             <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">
                 <div class="tfhb-meeting-card">
-                        <?php  
-
+                        <?php   
                         // Load Meeting Info Template  
                         load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
                             'meeting' => $meta_data,
@@ -385,16 +387,7 @@ class HydraBookingShortcode {
         if(isset($_POST['action_type']) && 'reschedule' == $_POST['action_type']){ 
 
             // if general_settings['allowed_reschedule_before_meeting_start'] is available exp 100 then check the time before reschedule
-            // if(isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start'])){
-            //     $allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
-            //     $current_time = strtotime(date('Y-m-d H:i:s'));
-            //     $meeting_time = strtotime($data['meeting_dates'].' '.$data['start_time']);
-            //     $time_diff = $meeting_time - $current_time;
-            //     $time_diff = $time_diff / 60; // convert to minutes
-            //     if($time_diff < $allowed_reschedule_before_meeting_start){
-            //         wp_send_json_error( array( 'message' => 'You can not reschedule the meeting' ) );
-            //     }
-            // }
+           
 
             $get_booking = $booking->get(
                 array('hash' => $meeting_hash),
@@ -403,6 +396,25 @@ class HydraBookingShortcode {
             ); 
             // Get Post Meta 
             $booking_meta = get_post_meta($get_booking->post_id, '_tfhb_booking_opt', true);
+
+            if(isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start'])){
+                $allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
+                if(isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start'])){
+                    $allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
+                    $DateTime = new DateTimeController($booking_meta['attendee_time_zone']);
+                    // Time format if has AM and PM into start time
+                    $time_format =strpos($booking_meta['start_time'], 'AM') || strpos($booking_meta['start_time'], 'PM') ? '12' : '24';
+                    $current_time = strtotime($DateTime->convert_time_based_on_timezone(date('Y-m-d H:i:s'), 'UTC', $booking_meta['attendee_time_zone'],  $time_format)); 
+                    $meeting_time = strtotime($booking_meta['meeting_dates'].' '.$booking_meta['start_time']);
+                    $time_diff = $meeting_time - $current_time;
+                    $time_diff = $time_diff / 60; // convert to minutes
+                    
+                    if($time_diff < $allowed_reschedule_before_meeting_start){ 
+                        wp_send_json_error( array( 'message' => 'You can not reschedule the meeting before '.$allowed_reschedule_before_meeting_start.' minutes' ) );
+                    }
+                }
+            }
+
             $reschedule_data = array(
                 'id' => $get_booking->id,
                 'attendee_time_zone' =>  isset($_POST['attendee_time_zone']) ? sanitize_text_field($_POST['attendee_time_zone']) : '',
@@ -414,6 +426,8 @@ class HydraBookingShortcode {
             );
             
             $booking_meta = array_merge($booking_meta, $reschedule_data);
+
+           
 
             // Update Post Meta
             update_post_meta($get_booking->post_id, '_tfhb_booking_opt',  $booking_meta);
