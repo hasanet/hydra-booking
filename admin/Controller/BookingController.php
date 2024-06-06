@@ -29,10 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'GET',
             'callback' => array($this, 'getBookingsData'),
         ));  
-        register_rest_route('hydra-booking/v1', '/booking/pre', array(
-            'methods' => 'GET',
-            'callback' => array($this, 'getPreBookingsData'),
-        )); 
         register_rest_route('hydra-booking/v1', '/booking/create', array(
             'methods' => 'POST',
             'callback' => array($this, 'CreateBooking'),
@@ -50,6 +46,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'updateBooking'),
         ));   
+
+        // Pre Booking Data
+        register_rest_route('hydra-booking/v1', '/booking/pre', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'getPreBookingsData'),
+        )); 
+        register_rest_route('hydra-booking/v1', '/booking/meeting', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getpreMeetingData'),
+        ));  
        
     }
     // Booking List
@@ -104,6 +110,50 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meetings' => $meeting_array
         ); 
         return rest_ensure_response($data);
+    }
+
+    // Pre Meeting Data
+    public function getpreMeetingData(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $meeting_id = isset($request['meeting_id']) ? $request['meeting_id'] : '';
+
+        // Single Meeting Data
+        $meeting = new Meeting();
+        $MeetingsData = $meeting->get($meeting_id);
+        
+        // var_dump($MeetingsData);
+        $meeting_locations = !empty($MeetingsData->meeting_locations) ? json_decode($MeetingsData->meeting_locations) : [''];
+
+        $meeting_location_array = array();
+        if(!empty($meeting_locations)){
+            foreach($meeting_locations as $single){
+                if($single->location){
+                    $meeting_location_array[] = array(
+                        'name' => $single->location,
+                        'value' => "".$single->location."",
+                    );
+                }
+            }
+        }
+
+        $host = new Host();
+        $HostData = $host->get( $MeetingsData->host_id  );
+
+        $meeting_host_array = array();
+        if($HostData->first_name){
+            $meeting_host_array[] = array(
+                'name' => $HostData->first_name.' '.$HostData->last_name,
+                'value' => "".$HostData->id."",
+            );
+        }
+
+        $data = array(
+            'status' => true, 
+            'locations' => $meeting_location_array,
+            'hosts' => $meeting_host_array,
+        ); 
+        return rest_ensure_response($data);
+
     }
 
     // Create Booking

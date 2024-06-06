@@ -271,7 +271,8 @@ namespace HydraBooking\Admin\Controller;
             'Select Meeting' => __('Select Meeting', 'hydra-booking'),
             'Create Booking' => __('Create Booking', 'hydra-booking'),
             'Back to Booking' => __('Back to Booking', 'hydra-booking'),
-            '' => __('', 'hydra-booking'),
+            'Select Location' => __('Select Location', 'hydra-booking'),
+            'Select Team Member' => __('Select Team Member', 'hydra-booking'),
 
             //Booking
             'Data' => __('Data', 'hydra-booking'),

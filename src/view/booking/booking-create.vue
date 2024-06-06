@@ -13,10 +13,14 @@ const booking = reactive({
     'email': '',
     'time_zone': '',
     'meeting': '',
+    'host': '',
+    'location': '',
     'status': '',
 })
 const timeZone = reactive({});
 const meetings = reactive({});
+const meeting_locations = reactive({});
+const meeting_hosts = reactive({});
 const fetchPreBookingData = async () => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/pre');
@@ -32,6 +36,24 @@ const fetchPreBookingData = async () => {
 // Back to Booking
 const TfhbPrevNavigator = () => {
     router.push({ name: 'BookingLists' });
+}
+
+// Meeting Change
+const MeetingChangeCallback = async (e) => {
+    let data = {
+        meeting_id: e.value,
+    };  
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/meeting', data, {} );
+      
+        if (response.data.status) {    
+            meeting_locations.value = response.data.locations; 
+            meeting_hosts.value = response.data.hosts;
+        }
+    } catch (error) {
+        
+    }
+
 }
 
 onBeforeMount(() => { 
@@ -85,7 +107,26 @@ onBeforeMount(() => {
                 selected = "1"
                 placeholder="Select Your Meeting"  
                 :option = "meetings.value" 
+                @tfhb-onchange="MeetingChangeCallback"
             />  
+
+            <HbDropdown
+                v-model="booking.host"
+                required= "true"  
+                :label="$tfhb_trans['Select Team Member']" 
+                :filter="true"
+                selected = "1"
+                :option = "meeting_hosts.value" 
+            /> 
+
+            <HbDropdown
+                v-model="booking.location"
+                required= "true"  
+                :label="$tfhb_trans['Select Location']" 
+                :filter="true"
+                selected = "1"
+                :option = "meeting_locations.value" 
+            /> 
 
             <HbDropdown  
                 v-model="booking.status"
