@@ -121,7 +121,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $meeting = new Meeting();
         $MeetingsData = $meeting->get($meeting_id);
         
-        // var_dump($MeetingsData);
+        // Meeting Location
         $meeting_locations = !empty($MeetingsData->meeting_locations) ? json_decode($MeetingsData->meeting_locations) : [''];
 
         $meeting_location_array = array();
@@ -136,6 +136,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             }
         }
 
+        // Host List
         $host = new Host();
         $HostData = $host->get( $MeetingsData->host_id  );
 
@@ -146,6 +147,42 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'value' => "".$HostData->id."",
             );
         }
+
+        // Meeting Information
+        $data = get_post_meta($MeetingsData->post_id, '__tfhb_meeting_opt', true);
+
+        if( isset($data['availability_type']) && 'settings' === $data['availability_type']){  
+            $_tfhb_availability_settings = get_user_meta($host_id, '_tfhb_host', true); 
+            if(in_array($data['availability_id'], array_keys($_tfhb_availability_settings['availability']))){
+                $availability_data = $_tfhb_availability_settings['availability'][$data['availability_id']]; 
+            }else{
+                $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+            } 
+         
+        }else{ 
+            $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+        }
+        
+        // Availability Range
+        $availability_range = isset($data['availability_range']) ? $data['availability_range'] : array();
+        $availability_range_type = isset($data['availability_range_type']) ? $data['availability_range_type'] : array();
+
+        // Duration
+        $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
+
+        $duration = isset($data['custom_duration']) && !empty($data['custom_duration']) ? $data['custom_duration'] : $duration;
+
+        // Buffer Time Before
+        $buffer_time_before = isset($data['buffer_time_before']) && !empty($data['buffer_time_before']) ? $data['buffer_time_before'] : 0;
+
+        // Buffer Time After
+        $buffer_time_after = isset($data['buffer_time_after']) && !empty($data['buffer_time_after']) ? $data['buffer_time_after'] : 0;
+
+        // Meeting Interval
+        $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
+
+        var_dump($availability_data);
+
 
         $data = array(
             'status' => true, 

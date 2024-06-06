@@ -273,6 +273,7 @@ namespace HydraBooking\Admin\Controller;
             'Back to Booking' => __('Back to Booking', 'hydra-booking'),
             'Select Location' => __('Select Location', 'hydra-booking'),
             'Select Team Member' => __('Select Team Member', 'hydra-booking'),
+            'Select Date' => __('Select Date', 'hydra-booking'),
 
             //Booking
             'Data' => __('Data', 'hydra-booking'),

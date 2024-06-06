@@ -3,6 +3,7 @@ import { ref, reactive, onBeforeMount } from 'vue';
 import axios from 'axios' 
 import HbText from '@/components/form-fields/HbText.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
+import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import { useRouter } from 'vue-router' 
 const router = useRouter();
@@ -15,6 +16,8 @@ const booking = reactive({
     'meeting': '',
     'host': '',
     'location': '',
+    'date': '',
+    'time': '',
     'status': '',
 })
 const timeZone = reactive({});
@@ -127,6 +130,16 @@ onBeforeMount(() => {
                 selected = "1"
                 :option = "meeting_locations.value" 
             /> 
+
+            <HbDateTime  
+                v-model="booking.date"
+                :label="$tfhb_trans['Select Date']" 
+                selected = "1" 
+                :config="{
+                    disable: ['2024-06-12', '2024-06-14']
+                }"
+                placeholder="Type your schedule title"   
+            />
 
             <HbDropdown  
                 v-model="booking.status"
