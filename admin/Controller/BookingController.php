@@ -7,6 +7,8 @@ namespace HydraBooking\Admin\Controller;
  // Use DB 
 use HydraBooking\DB\Booking;
 use HydraBooking\DB\Host;
+use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\DB\Meeting;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -44,6 +46,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'updateBooking'),
         ));   
+
+        // Pre Booking Data
+        register_rest_route('hydra-booking/v1', '/booking/pre', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'getPreBookingsData'),
+        )); 
+        register_rest_route('hydra-booking/v1', '/booking/meeting', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getpreMeetingData'),
+        ));  
        
     }
     // Booking List
@@ -75,6 +87,74 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         );
         return rest_ensure_response($data);
     }  
+
+    // Pre Booking Data
+    public function getPreBookingsData(){
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
+
+        $meeting = new Meeting();
+        $MeetingsList = $meeting->get();
+
+        $meeting_array = array();
+        foreach($MeetingsList as $single){
+            $meeting_array[] = array(
+                'name' => $single->title,
+                'value' => "".$single->id."",
+            );
+        }
+
+        $data = array(
+            'status' => true, 
+            'time_zone' => $time_zone,
+            'meetings' => $meeting_array
+        ); 
+        return rest_ensure_response($data);
+    }
+
+    // Pre Meeting Data
+    public function getpreMeetingData(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $meeting_id = isset($request['meeting_id']) ? $request['meeting_id'] : '';
+
+        // Single Meeting Data
+        $meeting = new Meeting();
+        $MeetingsData = $meeting->get($meeting_id);
+        
+        // var_dump($MeetingsData);
+        $meeting_locations = !empty($MeetingsData->meeting_locations) ? json_decode($MeetingsData->meeting_locations) : [''];
+
+        $meeting_location_array = array();
+        if(!empty($meeting_locations)){
+            foreach($meeting_locations as $single){
+                if($single->location){
+                    $meeting_location_array[] = array(
+                        'name' => $single->location,
+                        'value' => "".$single->location."",
+                    );
+                }
+            }
+        }
+
+        $host = new Host();
+        $HostData = $host->get( $MeetingsData->host_id  );
+
+        $meeting_host_array = array();
+        if($HostData->first_name){
+            $meeting_host_array[] = array(
+                'name' => $HostData->first_name.' '.$HostData->last_name,
+                'value' => "".$HostData->id."",
+            );
+        }
+
+        $data = array(
+            'status' => true, 
+            'locations' => $meeting_location_array,
+            'hosts' => $meeting_host_array,
+        ); 
+        return rest_ensure_response($data);
+
+    }
 
     // Create Booking
     public function CreateBooking() { 

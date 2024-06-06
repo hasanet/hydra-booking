@@ -263,6 +263,16 @@ namespace HydraBooking\Admin\Controller;
             'Pending' => __('Pending', 'hydra-booking'),
             'Re-schedule' => __('Re-schedule', 'hydra-booking'),
             'Canceled' => __('Canceled', 'hydra-booking'),
+            'Customer name' => __('Customer name', 'hydra-booking'),
+            'Jhon Deo' => __('Jhon Deo', 'hydra-booking'),
+            'Customer email' => __('Customer email', 'hydra-booking'),
+            'name@yourmail.com' => __('name@yourmail.com', 'hydra-booking'),
+            'Client Time zone' => __('Client Time zone', 'hydra-booking'),
+            'Select Meeting' => __('Select Meeting', 'hydra-booking'),
+            'Create Booking' => __('Create Booking', 'hydra-booking'),
+            'Back to Booking' => __('Back to Booking', 'hydra-booking'),
+            'Select Location' => __('Select Location', 'hydra-booking'),
+            'Select Team Member' => __('Select Team Member', 'hydra-booking'),
 
             //Booking
             'Data' => __('Data', 'hydra-booking'),
