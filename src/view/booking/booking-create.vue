@@ -3,8 +3,18 @@ import { ref, reactive, onBeforeMount } from 'vue';
 import axios from 'axios' 
 import HbText from '@/components/form-fields/HbText.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
+import Icon from '@/components/icon/LucideIcon.vue'
+import { useRouter } from 'vue-router' 
+const router = useRouter();
 
 // Fetch Pre booking Data
+const booking = reactive({
+    'name': '',
+    'email': '',
+    'time_zone': '',
+    'meeting': '',
+    'status': '',
+})
 const timeZone = reactive({});
 const meetings = reactive({});
 const fetchPreBookingData = async () => {
@@ -19,16 +29,29 @@ const fetchPreBookingData = async () => {
     } 
 }
 
+// Back to Booking
+const TfhbPrevNavigator = () => {
+    router.push({ name: 'BookingLists' });
+}
+
 onBeforeMount(() => { 
     fetchPreBookingData();
 });
 </script>
 
 <template>
-
+{{ booking }}
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
+            <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">
+                <div class="prev-navigator tfhb-cursor-pointer" @click="TfhbPrevNavigator()">
+                    <Icon name="ArrowLeft" size="20" /> 
+                </div>
+                <h3>{{ $tfhb_trans['Back to Booking'] }}</h3>
+            </div>
+            
             <HbText  
+                v-model="booking.name"
                 required= "true"  
                 :label="$tfhb_trans['Customer name']"  
                 name="name"
@@ -36,6 +59,7 @@ onBeforeMount(() => {
                 :placeholder="$tfhb_trans['Jhon Deo']" 
             /> 
             <HbText  
+                v-model="booking.email"
                 required= "true"  
                 :label="$tfhb_trans['Customer email']"  
                 name="email"
@@ -44,6 +68,7 @@ onBeforeMount(() => {
             /> 
 
             <HbDropdown
+                v-model="booking.time_zone"
                 required= "true"  
                 :label="$tfhb_trans['Client Time zone']" 
                 :filter="true"
@@ -53,6 +78,7 @@ onBeforeMount(() => {
             />  
 
             <HbDropdown
+                v-model="booking.meeting"
                 required= "true"  
                 :label="$tfhb_trans['Select Meeting']" 
                 :filter="true"
@@ -62,6 +88,7 @@ onBeforeMount(() => {
             />  
 
             <HbDropdown  
+                v-model="booking.status"
                 :label="$tfhb_trans['Status']" 
                 required= "true" 
                 :selected = "1"
@@ -72,6 +99,10 @@ onBeforeMount(() => {
                     {'name': 'Canceled', 'value': 'canceled'}
                 ]" 
             />  
+
+            <div class="tfhb-submission-btn">
+                <button class="tfhb-btn boxed-btn tfhb-flexbox">{{ $tfhb_trans['Create Booking'] }} </button>
+            </div>
         </div>
     </div>
 </template>

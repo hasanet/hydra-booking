@@ -269,8 +269,8 @@ namespace HydraBooking\Admin\Controller;
             'name@yourmail.com' => __('name@yourmail.com', 'hydra-booking'),
             'Client Time zone' => __('Client Time zone', 'hydra-booking'),
             'Select Meeting' => __('Select Meeting', 'hydra-booking'),
-            '' => __('', 'hydra-booking'),
-            '' => __('', 'hydra-booking'),
+            'Create Booking' => __('Create Booking', 'hydra-booking'),
+            'Back to Booking' => __('Back to Booking', 'hydra-booking'),
             '' => __('', 'hydra-booking'),
 
             //Booking
