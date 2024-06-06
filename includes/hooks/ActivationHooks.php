@@ -19,6 +19,7 @@ class ActivationHooks{
         // Add Capabilities to the role
         $this->tfhb_add_capabilities_to_role();
 
+     
     }
 
     public function tfhb_create_host_role(){
@@ -67,4 +68,5 @@ class ActivationHooks{
 
     }
     
+
 }

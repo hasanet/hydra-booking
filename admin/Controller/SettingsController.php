@@ -7,6 +7,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\CountryController;
  use HydraBooking\Admin\Controller\AuthController;
  use HydraBooking\Services\Integrations\Zoom\ZoomServices;
+ use HydraBooking\Admin\Controller\ScheduleController;
  // Use DB 
 use HydraBooking\DB\Availability;
 // exit
@@ -16,9 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     
 
     // constaract
-    public function __construct() { 
-        // add_action('admin_init', array($this, 'init'));
-        
+    public function __construct() {  
+
         add_action('rest_api_init', array($this, 'create_endpoint'));
 
 
@@ -150,6 +150,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // update option
         update_option('_tfhb_general_settings', $_tfhb_general_settings);
+        $ScheduleController = new ScheduleController();
+        // $ScheduleController->tfhb_after_booking_completed_schedule_update($_tfhb_general_settings['after_booking_completed']);
 
         $data = array(
             'status' => true, 
