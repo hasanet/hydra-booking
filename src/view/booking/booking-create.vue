@@ -67,6 +67,24 @@ const MeetingChangeCallback = async (e) => {
 
 }
 
+// Check Available Times
+const bookingSlot = async (e) => {
+    let data = {
+        meeting_id: booking.meeting,
+        data: e.target.value
+    };  
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/availabletime', data, {} );
+      
+        if (response.data.status) {    
+            // meeting_locations.value = response.data.locations; 
+            // meeting_hosts.value = response.data.hosts;
+        }
+    } catch (error) {
+        
+    }
+}
+
 onBeforeMount(() => { 
     fetchPreBookingData();
 });
@@ -75,7 +93,6 @@ onBeforeMount(() => {
 <template>
 <!-- {{ booking }} -->
 
-{{ unavailable_slot.value }}
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
             <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">
@@ -153,6 +170,7 @@ onBeforeMount(() => {
                     enable: available_slot.value
                 }"
                 placeholder="Type your schedule title"   
+                @change="bookingSlot"
             />
 
             <HbDropdown  

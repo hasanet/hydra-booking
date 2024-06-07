@@ -66,11 +66,11 @@ class HydraBookingShortcode {
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
         $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
         // Get Wp Cron all  Schedules Event list
-        echo '<pre>';
-        print_r(_get_cron_array());
-        echo '</pre>';
+    //     echo '<pre>';
+    //     print_r(_get_cron_array());
+    //     echo '</pre>';
 
-      exit;
+    //   exit;
  
         //  Reschedule Booking
         $booking_data = array();

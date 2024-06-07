@@ -56,6 +56,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'getpreMeetingData'),
         ));  
+        register_rest_route('hydra-booking/v1', '/booking/availabletime', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getAvailableTimeData'),
+        ));  
        
     }
     // Booking List
@@ -195,25 +199,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 }
             }
         }
+        // Unavailable
         $unavailable_slot =  implode(", ",$unavailable_slot);
         $unavailable_slot =  explode(", ",$unavailable_slot);
         $unavailable_slot = array_map(function($date) {
             return "'$date'";
         }, $unavailable_slot);
-        
         $unavailable_slot =  implode(",",$unavailable_slot);
 
+        // Available
         $available_slot =  implode(", ",$available_slot);
         $available_slot =  explode(", ",$available_slot);
         $available_slot = array_map(function($date) {
             return "'$date'";
         }, $available_slot);
-        
         $available_slot =  implode(",",$available_slot);
 
-
-
-        // var_dump($unavailable_slot);
         $data = array(
             'status' => true, 
             'locations' => $meeting_location_array,
@@ -223,6 +224,41 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         ); 
         return rest_ensure_response($data);
 
+    }
+
+    // Pre Meeting Data
+    public function getAvailableTimeData(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $meeting_id = isset($request['meeting_id']) ? $request['meeting_id'] : '';
+
+        $selected_date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
+        $selected_time_format = isset($_POST['time_format']) ? sanitize_text_field($_POST['time_format']) : '12';
+        $selected_time_zone = isset($_POST['time_zone']) ? sanitize_text_field($_POST['time_zone']) : 'UTC';
+
+
+        // Get All Booking Data.
+        $booking = new Booking();
+        $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
+        $date_time = new DateTimeController( $selected_time_zone );
+ 
+
+        $disabled_times = array();
+        foreach($bookings as $booking){
+            $start_time = $booking->start_time;
+            $end_time = $booking->end_time;
+            $time_zone = $booking->attendee_time_zone; 
+ 
+            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
+            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
+
+            $disabled_times[] = array(
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            );
+
+        }
+
+        var_dump($disabled_times); exit();
     }
 
     // Create Booking
