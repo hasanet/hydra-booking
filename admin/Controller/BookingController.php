@@ -181,13 +181,45 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Meeting Interval
         $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
 
-        var_dump($availability_data);
+        // var_dump($availability_data['date_slots']);
+
+        // Available and Unavailable date slot
+        $available_slot = [];
+        $unavailable_slot = [];
+        if(!empty($availability_data['date_slots'])){
+            foreach($availability_data['date_slots'] as $slot){
+                if($slot['available']){
+                    $unavailable_slot [] = $slot['date'];
+                }else{
+                    $available_slot [] = $slot['date'];
+                }
+            }
+        }
+        $unavailable_slot =  implode(", ",$unavailable_slot);
+        $unavailable_slot =  explode(", ",$unavailable_slot);
+        $unavailable_slot = array_map(function($date) {
+            return "'$date'";
+        }, $unavailable_slot);
+        
+        $unavailable_slot =  implode(",",$unavailable_slot);
+
+        $available_slot =  implode(", ",$available_slot);
+        $available_slot =  explode(", ",$available_slot);
+        $available_slot = array_map(function($date) {
+            return "'$date'";
+        }, $available_slot);
+        
+        $available_slot =  implode(",",$available_slot);
 
 
+
+        // var_dump($unavailable_slot);
         $data = array(
             'status' => true, 
             'locations' => $meeting_location_array,
             'hosts' => $meeting_host_array,
+            'available_slot' => $available_slot,
+            'unavailable_slot' => $unavailable_slot,
         ); 
         return rest_ensure_response($data);
 
