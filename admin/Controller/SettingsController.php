@@ -151,7 +151,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // update option
         update_option('_tfhb_general_settings', $_tfhb_general_settings);
         $ScheduleController = new ScheduleController();
-        // $ScheduleController->tfhb_after_booking_completed_schedule_update($_tfhb_general_settings['after_booking_completed']);
+        $ScheduleController->tfhb_after_booking_completed_schedule_update();
 
         $data = array(
             'status' => true, 

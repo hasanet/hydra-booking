@@ -219,7 +219,7 @@ onBeforeMount(() => {
                 <!-- Week start from -->
                 
                 <!-- Date Format -->
-                <HbDropdown 
+                <!-- <HbDropdown 
                     
                     v-model="generalSettings.date_format"  
                     required= "true" 
@@ -233,7 +233,7 @@ onBeforeMount(() => {
                     @add-change="tfhbValidateInput('date_format')" 
                     @add-click="tfhbValidateInput('date_format')" 
                     :errors="errors.date_format"
-                />
+                /> -->
                 <!-- Date Format -->
 
                 <!-- Select countr -->
