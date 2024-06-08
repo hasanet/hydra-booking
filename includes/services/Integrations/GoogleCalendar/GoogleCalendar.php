@@ -269,7 +269,7 @@ class GoogleCalendar{
             ),
             'conferenceData' => array(
                 'createRequest' => array(
-                    'requestId' => 'random_id', // Provide a unique ID for the request
+                    'requestId' => 'sample123', // Provide a unique ID for the request
                     'conferenceSolutionKey' => array(
                         'type' => 'hangoutsMeet'
                     )
@@ -299,10 +299,12 @@ class GoogleCalendar{
                 )); 
                 
             }else{
-                $url =  $this->calendarEvent . $calendarId . '/events'; 
+                $url =  $this->calendarEvent . $calendarId . '/events?conferenceDataVersion=1'; 
 
                 $response = wp_remote_post($url, array(
-                    'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
+                    'headers' => array( 
+                        'Authorization' => 'Bearer ' . $this->accessToken,
+                    ),
                     'body' => json_encode($setData),
                     'method' => 'POST',
                     'data_format' => 'body',
