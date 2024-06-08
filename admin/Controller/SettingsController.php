@@ -360,7 +360,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
         $key = sanitize_text_field($request['key']);
         $data = $request['value'];
-
+        // var_dump($data); exit();
         if($key == 'zoom_meeting'){ 
 
             $zoom = new ZoomServices(
@@ -402,6 +402,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'status' => true,  
                 'option' => $option,  
                 'message' => 'Google Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'stripe'){
+            $_tfhb_integration_settings['stripe']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_integration_settings['stripe']['secret_key'] =  sanitize_text_field($data['secret_key']);
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+            $option = get_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'option' => $option,  
+                'message' => 'Stripe Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }

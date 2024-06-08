@@ -9,6 +9,7 @@ import { toast } from "vue3-toastify";
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/integrations/GoogleCalendarIntegrations.vue'; 
+import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue'; 
 
 // import Form Field 
 import Icon from '@/components/icon/LucideIcon.vue' 
@@ -20,6 +21,7 @@ const skeleton = ref(true);
 
 const popup = ref(false);
 const gpopup = ref(false);
+const spopup = ref(false);
 const isPopupOpen = () => {
     popup.value = true;
 }
@@ -31,6 +33,12 @@ const isgPopupOpen = () => {
 }
 const isgPopupClose = (data) => {
     gpopup.value = false;
+}
+const isstripePopupOpen = () => {
+    spopup.value = true;
+}
+const isstripePopupClose = (data) => {
+    spopup.value = false;
 }
 
 
@@ -58,6 +66,12 @@ const Integration = reactive( {
         redirect_url: '',
 
     },
+    stripe : {
+        type: 'stripe', 
+        status: 0, 
+        secret_key: '',
+
+    },
 });
 
 //  update Integration
@@ -73,7 +87,8 @@ const fetchIntegration = async () => {
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
             Integration.woo_payment= response.data.integration_settings.woo_payment ? response.data.integration_settings.woo_payment : Integration.woo_payment;
             Integration.google_calendar= response.data.integration_settings.google_calendar ? response.data.integration_settings.google_calendar : Integration.google_calendar;
- 
+
+            Integration.stripe= response.data.integration_settings.stripe ? response.data.integration_settings.stripe : Integration.stripe;
 
             skeleton.value = false;
         }
@@ -102,6 +117,7 @@ const UpdateIntegration = async (key, value) => {
 
             popup.value = false;
             gpopup.value = false;
+            spopup.value = false;
             
         }else{
             toast.error(response.data.message, {
@@ -110,6 +126,7 @@ const UpdateIntegration = async (key, value) => {
 
             popup.value = false;
             gpopup.value = false;
+            spopup.value = false;
         }
     } catch (error) {
         toast.error('Action successful', {
@@ -162,6 +179,16 @@ onBeforeMount(() => {
                 @popup-close-control="isgPopupClose" 
                 />
                 <!-- zoom intrigation -->
+
+                <!-- stripe intrigation -->
+                <StripeIntegrations 
+                :stripe_data="Integration.stripe" 
+                @update-integrations="UpdateIntegration" 
+                :ispopup="spopup"
+                @popup-open-control="isstripePopupOpen"
+                @popup-close-control="isstripePopupClose" 
+                />
+                <!-- stripe intrigation -->
           
 
             </div> 
