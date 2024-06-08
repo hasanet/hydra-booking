@@ -26,42 +26,6 @@ const BackendBooking = ref(false);
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
 
-// Add New Booking
-const Tfhb_BackendBooking = async () => {
-    // Api Submission
-    try { 
-
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/create', booking_data, {
-            headers: {
-                'X-WP-Nonce': tfhb_core_apps.rest_nonce
-            } 
-        } );
-
-        // Api Response
-        if (response.data.status) {  
-            Booking.bookings = response.data.booking;  
-            toast.success(response.data.message, {
-                position: 'bottom-right', // Set the desired position
-                "autoClose": 1500,
-            });  
-            BackendBooking.value = false;
-            booking_data.meeting = '';
-            booking_data.name = '';
-            booking_data.phone = '';
-            booking_data.email = '';
-            booking_data.address = '';
-        }else{
-            toast.error(response.data.message, {
-                position: 'bottom-right', // Set the desired position
-                "autoClose": 1500,
-            });
-        }
-
-    } catch (error) {
-        console.log(error);
-    } 
-}
-
 const TfhbFormatMeetingLocation = (address) => {
     const meeting_address = JSON.parse(address)
     return meeting_address.map(loc => loc.location).join(', ');
@@ -71,13 +35,6 @@ onBeforeMount(() => {
     Booking.fetchBookings();
     Meeting.fetchMeetings();
 });
-
-// Auto Suggetions Meetings
-const defaultItems = [...Array(10).keys()].map(item => 'default-' + item);
-const meeting_items = ref(defaultItems);
-const search = (event) => {
-    meeting_items.value = event.query ? defaultItems.filter(item => item.includes(event.query)) : defaultItems;
-}
 
 
 // Booking Status Changed
@@ -243,55 +200,6 @@ const prevPage = () => {
 </HbPopup>
 
 <!-- Booking Quick View End -->
-
-<!-- Backend Booking Popup Start -->
-
-<HbPopup :isOpen="BackendBooking" @modal-close="BackendBooking = false" max_width="400px" name="first-modal" gap="24px">
-    <template #header> 
-        <h3>{{ $tfhb_trans['Add New Booking'] }}</h3>
-    </template>
-
-    <template #content> 
-        
-        <div class="tfhb-meeting-title">
-            <label>{{ $tfhb_trans['Meeting Name'] }} *</label>
-            <AutoComplete v-model="booking_data.meeting" :suggestions="meeting_items" @complete="search" placeholder="Search by Meeting title..." />
-        </div>
-
-        <HbText  
-            v-model="booking_data.name"
-            required= "true"  
-            :label="$tfhb_trans['Attendee']"  
-        /> 
-        <HbText  
-            v-model="booking_data.email"
-            required= "true"  
-            :label="$tfhb_trans['Attendee Email']"  
-        /> 
-        <HbText  
-            v-model="booking_data.phone"
-            required= "true"  
-            :label="$tfhb_trans['Attendee Phone']"  
-        />
-        <HbText  
-            v-model="booking_data.address"
-            required= "true"  
-            :label="$tfhb_trans['Attendee Address']"  
-        /> 
-
-        <div class="tfhb-button-group tfhb-flexbox tfhb-gap-16">
-            <button class="tfhb-btn boxed-btn secondary-btn tfhb-flexbox" @click="BackendBooking = false">
-                {{ $tfhb_trans['Cancel'] }}
-            </button>
-            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="Tfhb_BackendBooking()">
-                {{ $tfhb_trans['Save'] }}
-            </button>
-        </div>
-    </template> 
-
-</HbPopup>
-
-<!-- Backend Booking Popup End -->
 
 <div :class="{ 'tfhb-skeleton': Booking.skeleton }"  class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">

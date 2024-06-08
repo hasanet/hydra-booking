@@ -5,6 +5,7 @@ import HbText from '@/components/form-fields/HbText.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
+import { toast } from "vue3-toastify"; 
 import { useRouter } from 'vue-router' 
 const router = useRouter();
 
@@ -77,12 +78,41 @@ const bookingSlot = async (e) => {
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/availabletime', data, {} );
       
         if (response.data.status) {    
-            // meeting_locations.value = response.data.locations; 
-            // meeting_hosts.value = response.data.hosts;
+           
         }
     } catch (error) {
         
     }
+}
+
+// Add New Booking
+const createBooking = async () => {
+    // Api Submission
+    try { 
+
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/create', booking, {
+            headers: {
+                'X-WP-Nonce': tfhb_core_apps.rest_nonce
+            } 
+        } );
+
+        // Api Response
+        if (response.data.status) {   
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });  
+            router.push({ name: 'BookingLists' });
+        }else{
+            toast.error(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+    } 
 }
 
 onBeforeMount(() => { 
@@ -91,7 +121,6 @@ onBeforeMount(() => {
 </script>
 
 <template>
-<!-- {{ booking }} -->
 
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
@@ -187,7 +216,7 @@ onBeforeMount(() => {
             />  
 
             <div class="tfhb-submission-btn">
-                <button class="tfhb-btn boxed-btn tfhb-flexbox">{{ $tfhb_trans['Create Booking'] }} </button>
+                <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="createBooking">{{ $tfhb_trans['Create Booking'] }} </button>
             </div>
         </div>
     </div>

@@ -81,13 +81,12 @@
 		.tfhb-integrations-wrap{
 			width: 100% !important; 
 			justify-content: normal !important;
-			flex-wrap: nowrap !important;
 			@media #{$max1240}{
 				flex-wrap: wrap !important;
 			}
 			.tfhb-integrations-single-block{
 				margin: 0 !important;
-				width: calc(33% - 12px);
+				width: calc(33% - 14px);
 				@media #{$max1240}{
                     width: calc(50% - 12px);
                 }

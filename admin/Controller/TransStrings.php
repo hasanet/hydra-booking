@@ -138,6 +138,11 @@ namespace HydraBooking\Admin\Controller;
             'Edit' => __('Edit', 'hydra-booking'),
             'Profile' => __('Profile', 'hydra-booking'),
             'Information' => __('Information', 'hydra-booking'),
+            'Stripe' => __('Stripe', 'hydra-booking'),
+            'Stripe Secret Key' => __('Stripe Secret Key', 'hydra-booking'),
+            'Enter Your Stripe Secret' => __('Enter Your Stripe Secret', 'hydra-booking'),
+            'Connect Your Stripe Account' => __('Connect Your Stripe Account', 'hydra-booking'),
+            'Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account' => __('Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account', 'hydra-booking'),
 
             // Meetings
             'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),
