@@ -55,6 +55,8 @@ class App {
 
         add_action( 'pre_get_posts', array($this, 'tfhb_remove_posttype_request' ));
         add_filter( 'single_template', array($this, 'tfhb_single_meeting_template' ));
+
+        add_action( 'hydra_booking/stripe_payment_method', array($this, 'tfhb_stripe_payment_callback'), 10, 1 );
     }
 
     public function tfhb_single_meeting_template($single_template){
@@ -143,6 +145,58 @@ class App {
 
         }
         return $template;
+    }
+
+    public function tfhb_stripe_payment_callback($data){
+
+        if(file_exists(THB_PATH . '/app/integration/stripe/vendor/autoload.php')) {
+            require_once THB_PATH . '/app/integration/stripe/vendor/autoload.php'; 
+        }
+
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        $stripeSecret = !empty($_tfhb_integration_settings['stripe']['secret_key']) ? $_tfhb_integration_settings['stripe']['secret_key'] : '';
+
+        if(!empty($stripeSecret)){
+        try {
+      
+            \Stripe\Stripe::setVerifySslCerts(false);
+      
+            // See your keys here: https://dashboard.stripe.com/account/apikeys
+            \Stripe\Stripe::setApiKey($stripeSecret);
+      
+            // Get the payment token ID submitted by the form:
+            $token = !empty($data['tokenId']) ? $data['tokenId'] : '';
+      
+            $customer = \Stripe\Customer::create(array(
+              'email' => !empty($data['email']) ? $data['email'] : '',
+              'source'  => $token,
+              "address" => [
+                "city" => "Dhaka",
+                "country" => !empty($data['address']) ? $data['address'] : '',
+                "line1" => "dhaka",
+                "line2" => "",
+                "postal_code" => "1000",
+                "state" => "dhaka"
+              ]
+            ));
+      
+            $charge = \Stripe\Charge::create(array(
+              'customer' => $customer->id,
+              'amount'   => 120*100,
+              'currency' => "usd",
+              'description' => "test stipe payment",
+            ));
+      
+            // after successfull payment, you can store payment related information into your database
+      
+            $data = array('success' => true, 'data' => $charge);
+      
+            echo json_encode($data);
+        } catch (\Throwable $th) {
+            $data = array('success' => false, 'data' => $th->getMessage());
+            echo json_encode($data);
+        }
+    }
     }
 }
 

@@ -114,6 +114,7 @@ class THB_INIT{
         wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );
 
         // register script 
+        wp_enqueue_script( 'stripe', '//checkout.stripe.com/checkout.js', array( 'jquery' ), '1.0.0', true );
         wp_register_script( 'tfhb-select2-script', THB_URL . 'assets/app/js/select2.min.js', array('jquery', 'tfhb-app-script'), THB_VERSION, true );
         wp_register_script( 'tfhb-app-script', THB_URL . 'assets/app/js/main.js', array('jquery'), THB_VERSION, true ); 
 
