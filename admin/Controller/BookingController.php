@@ -258,7 +258,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         }
 
-        var_dump($disabled_times); exit();
+        // var_dump($disabled_times); exit();
     }
 
     // Create Booking
@@ -268,13 +268,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         $data = [ 
             'meeting_id' => isset($request['meeting']) ? $request['meeting'] : '',
-            'first_name' => isset($request['name']) ? $request['name'] : '',
+            'attendee_name' => isset($request['name']) ? $request['name'] : '',
             'email' => isset($request['email']) ? $request['email'] : '',
-            'phone' => isset($request['phone']) ? $request['phone'] : '',
-            'location_details' => isset($request['address']) ? $request['address'] : '',
+            'attendee_time_zone' => isset($request['time_zone']) ? $request['time_zone'] : '',
+            'host_id' => isset($request['host']) ? $request['host'] : '',
+            'meeting_dates' => isset($request['date']) ? $request['date'] : '',
+            'start_time' => isset($request['time']) ? $request['time'] : '',
+            'end_time' => isset($request['time']) ? $request['time'] : '',
+            'status' => isset($request['status']) ? $request['status'] : '',
             'payment_method' => 'backend',
             'payment_status' => 'pending',
-            'status'    => 'pending'
         ];
 
         // Check if user is already a booking
