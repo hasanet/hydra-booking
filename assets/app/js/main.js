@@ -263,19 +263,19 @@
 				// key: 'pk_test_51Oqv91IsLSX0wXZB2PaDDa4CBWibsZXdfx8CrbX9gxXTSpSjuE2QBHJGSbrvHJ9BIWOuIsi0zPdKiwS3aob1iaFI00u2c6wv2U', // your publisher key id
 				// locale: 'auto',
 				// token: function (token) {
-
-				// 	data.append('tokenId', token.id); 
-				// 	data.append('amount', 12); 
 					
-				// 	$.ajax({
+				// 	jQuery.ajax({
 				// 	url: tfhb_app_booking.ajax_url,
 				// 	method: 'POST',
-				// 	data: data,
+				// 	data: {
+				// 		tokenId: token.id, amount: amount,
+                // 		action: 'tfhb_meeting_form_submit',
+				// 	},
 				// 	dataType: "json",
 				// 	success: function( response ) {
 				// 		console.log(response.data);
 				// 		if(response.success) {
-				// 		window.location.href = "success.php";
+				// 		// window.location.href = "success.php";
 				// 		} else {
 				// 		window.location.href = "failed.php?msg="+ response.data;
 				// 		}

@@ -165,7 +165,7 @@ class App {
             \Stripe\Stripe::setApiKey($stripeSecret);
       
             // Get the payment token ID submitted by the form:
-            $token = !empty($data['hash']) ? $data['hash'] : '';
+            $token = !empty($data['tokenId']) ? $data['tokenId'] : '';
       
             $customer = \Stripe\Customer::create(array(
               'email' => !empty($data['email']) ? $data['email'] : '',
