@@ -24,6 +24,8 @@ const timeZone = reactive({});
 const meetings = reactive({});
 const meeting_locations = reactive({});
 const meeting_hosts = reactive({});
+const available_slot= reactive({});
+const unavailable_slot= reactive({});
 const fetchPreBookingData = async () => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/pre');
@@ -52,11 +54,35 @@ const MeetingChangeCallback = async (e) => {
         if (response.data.status) {    
             meeting_locations.value = response.data.locations; 
             meeting_hosts.value = response.data.hosts;
+
+            let unavailableSlotString = response.data.unavailable_slot;
+            let availableSlotString = response.data.available_slot;
+            
+            unavailable_slot.value = unavailableSlotString.replace(/'/g, "").split(',');
+            available_slot.value = availableSlotString.replace(/'/g, "").split(',');
         }
     } catch (error) {
         
     }
 
+}
+
+// Check Available Times
+const bookingSlot = async (e) => {
+    let data = {
+        meeting_id: booking.meeting,
+        data: e.target.value
+    };  
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/availabletime', data, {} );
+      
+        if (response.data.status) {    
+            // meeting_locations.value = response.data.locations; 
+            // meeting_hosts.value = response.data.hosts;
+        }
+    } catch (error) {
+        
+    }
 }
 
 onBeforeMount(() => { 
@@ -65,7 +91,8 @@ onBeforeMount(() => {
 </script>
 
 <template>
-{{ booking }}
+<!-- {{ booking }} -->
+
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
             <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">
@@ -114,6 +141,7 @@ onBeforeMount(() => {
             />  
 
             <HbDropdown
+                v-if="booking.meeting"
                 v-model="booking.host"
                 required= "true"  
                 :label="$tfhb_trans['Select Team Member']" 
@@ -123,6 +151,7 @@ onBeforeMount(() => {
             /> 
 
             <HbDropdown
+                v-if="booking.meeting"
                 v-model="booking.location"
                 required= "true"  
                 :label="$tfhb_trans['Select Location']" 
@@ -132,13 +161,16 @@ onBeforeMount(() => {
             /> 
 
             <HbDateTime  
+                v-if="unavailable_slot.value || available_slot.value"
                 v-model="booking.date"
                 :label="$tfhb_trans['Select Date']" 
                 selected = "1" 
                 :config="{
-                    disable: ['2024-06-12', '2024-06-14']
+                    disable: unavailable_slot.value,
+                    enable: available_slot.value
                 }"
                 placeholder="Type your schedule title"   
+                @change="bookingSlot"
             />
 
             <HbDropdown  

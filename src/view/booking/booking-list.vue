@@ -150,7 +150,8 @@ const prevPage = () => {
 <template>
 
 <!-- {{ tfhbClass }} -->
-<div :class="{ 'tfhb-skeleton': Booking.skeleton }" class="tfhb-dashboard-heading tfhb-flexbox">
+<!-- :class="{ 'tfhb-skeleton': Booking.skeleton }" -->
+<div class="tfhb-dashboard-heading tfhb-flexbox">
     <div class="tfhb-filter-box tfhb-flexbox">
         <div class="tfhb-header-filters">
             <input type="text" placeholder="Host name or meeting title" /> 
