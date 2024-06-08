@@ -531,7 +531,9 @@ class HydraBookingShortcode {
             $response['redirect'] =  wc_get_checkout_url();
         }  
 
-      
+        if(true == $meta_data['payment_status'] && 'stripe_payment' == $meta_data['payment_method']){
+            do_action('hydra_booking/stripe_payment_method', $data);
+        } 
  
         // Load Meeting Confirmation Template 
         $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
