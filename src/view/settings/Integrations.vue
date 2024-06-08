@@ -9,6 +9,7 @@ import { toast } from "vue3-toastify";
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/integrations/GoogleCalendarIntegrations.vue'; 
+import OutlookCalendarIntegrations from '@/components/integrations/OutlookCalendarIntegrations.vue'; 
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue'; 
 
 // import Form Field 
@@ -22,6 +23,7 @@ const skeleton = ref(true);
 const popup = ref(false);
 const gpopup = ref(false);
 const spopup = ref(false);
+const outlookpopup = ref(false);
 const isPopupOpen = () => {
     popup.value = true;
 }
@@ -33,6 +35,12 @@ const isgPopupOpen = () => {
 }
 const isgPopupClose = (data) => {
     gpopup.value = false;
+}
+const isOutlookPopupOpen = () => {
+    outlookpopup.value = true;
+}
+const isOutlookPopupClose = (data) => {
+    outlookpopup.value = false;
 }
 const isstripePopupOpen = () => {
     spopup.value = true;
@@ -66,6 +74,15 @@ const Integration = reactive( {
         redirect_url: '',
 
     },
+    outlook_calendar : {
+        type: 'meeting', 
+        status: 0, 
+        connection_status: 0,
+        client_id: '',
+        secret_key: '',
+        redirect_url: '',
+
+    },
     stripe : {
         type: 'stripe', 
         status: 0, 
@@ -87,6 +104,7 @@ const fetchIntegration = async () => {
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
             Integration.woo_payment= response.data.integration_settings.woo_payment ? response.data.integration_settings.woo_payment : Integration.woo_payment;
             Integration.google_calendar= response.data.integration_settings.google_calendar ? response.data.integration_settings.google_calendar : Integration.google_calendar;
+            Integration.outlook_calendar= response.data.integration_settings.outlook_calendar ? response.data.integration_settings.outlook_calendar : Integration.outlook_calendar;
 
             Integration.stripe= response.data.integration_settings.stripe ? response.data.integration_settings.stripe : Integration.stripe;
 
@@ -118,6 +136,7 @@ const UpdateIntegration = async (key, value) => {
             popup.value = false;
             gpopup.value = false;
             spopup.value = false;
+            spopup.value = false;
             
         }else{
             toast.error(response.data.message, {
@@ -126,7 +145,7 @@ const UpdateIntegration = async (key, value) => {
 
             popup.value = false;
             gpopup.value = false;
-            spopup.value = false;
+            outlookpopup.value = false;
         }
     } catch (error) {
         toast.error('Action successful', {
@@ -152,6 +171,7 @@ onBeforeMount(() => {
             </div> 
         </div>
         <div class="tfhb-content-wrap"> 
+            <!-- {{ Integration }} -->
             <div class="tfhb-integrations-wrap tfhb-flexbox">
 
                 <!-- Woo  Integrations  -->
@@ -177,6 +197,16 @@ onBeforeMount(() => {
                 :ispopup="gpopup"
                 @popup-open-control="isgPopupOpen"
                 @popup-close-control="isgPopupClose" 
+                />
+                <!-- zoom intrigation -->
+                 
+                <!-- zoom intrigation -->
+                <OutlookCalendarIntegrations 
+                :outlook_calendar="Integration.outlook_calendar" 
+                @update-integrations="UpdateIntegration"
+                :ispopup="outlookpopup"
+                @popup-open-control="isOutlookPopupOpen"
+                @popup-close-control="isOutlookPopupClose" 
                 />
                 <!-- zoom intrigation -->
 

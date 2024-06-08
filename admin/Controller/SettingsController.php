@@ -404,6 +404,26 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'message' => 'Google Calendar Settings Updated Successfully',
             );
             return rest_ensure_response($data);
+        }elseif($key == 'outlook_calendar'){
+            $_tfhb_integration_settings['outlook_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['outlook_calendar']['status'] =  sanitize_text_field($data['status']); 
+            $_tfhb_integration_settings['outlook_calendar']['client_id'] =  sanitize_text_field($data['client_id']); 
+            $_tfhb_integration_settings['outlook_calendar']['secret_key'] =  sanitize_text_field($data['secret_key']); 
+            $_tfhb_integration_settings['outlook_calendar']['redirect_url'] =  sanitize_text_field($data['redirect_url']); 
+            $_tfhb_integration_settings['outlook_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']); 
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+            $option = get_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'option' => $option,  
+                'message' => 'Outlook Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
         }elseif($key == 'stripe'){
             $_tfhb_integration_settings['stripe']['type'] =  sanitize_text_field($data['type']);
             $_tfhb_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);
