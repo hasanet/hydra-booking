@@ -1,5 +1,5 @@
 <?php
-namespace HydraBooking\Hooks;
+namespace HydraBooking\Hooks; 
 class ActivationHooks{
 
     public function __construct( ) { 
@@ -18,6 +18,7 @@ class ActivationHooks{
 
         // Add Capabilities to the role
         $this->tfhb_add_capabilities_to_role();
+ 
 
      
     }

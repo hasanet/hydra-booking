@@ -39,9 +39,7 @@ class THB_INIT{
         // Mail Hooks
         new HydraBooking\Hooks\MailHooks(); 
 
-        $scheduleController = new HydraBooking\Admin\Controller\ScheduleController();
-        $scheduleController->tfhb_create_cron_job();
- 
+    
 
       
         add_action('init', array($this, 'init'));
@@ -56,6 +54,8 @@ class THB_INIT{
 
  
     public function init() {   
+       new HydraBooking\Admin\Controller\ScheduleController(); 
+ 
         // Post Type 
         new HydraBooking\PostType\Meeting\Meeting_CPT();
         new HydraBooking\PostType\Booking\Booking_CPT(); 

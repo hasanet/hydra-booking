@@ -9,6 +9,7 @@ use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
 use HydraBooking\Admin\Controller\CountryController;
 use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
+use HydraBooking\Admin\Controller\ScheduleController;
 
  
 class HydraBookingShortcode {
@@ -65,13 +66,7 @@ class HydraBookingShortcode {
      
         $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
         $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
-        // Get Wp Cron all  Schedules Event list
-    //     echo '<pre>';
-    //     print_r(_get_cron_array());
-    //     echo '</pre>';
-
-    //   exit;
- 
+  
         //  Reschedule Booking
         $booking_data = array();
 
