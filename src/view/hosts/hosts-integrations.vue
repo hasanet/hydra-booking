@@ -9,6 +9,7 @@ import { toast } from "vue3-toastify";
 const currentRoute = useRouter().currentRoute.value.path;
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/hosts/GoogleCalendarIntegrations.vue';
+import OutlookCalendarIntegrations from '@/components/hosts/OutlookCalendarIntegrations.vue';
 
 const route = useRoute();
 //  Load Time Zone 
@@ -49,6 +50,14 @@ const Integration = reactive( {
         tfhb_google_calendar: {},
 
     },
+    outlook_calendar : {
+        type: 'meeting', 
+        status: 0, 
+        connection_status: 0, 
+        selected_calendar_id: '', 
+        tfhb_outlook_calendar: {},
+
+    },
 });
  
 
@@ -70,6 +79,7 @@ const fetchIntegration = async () => {
         if (response.data.status) {   
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
             Integration.google_calendar= response.data.google_calendar ? response.data.google_calendar : Integration.google_calendar;  
+            Integration.outlook_calendar = response.data.outlook_calendar  ? response.data.outlook_calendar  : Integration.outlook_calendar ;  
             
 
             skeleton.value = false;
@@ -123,6 +133,7 @@ onBeforeMount(() => {
 
         <!-- Host Integration -->
         <GoogleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
+        <OutlookCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :outlook_calendar="Integration.outlook_calendar" @update-integrations="UpdateIntegration" />
 
 
     </div> 

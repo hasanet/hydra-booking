@@ -9,6 +9,7 @@ use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
 use HydraBooking\Admin\Controller\CountryController;
 use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
+use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
 use HydraBooking\Admin\Controller\ScheduleController;
 
  

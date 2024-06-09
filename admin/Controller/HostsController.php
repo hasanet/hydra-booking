@@ -7,6 +7,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\CountryController;
  use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
+ use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
  // Use DB 
 use HydraBooking\DB\Host;
 use HydraBooking\DB\Availability;
@@ -447,8 +448,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
  
+        // Google Calendar API
         $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
-        
+       
         if($_tfhb_integration_settings['google_calendar']['status'] == true){  
 
             $google_calendar['type'] = 'google_calendar';
@@ -456,6 +458,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $google_calendar['access_url'] = $GoogleCalendar->GetAccessTokenUrl($user_id, ); 
             $google_calendar['status'] = $_tfhb_integration_settings['google_calendar']['status']; 
             $google_calendar['connection_status'] = $_tfhb_integration_settings['google_calendar']['connection_status'];  
+          
+            
+            
+        } 
+
+        // Outlook Calendar API
+        $outlook_calendar = isset($_tfhb_host_integration_settings['outlook_calendar']) ? $_tfhb_host_integration_settings['outlook_calendar'] : array();
+ 
+
+        if($_tfhb_integration_settings['outlook_calendar']['status'] == true){  
+
+            $outlook_calendar['type'] = 'outlook_calendar';
+            $OutlookCalendar = new OutlookCalendar();  
+            $outlook_calendar['access_url'] = $OutlookCalendar->GetAccessTokenUrl($user_id ); 
+            $outlook_calendar['status'] = $_tfhb_integration_settings['outlook_calendar']['status']; 
+            $outlook_calendar['connection_status'] = $_tfhb_integration_settings['outlook_calendar']['connection_status'];  
           
             
             
@@ -468,6 +486,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true,  
             'integration_settings' => $_tfhb_host_integration_settings,
             'google_calendar' => $google_calendar,  
+            'outlook_calendar' => $outlook_calendar,  
         );
         return rest_ensure_response($data);
     }
@@ -523,6 +542,25 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $data = array(
                 'status' => true,   
                 'message' => 'Google Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'outlook_calendar'){
+            // Get Global Settings 
+            $_tfhb_host_integration_settings['outlook_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['outlook_calendar']['status'] =  sanitize_text_field($data['status']);     
+            $_tfhb_host_integration_settings['outlook_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['outlook_calendar']['selected_calendar_id'] =  $data['selected_calendar_id'];
+            $_tfhb_host_integration_settings['outlook_calendar']['tfhb_outlook_calendar'] =  $data['tfhb_outlook_calendar'];
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+            
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Outlook Calendar Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }
