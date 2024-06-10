@@ -563,6 +563,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'message' => 'Outlook Calendar Settings Updated Successfully',
             );
             return rest_ensure_response($data);
+        }elseif($key == 'stripe'){
+            $_tfhb_host_integration_settings['stripe']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['stripe']['public_key'] =  sanitize_text_field($data['public_key']);
+            $_tfhb_host_integration_settings['stripe']['secret_key'] =  sanitize_text_field($data['secret_key']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            //  stripe payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Stripe Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
         }
     }
 

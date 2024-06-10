@@ -247,13 +247,6 @@ class HydraBookingShortcode {
 
     // Form Submit Callback
     public function tfhb_meeting_form_submit_callback() { 
-        // $data = [
-        //     'email' => "jahidcse66@gmail.com",
-        //     'address' => "Bangladesh",
-        //     'tokenId' => $_POST['tokenId']
-
-        // ];
-        // do_action('hydra_booking/stripe_payment_method', $data);
 
         // Checked Nonce validation
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
@@ -541,7 +534,9 @@ class HydraBookingShortcode {
         }  
 
         if(true == $meta_data['payment_status'] && 'stripe_payment' == $meta_data['payment_method']){
-            do_action('hydra_booking/stripe_payment_method', $data);
+            $data['tokenId'] = !empty($_POST['tokenId']) ? $_POST['tokenId'] : '';
+            $data['price'] = !empty($MeetingData->meeting_price) ? $MeetingData->meeting_price : '';
+            do_action('hydra_booking/stripe_payment_method', $data, $result['insert_id']);
         } 
  
         // Load Meeting Confirmation Template 

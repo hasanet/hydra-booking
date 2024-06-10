@@ -60,12 +60,19 @@ const closePopup = () => {
                     {{ $tfhb_trans['Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account'] }}
                 </p>
                 <HbText  
+                    v-model="stripe_data.public_key"  
+                    required= "true"  
+                    :label="$tfhb_trans['Stripe Public Key']"  
+                    selected = "1"
+                    :placeholder="$tfhb_trans['Enter Your Public Key']"  
+                /> 
+                <HbText  
                     v-model="stripe_data.secret_key"  
                     required= "true"  
                     :label="$tfhb_trans['Stripe Secret Key']"  
                     selected = "1"
                     :placeholder="$tfhb_trans['Enter Your Stripe Secret']"  
-                /> 
+                />
                 <button class="tfhb-btn boxed-btn" @click.stop="emit('update-integrations', 'stripe', stripe_data)">{{ $tfhb_trans['Save & Validate'] }}</button>
             </template> 
         </HbPopup>

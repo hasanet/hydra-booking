@@ -140,6 +140,8 @@ namespace HydraBooking\Admin\Controller;
             'Information' => __('Information', 'hydra-booking'),
             'Stripe' => __('Stripe', 'hydra-booking'),
             'Stripe Secret Key' => __('Stripe Secret Key', 'hydra-booking'),
+            'Stripe Public Key' => __('Stripe Public Key', 'hydra-booking'),
+            'Enter Your Public Key' => __('Enter Your Public Key', 'hydra-booking'),
             'Enter Your Stripe Secret' => __('Enter Your Stripe Secret', 'hydra-booking'),
             'Connect Your Stripe Account' => __('Connect Your Stripe Account', 'hydra-booking'),
             'Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account' => __('Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account', 'hydra-booking'),

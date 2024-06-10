@@ -10,6 +10,7 @@ const currentRoute = useRouter().currentRoute.value.path;
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/hosts/GoogleCalendarIntegrations.vue';
 import OutlookCalendarIntegrations from '@/components/hosts/OutlookCalendarIntegrations.vue';
+import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue';
 
 const route = useRoute();
 //  Load Time Zone 
@@ -26,6 +27,37 @@ const props = defineProps({
     time_zone:{}
 
 });
+
+
+const popup = ref(false);
+const gpopup = ref(false);
+const spopup = ref(false);
+const outlookpopup = ref(false);
+const isPopupOpen = () => {
+    popup.value = true;
+}
+const isPopupClose = (data) => {
+    popup.value = false;
+}
+const isgPopupOpen = () => {
+    gpopup.value = true;
+}
+const isgPopupClose = (data) => {
+    gpopup.value = false;
+}
+const isOutlookPopupOpen = () => {
+    outlookpopup.value = true;
+}
+const isOutlookPopupClose = (data) => {
+    outlookpopup.value = false;
+}
+const isstripePopupOpen = () => {
+    spopup.value = true;
+}
+const isstripePopupClose = (data) => {
+    spopup.value = false;
+}
+
 
 const Integration = reactive( {
     woo_payment : {
@@ -58,6 +90,13 @@ const Integration = reactive( {
         tfhb_outlook_calendar: {},
 
     },
+    stripe : {
+        type: 'stripe', 
+        status: 0, 
+        public_key: '',
+        secret_key: '',
+
+    }
 });
  
 
@@ -110,6 +149,11 @@ const UpdateIntegration = async (key, value) => {
                 "autoClose": 1500,
             }); 
             
+            popup.value = false;
+            gpopup.value = false;
+            spopup.value = false;
+            spopup.value = false;
+            
         }else{
             toast.error(response.data.message, {
                 position: 'bottom-right', // Set the desired position
@@ -129,11 +173,24 @@ onBeforeMount(() => {
 <template>
     <div class="tfhb-admin-card-box tfhb-m-0">   
         <!-- Woo  Integrations  --> 
-        <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" @update-integrations="UpdateIntegration" />
+        <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" 
+        @update-integrations="UpdateIntegration"
+        :ispopup="popup"
+        @popup-open-control="isPopupOpen"
+        @popup-close-control="isPopupClose" 
+        />
 
         <!-- Host Integration -->
         <GoogleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
         <OutlookCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :outlook_calendar="Integration.outlook_calendar" @update-integrations="UpdateIntegration" />
+
+        <StripeIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
+        :stripe_data="Integration.stripe" 
+        @update-integrations="UpdateIntegration"
+        :ispopup="spopup"
+        @popup-open-control="isstripePopupOpen"
+        @popup-close-control="isstripePopupClose"
+        />
 
 
     </div> 
