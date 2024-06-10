@@ -158,7 +158,7 @@ class App {
 
         if(!empty($stripeSecret)){
         try {
-      
+                
             \Stripe\Stripe::setVerifySslCerts(false);
       
             // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -166,7 +166,7 @@ class App {
       
             // Get the payment token ID submitted by the form:
             $token = !empty($data['tokenId']) ? $data['tokenId'] : '';
-      
+
             $customer = \Stripe\Customer::create(array(
               'email' => !empty($data['email']) ? $data['email'] : '',
               'source'  => $token,
