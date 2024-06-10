@@ -284,6 +284,7 @@
 							},
 							dataType: "json",
 							success: function( response ) {
+								console.log(response)
 								if(response.success){
 									if(response.data.redirect){
 										window.location.href = response.data.redirect;

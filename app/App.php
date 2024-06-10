@@ -211,9 +211,9 @@ class App {
                 $Transactions = $Transactions->add($tdata);
             }
 
-            $data = array('success' => true, 'data' => $charge);
+            // $data = array('success' => true, 'data' => $charge);
       
-            echo wp_json_encode($data);
+            // echo wp_json_encode($data);
         } catch (\Throwable $th) {
             $data = array('success' => false, 'data' => $th->getMessage());
             echo wp_json_encode($data);
