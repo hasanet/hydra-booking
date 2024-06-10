@@ -167,6 +167,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
         }
         
+           
+
         // Availability Range
         $availability_range = isset($data['availability_range']) ? $data['availability_range'] : array();
         $availability_range_type = isset($data['availability_range_type']) ? $data['availability_range_type'] : array();
@@ -185,42 +187,61 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Meeting Interval
         $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
 
-        // var_dump($availability_data['date_slots']);
+        // Disable Dates
+        $disabled_dates = array();
+        if($availability_data['date_slots'] != ''){
+            $date_slots = $availability_data['date_slots'];
+            foreach($date_slots as $single){
+                if($single['available'] == true ){
+                    // string to array
+                    $dates = explode(',', $single['date']); 
+                    foreach($dates as $date){
+                        $disabled_dates[] = $date;
+                    }
 
-        // Available and Unavailable date slot
-        $available_slot = [];
-        $unavailable_slot = [];
-        if(!empty($availability_data['date_slots'])){
-            foreach($availability_data['date_slots'] as $slot){
-                if($slot['available']){
-                    $unavailable_slot [] = $slot['date'];
-                }else{
-                    $available_slot [] = $slot['date'];
                 }
+
             }
         }
-        // Unavailable
-        $unavailable_slot =  implode(", ",$unavailable_slot);
-        $unavailable_slot =  explode(", ",$unavailable_slot);
-        $unavailable_slot = array_map(function($date) {
-            return "'$date'";
-        }, $unavailable_slot);
-        $unavailable_slot =  implode(",",$unavailable_slot);
 
-        // Available
-        $available_slot =  implode(", ",$available_slot);
-        $available_slot =  explode(", ",$available_slot);
-        $available_slot = array_map(function($date) {
-            return "'$date'";
-        }, $available_slot);
-        $available_slot =  implode(",",$available_slot);
+        // Disable Unavailable days
+        $unavailable_days = isset($availability_data['time_slots']) ? $availability_data['time_slots'] : array(); 
+        // day array based on js date key value
+        $days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+        // get sunday index number
+        $sunday_index = array_search('Sunday', $days);
 
+        $unavailable_days_array = array();
+        
+        foreach($unavailable_days as $single){ 
+            $unavailable_days_array[$single['day']] = $single['status'] == false ?  array_search($single['day'], $days) : 8; 
+        }
+
+
+
+        // flatpickr configuration only for date not time
+        $config = array(
+            // 'enableTime' => false,
+            'dateFormat' => 'Y-m-d',
+            'minDate' => 'today',
+            'defaultDate' => 'today',
+            'disable' =>  $disabled_dates,
+            'disable_days' =>  $unavailable_days_array,
+        );
+        
+
+       if($availability_range_type != 'indefinitely' ){  
+            $config['maxDate'] = $availability_range['end'];
+        } 
+             
+
+ 
         $data = array(
             'status' => true, 
             'locations' => $meeting_location_array,
             'hosts' => $meeting_host_array,
-            'available_slot' => $available_slot,
-            'unavailable_slot' => $unavailable_slot,
+            'available_slot' => $unavailable_days_array,
+            'flatpickr_date' => $config, 
         ); 
         return rest_ensure_response($data);
 
