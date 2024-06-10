@@ -86,6 +86,7 @@ const Integration = reactive( {
     stripe : {
         type: 'stripe', 
         status: 0, 
+        public_key: '',
         secret_key: '',
 
     },

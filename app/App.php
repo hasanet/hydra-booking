@@ -56,7 +56,7 @@ class App {
         add_action( 'pre_get_posts', array($this, 'tfhb_remove_posttype_request' ));
         add_filter( 'single_template', array($this, 'tfhb_single_meeting_template' ));
 
-        add_action( 'hydra_booking/stripe_payment_method', array($this, 'tfhb_stripe_payment_callback'), 10, 1 );
+        add_action( 'hydra_booking/stripe_payment_method', array($this, 'tfhb_stripe_payment_callback'), 10, 2 );
     }
 
     public function tfhb_single_meeting_template($single_template){
@@ -147,7 +147,7 @@ class App {
         return $template;
     }
 
-    public function tfhb_stripe_payment_callback($data){
+    public function tfhb_stripe_payment_callback($data, $booking_id){
 
         if(file_exists(THB_PATH . '/app/integration/stripe/vendor/autoload.php')) {
             require_once THB_PATH . '/app/integration/stripe/vendor/autoload.php'; 
@@ -158,7 +158,7 @@ class App {
 
         if(!empty($stripeSecret)){
         try {
-                
+
             \Stripe\Stripe::setVerifySslCerts(false);
       
             // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -166,6 +166,7 @@ class App {
       
             // Get the payment token ID submitted by the form:
             $token = !empty($data['tokenId']) ? $data['tokenId'] : '';
+            $amount = !empty($data['price']) ? $data['price'] : 0;
 
             $customer = \Stripe\Customer::create(array(
               'email' => !empty($data['email']) ? $data['email'] : '',
@@ -182,13 +183,21 @@ class App {
       
             $charge = \Stripe\Charge::create(array(
               'customer' => $customer->id,
-              'amount'   => 120*100,
+              'amount'   => $amount * 100,
               'currency' => "usd",
               'description' => "test stipe payment",
             ));
-      
-            // after successfull payment, you can store payment related information into your database
-      
+
+            if($charge->balance_transaction){
+                $booking = new Booking();
+                $data = [ 
+                    'id' => $booking_id,
+                    'payment_status' => 'Completed'
+                ];
+                // Booking Update
+                $bookingUpdate = $booking->update($data);
+            }
+
             $data = array('success' => true, 'data' => $charge);
       
             echo json_encode($data);

@@ -30,6 +30,7 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
         <input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">
         <input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
         <input type="hidden" id="payment_method" name="payment_method" value="<?php echo $meeting['payment_method']; ?>">
+        <input type="hidden" id="payment_amount" name="payment_amount" value="<?php echo !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : ''; ?>">
         <?php 
             if(!empty($booking_data)) {    
                 echo '<input type="hidden" id="booking_hash" name="booking_hash" value="'.esc_attr($booking_data->hash).'">'; 

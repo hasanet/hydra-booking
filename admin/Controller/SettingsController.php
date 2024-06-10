@@ -427,6 +427,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }elseif($key == 'stripe'){
             $_tfhb_integration_settings['stripe']['type'] =  sanitize_text_field($data['type']);
             $_tfhb_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_integration_settings['stripe']['public_key'] =  sanitize_text_field($data['public_key']);
             $_tfhb_integration_settings['stripe']['secret_key'] =  sanitize_text_field($data['secret_key']);
 
             // update option
