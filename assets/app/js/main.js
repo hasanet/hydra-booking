@@ -263,7 +263,7 @@
 
 				if("stripe_payment"==payment_type){
 					var handler = StripeCheckout.configure({
-					key: 'pk_test_51Oqv91IsLSX0wXZB2PaDDa4CBWibsZXdfx8CrbX9gxXTSpSjuE2QBHJGSbrvHJ9BIWOuIsi0zPdKiwS3aob1iaFI00u2c6wv2U', // your publisher key id
+					key: 'pk_test_51PQ0DZ06yyOsAyAubyuNTfKOdELOYVb1CpMexlmp1egqCy7VBOfsTOmqFmlJRKGcbhWzcKeMCIt7jMq4UFNYA2g700KquNvO3z', // your publisher key id
 					locale: 'auto',
 					token: function (token) {
 						jQuery.ajax({
