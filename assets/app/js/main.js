@@ -284,11 +284,28 @@
 							},
 							dataType: "json",
 							success: function( response ) {
-								console.log(response);
-								if(response.success) {
-								// window.location.href = "success.php";
-								} else {
-								window.location.href = "failed.php?msg="+ response.data;
+								if(response.success){
+									if(response.data.redirect){
+										window.location.href = response.data.redirect;
+										return;
+									}else{ 
+										$this.find('.tfhb-meeting-card').html(''); 
+										$this.find('.tfhb-meeting-card').append(response.data.confirmation_template); 
+										if(response.data.action == 'rescheduled'){
+											$this.find('.tfhb-meeting-hostinfo').append(`
+													<div class="tfhb-notice " > 
+													<span>`+response.data.message+` </span>
+												</div>`
+											)
+										}
+	
+									}
+									$this.find('.tfhb-preloader').remove();
+								}else{
+									$this.find('.tfhb-preloader').remove();
+									$this.find('.tfhb-notice').append(response.data.message);
+									$this.find('.tfhb-notice').show();
+									
 								}
 							}
 						})
