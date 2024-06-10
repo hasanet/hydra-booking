@@ -6,6 +6,7 @@ namespace HydraBooking\App;
 use HydraBooking\App\Shortcode\HydraBookingShortcode;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking; 
 use HydraBooking\DB\Booking;
+use HydraBooking\DB\Transactions;
 
 class App {
     public function __construct() {
@@ -156,6 +157,10 @@ class App {
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
         $stripeSecret = !empty($_tfhb_integration_settings['stripe']['secret_key']) ? $_tfhb_integration_settings['stripe']['secret_key'] : '';
 
+        $_tfhb_host_integration_settings = get_user_meta($data['host_id'], '_tfhb_host_integration_settings');
+
+        $stripeSecret = !empty($_tfhb_host_integration_settings['stripe']['public_key']) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripeSecret;
+
         if(!empty($stripeSecret)){
         try {
 
@@ -196,14 +201,22 @@ class App {
                 ];
                 // Booking Update
                 $bookingUpdate = $booking->update($data);
+
+                // Data for Transactions Table
+                $tdata = [ 
+                    'booking_id' => $booking_id,
+                    'transation_history' => wp_json_encode($charge)
+                ];
+                $Transactions =  new Transactions();
+                $Transactions = $Transactions->add($tdata);
             }
 
             $data = array('success' => true, 'data' => $charge);
       
-            echo json_encode($data);
+            echo wp_json_encode($data);
         } catch (\Throwable $th) {
             $data = array('success' => false, 'data' => $th->getMessage());
-            echo json_encode($data);
+            echo wp_json_encode($data);
         }
     }
     }
