@@ -146,6 +146,12 @@ const routes = [
                         name: 'MeetingsCreatePayment',
                         meta: { Capabilities: 'tfhb_manage_options' },
                         component: () => import('../view/meetings/meetings-payment.vue')
+                    },
+                    {
+                        path: 'webhook',
+                        name: 'MeetingsCreateWebhook',
+                        meta: { Capabilities: 'tfhb_manage_options' },
+                        component: () => import('../view/meetings/meetings-webhook.vue')
                     }
                 ]
             }, 

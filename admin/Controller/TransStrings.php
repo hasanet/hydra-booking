@@ -246,6 +246,7 @@ namespace HydraBooking\Admin\Controller;
             'Options' => __('Options', 'hydra-booking'),
             'Add New Option' => __('Add New Option', 'hydra-booking'),
             'Mark as read' => __('Mark as read', 'hydra-booking'),
+            'Webhook Integrations' => __('Webhook Integrations', 'hydra-booking'),
 
             //Booking
             'Add New Booking' => __('Add New Booking', 'hydra-booking'),
