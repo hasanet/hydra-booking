@@ -218,6 +218,7 @@
 
 				var payment_type = $this.find("#payment_method").val();
 				var meeting_price = $this.find("#meeting_price").val();
+				var stripe_public_key = $this.find("#stpublic_key").val();
 				if("woo_payment"==payment_type){
 					var data  = new FormData(this); 
 					data.append('action', 'tfhb_meeting_form_submit'); 
@@ -263,7 +264,7 @@
 
 				if("stripe_payment"==payment_type){
 					var handler = StripeCheckout.configure({
-					key: 'pk_test_51PQ0DZ06yyOsAyAubyuNTfKOdELOYVb1CpMexlmp1egqCy7VBOfsTOmqFmlJRKGcbhWzcKeMCIt7jMq4UFNYA2g700KquNvO3z', // your publisher key id
+					key: stripe_public_key, // your publisher key id
 					locale: 'auto',
 					token: function (token) {
 						jQuery.ajax({
@@ -284,7 +285,6 @@
 							},
 							dataType: "json",
 							success: function( response ) {
-								console.log(response)
 								if(response.success){
 									if(response.data.redirect){
 										window.location.href = response.data.redirect;
@@ -316,7 +316,10 @@
 					handler.open({
 						name: 'Hydra Booking',
 						description: '2 widgets',
-						amount: meeting_price * 100
+						amount: meeting_price * 100,
+						closed: function () {
+							location.reload();
+				  		}
 					});
 				}
 				
