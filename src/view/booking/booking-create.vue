@@ -12,6 +12,8 @@ const router = useRouter();
 // Fetch Pre booking Data
 const booking = reactive({
     'name': '',
+    'start_time': '',
+    'end_time': '',
     'email': '',
     'time_zone': '',
     'meeting': '',
@@ -25,6 +27,10 @@ const timeZone = reactive({});
 const meetings = reactive({});
 const meeting_locations = reactive({});
 const meeting_hosts = reactive({});
+const booking_time_data = reactive({
+    value: {},
+});
+const booking_time = reactive({});
 const flatpickr_date= reactive({
     dateFormat: 'Y-m-d',
     minDate : 'today',
@@ -92,16 +98,29 @@ const MeetingChangeCallback = async (e) => {
 }
 
 // Check Available Times
-const bookingSlot = async (e) => {
-    alert(1)
-    let data = {
+const bookingSlot = async (date) => {
+     
+    let data = { 
+        date: date,
         meeting_id: booking.meeting,
-        date: e.target.value
+        selected_time_zone: booking.time_zone,
     };  
+
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/availabletime', data, {} );
       
         if (response.data.status) {    
+            let time_slots_data = response.data.time_slots_data; 
+            // // push data  like that {'name': 'Pending', 'value': 'pending'}
+            // // make loop time_slots_data and push data  
+            let time_slots = [];
+            time_slots_data.forEach(element => {  
+                time_slots.push({'name': element.start + ' - ' + element.end, 'value': element});
+                
+                
+            });
+
+            booking_time_data.value = time_slots; 
            
         }
     } catch (error) {
@@ -139,6 +158,15 @@ const createBooking = async () => {
     } 
 }
 
+// Get End Time
+const MeetingGetEndTime = (e) => {
+    //  get selected value 
+    let times = e.value;
+    booking.start_time = times.start;
+    booking.end_time = times.end;
+    console.log(booking);
+}
+
 
 
 onBeforeMount(() => { 
@@ -146,8 +174,7 @@ onBeforeMount(() => {
 });
 </script>
 
-<template>
-    {{ flatpickr_date }}
+<template> 
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
             <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">
@@ -221,20 +248,18 @@ onBeforeMount(() => {
                 selected = "1" 
                 :config="flatpickr_date"
                 placeholder="Type your schedule title"   
-                @bookingSlot="bookingSlot"
+                :change = true
+                @dateChange="bookingSlot"
             />
 
             <HbDropdown  
-                v-model="booking.start_time"
+                v-model="booking_time"
                 :label="$tfhb_trans['Select Date']" 
                 required= "true" 
                 :selected = "1"
                 placeholder="Select Booking Time"   
-                :option = "[
-                    {'name': 'Pending', 'value': 'pending'},  
-                    {'name': 'Confirmed', 'value': 'confirmed'},   
-                    {'name': 'Canceled', 'value': 'canceled'}
-                ]" 
+                :option = "booking_time_data.value" 
+                 @tfhb-onchange="MeetingGetEndTime"
             />   
             <HbDropdown  
                 v-model="booking.status"
