@@ -38,6 +38,7 @@ $stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key
         <input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
         <input type="hidden" id="payment_method" name="payment_method" value="<?php echo $meeting['payment_method']; ?>">
         <input type="hidden" id="payment_amount" name="payment_amount" value="<?php echo !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : ''; ?>">
+        <input type="hidden" id="payment_currency" name="payment_currency" value="<?php echo !empty($meeting['payment_currency']) ? $meeting['payment_currency'] : 'USD'; ?>">
         <input type="hidden" id="stpublic_key" name="public_key" value="<?php echo $stripePublicKey; ?>">
         <?php 
             if(!empty($booking_data)) {    

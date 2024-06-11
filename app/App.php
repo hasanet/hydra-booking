@@ -189,7 +189,7 @@ class App {
             $charge = \Stripe\Charge::create(array(
               'customer' => $customer->id,
               'amount'   => $amount * 100,
-              'currency' => "usd",
+              'currency' => $data['currency'],
               'description' => "test stipe payment",
             ));
 

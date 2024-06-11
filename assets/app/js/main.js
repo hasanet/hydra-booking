@@ -219,6 +219,7 @@
 				var payment_type = $this.find("#payment_method").val();
 				var meeting_price = $this.find("#meeting_price").val();
 				var stripe_public_key = $this.find("#stpublic_key").val();
+				var payment_currency = $this.find("#payment_currency").val();
 				if("woo_payment"==payment_type){
 					var data  = new FormData(this); 
 					data.append('action', 'tfhb_meeting_form_submit'); 
@@ -317,9 +318,10 @@
 						name: 'Hydra Booking',
 						description: '2 widgets',
 						amount: meeting_price * 100,
-						closed: function () {
-							location.reload();
-				  		}
+						currency: payment_currency,
+						// closed: function () {
+						// 	location.reload();
+				  		// }
 					});
 				}
 				
