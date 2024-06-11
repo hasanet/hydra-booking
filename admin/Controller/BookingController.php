@@ -417,8 +417,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'attendee_time_zone' => isset($request['time_zone']) ? $request['time_zone'] : '',
             'host_id' => isset($request['host']) ? $request['host'] : '',
             'meeting_dates' => isset($request['date']) ? $request['date'] : '',
-            'start_time' => isset($request['time']) ? $request['time'] : '',
-            'end_time' => isset($request['time']) ? $request['time'] : '',
+            'start_time' => isset($request['time']['start']) ? $request['time']['start'] : '',
+            'end_time' => isset($request['time']['end']) ? $request['time']['end'] : '',
             'status' => isset($request['status']) ? $request['status'] : '',
             'payment_method' => 'backend',
             'payment_status' => 'pending',
@@ -462,11 +462,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     // Get Single Booking
     public function getBookingData($request){
-        
+        $booking_id = $request['id'];
+
+        // Check if user is already a booking
+        $booking = new Booking();
+        // Insert booking
+        $booking = $booking->get($booking_id);
+
+        $booking->times = [
+            'start' => $booking->start_time,
+            'end'  => $booking->end_time
+        ];
+
         // Return response
         $data = array(
             'status' => true, 
-            'meeting' => $MeetingData,  
+            'booking' => $booking,  
             'message' => 'Booking Data',
         );
         return rest_ensure_response($data);

@@ -269,9 +269,9 @@ const prevPage = () => {
                         <span @click.stop="Tfhb_Booking_View(book)">
                             <Icon name="Eye" width="20" />
                         </span>
-                        <a href="">
+                        <router-link :to="{ name: 'bookingUpdate', params: { id: book.id } }" class="tfhb-dropdown-single">
                             <Icon name="Settings" width="20" />
-                        </a>
+                        </router-link>
                     </div>
                 </td>
             </tr>

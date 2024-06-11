@@ -38,6 +38,12 @@ const routes = [
                 name: 'BookingCreate',
                 meta: { Capabilities: 'tfhb_manage_settings' },
                 component: () => import('../view/booking/booking-create.vue')
+            },
+            {
+                path: 'update/:id',
+                name: 'bookingUpdate',
+                meta: { Capabilities: 'tfhb_manage_options' },
+                component: () => import('../view/booking/booking-update.vue')
             }, 
         ]
     }, 

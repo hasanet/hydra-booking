@@ -6,11 +6,13 @@ import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import { toast } from "vue3-toastify"; 
-import { useRouter } from 'vue-router' 
+import { useRouter, useRoute } from 'vue-router' 
 const router = useRouter();
+const route = useRoute();
 
 // Fetch Pre booking Data
 const booking = reactive({
+    'id': '',
     'name': '',
     'start_time': '',
     'end_time': '',
@@ -33,7 +35,6 @@ const booking_time_data = reactive({
 const flatpickr_date= reactive({
     dateFormat: 'Y-m-d',
     minDate : 'today',
-    defaultDate: 'today',
     disable: [],
 }); 
 const fetchPreBookingData = async () => {
@@ -161,14 +162,34 @@ const MeetingGetEndTime = (e) => {
     booking.end_time = times.end;
 }
 
-
+// Get Single Booking
+const bookingId = route.params.id;
+const fetchSingleBooking = async () => {
+    try { 
+        const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/'+bookingId);
+        if (response.data.status == true) { 
+            booking.id = response.data.booking.id;
+            booking.name = response.data.booking.attendee_name;
+            booking.email = response.data.booking.email;
+            booking.time_zone = response.data.booking.attendee_time_zone;
+            booking.meeting = response.data.booking.meeting_id;
+            booking.host = response.data.booking.host_id;
+            booking.date = response.data.booking.meeting_dates;
+            booking.status = response.data.booking.status;
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
 
 onBeforeMount(() => { 
     fetchPreBookingData();
+    fetchSingleBooking();
 });
 </script>
 
 <template> 
+
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
             <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">
@@ -216,7 +237,7 @@ onBeforeMount(() => {
                 @tfhb-onchange="MeetingChangeCallback"
             />  
 
-            <HbDropdown
+            <!-- <HbDropdown
                 v-if="booking.meeting"
                 v-model="booking.host"
                 required= "true"  
@@ -234,7 +255,7 @@ onBeforeMount(() => {
                 :filter="true"
                 selected = "1"
                 :option = "meeting_locations.value" 
-            /> 
+            />  -->
 
             <HbDateTime   
                 v-if="booking.meeting"
