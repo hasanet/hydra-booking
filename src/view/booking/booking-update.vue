@@ -168,6 +168,18 @@ const fetchSingleBooking = async () => {
     try { 
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/'+bookingId);
         if (response.data.status == true) { 
+            // If any available this date
+            if(response.data.times){
+                let time_slots_data = response.data.times; 
+                let time_slots = [];
+
+                Object.values(time_slots_data).forEach(element => {  
+                    time_slots.push({'name': element.start + ' - ' + element.end, 'value': element});
+                });
+                booking_time_data.value = time_slots;
+                booking.time = response.data.booking.times;
+            }
+
             booking.id = response.data.booking.id;
             booking.name = response.data.booking.attendee_name;
             booking.email = response.data.booking.email;
@@ -189,7 +201,7 @@ onBeforeMount(() => {
 </script>
 
 <template> 
-
+{{ booking }}
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
             <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">

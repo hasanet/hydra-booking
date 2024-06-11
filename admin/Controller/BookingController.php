@@ -347,6 +347,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             }
             return true;
         }); 
+
         return rest_ensure_response(
             array(
                 'status' => true, 
@@ -467,17 +468,115 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Check if user is already a booking
         $booking = new Booking();
         // Insert booking
-        $booking = $booking->get($booking_id);
+        $singlebooking = $booking->get($booking_id);
 
-        $booking->times = [
-            'start' => $booking->start_time,
-            'end'  => $booking->end_time
+        
+
+        $meeting_id = $singlebooking->meeting_id;
+        $meeting = new Meeting();
+        $MeetingsData = $meeting->get($meeting_id);
+
+        $selected_date = $singlebooking->meeting_dates;
+      
+        $selected_time_zone = $singlebooking->attendee_time_zone;
+
+        $selected_time_format = '12';
+         // Meeting Information
+        $data = get_post_meta($MeetingsData->post_id, '__tfhb_meeting_opt', true);
+
+        if( isset($data['availability_type']) && 'settings' === $data['availability_type']){  
+            $_tfhb_availability_settings = get_user_meta( $MeetingsData-> host_id, '_tfhb_host', true); 
+            if(in_array($data['availability_id'], array_keys($_tfhb_availability_settings['availability']))){
+                $availability_data = $_tfhb_availability_settings['availability'][$data['availability_id']]; 
+            }else{
+                $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+            } 
+         
+        }else{ 
+            $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+        }
+        
+
+        // Disable Unavailable days
+        $time_slots = isset($availability_data['time_slots']) ? $availability_data['time_slots'] : array(); 
+
+         // Duration
+        $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
+
+        $duration = isset($data['custom_duration']) && !empty($data['custom_duration']) ? $data['custom_duration'] : $duration;
+
+        // Buffer Time Before
+        $buffer_time_before = isset($data['buffer_time_before']) && !empty($data['buffer_time_before']) ? $data['buffer_time_before'] : 0;
+
+        // Buffer Time After
+        $buffer_time_after = isset($data['buffer_time_after']) && !empty($data['buffer_time_after']) ? $data['buffer_time_after'] : 0;
+
+        // Meeting Interval
+        $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
+
+        // Disable Dates
+
+        // Get All Booking Data.
+        $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
+        $date_time = new DateTimeController( $selected_time_zone );
+ 
+
+        $disabled_times = array();
+        foreach($bookings as $booking){
+            $start_time = $booking->start_time;
+            $end_time = $booking->end_time;
+            $time_zone = $booking->attendee_time_zone; 
+ 
+            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
+            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
+
+            $disabled_times[] = array(
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            );
+
+        }
+
+        // Time Slot
+        $time_slots_data = array();
+        // get Selected Date day
+        $selected_day = date('l', strtotime($selected_date));
+        
+        // only get selected day time slot in single array using array finter
+        $selected_available_time = array();
+        $selected_available = array();
+        foreach ($time_slots as $single) {
+            if($single['day'] == $selected_day){
+                $selected_available = $single;
+            }
+        }
+        $times = $selected_available ? $selected_available['times'] : array();
+        foreach($times as $key => $value){
+            $start_time = $value['start']; 
+            $end_time = $value['end'];
+            $generatedSlots = $this->generateTimeSlots($start_time, $end_time, $duration, $meeting_interval, $buffer_time_before, $buffer_time_after, $selected_date, $selected_time_format, $selected_time_zone);
+            $time_slots_data = array_merge($time_slots_data, $generatedSlots);
+
+        }
+        // if date already exists remove that array
+        $time_slots_data = array_filter($time_slots_data, function($time_slot) use ($disabled_times) {
+            foreach ($disabled_times as $disabled_time) {
+                if ($time_slot['start'] === $disabled_time['start_time'] && $time_slot['end'] === $disabled_time['end_time']) {
+                    return false;
+                }
+            }
+            return true;
+        }); 
+
+        $singlebooking->times = [
+            'start' => $singlebooking->start_time,
+            'end'  => $singlebooking->end_time
         ];
-
         // Return response
         $data = array(
             'status' => true, 
-            'booking' => $booking,  
+            'booking' => $singlebooking,  
+            'times'  => $time_slots_data,
             'message' => 'Booking Data',
         );
         return rest_ensure_response($data);
