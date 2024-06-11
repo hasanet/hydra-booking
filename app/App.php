@@ -159,7 +159,7 @@ class App {
 
         $_tfhb_host_integration_settings = get_user_meta($data['host_id'], '_tfhb_host_integration_settings');
 
-        $stripeSecret = !empty($_tfhb_host_integration_settings['stripe']['public_key']) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripeSecret;
+        $stripeSecret = !empty($_tfhb_host_integration_settings['stripe']['secret_key']) ? $_tfhb_host_integration_settings['stripe']['secret_key'] : $stripeSecret;
 
         if(!empty($stripeSecret)){
         try {
@@ -189,7 +189,7 @@ class App {
             $charge = \Stripe\Charge::create(array(
               'customer' => $customer->id,
               'amount'   => $amount * 100,
-              'currency' => "usd",
+              'currency' => $data['currency'],
               'description' => "test stipe payment",
             ));
 

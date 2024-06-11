@@ -96,7 +96,7 @@ const changeTab = (e) => {
                         <input v-model="meeting.meeting_price" required="" type="text" placeholder="00.000">
                         <select v-model="meeting.payment_currency" placeholder="USD">
                             <option value="USD">USD</option>
-                            <option value="Euro">Euro</option>
+                            <option value="EUR">Euro</option>
                         </select>
                     </div>
                 </div>
