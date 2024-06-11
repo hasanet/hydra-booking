@@ -536,7 +536,9 @@ class HydraBookingShortcode {
         if(true == $meta_data['payment_status'] && 'stripe_payment' == $meta_data['payment_method']){
             $data['tokenId'] = !empty($_POST['tokenId']) ? $_POST['tokenId'] : '';
             $data['price'] = !empty($MeetingData->meeting_price) ? $MeetingData->meeting_price : '';
-            do_action('hydra_booking/stripe_payment_method', $data, $result['insert_id']);
+            if( empty($_POST['action_type']) ){
+                do_action('hydra_booking/stripe_payment_method', $data, $result['insert_id']);
+            }
         } 
  
         // Load Meeting Confirmation Template 
