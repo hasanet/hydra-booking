@@ -55,6 +55,29 @@ const updateWebHook = async () => {
     } 
 }
 
+const deleteWebHook = async (key) => {
+    const data = {
+        key: key,
+        meeting_id: props.meetingId
+    };
+
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/webhook/delete', data, {
+               
+        } );
+        if (response.data.status) { 
+            toast.success(response.data.message, {
+                position: 'bottom-right', // Set the desired position
+                "autoClose": 1500,
+            }); 
+
+            props.meeting.webhook = response.data.webhook ? JSON.parse(response.data.webhook) : '';
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const addNewWebHook = () => {
     webhookList.value = false;
     webhookcreate.value = true;
@@ -97,7 +120,7 @@ const backtoWebHookList = () => {
                     <Icon name="PencilLine" :width="16" />
                 </button>
                 <button class="question-edit-btn">
-                    <Icon name="X" :width="16"/>
+                    <Icon name="X" :width="16" @click="deleteWebHook(key)" />
                 </button>
             </div>
         </div>

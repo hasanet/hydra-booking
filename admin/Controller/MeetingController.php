@@ -52,6 +52,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'updateMeetingWebhook'),
         ));   
+        register_rest_route('hydra-booking/v1', '/meetings/webhook/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'deleteMeetingWebhook'),
+        ));
 
         register_rest_route('hydra-booking/v1', '/meetings/filter', array(
             'methods' => 'GET',
@@ -266,6 +270,48 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         ));
     }    
 
+    // Webhook Delete
+    public function deleteMeetingWebhook($request){
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+
+        $key = $request['key'];
+
+        // Decode existing webhook data if it exists
+        $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
+
+        // Check if the key exists in the array
+        if (isset($webHookdata[$key])) {
+            // Remove the element at the specified key
+            unset($webHookdata[$key]);
+
+            // Re-index the array to maintain sequential keys
+            $webHookdata = array_values($webHookdata);
+
+            // Encode the updated webhook data back to JSON
+            $encodedWebHookdata = json_encode($webHookdata);
+
+            // Update the meeting with the new webhook data
+            $data = [
+                'id'      => $request['meeting_id'],
+                'webhook' => $encodedWebHookdata,
+            ];
+            $MeetingUpdate = $meeting->update($data);
+            $updateMeetingData = $meeting->get($request['meeting_id']);
+
+            return rest_ensure_response(array(
+                'status' => true,
+                'webhook' => $updateMeetingData->webhook,
+                'message' => 'Webhook Successfully Deleted!',
+            ));
+        } else {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Webhook key does not exist!',
+            ));
+        }
+    }
 
     // Category Delete
     public function DeleteCategory(){
