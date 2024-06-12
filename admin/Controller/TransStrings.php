@@ -249,6 +249,18 @@ namespace HydraBooking\Admin\Controller;
             'Webhook Integrations' => __('Webhook Integrations', 'hydra-booking'),
             'Select Time' => __('Select Time', 'hydra-booking'),
             'Your Previous Booking Time:' => __('Your Previous Booking Time:', 'hydra-booking'),
+            'Add New Webhook' => __('Add New Webhook', 'hydra-booking'),
+            'Select Webhook' => __('Select Webhook', 'hydra-booking'),
+            'Webhook URL' => __('Webhook URL', 'hydra-booking'),
+            'Type your Webhook URL' => __('Type your Webhook URL', 'hydra-booking'),
+            'Save Webhook' => __('Save Webhook', 'hydra-booking'),
+            'Enable this Webhook' => __('Enable this Webhook', 'hydra-booking'),
+            'Event Triggers*' => __('Event Triggers *', 'hydra-booking'),
+            'Request Method' => __('Request Method', 'hydra-booking'),
+            'Request Format' => __('Request Format', 'hydra-booking'),
+            'Request Body' => __('Request Body *', 'hydra-booking'),
+            '' => __('', 'hydra-booking'),
+            '' => __('', 'hydra-booking'),
 
             //Booking
             'Add New Booking' => __('Add New Booking', 'hydra-booking'),
