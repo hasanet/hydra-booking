@@ -22,6 +22,8 @@ const props = defineProps({
 
 });
 
+const webhookList = ref(true);
+const webhookcreate = ref(false);
 const webhookData = reactive({
     'meeting_id' : props.meetingId,
     'id': '',
@@ -40,14 +42,27 @@ const updateWebHook = async () => {
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/webhook/update', webhookData);
         if (response.data.status == true) { 
-            // toast.success(response.data.message); 
-            
+            toast.success(response.data.message); 
+            props.meeting.webhook = response.data.webhook ? JSON.parse(response.data.webhook) : '';
+
+            webhookcreate.value = false;
+            webhookList.value = true;
         }else{
-            // toast.error(response.data.message); 
+            toast.error(response.data.message); 
         }
     } catch (error) {
         console.log(error);
     } 
+}
+
+const addNewWebHook = () => {
+    webhookList.value = false;
+    webhookcreate.value = true;
+}
+
+const backtoWebHookList = () => {
+    webhookcreate.value = false;
+    webhookList.value = true;
 }
 
 </script>
@@ -59,19 +74,24 @@ const updateWebHook = async () => {
             <h2>{{ $tfhb_trans['Availability Range for this Booking'] }}</h2> 
             <p>{{ $tfhb_trans['How many days can the invitee schedule?'] }}</p>
         </div>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" >
+        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookList" @click="addNewWebHook">
             <Icon name="PlusCircle" :width="20"/>
             {{ $tfhb_trans['Add New Webhook'] }}
         </button>
+        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookcreate" @click="backtoWebHookList">
+            <Icon name="ArrowLeft" :width="20"/>
+            {{ $tfhb_trans['Back'] }}
+        </button>
     </div>
 
-    <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.webhook">
+    <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.webhook && webhookList">
         <div class="tfhb-admin-card-box tfhb-full-width tfhb-justify-between tfhb-mb-16" v-for="(hook, key)  in meeting.webhook" :key="key">
             <div class="tfhb-webhook-info">
                 <h4>{{ hook.webhook }}</h4>
                 <p>{{ hook.url }}</p>
             </div>
             <div class="tfhb-webhook-action tfhb-flexbox tfhb-gap-8">
+
                 <HbSwitch />
                 <button class="question-edit-btn" >
                     <Icon name="PencilLine" :width="16" />
@@ -83,7 +103,7 @@ const updateWebHook = async () => {
         </div>
     </div>
 
-    <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24">
+    <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24" v-if="webhookcreate">
         <HbDropdown  
             v-model="webhookData.webhook"
             required= "true"  

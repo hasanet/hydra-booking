@@ -248,7 +248,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Encode the updated webhook data back to JSON
         $encodedWebHookdata = json_encode($webHookdata);
-        
 
         $data = [
             'id'      => $request['meeting_id'],
@@ -257,9 +256,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     
         // Update the meeting with the new webhook data
         $MeetingUpdate = $meeting->update($data);
+
+        $updateMeetingData = $meeting->get($request['meeting_id']);
         
         return rest_ensure_response(array(
             'status' => true,
+            'webhook' => $updateMeetingData->webhook,
             'message' => 'Webhook Successfully Updated!',
         ));
     }    

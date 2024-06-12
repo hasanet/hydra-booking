@@ -259,7 +259,7 @@ namespace HydraBooking\Admin\Controller;
             'Request Method' => __('Request Method', 'hydra-booking'),
             'Request Format' => __('Request Format', 'hydra-booking'),
             'Request Body' => __('Request Body *', 'hydra-booking'),
-            '' => __('', 'hydra-booking'),
+            'Back' => __('Back', 'hydra-booking'),
             '' => __('', 'hydra-booking'),
 
             //Booking
