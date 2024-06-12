@@ -32,6 +32,8 @@ const meeting_hosts = reactive({});
 const booking_time_data = reactive({
     value: {},
 });
+
+const previousBookedTime = reactive({});
 const flatpickr_date= reactive({
     dateFormat: 'Y-m-d',
     minDate : 'today',
@@ -177,6 +179,7 @@ const fetchSingleBooking = async () => {
                     time_slots.push({'name': element.start + ' - ' + element.end, 'value': element});
                 });
                 booking_time_data.value = time_slots;
+                previousBookedTime.value = response.data.booking.times;
                 booking.time = response.data.booking.times;
             }
 
@@ -201,7 +204,7 @@ onBeforeMount(() => {
 </script>
 
 <template> 
-{{ booking }}
+
     <div class="tfhb-booking-create">
         <div class="tfhb-booking-box tfhb-flexbox">
             <div class="tfhb-meeting-heading tfhb-flexbox tfhb-gap-8">
@@ -279,6 +282,8 @@ onBeforeMount(() => {
                 :change = true
                 @dateChange="bookingSlot"
             />
+
+            <h4 v-if="previousBookedTime.value">{{ $tfhb_trans['Your Previous Booking Time:'] }} {{ previousBookedTime.value.start }} - {{ previousBookedTime.value.end }}</h4>
 
             <HbDropdown  
                 v-if="booking.date"

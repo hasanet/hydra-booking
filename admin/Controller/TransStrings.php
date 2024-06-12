@@ -248,6 +248,7 @@ namespace HydraBooking\Admin\Controller;
             'Mark as read' => __('Mark as read', 'hydra-booking'),
             'Webhook Integrations' => __('Webhook Integrations', 'hydra-booking'),
             'Select Time' => __('Select Time', 'hydra-booking'),
+            'Your Previous Booking Time:' => __('Your Previous Booking Time:', 'hydra-booking'),
 
             //Booking
             'Add New Booking' => __('Add New Booking', 'hydra-booking'),

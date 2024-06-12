@@ -238,7 +238,7 @@ const prevPage = () => {
                     <span>{{ book.host_email }}</span>
                 </td>
                 <td>
-                    {{ book.attendee_first_name }} {{ book.attendee_last_name }}
+                    {{ book.attendee_name }}
                     <span>{{ book.attendee_email }}</span>
                 </td>
                 <td>
