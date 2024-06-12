@@ -1,5 +1,7 @@
 <script setup>
 import { reactive, onBeforeMount, ref } from 'vue';
+import axios from 'axios'  
+import { toast } from "vue3-toastify"; 
 
 import Icon from '@/components/icon/LucideIcon.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue';
@@ -8,8 +10,20 @@ import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbRadio from '@/components/form-fields/HbRadio.vue';
 
+const props = defineProps({
+    meetingId: {
+        type: Number,
+        required: true
+    },
+    meeting: {
+        type: Object,
+        required: true
+    },
+
+});
 
 const webhookData = reactive({
+    'meeting_id' : props.meetingId,
     'id': '',
     'webhook': '',
     'url': '',
@@ -19,6 +33,22 @@ const webhookData = reactive({
     'request_body': 'all',
     'status': '',
 });
+
+
+const updateWebHook = async () => {
+    // Api Submission
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/webhook/update', webhookData);
+        if (response.data.status == true) { 
+            // toast.success(response.data.message); 
+            
+        }else{
+            // toast.error(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+}
 
 </script>
 
@@ -34,7 +64,25 @@ const webhookData = reactive({
             {{ $tfhb_trans['Add New Webhook'] }}
         </button>
     </div>
-{{ webhookData }}
+
+    <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.webhook">
+        <div class="tfhb-admin-card-box tfhb-full-width tfhb-justify-between tfhb-mb-16" v-for="(hook, key)  in meeting.webhook" :key="key">
+            <div class="tfhb-webhook-info">
+                <h4>{{ hook.webhook }}</h4>
+                <p>{{ hook.url }}</p>
+            </div>
+            <div class="tfhb-webhook-action tfhb-flexbox tfhb-gap-8">
+                <HbSwitch />
+                <button class="question-edit-btn" >
+                    <Icon name="PencilLine" :width="16" />
+                </button>
+                <button class="question-edit-btn">
+                    <Icon name="X" :width="16"/>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24">
         <HbDropdown  
             v-model="webhookData.webhook"
@@ -110,7 +158,7 @@ const webhookData = reactive({
         />
 
         <div class="tfhb-submission-btn">
-            <button class="tfhb-btn boxed-btn tfhb-flexbox">{{ $tfhb_trans['Save Webhook'] }} </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="updateWebHook">{{ $tfhb_trans['Save Webhook'] }} </button>
         </div>
     </div>
 </div>

@@ -239,7 +239,8 @@ const meetingData = reactive({
     payment_method: '',
     payment_meta: {
         product_id: '',
-    }
+    },
+    webhook: ''
 });
 
 // Add more Location
@@ -393,6 +394,8 @@ const meetingId = route.params.id;
             if(response.data.meeting.payment_meta && "object" == typeof response.data.meeting.payment_meta){
                 meetingData.payment_meta = response.data.meeting.payment_meta
             }
+
+            meetingData.webhook = response.data.meeting.webhook ? JSON.parse(response.data.meeting.webhook) : '';
 
             skeleton.value = false
         }else{ 
