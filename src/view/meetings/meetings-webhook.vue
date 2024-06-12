@@ -88,9 +88,18 @@ const backtoWebHookList = () => {
     webhookList.value = true;
 }
 
+// edit webhook
+const editWebHook = (data, key) => {
+    webhookData.id = key;
+    webhookData.meeting_id = data.meeting_id;
+    webhookData.webhook = data.webhook;
+}
+
 </script>
 
 <template>
+
+{{ webhookData  }}
 <div class="meeting-create-details tfhb-gap-24">
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
@@ -117,7 +126,7 @@ const backtoWebHookList = () => {
 
                 <HbSwitch />
                 <button class="question-edit-btn" >
-                    <Icon name="PencilLine" :width="16" />
+                    <Icon name="PencilLine" :width="16" @click="editWebHook(hook, key)" />
                 </button>
                 <button class="question-edit-btn">
                     <Icon name="X" :width="16" @click="deleteWebHook(key)" />
