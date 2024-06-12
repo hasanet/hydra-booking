@@ -56,6 +56,7 @@ class Meeting {
                 payment_currency VARCHAR(20) NULL, 
                 meeting_price VARCHAR(20) NULL, 
                 payment_meta LONGTEXT NULL, 
+                webhook LONGTEXT NULL, 
                 status VARCHAR(20) NULL, 
                 created_by VARCHAR(20) NOT NULL, 
                 updated_by VARCHAR(20) NOT NULL, 
@@ -121,14 +122,30 @@ class Meeting {
         unset($request['id']);
 
         // encode json in array data
-        $request['meeting_locations'] = wp_json_encode($request['meeting_locations']);
-        $request['availability_range'] = wp_json_encode($request['availability_range']);
-        $request['availability_custom'] = wp_json_encode($request['availability_custom']);
-        $request['booking_frequency'] = wp_json_encode($request['booking_frequency']);
-        $request['recurring_repeat'] = wp_json_encode($request['recurring_repeat']);
-        $request['questions'] = wp_json_encode($request['questions']);
-        $request['notification'] = wp_json_encode($request['notification']);
-        $request['payment_meta'] = wp_json_encode($request['payment_meta']);
+        if($request['meeting_locations']){
+            $request['meeting_locations'] = wp_json_encode($request['meeting_locations']);
+        }
+        if($request['availability_range']){
+            $request['availability_range'] = wp_json_encode($request['availability_range']);
+        }
+        if($request['availability_custom']){
+            $request['availability_custom'] = wp_json_encode($request['availability_custom']);
+        }
+        if($request['booking_frequency']){
+            $request['booking_frequency'] = wp_json_encode($request['booking_frequency']);
+        }
+        if($request['recurring_repeat']){
+            $request['recurring_repeat'] = wp_json_encode($request['recurring_repeat']);
+        }
+        if($request['questions']){
+            $request['questions'] = wp_json_encode($request['questions']);
+        }
+        if($request['notification']){
+            $request['notification'] = wp_json_encode($request['notification']);
+        }
+        if($request['payment_meta']){
+            $request['payment_meta'] = wp_json_encode($request['payment_meta']);
+        }
 
 
         // Update meeting

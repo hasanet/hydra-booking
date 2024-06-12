@@ -39,7 +39,7 @@ const flatPickrChange = (e) => {
 </script>
 
 <template>
-  {{ config }}
+
   <div class="tfhb-single-form-field " :class="[name,fieldClass]" 
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
     >

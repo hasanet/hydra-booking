@@ -238,7 +238,7 @@ const prevPage = () => {
                     <span>{{ book.host_email }}</span>
                 </td>
                 <td>
-                    {{ book.attendee_first_name }} {{ book.attendee_last_name }}
+                    {{ book.attendee_name }}
                     <span>{{ book.attendee_email }}</span>
                 </td>
                 <td>
@@ -269,9 +269,9 @@ const prevPage = () => {
                         <span @click.stop="Tfhb_Booking_View(book)">
                             <Icon name="Eye" width="20" />
                         </span>
-                        <a href="">
+                        <router-link :to="{ name: 'bookingUpdate', params: { id: book.id } }" class="tfhb-dropdown-single">
                             <Icon name="Settings" width="20" />
-                        </a>
+                        </router-link>
                     </div>
                 </td>
             </tr>

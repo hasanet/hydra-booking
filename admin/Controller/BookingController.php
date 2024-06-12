@@ -347,6 +347,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             }
             return true;
         }); 
+
         return rest_ensure_response(
             array(
                 'status' => true, 
@@ -407,40 +408,54 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     }
     // Create Booking
     public function CreateBooking() { 
-        
         $request = json_decode(file_get_contents('php://input'), true);
-
-        $data = [ 
-            'meeting_id' => isset($request['meeting']) ? $request['meeting'] : '',
-            'attendee_name' => isset($request['name']) ? $request['name'] : '',
-            'email' => isset($request['email']) ? $request['email'] : '',
-            'attendee_time_zone' => isset($request['time_zone']) ? $request['time_zone'] : '',
-            'host_id' => isset($request['host']) ? $request['host'] : '',
-            'meeting_dates' => isset($request['date']) ? $request['date'] : '',
-            'start_time' => isset($request['time']) ? $request['time'] : '',
-            'end_time' => isset($request['time']) ? $request['time'] : '',
-            'status' => isset($request['status']) ? $request['status'] : '',
-            'payment_method' => 'backend',
-            'payment_status' => 'pending',
-        ];
 
         // Check if user is already a booking
         $booking = new Booking();
-        // Insert booking
-        $bookingInsert = $booking->add($data);
-        if(!$bookingInsert['status']) {
-            return rest_ensure_response(array('status' => false, 'message' => 'Error while creating Booking'));
+
+        if(!empty($request['id'])){
+            $data = [ 
+                'id' => isset($request['id']) ? $request['id'] : '',
+                'meeting_id' => isset($request['meeting']) ? $request['meeting'] : '',
+                'attendee_name' => isset($request['name']) ? $request['name'] : '',
+                'email' => isset($request['email']) ? $request['email'] : '',
+                'attendee_time_zone' => isset($request['time_zone']) ? $request['time_zone'] : '',
+                'start_time' => isset($request['time']['start']) ? $request['time']['start'] : '',
+                'end_time' => isset($request['time']['end']) ? $request['time']['end'] : '',
+                'status' => isset($request['status']) ? $request['status'] : ''
+            ];
+
+            // Booking Update
+            $bookingUpdate = $booking->update($data);
+        }else{
+            $data = [ 
+                'meeting_id' => isset($request['meeting']) ? $request['meeting'] : '',
+                'attendee_name' => isset($request['name']) ? $request['name'] : '',
+                'email' => isset($request['email']) ? $request['email'] : '',
+                'attendee_time_zone' => isset($request['time_zone']) ? $request['time_zone'] : '',
+                'host_id' => isset($request['host']) ? $request['host'] : '',
+                'meeting_dates' => isset($request['date']) ? $request['date'] : '',
+                'start_time' => isset($request['time']['start']) ? $request['time']['start'] : '',
+                'end_time' => isset($request['time']['end']) ? $request['time']['end'] : '',
+                'status' => isset($request['status']) ? $request['status'] : '',
+                'payment_method' => 'backend',
+                'payment_status' => 'pending',
+            ];
+
+            // Insert booking
+            $bookingInsert = $booking->add($data);
+            if(!$bookingInsert['status']) {
+                return rest_ensure_response(array('status' => false, 'message' => 'Error while creating Booking'));
+            }
         }
-        $booking_id = $bookingInsert['insert_id'];
 
         // booking Lists 
         $booking_List = $booking->get();
         // Return response
         $data = array(
             'status' => true, 
-            'booking' => $booking_List,  
-            'id' => $booking_id,  
-            'message' => 'Booking Created Successfully', 
+            'booking' => $booking_List,   
+            'message' => !empty($request['id']) ? 'Booking Updated Successfully' : 'Booking Created Successfully', 
         );
         
         return rest_ensure_response($data);
@@ -462,11 +477,120 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     // Get Single Booking
     public function getBookingData($request){
+        $booking_id = $request['id'];
+
+        // Check if user is already a booking
+        $booking = new Booking();
+        // Insert booking
+        $singlebooking = $booking->get($booking_id);
+
         
+
+        $meeting_id = $singlebooking->meeting_id;
+        $meeting = new Meeting();
+        $MeetingsData = $meeting->get($meeting_id);
+
+        $selected_date = $singlebooking->meeting_dates;
+      
+        $selected_time_zone = $singlebooking->attendee_time_zone;
+
+        $selected_time_format = '12';
+         // Meeting Information
+        $data = get_post_meta($MeetingsData->post_id, '__tfhb_meeting_opt', true);
+
+        if( isset($data['availability_type']) && 'settings' === $data['availability_type']){  
+            $_tfhb_availability_settings = get_user_meta( $MeetingsData-> host_id, '_tfhb_host', true); 
+            if(in_array($data['availability_id'], array_keys($_tfhb_availability_settings['availability']))){
+                $availability_data = $_tfhb_availability_settings['availability'][$data['availability_id']]; 
+            }else{
+                $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+            } 
+         
+        }else{ 
+            $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
+        }
+        
+
+        // Disable Unavailable days
+        $time_slots = isset($availability_data['time_slots']) ? $availability_data['time_slots'] : array(); 
+
+         // Duration
+        $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
+
+        $duration = isset($data['custom_duration']) && !empty($data['custom_duration']) ? $data['custom_duration'] : $duration;
+
+        // Buffer Time Before
+        $buffer_time_before = isset($data['buffer_time_before']) && !empty($data['buffer_time_before']) ? $data['buffer_time_before'] : 0;
+
+        // Buffer Time After
+        $buffer_time_after = isset($data['buffer_time_after']) && !empty($data['buffer_time_after']) ? $data['buffer_time_after'] : 0;
+
+        // Meeting Interval
+        $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
+
+        // Disable Dates
+
+        // Get All Booking Data.
+        $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
+        $date_time = new DateTimeController( $selected_time_zone );
+ 
+
+        $disabled_times = array();
+        foreach($bookings as $booking){
+            $start_time = $booking->start_time;
+            $end_time = $booking->end_time;
+            $time_zone = $booking->attendee_time_zone; 
+ 
+            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
+            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
+
+            $disabled_times[] = array(
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            );
+
+        }
+
+        // Time Slot
+        $time_slots_data = array();
+        // get Selected Date day
+        $selected_day = date('l', strtotime($selected_date));
+        
+        // only get selected day time slot in single array using array finter
+        $selected_available_time = array();
+        $selected_available = array();
+        foreach ($time_slots as $single) {
+            if($single['day'] == $selected_day){
+                $selected_available = $single;
+            }
+        }
+        $times = $selected_available ? $selected_available['times'] : array();
+        foreach($times as $key => $value){
+            $start_time = $value['start']; 
+            $end_time = $value['end'];
+            $generatedSlots = $this->generateTimeSlots($start_time, $end_time, $duration, $meeting_interval, $buffer_time_before, $buffer_time_after, $selected_date, $selected_time_format, $selected_time_zone);
+            $time_slots_data = array_merge($time_slots_data, $generatedSlots);
+
+        }
+        // if date already exists remove that array
+        $time_slots_data = array_filter($time_slots_data, function($time_slot) use ($disabled_times) {
+            foreach ($disabled_times as $disabled_time) {
+                if ($time_slot['start'] === $disabled_time['start_time'] && $time_slot['end'] === $disabled_time['end_time']) {
+                    return false;
+                }
+            }
+            return true;
+        }); 
+
+        $singlebooking->times = [
+            'start' => $singlebooking->start_time,
+            'end'  => $singlebooking->end_time
+        ];
         // Return response
         $data = array(
             'status' => true, 
-            'meeting' => $MeetingData,  
+            'booking' => $singlebooking,  
+            'times'  => $time_slots_data,
             'message' => 'Booking Data',
         );
         return rest_ensure_response($data);

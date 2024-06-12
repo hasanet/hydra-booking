@@ -239,7 +239,8 @@ const meetingData = reactive({
     payment_method: '',
     payment_meta: {
         product_id: '',
-    }
+    },
+    webhook: ''
 });
 
 // Add more Location
@@ -394,6 +395,8 @@ const meetingId = route.params.id;
                 meetingData.payment_meta = response.data.meeting.payment_meta
             }
 
+            meetingData.webhook = response.data.meeting.webhook ? JSON.parse(response.data.meeting.webhook) : '';
+
             skeleton.value = false
         }else{ 
             router.push({ name: 'MeetingsLists' });
@@ -459,6 +462,9 @@ const UpdateMeetingData = async (validator_field) => {
                 router.push({ name: 'MeetingsCreatePayment' });
             }
             if("MeetingsCreatePayment"==route.name){
+                router.push({ name: 'MeetingsCreateWebhook' });
+            }
+            if("MeetingsCreateWebhook"==route.name){
                 router.push({ name: 'MeetingsLists' });
             }
         }else{
@@ -488,6 +494,9 @@ const TfhbPrevNavigator = () => {
     if("MeetingsCreatePayment"==route.name){
         router.push({ name: 'MeetingsCreateNotifications' });
     }
+    if("MeetingsCreateWebhook"==route.name){
+        router.push({ name: 'MeetingsCreatePayment' });
+    }
 }
 </script>
 
@@ -514,6 +523,7 @@ const TfhbPrevNavigator = () => {
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> {{ $tfhb_trans['Questions'] }}</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/notifications'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> {{ $tfhb_trans['Notifications'] }}</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/payment'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }">{{ $tfhb_trans['Payment'] }}</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/webhook'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/webhook' }">{{ $tfhb_trans['Webhook Integrations'] }}</router-link></li>  
 
             </ul>  
         </nav>
