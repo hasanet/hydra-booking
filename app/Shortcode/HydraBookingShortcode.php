@@ -653,33 +653,34 @@ class HydraBookingShortcode {
 
 
         $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : '';
+        $meeting_id = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
         $selected_time_format = isset($_POST['time_format']) ? sanitize_text_field($_POST['time_format']) : '12';
         $selected_time_zone = isset($_POST['time_zone']) ? sanitize_text_field($_POST['time_zone']) : 'UTC';
 
-
-        // Get All Booking Data.
-        $booking = new Booking();
-        $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
+         
+        
         $date_time = new DateTimeController( $selected_time_zone );
+       $data = $date_time->getAvailableTimeData($meeting_id, $selected_date, $selected_time_zone, $selected_time_format);
  
+        // exit;
 
-        $disabled_times = array();
-        foreach($bookings as $booking){
-            $start_time = $booking->start_time;
-            $end_time = $booking->end_time;
-            $time_zone = $booking->attendee_time_zone; 
+        // $disabled_times = array();
+        // foreach($bookings as $booking){
+        //     $start_time = $booking->start_time;
+        //     $end_time = $booking->end_time;
+        //     $time_zone = $booking->attendee_time_zone; 
  
-            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
-            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
+        //     $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
+        //     $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
 
-            $disabled_times[] = array(
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            );
+        //     $disabled_times[] = array(
+        //         'start_time' => $start_time,
+        //         'end_time' => $end_time,
+        //     );
 
-        }
+        // }
 
-        wp_send_json_success(  $disabled_times );
+        wp_send_json_success(  $data );
         wp_die();
     }
 
