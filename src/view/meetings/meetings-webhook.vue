@@ -33,6 +33,19 @@ const webhookData = reactive({
     'request_format': '',
     'events': '',
     'request_body': 'all',
+    'request_header': 'no',
+    'headers': [
+        {
+            'key': '',
+            'value': ''
+        }
+    ],
+    'bodys': [
+        {
+            'name': '',
+            'value': ''
+        }
+    ],
     'status': '',
 });
 
@@ -89,6 +102,7 @@ const addNewWebHook = () => {
     webhookData.request_format = '';
     webhookData.events = '';
     webhookData.request_body = 'all';
+    webhookData.request_header = 'no';
     webhookData.status = '';
 }
 
@@ -107,6 +121,7 @@ const editWebHook = (data, key) => {
     webhookData.request_format = data.request_format;
     webhookData.events = data.events;
     webhookData.request_body = data.request_body;
+    webhookData.request_header = data.request_header;
     webhookData.status = data.status;
 
     webhookList.value = false;
@@ -124,9 +139,34 @@ const updateHookStatus = (e, data, key) => {
     webhookData.request_format = data.request_format;
     webhookData.events = data.events;
     webhookData.request_body = data.request_body;
+    webhookData.request_header = data.request_header;
     webhookData.status = e.target.checked ? 1 : 0;
 
     updateWebHook();
+}
+
+// Add header
+const addHeadersField = () => {
+    webhookData.headers.push({
+        key: '',
+        value: '',
+    });
+}
+// Delete header
+const deleteHeadersField = (key) => {
+    webhookData.headers.splice(key, 1)
+}
+
+// Add body
+const addBodyField = () => {
+    webhookData.bodys.push({
+        name: '',
+        value: '',
+    });
+}
+// Delete body
+const deleteBodyField = (key) => {
+    webhookData.bodys.splice(key, 1)
 }
 
 </script>
@@ -237,6 +277,48 @@ const updateHookStatus = (e, data, key) => {
 
         <HbRadio 
             required= "true"
+            v-model="webhookData.request_header"
+            name="request_header"
+            :label="$tfhb_trans['Request Header']"
+            :groups="true"
+            :options="[
+                {'label': 'No Headers', 'value': 'no'}, 
+                {'label': 'With Headers', 'value': 'with'}
+            ]" 
+        />
+        
+        <div class="tfhb-headers tfhb-full-width" v-if="'with'==webhookData.request_header">
+            <p>{{ $tfhb_trans['Request Headers'] }}</p>
+            <div class="tfhb-flexbox" v-for="(header, key) in webhookData.headers">
+                <div class="tfhb-request-header-fields tfhb-flexbox">
+                    <HbText  
+                        v-model="header.key"
+                        required= "true"  
+                        selected = "1"
+                        :placeholder="$tfhb_trans['Header Key']" 
+                        width="50"
+                    /> 
+                    <HbText  
+                        v-model="header.value"
+                        required= "true"   
+                        selected = "1"
+                        :placeholder="$tfhb_trans['Header Value']" 
+                        width="50"
+                    /> 
+                </div>
+                <div class="request-actions">
+                    <button class="tfhb-availability-schedule-btn" @click="addHeadersField" v-if="key == 0">
+                        <Icon name="Plus" size="20px" /> 
+                    </button> 
+                    <button class="tfhb-availability-schedule-btn" @click="deleteHeadersField(key)" v-else>
+                        <Icon name="X" size="20px" /> 
+                    </button> 
+                </div>
+            </div>
+        </div>
+
+        <HbRadio 
+            required= "true"
             v-model="webhookData.request_body"
             name="request_body"
             :label="$tfhb_trans['Request Body']"
@@ -246,6 +328,36 @@ const updateHookStatus = (e, data, key) => {
                 {'label': 'Selected Data', 'value': 'selected'}
             ]" 
         />
+
+        <div class="tfhb-headers tfhb-full-width" v-if="'selected'==webhookData.request_body">
+            <p>{{ $tfhb_trans['Request Fields'] }}</p>
+            <div class="tfhb-flexbox" v-for="(body, key) in webhookData.bodys">
+                <div class="tfhb-request-header-fields tfhb-flexbox">
+                    <HbText  
+                        v-model="body.name"
+                        required= "true"  
+                        selected = "1"
+                        :placeholder="$tfhb_trans['Enter Name']" 
+                        width="50"
+                    /> 
+                    <HbText  
+                        v-model="body.value"
+                        required= "true"   
+                        selected = "1"
+                        :placeholder="$tfhb_trans['Enter Value']" 
+                        width="50"
+                    /> 
+                </div>
+                <div class="request-actions">
+                    <button class="tfhb-availability-schedule-btn" @click="addBodyField" v-if="key == 0">
+                        <Icon name="Plus" size="20px" /> 
+                    </button> 
+                    <button class="tfhb-availability-schedule-btn" @click="deleteBodyField(key)" v-else>
+                        <Icon name="X" size="20px" /> 
+                    </button> 
+                </div>
+            </div>
+        </div>
 
         <HbCheckbox 
             v-model="webhookData.status"

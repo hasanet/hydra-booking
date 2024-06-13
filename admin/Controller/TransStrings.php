@@ -260,7 +260,13 @@ namespace HydraBooking\Admin\Controller;
             'Request Format' => __('Request Format', 'hydra-booking'),
             'Request Body' => __('Request Body', 'hydra-booking'),
             'Back' => __('Back', 'hydra-booking'),
-            '' => __('', 'hydra-booking'),
+            'Request Header' => __('Request Header', 'hydra-booking'),
+            'Request Headers' => __('Request Headers', 'hydra-booking'),
+            'Header Key' => __('Header Key', 'hydra-booking'),
+            'Header Value' => __('Header Value', 'hydra-booking'),
+            'Request Fields' => __('Request Fields', 'hydra-booking'),
+            'Enter Name' => __('Enter Name', 'hydra-booking'),
+            'Enter Value' => __('Enter Value', 'hydra-booking'),
 
             //Booking
             'Add New Booking' => __('Add New Booking', 'hydra-booking'),

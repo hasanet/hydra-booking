@@ -574,4 +574,15 @@
             }
         }
     }
+    .tfhb-headers{
+        > .tfhb-flexbox{
+            margin-bottom: 16px;
+            &:last-child{
+                margin-bottom: 0px;
+            }
+            .tfhb-request-header-fields{
+                width: calc(100% - 80px);
+            }
+        }
+    }
 }
