@@ -104,6 +104,18 @@ const addNewWebHook = () => {
     webhookData.request_body = 'all';
     webhookData.request_header = 'no';
     webhookData.status = '';
+    webhookData.headers = [
+        {
+            'key': '',
+            'value': ''
+        }
+    ];
+    webhookData.bodys = [
+        {
+            'name': '',
+            'value': ''
+        }
+    ];
 }
 
 const backtoWebHookList = () => {
@@ -123,6 +135,8 @@ const editWebHook = (data, key) => {
     webhookData.request_body = data.request_body;
     webhookData.request_header = data.request_header;
     webhookData.status = data.status;
+    webhookData.headers = data.headers;
+    webhookData.bodys = data.bodys;
 
     webhookList.value = false;
     webhookcreate.value = true;
@@ -141,6 +155,8 @@ const updateHookStatus = (e, data, key) => {
     webhookData.request_body = data.request_body;
     webhookData.request_header = data.request_header;
     webhookData.status = e.target.checked ? 1 : 0;
+    webhookData.headers = data.headers;
+    webhookData.bodys = data.bodys;
 
     updateWebHook();
 }

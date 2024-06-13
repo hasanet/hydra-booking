@@ -246,6 +246,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'request_format' => !empty($request['request_format']) ? $request['request_format'] : '',
             'events' => !empty($request['events']) ? $request['events'] : '',
             'request_body' => !empty($request['request_body']) ? $request['request_body'] : '',
+            'request_header' => !empty($request['request_header']) ? $request['request_header'] : '',
+            'headers' => !empty($request['headers']) ? $request['headers'] : '',
+            'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
