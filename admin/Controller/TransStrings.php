@@ -255,10 +255,10 @@ namespace HydraBooking\Admin\Controller;
             'Type your Webhook URL' => __('Type your Webhook URL', 'hydra-booking'),
             'Save Webhook' => __('Save Webhook', 'hydra-booking'),
             'Enable this Webhook' => __('Enable this Webhook', 'hydra-booking'),
-            'Event Triggers*' => __('Event Triggers *', 'hydra-booking'),
+            'Event Triggers' => __('Event Triggers', 'hydra-booking'),
             'Request Method' => __('Request Method', 'hydra-booking'),
             'Request Format' => __('Request Format', 'hydra-booking'),
-            'Request Body' => __('Request Body *', 'hydra-booking'),
+            'Request Body' => __('Request Body', 'hydra-booking'),
             'Back' => __('Back', 'hydra-booking'),
             '' => __('', 'hydra-booking'),
 

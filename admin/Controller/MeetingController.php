@@ -235,8 +235,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     
         // Decode existing webhook data if it exists
         $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
-        
-        // Update webhook data with new request data
+    
+        $key = isset($request['key']) ? $request['key'] : '';
+    
+        // New webhook data to be updated
         $newWebHookdata = array(
             'webhook' => !empty($request['webhook']) ? $request['webhook'] : '',
             'url' => !empty($request['url']) ? $request['url'] : '',
@@ -247,12 +249,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
-        // Merge the new webhook data with the existing one
-        $webHookdata[] = $newWebHookdata;
-
+        if ($key !== '' && isset($webHookdata[$key])) {
+            // Update the existing webhook data at the specified key
+            $webHookdata[$key] = $newWebHookdata;
+        } else {
+            // Append the new webhook data
+            $webHookdata[] = $newWebHookdata;
+        }
+    
         // Encode the updated webhook data back to JSON
         $encodedWebHookdata = json_encode($webHookdata);
-
+    
         $data = [
             'id'      => $request['meeting_id'],
             'webhook' => $encodedWebHookdata,
@@ -260,7 +267,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     
         // Update the meeting with the new webhook data
         $MeetingUpdate = $meeting->update($data);
-
+    
+        // Retrieve updated meeting data
         $updateMeetingData = $meeting->get($request['meeting_id']);
         
         return rest_ensure_response(array(
@@ -268,7 +276,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'webhook' => $updateMeetingData->webhook,
             'message' => 'Webhook Successfully Updated!',
         ));
-    }    
+    }       
 
     // Webhook Delete
     public function deleteMeetingWebhook($request){

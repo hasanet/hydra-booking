@@ -26,7 +26,7 @@ const webhookList = ref(true);
 const webhookcreate = ref(false);
 const webhookData = reactive({
     'meeting_id' : props.meetingId,
-    'id': '',
+    'key': '',
     'webhook': '',
     'url': '',
     'request_method': '',
@@ -81,6 +81,15 @@ const deleteWebHook = async (key) => {
 const addNewWebHook = () => {
     webhookList.value = false;
     webhookcreate.value = true;
+
+    webhookData.key = '';
+    webhookData.webhook = '';
+    webhookData.url = '';
+    webhookData.request_method = '';
+    webhookData.request_format = '';
+    webhookData.events = '';
+    webhookData.request_body = 'all';
+    webhookData.status = '';
 }
 
 const backtoWebHookList = () => {
@@ -90,9 +99,18 @@ const backtoWebHookList = () => {
 
 // edit webhook
 const editWebHook = (data, key) => {
-    webhookData.id = key;
+    webhookData.key = key;
     webhookData.meeting_id = data.meeting_id;
     webhookData.webhook = data.webhook;
+    webhookData.url = data.url;
+    webhookData.request_method = data.request_method;
+    webhookData.request_format = data.request_format;
+    webhookData.events = data.events;
+    webhookData.request_body = data.request_body;
+    webhookData.status = data.status;
+
+    webhookList.value = false;
+    webhookcreate.value = true;
 }
 
 </script>
@@ -185,14 +203,16 @@ const editWebHook = (data, key) => {
         />
 
         <HbCheckbox 
+            required= "true"
             v-model="webhookData.events"
             names="webhook_events"
-            :label="$tfhb_trans['Event Triggers*']"
+            :label="$tfhb_trans['Event Triggers']"
             :groups="true"
             :options="['Booking Confirmed', 'Booking Canceled', 'Booking Completed']" 
         />
 
         <HbRadio 
+            required= "true"
             v-model="webhookData.request_body"
             name="request_body"
             :label="$tfhb_trans['Request Body']"
