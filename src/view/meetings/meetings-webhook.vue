@@ -113,6 +113,22 @@ const editWebHook = (data, key) => {
     webhookcreate.value = true;
 }
 
+// update webhook status
+const updateHookStatus = (e, data, key) => {
+
+    webhookData.key = key;
+    webhookData.meeting_id = props.meetingId;
+    webhookData.webhook = data.webhook;
+    webhookData.url = data.url;
+    webhookData.request_method = data.request_method;
+    webhookData.request_format = data.request_format;
+    webhookData.events = data.events;
+    webhookData.request_body = data.request_body;
+    webhookData.status = e.target.checked ? 1 : 0;
+
+    updateWebHook();
+}
+
 </script>
 
 <template>
@@ -139,10 +155,18 @@ const editWebHook = (data, key) => {
             <div class="tfhb-webhook-info">
                 <h4>{{ hook.webhook }}</h4>
                 <p>{{ hook.url }}</p>
+                <ul class="webhook-event" v-if="hook.events">
+                    <li v-for="event in hook.events">
+                        {{ event }}
+                    </li>
+                </ul>
             </div>
             <div class="tfhb-webhook-action tfhb-flexbox tfhb-gap-8">
 
-                <HbSwitch />
+                <HbSwitch 
+                v-model="hook.status"
+                @change="(e) => updateHookStatus(e, hook, key)"
+                />
                 <button class="question-edit-btn" >
                     <Icon name="PencilLine" :width="16" @click="editWebHook(hook, key)" />
                 </button>
