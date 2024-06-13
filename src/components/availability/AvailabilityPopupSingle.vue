@@ -413,32 +413,24 @@ const tfhbValidateInput = (fieldName) => {
 
                                     <div class="tfhb-availability-schedule-inner tfhb-flexbox tfhb-gap-16 tfhb-mt-16" v-for="(time, tkey) in OverridesDates.times" :key="tkey" v-if="OverridesDates.available!=1">
                                         <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
-                                            <HbDateTime  
-                                                v-model="time.start"
-                                                selected = "1" 
-                                                :config="{
-                                                    enableTime: true,
-                                                    noCalendar: true,
-                                                    dateFormat: 'H:i'
-                                                }"
+                                            
+                                            <HbDropdown 
+                                                v-model="time.start"  
+                                                required= "true" 
                                                 width="45"
-                                                placeholder="Type your schedule title"   
-                                                icon="Clock"
-                                            /> 
+                                                :selected = "1"
+                                                placeholder="Start"   
+                                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                            />  
                                             <Icon name="MoveRight" size="20" /> 
-                                            <HbDateTime  
-                                                v-model="time.end"
-                                                :label="$tfhb_trans['End']"  
-                                                selected = "1"
-                                                :config="{
-                                                    enableTime: true,
-                                                    noCalendar: true,
-                                                    dateFormat: 'H:i'
-                                                }"
+                                            <HbDropdown 
+                                                v-model="time.end"  
+                                                required= "true" 
                                                 width="45"
-                                                placeholder="Type your schedule title"   
-                                                icon="Clock"
-                                            /> 
+                                                :selected = "1"
+                                                placeholder="End"   
+                                                :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                            />  
 
                                         </div>
                                         

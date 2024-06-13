@@ -2,10 +2,7 @@
 namespace HydraBooking\Hooks;
 use HydraBooking\DB\Meeting;
 class WebHook{
-    // Approved
-    // Pending
-    // Re-schedule
-    // Canceled
+
     public function __construct( ) { 
         add_action('hydra_booking/after_booking_completed', [$this, 'webhookBookingToCompleted'], 10, 1);
         // add_action('hydra_booking/after_booking_canceled', [$this, 'pushBookingToCanceled'], 10, 1);
