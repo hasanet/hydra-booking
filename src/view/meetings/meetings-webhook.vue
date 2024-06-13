@@ -100,7 +100,7 @@ const backtoWebHookList = () => {
 // edit webhook
 const editWebHook = (data, key) => {
     webhookData.key = key;
-    webhookData.meeting_id = data.meeting_id;
+    webhookData.meeting_id = props.meetingId;
     webhookData.webhook = data.webhook;
     webhookData.url = data.url;
     webhookData.request_method = data.request_method;
@@ -117,7 +117,7 @@ const editWebHook = (data, key) => {
 
 <template>
 
-{{ webhookData  }}
+<!-- {{ webhookData  }} -->
 <div class="meeting-create-details tfhb-gap-24">
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
@@ -205,7 +205,7 @@ const editWebHook = (data, key) => {
         <HbCheckbox 
             required= "true"
             v-model="webhookData.events"
-            names="webhook_events"
+            name="webhook_events"
             :label="$tfhb_trans['Event Triggers']"
             :groups="true"
             :options="['Booking Confirmed', 'Booking Canceled', 'Booking Completed']" 
