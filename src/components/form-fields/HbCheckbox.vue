@@ -68,9 +68,10 @@ const MulticheckedValue = (e) => {
                 :name="name"
                 :value="value"
                 type="checkbox"
+                :checked="modelValue.includes(value)"
                 />     
                 <span class="checkmark"></span>
-                {{ value }} <span  v-if="required == 'true'"> *</span>
+                {{ value }} 
             </label>
         </div>
     </div> 

@@ -70,7 +70,7 @@ const MulticheckedValue = (e) => {
                 type="radio"
                 /> 
                 <span class="checkmark"></span>
-                {{ value.label }} <span  v-if="required == 'true'"> *</span>
+                {{ value.label }}
             </label>
             </div>
             

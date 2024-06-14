@@ -561,4 +561,28 @@
             }
         }
     }
+    .tfhb-webhook-info{
+        .webhook-event{
+            display: flex;
+            gap: 8px;
+            li{
+                display: inline-block;
+                padding: 3px 8px;
+                border-radius: 6px;
+                background-color: #FEE6F0;
+                color: #F62881;
+            }
+        }
+    }
+    .tfhb-headers{
+        > .tfhb-flexbox{
+            margin-bottom: 16px;
+            &:last-child{
+                margin-bottom: 0px;
+            }
+            .tfhb-request-header-fields{
+                width: calc(100% - 80px);
+            }
+        }
+    }
 }

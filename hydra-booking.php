@@ -39,7 +39,8 @@ class THB_INIT{
         // Mail Hooks
         new HydraBooking\Hooks\MailHooks(); 
 
-    
+        // Web Hooks
+        new HydraBooking\Hooks\WebHook(); 
 
       
         add_action('init', array($this, 'init'));
