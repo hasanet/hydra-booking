@@ -71,6 +71,12 @@ namespace HydraBooking\Admin\Controller;
         // Disable Unavailable days
         $time_slots = isset($availability_data['time_slots']) ? $availability_data['time_slots'] : array(); 
 
+      
+
+        // Disable Unavailable days
+        $date_slots = isset($availability_data['date_slots']) ? $availability_data['date_slots'] : array(); 
+
+
          // Duration
         $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
 
@@ -123,17 +129,28 @@ namespace HydraBooking\Admin\Controller;
          }
         
          $times = $selected_available ? $selected_available['times'] : array();
+
+        foreach ($date_slots as $key => $value){
+            
+            // in strings 2024-06-12, 2024-06-13, 2024-06-14 has date
+            if(strpos($value['date'], $selected_date) !== false && $value['available'] == false){
+
+                $times = $value['times'];
+            }
+            
+        }
       
-         foreach($times as $key => $value){
-             $start_time = $value['start']; 
+        foreach($times as $key => $value){
+
+            $start_time = $value['start']; 
              
-             $end_time = $value['end'];
-             
-             $generatedSlots = $this->generateTimeSlots($start_time, $end_time, $duration, $meeting_interval, $buffer_time_before, $buffer_time_after, $selected_date, $selected_time_format, $time_zone, $selected_time_zone);
+            $end_time = $value['end'];
+            
+            $generatedSlots = $this->generateTimeSlots($start_time, $end_time, $duration, $meeting_interval, $buffer_time_before, $buffer_time_after, $selected_date, $selected_time_format, $time_zone, $selected_time_zone);
           
-             $time_slots_data = array_merge($time_slots_data, $generatedSlots);
+            $time_slots_data = array_merge($time_slots_data, $generatedSlots);
  
-         }
+        }
       
          // if date already exists remove that array
          $data= array();

@@ -660,25 +660,9 @@ class HydraBookingShortcode {
          
         
         $date_time = new DateTimeController( $selected_time_zone );
-       $data = $date_time->getAvailableTimeData($meeting_id, $selected_date, $selected_time_zone, $selected_time_format);
+        $data = $date_time->getAvailableTimeData($meeting_id, $selected_date, $selected_time_zone, $selected_time_format);
  
-        // exit;
-
-        // $disabled_times = array();
-        // foreach($bookings as $booking){
-        //     $start_time = $booking->start_time;
-        //     $end_time = $booking->end_time;
-        //     $time_zone = $booking->attendee_time_zone; 
- 
-        //     $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
-        //     $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
-
-        //     $disabled_times[] = array(
-        //         'start_time' => $start_time,
-        //         'end_time' => $end_time,
-        //     );
-
-        // }
+      
 
         wp_send_json_success(  $data );
         wp_die();
