@@ -338,7 +338,6 @@ const deleteBodyField = (key) => {
         </div>
 
         <HbRadio 
-            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             required= "true"
             v-model="webhookData.request_body"
             name="request_body"
@@ -350,7 +349,7 @@ const deleteBodyField = (key) => {
             ]" 
         />
 
-        <div class="tfhb-headers tfhb-full-width" v-if="'selected'==webhookData.request_body && 'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook">
+        <div class="tfhb-headers tfhb-full-width" v-if="'selected'==webhookData.request_body">
             <p>{{ $tfhb_trans['Request Fields'] }}</p>
             <div class="tfhb-flexbox" v-for="(body, key) in webhookData.bodys">
                 <div class="tfhb-request-header-fields tfhb-flexbox">

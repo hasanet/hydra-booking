@@ -52,8 +52,28 @@ class WebHook{
             'cookies'     => array(),
         );
 
+        $body_request = isset( $hook['bodys'] ) ? $hook['bodys'] : '';
+		$body_request_type = isset( $hook['request_body'] ) ? $hook['request_body'] : 'all';
+
+        $body_data = array();
+
+        // Check if $body_request is an array
+		if ( is_array( $body_request ) && 'selected'==$body_request_type ) {
+			// Loop through each item in the array
+			foreach ( $body_request as $body ) {
+				// Access individual values using keys
+				$body_value = $body['name'];
+				$body_parameter = $booking[ $body['value'] ];
+
+				// Add data to the $body_data array
+				$body_data[ $body_value ] = $body_parameter;
+			}
+		}else{
+            $body_data = $booking;
+        }
+
         $tfhb_http_args['headers']['X-WP-Webhook-Source'] = home_url( '/' );
-        $tfhb_http_args['body'] = trim( wp_json_encode( $booking ) );
+        $tfhb_http_args['body'] = trim( wp_json_encode( $body_data ) );
         $response = wp_safe_remote_request( $hook['url'], $tfhb_http_args );	
     }
 
@@ -73,8 +93,28 @@ class WebHook{
             'cookies'     => array(),
         );
 
+        $body_request = isset( $hook['bodys'] ) ? $hook['bodys'] : '';
+		$body_request_type = isset( $hook['request_body'] ) ? $hook['request_body'] : 'all';
+
+        $body_data = array();
+
+        // Check if $body_request is an array
+		if ( is_array( $body_request ) && 'selected'==$body_request_type ) {
+			// Loop through each item in the array
+			foreach ( $body_request as $body ) {
+				// Access individual values using keys
+				$body_value = $body['name'];
+				$body_parameter = $booking[ $body['value'] ];
+
+				// Add data to the $body_data array
+				$body_data[ $body_value ] = $body_parameter;
+			}
+		}else{
+            $body_data = $booking;
+        }
+
         $tfhb_http_args['headers']['X-WP-Webhook-Source'] = home_url( '/' );
-        $tfhb_http_args['body'] = trim( wp_json_encode( $booking ) );
+        $tfhb_http_args['body'] = trim( wp_json_encode( $body_data ) );
         $response = wp_safe_remote_request( $hook['url'], $tfhb_http_args );	
     }
 
