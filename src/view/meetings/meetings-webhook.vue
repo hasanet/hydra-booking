@@ -243,7 +243,8 @@ const deleteBodyField = (key) => {
             placeholder="Select Webhook"  
             :option = "[
                 {'name': 'Pabbly', 'value': 'Pabbly'}, 
-                {'name': 'Zapier', 'value': 'Zapier'}
+                {'name': 'Zapier', 'value': 'Zapier'},
+                {'name': 'Webhook', 'value': 'Webhook'}
             ]"
         />
 
