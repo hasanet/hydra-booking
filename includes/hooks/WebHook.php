@@ -82,7 +82,6 @@ class WebHook{
     function tfhb_webhook_callback($booking, $hook) {
 
 		//Admin Option
-		$web_hook_enable = isset( $hook['status'] ) ? $hook['status'] : false;
 		$request_api = isset( $hook['url'] ) ? $hook['url'] : '';
 		$request_method = isset( $hook['request_method'] ) ? $hook['request_method'] : '';
 		$request_format = isset( $hook['request_format'] ) ? $hook['request_format'] : '';
@@ -93,19 +92,6 @@ class WebHook{
 
 		$api_endpoint = $request_api;
 		$api_request_method = $request_method;
-
-		// Return if not enable
-		if ( ! $web_hook_enable ) {
-			return;
-		}
-		// Return API Not Fill
-		if ( empty( $api_endpoint ) ) {
-			return;
-		}
-		// Return If post type not seleted
-		if ( empty( $api_request_method ) ) {
-			return;
-		}
 
 		// Define the data to send in the POST request
 		$header_data = array();
