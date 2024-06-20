@@ -258,6 +258,7 @@ const deleteBodyField = (key) => {
         /> 
 
         <HbDropdown  
+            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             v-model="webhookData.request_method"
             :label="$tfhb_trans['Request Method']"   
             width="50"
@@ -272,6 +273,7 @@ const deleteBodyField = (key) => {
         />
 
         <HbDropdown  
+            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             v-model="webhookData.request_format"
             :label="$tfhb_trans['Request Format']"   
             width="50"
@@ -293,6 +295,7 @@ const deleteBodyField = (key) => {
         />
 
         <HbRadio 
+            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             required= "true"
             v-model="webhookData.request_header"
             name="request_header"
@@ -304,7 +307,7 @@ const deleteBodyField = (key) => {
             ]" 
         />
         
-        <div class="tfhb-headers tfhb-full-width" v-if="'with'==webhookData.request_header">
+        <div class="tfhb-headers tfhb-full-width" v-if="'with'==webhookData.request_header && 'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook">
             <p>{{ $tfhb_trans['Request Headers'] }}</p>
             <div class="tfhb-flexbox" v-for="(header, key) in webhookData.headers">
                 <div class="tfhb-request-header-fields tfhb-flexbox">
@@ -335,6 +338,7 @@ const deleteBodyField = (key) => {
         </div>
 
         <HbRadio 
+            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             required= "true"
             v-model="webhookData.request_body"
             name="request_body"
@@ -346,7 +350,7 @@ const deleteBodyField = (key) => {
             ]" 
         />
 
-        <div class="tfhb-headers tfhb-full-width" v-if="'selected'==webhookData.request_body">
+        <div class="tfhb-headers tfhb-full-width" v-if="'selected'==webhookData.request_body && 'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook">
             <p>{{ $tfhb_trans['Request Fields'] }}</p>
             <div class="tfhb-flexbox" v-for="(body, key) in webhookData.bodys">
                 <div class="tfhb-request-header-fields tfhb-flexbox">
