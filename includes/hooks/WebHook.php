@@ -5,10 +5,11 @@ class WebHook{
 
     public function __construct( ) { 
         add_action('hydra_booking/after_booking_completed', [$this, 'webhookBookingToCompleted'], 10, 1);
-        // add_action('hydra_booking/after_booking_canceled', [$this, 'pushBookingToCanceled'], 10, 1);
-        // add_action('hydra_booking/after_booking_schedule', [$this, 'pushBookingToscheduled'], 10, 1);
+        add_action('hydra_booking/after_booking_canceled', [$this, 'webhookBookingToCanceled'], 10, 1);
+        add_action('hydra_booking/after_booking_confirmed', [$this, 'webhookBookingToConfirmed'], 10, 1);
     }
 
+    // If booking Completed
     public function webhookBookingToCompleted($booking){
 
         // Get Meeting
@@ -18,15 +19,45 @@ class WebHook{
         $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
         if(!empty($webHookdata)){
             foreach($webHookdata as $hook){
-                // Pabbly
-                // if( !empty($hook['webhook']) && !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && "Pabbly"==$hook['webhook'] && !empty($hook['status']) ){
-                //     $this->tfhb_pabbly_callback($booking, $hook);
-                // }
-                // // Zapier
-                // if( !empty($hook['webhook']) && !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && "Zapier"==$hook['webhook'] && !empty($hook['status']) ){
-                //     $this->tfhb_zapier_callback($booking, $hook);
-                // }
 
+                // Webhook
+                if( !empty($hook['events']) && in_array("Booking Completed", $hook['events']) && !empty($hook['status']) ){
+                    $this->tfhb_webhook_callback($booking, $hook);
+                }
+            }
+        }
+        
+    }
+
+    // If booking Cancel
+    public function webhookBookingToCanceled($booking){
+
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($booking->meeting_id);
+
+        $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
+        if(!empty($webHookdata)){
+            foreach($webHookdata as $hook){
+                // Webhook
+                if( !empty($hook['events']) && in_array("Booking Canceled", $hook['events']) && !empty($hook['status']) ){
+                    $this->tfhb_webhook_callback($booking, $hook);
+                }
+            }
+        }
+        
+    }
+
+    // If booking confirmed
+    public function webhookBookingToConfirmed($booking){
+
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($booking->meeting_id);
+
+        $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
+        if(!empty($webHookdata)){
+            foreach($webHookdata as $hook){
                 // Webhook
                 if( !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && !empty($hook['status']) ){
                     $this->tfhb_webhook_callback($booking, $hook);
@@ -36,87 +67,87 @@ class WebHook{
         
     }
 
-    // Pabbly Callback
-    function tfhb_pabbly_callback($booking, $hook){
-        $tfhb_allow_unsafe_urls = false;
-        $tfhb_http_args = array(
-            'method'      => 'POST',
-            'timeout'     => MINUTE_IN_SECONDS,
-            'redirection' => 0,
-            'httpversion' => '1.0',
-            'blocking'    => false,
-            'user-agent'  => sprintf(  'Trigger (WordPress/%s)', $GLOBALS['wp_version'] ),
-            'headers'     => array(
-            'Content-Type' => 'application/json; charset=UTF-8',
-            ),
-            'cookies'     => array(),
-        );
+    // // Pabbly Callback
+    // function tfhb_pabbly_callback($booking, $hook){
+    //     $tfhb_allow_unsafe_urls = false;
+    //     $tfhb_http_args = array(
+    //         'method'      => 'POST',
+    //         'timeout'     => MINUTE_IN_SECONDS,
+    //         'redirection' => 0,
+    //         'httpversion' => '1.0',
+    //         'blocking'    => false,
+    //         'user-agent'  => sprintf(  'Trigger (WordPress/%s)', $GLOBALS['wp_version'] ),
+    //         'headers'     => array(
+    //         'Content-Type' => 'application/json; charset=UTF-8',
+    //         ),
+    //         'cookies'     => array(),
+    //     );
 
-        $body_request = isset( $hook['bodys'] ) ? $hook['bodys'] : '';
-		$body_request_type = isset( $hook['request_body'] ) ? $hook['request_body'] : 'all';
+    //     $body_request = isset( $hook['bodys'] ) ? $hook['bodys'] : '';
+	// 	$body_request_type = isset( $hook['request_body'] ) ? $hook['request_body'] : 'all';
 
-        $body_data = array();
+    //     $body_data = array();
 
-        // Check if $body_request is an array
-		if ( is_array( $body_request ) && 'selected'==$body_request_type ) {
-			// Loop through each item in the array
-			foreach ( $body_request as $body ) {
-				// Access individual values using keys
-				$body_value = $body['name'];
-				$body_parameter = $booking[ $body['value'] ];
+    //     // Check if $body_request is an array
+	// 	if ( is_array( $body_request ) && 'selected'==$body_request_type ) {
+	// 		// Loop through each item in the array
+	// 		foreach ( $body_request as $body ) {
+	// 			// Access individual values using keys
+	// 			$body_value = $body['name'];
+	// 			$body_parameter = $booking[ $body['value'] ];
 
-				// Add data to the $body_data array
-				$body_data[ $body_value ] = $body_parameter;
-			}
-		}else{
-            $body_data = $booking;
-        }
+	// 			// Add data to the $body_data array
+	// 			$body_data[ $body_value ] = $body_parameter;
+	// 		}
+	// 	}else{
+    //         $body_data = $booking;
+    //     }
 
-        $tfhb_http_args['headers']['X-WP-Webhook-Source'] = home_url( '/' );
-        $tfhb_http_args['body'] = trim( wp_json_encode( $body_data ) );
-        $response = wp_safe_remote_request( $hook['url'], $tfhb_http_args );	
-    }
+    //     $tfhb_http_args['headers']['X-WP-Webhook-Source'] = home_url( '/' );
+    //     $tfhb_http_args['body'] = trim( wp_json_encode( $body_data ) );
+    //     $response = wp_safe_remote_request( $hook['url'], $tfhb_http_args );	
+    // }
 
-    // Zapier Callback
-    function tfhb_zapier_callback($booking, $hook){
-        $tfhb_allow_unsafe_urls = false;
-        $tfhb_http_args = array(
-            'method'      => 'POST',
-            'timeout'     => MINUTE_IN_SECONDS,
-            'redirection' => 0,
-            'httpversion' => '1.0',
-            'blocking'    => false,
-            'user-agent'  => sprintf(  'Trigger (WordPress/%s)', $GLOBALS['wp_version'] ),
-            'headers'     => array(
-            'Content-Type' => 'application/json; charset=UTF-8',
-            ),
-            'cookies'     => array(),
-        );
+    // // Zapier Callback
+    // function tfhb_zapier_callback($booking, $hook){
+    //     $tfhb_allow_unsafe_urls = false;
+    //     $tfhb_http_args = array(
+    //         'method'      => 'POST',
+    //         'timeout'     => MINUTE_IN_SECONDS,
+    //         'redirection' => 0,
+    //         'httpversion' => '1.0',
+    //         'blocking'    => false,
+    //         'user-agent'  => sprintf(  'Trigger (WordPress/%s)', $GLOBALS['wp_version'] ),
+    //         'headers'     => array(
+    //         'Content-Type' => 'application/json; charset=UTF-8',
+    //         ),
+    //         'cookies'     => array(),
+    //     );
 
-        $body_request = isset( $hook['bodys'] ) ? $hook['bodys'] : '';
-		$body_request_type = isset( $hook['request_body'] ) ? $hook['request_body'] : 'all';
+    //     $body_request = isset( $hook['bodys'] ) ? $hook['bodys'] : '';
+	// 	$body_request_type = isset( $hook['request_body'] ) ? $hook['request_body'] : 'all';
 
-        $body_data = array();
+    //     $body_data = array();
 
-        // Check if $body_request is an array
-		if ( is_array( $body_request ) && 'selected'==$body_request_type ) {
-			// Loop through each item in the array
-			foreach ( $body_request as $body ) {
-				// Access individual values using keys
-				$body_value = $body['name'];
-				$body_parameter = $booking[ $body['value'] ];
+    //     // Check if $body_request is an array
+	// 	if ( is_array( $body_request ) && 'selected'==$body_request_type ) {
+	// 		// Loop through each item in the array
+	// 		foreach ( $body_request as $body ) {
+	// 			// Access individual values using keys
+	// 			$body_value = $body['name'];
+	// 			$body_parameter = $booking[ $body['value'] ];
 
-				// Add data to the $body_data array
-				$body_data[ $body_value ] = $body_parameter;
-			}
-		}else{
-            $body_data = $booking;
-        }
+	// 			// Add data to the $body_data array
+	// 			$body_data[ $body_value ] = $body_parameter;
+	// 		}
+	// 	}else{
+    //         $body_data = $booking;
+    //     }
 
-        $tfhb_http_args['headers']['X-WP-Webhook-Source'] = home_url( '/' );
-        $tfhb_http_args['body'] = trim( wp_json_encode( $body_data ) );
-        $response = wp_safe_remote_request( $hook['url'], $tfhb_http_args );	
-    }
+    //     $tfhb_http_args['headers']['X-WP-Webhook-Source'] = home_url( '/' );
+    //     $tfhb_http_args['body'] = trim( wp_json_encode( $body_data ) );
+    //     $response = wp_safe_remote_request( $hook['url'], $tfhb_http_args );	
+    // }
 
     // Webhook Callback
     function tfhb_webhook_callback($booking, $hook) {
