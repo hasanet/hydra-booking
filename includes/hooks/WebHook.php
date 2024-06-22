@@ -19,13 +19,13 @@ class WebHook{
         if(!empty($webHookdata)){
             foreach($webHookdata as $hook){
                 // Pabbly
-                if( !empty($hook['webhook']) && !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && "Pabbly"==$hook['webhook'] && !empty($hook['status']) ){
-                    $this->tfhb_pabbly_callback($booking, $hook);
-                }
-                // Zapier
-                if( !empty($hook['webhook']) && !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && "Zapier"==$hook['webhook'] && !empty($hook['status']) ){
-                    $this->tfhb_zapier_callback($booking, $hook);
-                }
+                // if( !empty($hook['webhook']) && !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && "Pabbly"==$hook['webhook'] && !empty($hook['status']) ){
+                //     $this->tfhb_pabbly_callback($booking, $hook);
+                // }
+                // // Zapier
+                // if( !empty($hook['webhook']) && !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && "Zapier"==$hook['webhook'] && !empty($hook['status']) ){
+                //     $this->tfhb_zapier_callback($booking, $hook);
+                // }
 
                 // Webhook
                 if( !empty($hook['events']) && in_array("Booking Confirmed", $hook['events']) && !empty($hook['status']) ){
@@ -123,7 +123,7 @@ class WebHook{
 
 		//Admin Option
 		$request_api = isset( $hook['url'] ) ? $hook['url'] : '';
-		$request_method = isset( $hook['request_method'] ) ? $hook['request_method'] : '';
+		$request_method = isset( $hook['request_method'] ) ? $hook['request_method'] : 'POST';
 		$request_format = isset( $hook['request_format'] ) ? $hook['request_format'] : '';
 		$header_request = isset( $hook['headers'] ) ? $hook['headers'] : '';
         $header_request_type = isset( $hook['request_header'] ) ? $hook['request_header'] : 'no';
@@ -179,7 +179,7 @@ class WebHook{
 			),
 			'method' => $api_request_method,
 		);
-
+        
 		// Make the POST request
 		$response = wp_remote_request( $api_endpoint, $request_args );
 

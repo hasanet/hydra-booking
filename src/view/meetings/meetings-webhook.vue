@@ -258,7 +258,6 @@ const deleteBodyField = (key) => {
         /> 
 
         <HbDropdown  
-            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             v-model="webhookData.request_method"
             :label="$tfhb_trans['Request Method']"   
             width="50"
@@ -273,7 +272,6 @@ const deleteBodyField = (key) => {
         />
 
         <HbDropdown  
-            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             v-model="webhookData.request_format"
             :label="$tfhb_trans['Request Format']"   
             width="50"
