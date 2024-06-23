@@ -243,7 +243,8 @@ const deleteBodyField = (key) => {
             placeholder="Select Webhook"  
             :option = "[
                 {'name': 'Pabbly', 'value': 'Pabbly'}, 
-                {'name': 'Zapier', 'value': 'Zapier'}
+                {'name': 'Zapier', 'value': 'Zapier'},
+                {'name': 'Webhook', 'value': 'Webhook'}
             ]"
         />
 
@@ -292,6 +293,7 @@ const deleteBodyField = (key) => {
         />
 
         <HbRadio 
+            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
             required= "true"
             v-model="webhookData.request_header"
             name="request_header"
@@ -303,7 +305,7 @@ const deleteBodyField = (key) => {
             ]" 
         />
         
-        <div class="tfhb-headers tfhb-full-width" v-if="'with'==webhookData.request_header">
+        <div class="tfhb-headers tfhb-full-width" v-if="'with'==webhookData.request_header && 'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook">
             <p>{{ $tfhb_trans['Request Headers'] }}</p>
             <div class="tfhb-flexbox" v-for="(header, key) in webhookData.headers">
                 <div class="tfhb-request-header-fields tfhb-flexbox">
