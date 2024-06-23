@@ -219,6 +219,8 @@ namespace HydraBooking\Admin\Controller;
             'Meeting Questions for Attendee' => __('Meeting Questions for Attendee', 'hydra-booking'),
             'Create your own booking page questions' => __('Create your own booking page questions', 'hydra-booking'),
             'Add Question for Attendee' => __('Add Question for Attendee', 'hydra-booking'),
+            'Create custom form' => __('Create custom form', 'hydra-booking'),
+            'Use existing form' => __('Use existing form', 'hydra-booking'),
             'Add more questions' => __('Add more questions', 'hydra-booking'),
             'Add New Availability' => __('Add New Availability', 'hydra-booking'),
             'New standard in online payment' => __('New standard in online payment', 'hydra-booking'),

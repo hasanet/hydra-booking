@@ -138,8 +138,8 @@ const meetingData = reactive({
     ],
     recurring_maximum: '',
     attendee_can_cancel: 1,
-    attendee_can_reschedule: 1,
-    questions_status: 1,
+    attendee_can_reschedule: 1, 
+    questions_type: 'custom',
     questions: [
         {
             label: 'name',
@@ -369,12 +369,15 @@ const meetingId = route.params.id;
             meetingData.attendee_can_cancel = response.data.meeting.attendee_can_cancel
             meetingData.attendee_can_reschedule = response.data.meeting.attendee_can_reschedule
 
-            if(response.data.meeting.questions_status){
-                meetingData.questions_status = response.data.meeting.questions_status
+            if(response.data.meeting.questions_type){
+                meetingData.questions_type = response.data.meeting.questions_type
             }
 
             if(response.data.meeting.questions){
                 meetingData.questions = JSON.parse(response.data.meeting.questions)
+            }
+            if(response.data.meeting.questions_form){
+                meetingData.questions_form = JSON.parse(response.data.meeting.questions_form)
             }
             if(response.data.meeting.notification && "string" == typeof response.data.meeting.notification){
                 meetingData.notification = JSON.parse(response.data.meeting.notification)
