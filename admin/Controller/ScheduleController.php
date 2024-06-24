@@ -27,7 +27,7 @@ namespace HydraBooking\Admin\Controller;
     public function tfhb_custom_cron_job_schedule( $schedules ) {
         
         $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
-        $every_minute = isset($general_settings['after_booking_completed']) ? $general_settings['after_booking_completed'] : 60; // minutes
+        $every_minute = !empty($general_settings['after_booking_completed']) ? $general_settings['after_booking_completed'] : 60; // minutes
            
         $every_minute = $every_minute * 60; 
 
