@@ -10,6 +10,7 @@ import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/integrations/GoogleCalendarIntegrations.vue'; 
 import OutlookCalendarIntegrations from '@/components/integrations/OutlookCalendarIntegrations.vue'; 
+import AppleCalendarIntegrations from '@/components/integrations/AppleCalendarIntegrations.vue'; 
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue'; 
 
 // import Form Field 
@@ -66,7 +67,7 @@ const Integration = reactive( {
 
     },
     google_calendar : {
-        type: 'meeting', 
+        type: 'calendar', 
         status: 0, 
         connection_status: 0,
         client_id: '',
@@ -75,13 +76,18 @@ const Integration = reactive( {
 
     },
     outlook_calendar : {
-        type: 'meeting', 
+        type: 'calendar', 
         status: 0, 
         connection_status: 0,
         client_id: '',
         secret_key: '',
         redirect_url: '',
 
+    },
+    apple_calendar : {
+        type: 'calendar', 
+        status: 0,
+        connection_status: 0,
     },
     stripe : {
         type: 'stripe', 
@@ -106,6 +112,7 @@ const fetchIntegration = async () => {
             Integration.woo_payment= response.data.integration_settings.woo_payment ? response.data.integration_settings.woo_payment : Integration.woo_payment;
             Integration.google_calendar= response.data.integration_settings.google_calendar ? response.data.integration_settings.google_calendar : Integration.google_calendar;
             Integration.outlook_calendar= response.data.integration_settings.outlook_calendar ? response.data.integration_settings.outlook_calendar : Integration.outlook_calendar;
+            Integration.apple_calendar= response.data.integration_settings.apple_calendar ? response.data.integration_settings.apple_calendar : Integration.apple_calendar;
 
             Integration.stripe= response.data.integration_settings.stripe ? response.data.integration_settings.stripe : Integration.stripe;
 
@@ -201,7 +208,7 @@ onBeforeMount(() => {
                 />
                 <!-- zoom intrigation -->
                  
-                <!-- zoom intrigation -->
+                <!-- Outlook intrigation -->
                 <OutlookCalendarIntegrations 
                 :outlook_calendar="Integration.outlook_calendar" 
                 @update-integrations="UpdateIntegration"
@@ -209,7 +216,15 @@ onBeforeMount(() => {
                 @popup-open-control="isOutlookPopupOpen"
                 @popup-close-control="isOutlookPopupClose" 
                 />
-                <!-- zoom intrigation -->
+                <!-- Outlook intrigation -->
+
+                <!-- Apple intrigation -->
+                <AppleCalendarIntegrations 
+                :apple_calendar="Integration.apple_calendar" 
+                @update-integrations="UpdateIntegration"
+                :ispopup="outlookpopup" 
+                />
+                <!-- Apple intrigation -->
 
                 <!-- stripe intrigation -->
                 <StripeIntegrations 

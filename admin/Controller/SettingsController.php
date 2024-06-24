@@ -424,6 +424,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'message' => 'Outlook Calendar Settings Updated Successfully',
             );
             return rest_ensure_response($data);
+        }elseif($key == 'apple_calendar'){
+            $_tfhb_integration_settings['apple_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['apple_calendar']['connection_status'] =  sanitize_text_field($data['connection_status']);  
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+            $option = get_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,  
+                'option' => $option,  
+                'message' => 'Apple Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
         }elseif($key == 'stripe'){
             $_tfhb_integration_settings['stripe']['type'] =  sanitize_text_field($data['type']);
             $_tfhb_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);

@@ -10,6 +10,7 @@ const currentRoute = useRouter().currentRoute.value.path;
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/hosts/GoogleCalendarIntegrations.vue';
 import OutlookCalendarIntegrations from '@/components/hosts/OutlookCalendarIntegrations.vue';
+import AppleCalendarIntegrations from '@/components/hosts/AppleCalendarIntegrations.vue';
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue';
 
 const route = useRoute();
@@ -90,6 +91,14 @@ const Integration = reactive( {
         tfhb_outlook_calendar: {},
 
     },
+    apple_calendar : {
+        type: 'calendar', 
+        status: 0,
+        connection_status: 0, 
+        apple_id: '',
+        app_password: '',
+
+    },
     stripe : {
         type: 'stripe', 
         status: 0, 
@@ -119,6 +128,7 @@ const fetchIntegration = async () => {
             Integration.zoom_meeting= response.data.integration_settings.zoom_meeting ? response.data.integration_settings.zoom_meeting : Integration.zoom_meeting;
             Integration.google_calendar= response.data.google_calendar ? response.data.google_calendar : Integration.google_calendar;  
             Integration.outlook_calendar = response.data.outlook_calendar  ? response.data.outlook_calendar  : Integration.outlook_calendar ;  
+            Integration.apple_calendar = response.data.apple_calendar  ? response.data.apple_calendar  : Integration.apple_calendar ;  
             
 
             skeleton.value = false;
@@ -183,6 +193,7 @@ onBeforeMount(() => {
         <!-- Host Integration -->
         <GoogleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
         <OutlookCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :outlook_calendar="Integration.outlook_calendar" @update-integrations="UpdateIntegration" />
+        <AppleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :apple_calendar="Integration.apple_calendar" @update-integrations="UpdateIntegration" />
 
         <StripeIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
         :stripe_data="Integration.stripe" 

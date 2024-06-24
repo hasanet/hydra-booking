@@ -478,6 +478,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             
             
         } 
+
+        // Apple Calendar  
+        $apple_calendar = isset($_tfhb_host_integration_settings['apple_calendar']) ? $_tfhb_host_integration_settings['apple_calendar'] : array();
+ 
+
+        if($_tfhb_integration_settings['apple_calendar']['connection_status'] == true){  
+
+            $apple_calendar['type'] = 'calendar';  
+            $apple_calendar['status'] = $_tfhb_integration_settings['apple_calendar']['status']; 
+            $apple_calendar['connection_status'] = $_tfhb_integration_settings['apple_calendar']['connection_status'];  
+            $apple_calendar['apple_id'] = isset($apple_calendar['apple_id']) ? $apple_calendar['apple_id'] : '';
+            $apple_calendar['app_password'] = isset($apple_calendar['app_password']) ? $apple_calendar['app_password'] : ''; 
+        } 
         
 
 
@@ -487,6 +500,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'integration_settings' => $_tfhb_host_integration_settings,
             'google_calendar' => $google_calendar,  
             'outlook_calendar' => $outlook_calendar,  
+            'apple_calendar' => $apple_calendar,  
         );
         return rest_ensure_response($data);
     }
@@ -561,6 +575,26 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $data = array(
                 'status' => true,   
                 'message' => 'Outlook Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'apple_calendar'){
+            // Get Global Settings 
+            $_tfhb_host_integration_settings['apple_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['apple_calendar']['status'] =  sanitize_text_field($data['status']);     
+            $_tfhb_host_integration_settings['apple_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['apple_calendar']['apple_id'] =  $data['apple_id'];
+            $_tfhb_host_integration_settings['apple_calendar']['app_password'] =  $data['app_password'];
+ 
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+            
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Apple Calendar Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }elseif($key == 'stripe'){

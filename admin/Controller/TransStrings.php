@@ -106,6 +106,7 @@ namespace HydraBooking\Admin\Controller;
             'Redirect Url' =>  __('Redirect Url', 'hydra-booking'),
             'Enter Redirect Url' =>  __('Enter Redirect Url', 'hydra-booking'),
             'Payment Method' =>  __('Enter Redirect Url', 'hydra-booking'),
+            'Apple Calendar' =>  __('Apple Calendar', 'hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 
@@ -145,6 +146,10 @@ namespace HydraBooking\Admin\Controller;
             'Enter Your Stripe Secret' => __('Enter Your Stripe Secret', 'hydra-booking'),
             'Connect Your Stripe Account' => __('Connect Your Stripe Account', 'hydra-booking'),
             'Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account' => __('Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account', 'hydra-booking'),
+            'Apple ID (Email)' => __('Apple ID (Email)', 'hydra-booking'),
+            'App Specific Password' => __('App Specific Password', 'hydra-booking'),
+            'Enter Apple ID (Email)' => __('Enter Apple ID (Email)', 'hydra-booking'),
+            'Enter App Specific Password' => __('Enter App Specific Password', 'hydra-booking'),
 
             // Meetings
             'Create New Meeting' => __("Create New Meeting", 'hydra-booking'),
