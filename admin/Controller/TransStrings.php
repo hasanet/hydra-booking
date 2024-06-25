@@ -107,6 +107,13 @@ namespace HydraBooking\Admin\Controller;
             'Enter Redirect Url' =>  __('Enter Redirect Url', 'hydra-booking'),
             'Payment Method' =>  __('Enter Redirect Url', 'hydra-booking'),
             'Apple Calendar' =>  __('Apple Calendar', 'hydra-booking'),
+            'Mailchimp' => __('Mailchimp','hydra-booking'),
+            'Mailchimp API Key' => __('Mailchimp API Key','hydra-booking'),
+            'Enter Your API Key' => __('Enter Your API Key','hydra-booking'),
+            'Connect Your Mailchimp API' => __('Connect Your Mailchimp API','hydra-booking'),
+            'Please read the documentation here for step by step guide to know how you can get api credentials from Mailchimp Account' => __('Please read the documentation here for step by step guide to know how you can get api credentials from Mailchimp Account','hydra-booking'),
+            '' => __('','hydra-booking'),
+            '' => __('','hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 

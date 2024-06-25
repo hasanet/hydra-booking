@@ -12,6 +12,7 @@ import GoogleCalendarIntegrations from '@/components/integrations/GoogleCalendar
 import OutlookCalendarIntegrations from '@/components/integrations/OutlookCalendarIntegrations.vue'; 
 import AppleCalendarIntegrations from '@/components/integrations/AppleCalendarIntegrations.vue'; 
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue'; 
+import MailchimpIntegrations from '@/components/integrations/MailchimpIntegrations.vue'; 
 
 // import Form Field 
 import Icon from '@/components/icon/LucideIcon.vue' 
@@ -24,6 +25,7 @@ const skeleton = ref(true);
 const popup = ref(false);
 const gpopup = ref(false);
 const spopup = ref(false);
+const mailpopup = ref(false);
 const outlookpopup = ref(false);
 const isPopupOpen = () => {
     popup.value = true;
@@ -50,6 +52,12 @@ const isstripePopupClose = (data) => {
     spopup.value = false;
 }
 
+const ismailchimpPopupOpen = () => {
+    mailpopup.value = true;
+}
+const ismailchimpPopupClose = (data) => {
+    mailpopup.value = false;
+}
 
 const Integration = reactive( {
     woo_payment : {
@@ -96,6 +104,11 @@ const Integration = reactive( {
         secret_key: '',
 
     },
+    mailchimp : {
+        type: 'mailchimp', 
+        status: 0, 
+        key: ''
+    }
 });
 
 //  update Integration
@@ -115,6 +128,7 @@ const fetchIntegration = async () => {
             Integration.apple_calendar= response.data.integration_settings.apple_calendar ? response.data.integration_settings.apple_calendar : Integration.apple_calendar;
 
             Integration.stripe= response.data.integration_settings.stripe ? response.data.integration_settings.stripe : Integration.stripe;
+            Integration.mailchimp= response.data.integration_settings.mailchimp ? response.data.integration_settings.mailchimp : Integration.mailchimp;
 
             skeleton.value = false;
         }
@@ -145,6 +159,7 @@ const UpdateIntegration = async (key, value) => {
             gpopup.value = false;
             spopup.value = false;
             spopup.value = false;
+            mailpopup.value = false;
             
         }else{
             toast.error(response.data.message, {
@@ -235,6 +250,16 @@ onBeforeMount(() => {
                 @popup-close-control="isstripePopupClose" 
                 />
                 <!-- stripe intrigation -->
+
+                <!-- Mailchimp intrigation -->
+                <MailchimpIntegrations 
+                :mail_data="Integration.mailchimp" 
+                @update-integrations="UpdateIntegration" 
+                :ispopup="mailpopup"
+                @popup-open-control="ismailchimpPopupOpen"
+                @popup-close-control="ismailchimpPopupClose" 
+                />
+                <!-- Mailchimp intrigation -->
           
 
             </div> 
