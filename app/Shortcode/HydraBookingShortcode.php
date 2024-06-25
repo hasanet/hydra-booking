@@ -11,6 +11,7 @@ use HydraBooking\Admin\Controller\CountryController;
 use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
 use HydraBooking\Admin\Controller\ScheduleController;
+use HydraBooking\Services\Integrations\AppleCalendar\AppleCalendar;
 
  
 class HydraBookingShortcode {
@@ -44,6 +45,7 @@ class HydraBookingShortcode {
             return 'Please provide a valid Meeting id';
         }  
 
+
         // Attributes
         $atts = shortcode_atts(
             array( 
@@ -56,6 +58,12 @@ class HydraBookingShortcode {
         );
 
         $calendar_id = $atts['id']; 
+        // new AppleCalendar('info@themefic.com', 'veuq-bfpa-nksb-sqlw');
+         
+        // echo "<pre>";
+        // // print_r();$appleCalendar->getCalendars()
+        // echo "</pre>";
+        // exit;
 
         // Get Meeting
         $meeting = new Meeting();
