@@ -591,7 +591,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'recurring_maximum'         => isset($request['recurring_maximum']) ? sanitize_text_field($request['recurring_maximum']) : '',
             'attendee_can_cancel'       => isset($request['attendee_can_cancel']) ? sanitize_text_field($request['attendee_can_cancel']) : '',
             'attendee_can_reschedule'   => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
-            'questions_status'          => isset($request['questions_status']) ? sanitize_text_field($request['questions_status']) : '',
+            'questions_type'          => isset($request['questions_type']) ? sanitize_text_field($request['questions_type']) : '',
             'questions'                 => isset($request['questions']) ? $request['questions'] : '',
             'notification'              => isset($request['notification']) ? $request['notification'] : '',
             'payment_status'            => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
