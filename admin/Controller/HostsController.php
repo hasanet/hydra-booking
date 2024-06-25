@@ -492,6 +492,26 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $apple_calendar['app_password'] = isset($apple_calendar['app_password']) ? $apple_calendar['app_password'] : ''; 
         } 
         
+         // Stripe API
+         $stripe = isset($_tfhb_host_integration_settings['stripe']) ? $_tfhb_host_integration_settings['stripe'] : array();
+         if($_tfhb_integration_settings['stripe']['status'] == true){  
+ 
+            $stripe['type'] = 'stripe';
+            $stripe['status'] = $_tfhb_integration_settings['stripe']['status']; 
+            $stripe['public_key'] = $_tfhb_integration_settings['stripe']['public_key'];  
+            $stripe['secret_key'] = $_tfhb_integration_settings['stripe']['secret_key']; 
+           
+         } 
+
+        // Mailchimp API
+        $mailchimp = isset($_tfhb_host_integration_settings['mailchimp']) ? $_tfhb_host_integration_settings['mailchimp'] : array();
+        if($_tfhb_integration_settings['mailchimp']['status'] == true){  
+
+            $mailchimp['type'] = 'mailchimp';
+            $mailchimp['status'] = $_tfhb_integration_settings['mailchimp']['status']; 
+            $mailchimp['key'] = $_tfhb_integration_settings['mailchimp']['key'];  
+          
+        } 
 
 
         // Checked if woo
@@ -501,6 +521,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'google_calendar' => $google_calendar,  
             'outlook_calendar' => $outlook_calendar,  
             'apple_calendar' => $apple_calendar,  
+            'mailchimp' => $mailchimp,  
+            'stripe' => $stripe,  
         );
         return rest_ensure_response($data);
     }
@@ -610,6 +632,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $data = array(
                 'status' => true,   
                 'message' => 'Stripe Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'mailchimp'){
+            $_tfhb_host_integration_settings['mailchimp']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['mailchimp']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['mailchimp']['key'] =  sanitize_text_field($data['key']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'message' => 'Mailchimp Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }

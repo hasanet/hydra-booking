@@ -455,6 +455,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'message' => 'Stripe Settings Updated Successfully',
             );
             return rest_ensure_response($data);
+        }elseif($key == 'mailchimp'){
+            $_tfhb_integration_settings['mailchimp']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_integration_settings['mailchimp']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_integration_settings['mailchimp']['key'] =  sanitize_text_field($data['key']);
+
+            // update option
+            update_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+            $option = get_option('_tfhb_integration_settings', $_tfhb_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'option' => $option,  
+                'message' => 'Mailchimp Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
         }
     }
 
