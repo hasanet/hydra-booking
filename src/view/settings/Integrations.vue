@@ -105,7 +105,7 @@ const Integration = reactive( {
 
     },
     mailchimp : {
-        type: 'stripe', 
+        type: 'mailchimp', 
         status: 0, 
         key: ''
     }

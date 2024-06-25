@@ -111,11 +111,10 @@ const Integration = reactive( {
         type: 'stripe', 
         status: 0, 
         public_key: '',
-        secret_key: '',
-
+        secret_key: ''
     },
     mailchimp : {
-        type: 'stripe', 
+        type: 'mailchimp', 
         status: 0, 
         key: ''
     }

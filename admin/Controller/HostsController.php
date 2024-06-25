@@ -492,24 +492,24 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $apple_calendar['app_password'] = isset($apple_calendar['app_password']) ? $apple_calendar['app_password'] : ''; 
         } 
         
-         // Stripe API
-         $stripe = isset($_tfhb_host_integration_settings['stripe']) ? $_tfhb_host_integration_settings['stripe'] : array();
-         if($_tfhb_integration_settings['stripe']['status'] == true){  
- 
-            $stripe['type'] = 'stripe';
-            $stripe['status'] = $_tfhb_integration_settings['stripe']['status']; 
-            $stripe['public_key'] = $_tfhb_integration_settings['stripe']['public_key'];  
-            $stripe['secret_key'] = $_tfhb_integration_settings['stripe']['secret_key']; 
-           
-         } 
+        // Stripe API
+        $stripe = isset($_tfhb_host_integration_settings['stripe']) ? $_tfhb_host_integration_settings['stripe'] : array();
+        if($_tfhb_integration_settings['stripe']['status'] == true){  
+
+        $stripe['type'] = 'stripe';
+        $stripe['status'] = $_tfhb_host_integration_settings['stripe']['status']; 
+        $stripe['public_key'] = $_tfhb_host_integration_settings['stripe']['public_key'];  
+        $stripe['secret_key'] = $_tfhb_host_integration_settings['stripe']['secret_key']; 
+        
+        } 
 
         // Mailchimp API
         $mailchimp = isset($_tfhb_host_integration_settings['mailchimp']) ? $_tfhb_host_integration_settings['mailchimp'] : array();
         if($_tfhb_integration_settings['mailchimp']['status'] == true){  
 
             $mailchimp['type'] = 'mailchimp';
-            $mailchimp['status'] = $_tfhb_integration_settings['mailchimp']['status']; 
-            $mailchimp['key'] = $_tfhb_integration_settings['mailchimp']['key'];  
+            $mailchimp['status'] = $_tfhb_host_integration_settings['mailchimp']['status']; 
+            $mailchimp['key'] = $_tfhb_host_integration_settings['mailchimp']['key'];  
           
         } 
 

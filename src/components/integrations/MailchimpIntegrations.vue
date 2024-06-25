@@ -6,6 +6,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 // import Form Field 
 import HbText from '@/components/form-fields/HbText.vue' 
 import HbPopup from '@/components/widgets/HbPopup.vue';  
+import HbSwitch from '@/components/form-fields/HbSwitch.vue';  
 
 const props = defineProps([
     'class', 
@@ -38,7 +39,7 @@ const closePopup = () => {
             <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ mail_data.key ? 'Settings' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
-                <HbSwitch v-if="mail_data.connection_status" @change="emit('update-integrations', 'mailchimp', mail_data)" v-model="mail_data.status"    />
+                <HbSwitch @change="emit('update-integrations', 'mailchimp', mail_data)" v-model="mail_data.status"    />
             <!-- Swicher --> 
         </div>
 
