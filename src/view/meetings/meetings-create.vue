@@ -240,7 +240,8 @@ const meetingData = reactive({
     payment_meta: {
         product_id: '',
     },
-    webhook: ''
+    webhook: '',
+    integrations: ''
 });
 
 // Add more Location
@@ -399,6 +400,7 @@ const meetingId = route.params.id;
             }
 
             meetingData.webhook = response.data.meeting.webhook ? JSON.parse(response.data.meeting.webhook) : '';
+            meetingData.integrations = response.data.meeting.integrations ? JSON.parse(response.data.meeting.integrations) : '';
 
             skeleton.value = false
         }else{ 
@@ -526,7 +528,9 @@ const TfhbPrevNavigator = () => {
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> {{ $tfhb_trans['Questions'] }}</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/notifications'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> {{ $tfhb_trans['Notifications'] }}</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/payment'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }">{{ $tfhb_trans['Payment'] }}</router-link></li>  
-                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/webhook'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/webhook' }">{{ $tfhb_trans['Webhook Integrations'] }}</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/webhook'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/webhook' }">{{ $tfhb_trans['Webhook'] }}</router-link></li>  
+
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/integrations' }">{{ $tfhb_trans['Integrations'] }}</router-link></li> 
 
             </ul>  
         </nav>

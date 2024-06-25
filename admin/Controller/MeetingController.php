@@ -57,6 +57,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'deleteMeetingWebhook'),
         ));
 
+        register_rest_route('hydra-booking/v1', '/meetings/integration/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'updateMeetingIntegration'),
+        ));   
+        register_rest_route('hydra-booking/v1', '/meetings/integration/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'deleteMeetingIntegration'),
+        ));
+
         register_rest_route('hydra-booking/v1', '/meetings/filter', array(
             'methods' => 'GET',
             'callback' => array($this, 'filterMeetings'),
@@ -320,6 +329,98 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             return rest_ensure_response(array(
                 'status' => false,
                 'message' => 'Webhook key does not exist!',
+            ));
+        }
+    }
+
+    // Integrations
+    public function updateMeetingIntegration() {
+        $request = json_decode(file_get_contents('php://input'), true);
+        
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+    
+        // Decode existing integrations data if it exists
+        $Integrationsdata = !empty($MeetingData->integrations) ? json_decode($MeetingData->integrations, true) : array();
+    
+        $key = isset($request['key']) ? $request['key'] : '';
+    
+        // New webhook data to be updated
+        $newIntegrationsdata = array(
+            'title' => !empty($request['title']) ? $request['title'] : '',
+            'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
+            'status' => !empty($request['status']) ? $request['status'] : '',
+        );
+    
+        if ($key !== '' && isset($Integrationsdata[$key])) {
+            // Update the existing webhook data at the specified key
+            $Integrationsdata[$key] = $newIntegrationsdata;
+        } else {
+            // Append the new webhook data
+            $Integrationsdata[] = $newIntegrationsdata;
+        }
+    
+        // Encode the updated webhook data back to JSON
+        $encodedIntegrationsdata = json_encode($Integrationsdata);
+    
+        $data = [
+            'id'      => $request['meeting_id'],
+            'integrations' => $encodedIntegrationsdata,
+        ];
+    
+        // Update the meeting with the new webhook data
+        $MeetingUpdate = $meeting->update($data);
+    
+        // Retrieve updated meeting data
+        $updateMeetingData = $meeting->get($request['meeting_id']);
+        
+        return rest_ensure_response(array(
+            'status' => true,
+            'integrations' => $updateMeetingData->integrations,
+            'message' => 'Webhook Successfully Updated!',
+        ));
+    }       
+
+    // Integration Delete
+    public function deleteMeetingIntegration($request){
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+
+        $key = $request['key'];
+
+        // Decode existing webhook data if it exists
+        $Integrationsdata = !empty($MeetingData->integrations) ? json_decode($MeetingData->integrations, true) : array();
+
+        // Check if the key exists in the array
+        if (isset($Integrationsdata[$key])) {
+            // Remove the element at the specified key
+            unset($Integrationsdata[$key]);
+
+            // Re-index the array to maintain sequential keys
+            $Integrationsdata = array_values($Integrationsdata);
+
+            // Encode the updated Integrations data back to JSON
+            $encodedIntegrationsdata = json_encode($Integrationsdata);
+
+            // Update the meeting with the new Integrations data
+            $data = [
+                'id'      => $request['meeting_id'],
+                'integrations' => $encodedIntegrationsdata,
+            ];
+            $MeetingUpdate = $meeting->update($data);
+            $updateMeetingData = $meeting->get($request['meeting_id']);
+
+            return rest_ensure_response(array(
+                'status' => true,
+                'integrations' => $updateMeetingData->integrations,
+                'message' => 'Integrations Successfully Deleted!',
+            ));
+        } else {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Integrations key does not exist!',
             ));
         }
     }

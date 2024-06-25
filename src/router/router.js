@@ -158,6 +158,12 @@ const routes = [
                         name: 'MeetingsCreateWebhook',
                         meta: { Capabilities: 'tfhb_manage_options' },
                         component: () => import('../view/meetings/meetings-webhook.vue')
+                    },
+                    {
+                        path: 'integrations',
+                        name: 'MeetingsCreateIntegrations',
+                        meta: { Capabilities: 'tfhb_manage_options' },
+                        component: () => import('../view/meetings/meetings-integrations.vue')
                     }
                 ]
             }, 
