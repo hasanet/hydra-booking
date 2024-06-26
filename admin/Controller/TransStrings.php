@@ -113,6 +113,13 @@ namespace HydraBooking\Admin\Controller;
             'Connect Your Mailchimp API' => __('Connect Your Mailchimp API','hydra-booking'),
             'Please read the documentation here for step by step guide to know how you can get api credentials from Mailchimp Account' => __('Please read the documentation here for step by step guide to know how you can get api credentials from Mailchimp Account','hydra-booking'),
             'Webhook' => __('Webhook','hydra-booking'),
+            'Integrations Title' => __('Integrations Title','hydra-booking'),
+            'Type your Integrations Title' => __('Type your Integrations Title','hydra-booking'),
+            'Other Fields' => __('Other Fields','hydra-booking'),
+            'Add New Integrations' => __('Add New Integrations','hydra-booking'),
+            '' => __('','hydra-booking'),
+            '' => __('','hydra-booking'),
+            '' => __('','hydra-booking'),
             '' => __('','hydra-booking'),
 
             // Hosts

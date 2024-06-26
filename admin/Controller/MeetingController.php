@@ -350,6 +350,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $newIntegrationsdata = array(
             'title' => !empty($request['title']) ? $request['title'] : '',
             'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
+            'events' => !empty($request['events']) ? $request['events'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
@@ -378,7 +379,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response(array(
             'status' => true,
             'integrations' => $updateMeetingData->integrations,
-            'message' => 'Webhook Successfully Updated!',
+            'message' => 'Integrations Successfully Updated!',
         ));
     }       
 

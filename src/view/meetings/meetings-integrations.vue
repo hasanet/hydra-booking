@@ -22,9 +22,9 @@ const props = defineProps({
 
 });
 
-const webhookList = ref(true);
-const webhookcreate = ref(false);
-const webhookData = reactive({
+const integrationsList = ref(true);
+const integrationscreate = ref(false);
+const integrationsData = reactive({
     'meeting_id' : props.meetingId,
     'title': '',
     'events': '',
@@ -38,16 +38,16 @@ const webhookData = reactive({
 });
 
 
-const updateWebHook = async () => {
+const updateIntegrations = async () => {
     // Api Submission
     try { 
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/integration/update', webhookData);
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/integration/update', integrationsData);
         if (response.data.status == true) { 
             toast.success(response.data.message); 
-            props.meeting.webhook = response.data.webhook ? JSON.parse(response.data.webhook) : '';
+            props.meeting.integrations = response.data.integrations ? JSON.parse(response.data.integrations) : '';
 
-            webhookcreate.value = false;
-            webhookList.value = true;
+            integrationscreate.value = false;
+            integrationsList.value = true;
         }else{
             toast.error(response.data.message); 
         }
@@ -56,7 +56,7 @@ const updateWebHook = async () => {
     } 
 }
 
-const deleteWebHook = async (key) => {
+const deleteIntegrations = async (key) => {
     const data = {
         key: key,
         meeting_id: props.meetingId
@@ -72,33 +72,23 @@ const deleteWebHook = async (key) => {
                 "autoClose": 1500,
             }); 
 
-            props.meeting.webhook = response.data.webhook ? JSON.parse(response.data.webhook) : '';
+            props.meeting.integrations = response.data.integrations ? JSON.parse(response.data.integrations) : '';
         }
     } catch (error) {
         console.log(error);
     }
 }
 
-const addNewWebHook = () => {
-    webhookList.value = false;
-    webhookcreate.value = true;
+const addNewIntegrations = () => {
+    integrationsList.value = false;
+    integrationscreate.value = true;
 
-    webhookData.key = '';
-    webhookData.webhook = '';
-    webhookData.url = '';
-    webhookData.request_method = '';
-    webhookData.request_format = '';
-    webhookData.events = '';
-    webhookData.request_body = 'all';
-    webhookData.request_header = 'no';
-    webhookData.status = '';
-    webhookData.headers = [
-        {
-            'key': '',
-            'value': ''
-        }
-    ];
-    webhookData.bodys = [
+    integrationsData.key = '';
+    integrationsData.title = '';
+    integrationsData.webhook = '';
+    integrationsData.events = '';
+    integrationsData.status = '';
+    integrationsData.bodys = [
         {
             'name': '',
             'value': ''
@@ -106,99 +96,77 @@ const addNewWebHook = () => {
     ];
 }
 
-const backtoWebHookList = () => {
-    webhookcreate.value = false;
-    webhookList.value = true;
+const backtointegrationsList = () => {
+    integrationscreate.value = false;
+    integrationsList.value = true;
 }
 
 // edit webhook
-const editWebHook = (data, key) => {
-    webhookData.key = key;
-    webhookData.meeting_id = props.meetingId;
-    webhookData.webhook = data.webhook;
-    webhookData.url = data.url;
-    webhookData.request_method = data.request_method;
-    webhookData.request_format = data.request_format;
-    webhookData.events = data.events;
-    webhookData.request_body = data.request_body;
-    webhookData.request_header = data.request_header;
-    webhookData.status = data.status;
-    webhookData.headers = data.headers;
-    webhookData.bodys = data.bodys;
+const editIntegrations = (data, key) => {
+    integrationsData.key = key;
+    integrationsData.meeting_id = props.meetingId;
+    integrationsData.webhook = data.webhook;
+    integrationsData.title = data.title;
+    integrationsData.events = data.events;
+    integrationsData.status = data.status;
+    integrationsData.bodys = data.bodys;
 
-    webhookList.value = false;
-    webhookcreate.value = true;
+    integrationsList.value = false;
+    integrationscreate.value = true;
 }
 
 // update webhook status
 const updateHookStatus = (e, data, key) => {
 
-    webhookData.key = key;
-    webhookData.meeting_id = props.meetingId;
-    webhookData.webhook = data.webhook;
-    webhookData.url = data.url;
-    webhookData.request_method = data.request_method;
-    webhookData.request_format = data.request_format;
-    webhookData.events = data.events;
-    webhookData.request_body = data.request_body;
-    webhookData.request_header = data.request_header;
-    webhookData.status = e.target.checked ? 1 : 0;
-    webhookData.headers = data.headers;
-    webhookData.bodys = data.bodys;
+    integrationsData.key = key;
+    integrationsData.meeting_id = props.meetingId;
+    integrationsData.webhook = data.webhook;
+    integrationsData.title = data.title;
+    integrationsData.events = data.events;
+    integrationsData.status = e.target.checked ? 1 : 0;
+    integrationsData.bodys = data.bodys;
 
-    updateWebHook();
-}
-
-// Add header
-const addHeadersField = () => {
-    webhookData.headers.push({
-        key: '',
-        value: '',
-    });
-}
-// Delete header
-const deleteHeadersField = (key) => {
-    webhookData.headers.splice(key, 1)
+    updateIntegrations();
 }
 
 // Add body
 const addBodyField = () => {
-    webhookData.bodys.push({
+    integrationsData.bodys.push({
         name: '',
         value: '',
     });
 }
 // Delete body
 const deleteBodyField = (key) => {
-    webhookData.bodys.splice(key, 1)
+    integrationsData.bodys.splice(key, 1)
 }
 
 </script>
 
 <template>
 
-<!-- {{ webhookData  }} -->
+<!-- {{ integrationsData  }} -->
 <div class="meeting-create-details tfhb-gap-24">
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
             <h2>{{ $tfhb_trans['Availability Range for this Booking'] }}</h2> 
             <p>{{ $tfhb_trans['How many days can the invitee schedule?'] }}</p>
         </div>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookList" @click="addNewWebHook">
+        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="integrationsList" @click="addNewIntegrations">
             <Icon name="PlusCircle" :width="20"/>
-            {{ $tfhb_trans['Add New Webhook'] }}
+            {{ $tfhb_trans['Add New Integrations'] }}
         </button>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookcreate" @click="backtoWebHookList">
+        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="integrationscreate" @click="backtointegrationsList">
             <Icon name="ArrowLeft" :width="20"/>
             {{ $tfhb_trans['Back'] }}
         </button>
     </div>
 
-    <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.webhook && webhookList">
-        <div class="tfhb-admin-card-box tfhb-full-width tfhb-justify-between tfhb-mb-16" v-for="(hook, key)  in meeting.webhook" :key="key">
+    <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.integrations && integrationsList">
+        <div class="tfhb-admin-card-box tfhb-full-width tfhb-justify-between tfhb-mb-16" v-for="(hook, key)  in meeting.integrations" :key="key">
             <div class="tfhb-webhook-info">
                 <h4>{{ hook.webhook }}</h4>
-                <p>{{ hook.url }}</p>
+                <p>{{ hook.title }}</p>
                 <ul class="webhook-event" v-if="hook.events">
                     <li v-for="event in hook.events">
                         {{ event }}
@@ -212,18 +180,18 @@ const deleteBodyField = (key) => {
                 @change="(e) => updateHookStatus(e, hook, key)"
                 />
                 <button class="question-edit-btn" >
-                    <Icon name="PencilLine" :width="16" @click="editWebHook(hook, key)" />
+                    <Icon name="PencilLine" :width="16" @click="editIntegrations(hook, key)" />
                 </button>
                 <button class="question-edit-btn">
-                    <Icon name="X" :width="16" @click="deleteWebHook(key)" />
+                    <Icon name="X" :width="16" @click="deleteIntegrations(key)" />
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24" v-if="webhookcreate">
-        <HbDropdown  
-            v-model="webhookData.webhook"
+    <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24" v-if="integrationscreate">
+        <!-- <HbDropdown  
+            v-model="integrationsData.webhook"
             required= "true"  
             :label="$tfhb_trans['Select Webhook']"   
             width="50"
@@ -233,110 +201,28 @@ const deleteBodyField = (key) => {
                 {'name': 'Webhook', 'value': 'Webhook'},
                 {'name': 'Mailchimp', 'value': 'Mailchimp'}, 
             ]"
-        />
+        /> -->
 
         <HbText  
-            v-model="webhookData.url"
+            v-model="integrationsData.title"
             required= "true"  
-            :label="$tfhb_trans['Webhook URL']"  
+            :label="$tfhb_trans['Integrations Title']"  
             selected = "1"
-            :placeholder="$tfhb_trans['Type your Webhook URL']" 
-            width="50"
+            :placeholder="$tfhb_trans['Type your Integrations Title']" 
         /> 
-
-        <HbDropdown  
-            v-model="webhookData.request_method"
-            :label="$tfhb_trans['Request Method']"   
-            width="50"
-            selected = "1"
-            placeholder="Request Method"  
-            :option = "[
-                {'name': 'GET', 'value': 'GET'}, 
-                {'name': 'POST', 'value': 'POST'},
-                {'name': 'PUT', 'value': 'PUT'},
-                {'name': 'PATCH', 'value': 'PATCH'}
-            ]"
-        />
-
-        <HbDropdown  
-            v-model="webhookData.request_format"
-            :label="$tfhb_trans['Request Format']"   
-            width="50"
-            selected = "1"
-            placeholder="Request Format"  
-            :option = "[
-                {'name': 'FORM', 'value': 'form'}, 
-                {'name': 'JSON', 'value': 'json'}
-            ]"
-        />
 
         <HbCheckbox 
             required= "true"
-            v-model="webhookData.events"
+            v-model="integrationsData.events"
             name="webhook_events"
             :label="$tfhb_trans['Event Triggers']"
             :groups="true"
             :options="['Booking Confirmed', 'Booking Canceled', 'Booking Completed']" 
         />
 
-        <HbRadio 
-            v-if="'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook"
-            required= "true"
-            v-model="webhookData.request_header"
-            name="request_header"
-            :label="$tfhb_trans['Request Header']"
-            :groups="true"
-            :options="[
-                {'label': 'No Headers', 'value': 'no'}, 
-                {'label': 'With Headers', 'value': 'with'}
-            ]" 
-        />
-        
-        <div class="tfhb-headers tfhb-full-width" v-if="'with'==webhookData.request_header && 'Pabbly'!=webhookData.webhook && 'Zapier'!=webhookData.webhook">
-            <p>{{ $tfhb_trans['Request Headers'] }}</p>
-            <div class="tfhb-flexbox" v-for="(header, key) in webhookData.headers">
-                <div class="tfhb-request-header-fields tfhb-flexbox">
-                    <HbText  
-                        v-model="header.key"
-                        required= "true"  
-                        selected = "1"
-                        :placeholder="$tfhb_trans['Header Key']" 
-                        width="50"
-                    /> 
-                    <HbText  
-                        v-model="header.value"
-                        required= "true"   
-                        selected = "1"
-                        :placeholder="$tfhb_trans['Header Value']" 
-                        width="50"
-                    /> 
-                </div>
-                <div class="request-actions">
-                    <button class="tfhb-availability-schedule-btn" @click="addHeadersField" v-if="key == 0">
-                        <Icon name="Plus" size="20px" /> 
-                    </button> 
-                    <button class="tfhb-availability-schedule-btn" @click="deleteHeadersField(key)" v-else>
-                        <Icon name="X" size="20px" /> 
-                    </button> 
-                </div>
-            </div>
-        </div>
-
-        <HbRadio 
-            required= "true"
-            v-model="webhookData.request_body"
-            name="request_body"
-            :label="$tfhb_trans['Request Body']"
-            :groups="true"
-            :options="[
-                {'label': 'All Data', 'value': 'all'}, 
-                {'label': 'Selected Data', 'value': 'selected'}
-            ]" 
-        />
-
-        <div class="tfhb-headers tfhb-full-width" v-if="'selected'==webhookData.request_body">
-            <p>{{ $tfhb_trans['Request Fields'] }}</p>
-            <div class="tfhb-flexbox" v-for="(body, key) in webhookData.bodys">
+        <div class="tfhb-headers tfhb-full-width">
+            <p>{{ $tfhb_trans['Other Fields'] }}</p>
+            <div class="tfhb-flexbox" v-for="(body, key) in integrationsData.bodys">
                 <div class="tfhb-request-header-fields tfhb-flexbox">
                     <HbText  
                         v-model="body.name"
@@ -365,13 +251,13 @@ const deleteBodyField = (key) => {
         </div>
 
         <HbCheckbox 
-            v-model="webhookData.status"
+            v-model="integrationsData.status"
             :label="$tfhb_trans['Enable this Webhook']"
             name="enable_webhook"
         />
 
         <div class="tfhb-submission-btn">
-            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="updateWebHook">{{ $tfhb_trans['Save Webhook'] }} </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox" @click="updateIntegrations">{{ $tfhb_trans['Save Webhook'] }} </button>
         </div>
     </div>
 </div>

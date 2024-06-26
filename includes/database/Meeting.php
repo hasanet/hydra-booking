@@ -58,6 +58,7 @@ class Meeting {
                 meeting_price VARCHAR(20) NULL, 
                 payment_meta LONGTEXT NULL, 
                 webhook LONGTEXT NULL, 
+                integrations LONGTEXT NULL, 
                 status VARCHAR(20) NULL, 
                 created_by VARCHAR(20) NOT NULL, 
                 updated_by VARCHAR(20) NOT NULL, 
