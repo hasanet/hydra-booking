@@ -485,7 +485,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $booking_List = $booking->get(null, true);
 
         // Single Booking 
-        $single_booking_meta = $booking->get($request['id']);
+        $single_booking_meta = $booking->get(['id'=>$request['id']],false, true);
 
         if("approved"==$request['status']){
             do_action('hydra_booking/after_booking_completed', $single_booking_meta);

@@ -350,6 +350,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $newIntegrationsdata = array(
             'title' => !empty($request['title']) ? $request['title'] : '',
             'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
+            'events' => !empty($request['events']) ? $request['events'] : '',
+            'audience' => !empty($request['audience']) ? $request['audience'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
@@ -378,7 +380,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response(array(
             'status' => true,
             'integrations' => $updateMeetingData->integrations,
-            'message' => 'Webhook Successfully Updated!',
+            'message' => 'Integrations Successfully Updated!',
         ));
     }       
 
@@ -631,6 +633,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
         }
 
+        $_tfhb_host_integration_settings = !empty($MeetingData->host_id) ? get_user_meta($MeetingData->host_id, '_tfhb_host_integration_settings', true) : ''; 
+        $api_key = !empty($_tfhb_integration_settings['mailchimp']['key']) ? $_tfhb_integration_settings['mailchimp']['key'] : '';
+        $api_key = !empty($_tfhb_host_integration_settings['mailchimp']['key']) ? $_tfhb_host_integration_settings['mailchimp']['key'] : $api_key;
+        $mailchimp_Data = [];
+        if ( $api_key != '' ) {
+			$response = $this->set_config( $api_key, 'ping' );
+			$response = json_decode( $response );
+			if ( isset( $response->health_status ) ) { //Display success message
+				$mailchimp_Data['status'] = true;
+                $aud_lists = $this->get_audiance($api_key);
+                $mailchimp_Data['audience'] = $aud_lists;
+			} else {
+				$mailchimp_Data['status'] = false;
+			}
+		}
+
         // Return response
         $data = array(
             'status' => true, 
@@ -638,6 +656,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'time_zone' => $time_zone,  
             'wc_product' => $wc_product,  
             'meeting_category' => $term_array,
+            'mailchimp' => $mailchimp_Data,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -791,4 +810,56 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
 
     }
+
+    /* Mailchimp audiance List */
+    private function get_audiance($api_key){
+
+        $response = $this->set_config( $api_key, 'lists' );
+        $audience = array();
+        $response = json_decode( $response, true );
+        $x = 0;
+        if ( isset( $response['lists'] ) && $response != null ) {
+            foreach ( $response['lists'] as $list ) {
+                $audience[] = array(
+                    'name' => $list['name'],
+                    'value' => "".$list['id']."",
+                );
+
+                $x++;
+            }
+        }
+        return $audience;
+    }
+
+    /* Mailchimp config set */
+	private function set_config( $api_key = '', $path = '' ) {
+
+
+		$server_prefix = explode( "-", $api_key );
+
+		if ( ! isset( $server_prefix[1] ) ) {
+			return;
+		}
+		$server_prefix = $server_prefix[1];
+
+		$url = "https://$server_prefix.api.mailchimp.com/3.0/$path";
+
+		$curl = curl_init( $url );
+		curl_setopt( $curl, CURLOPT_URL, $url );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+
+		$headers = array(
+			"Authorization: Bearer $api_key"
+		);
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+		//for debug only!
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, false );
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
+
+		$resp = curl_exec( $curl );
+		curl_close( $curl );
+
+		return $resp;
+	}
+
 } 

@@ -536,7 +536,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $host_id = $request['id'];
         $user_id = $request['user_id'];
         
-        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
+        $_tfhb_host_integration_settings = is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array();
+
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
         if($key == 'zoom_meeting'){ 
 
@@ -620,7 +621,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
             return rest_ensure_response($data);
         }elseif($key == 'stripe'){
-            $_tfhb_host_integration_settings['stripe']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['stripe']['type'] =  'stripe';
             $_tfhb_host_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);
             $_tfhb_host_integration_settings['stripe']['public_key'] =  sanitize_text_field($data['public_key']);
             $_tfhb_host_integration_settings['stripe']['secret_key'] =  sanitize_text_field($data['secret_key']);
@@ -635,7 +636,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
             return rest_ensure_response($data);
         }elseif($key == 'mailchimp'){
-            $_tfhb_host_integration_settings['mailchimp']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['mailchimp']['type'] =  'mailchimp';
             $_tfhb_host_integration_settings['mailchimp']['status'] =  sanitize_text_field($data['status']);
             $_tfhb_host_integration_settings['mailchimp']['key'] =  sanitize_text_field($data['key']);
 
