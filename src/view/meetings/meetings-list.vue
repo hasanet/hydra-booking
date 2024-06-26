@@ -44,7 +44,8 @@ const shareData = reactive({
     meeting_type: '',
     share_type: 'link',
     link: '',
-    shortcode: ''
+    shortcode: '',
+    embed: ''
 })
 
 const ShareTabs = (tab) => {
@@ -59,6 +60,7 @@ const sharePopupData = (data) => {
     shareData.meeting_type = data.meeting_type
     shareData.shortcode = '[hydra_booking id="'+data.id+'"]'
     shareData.link = tfhb_core_apps.admin_url + '/' + data.slug
+    shareData.embed = '<iframe src="'+ tfhb_core_apps.admin_url +'/?hydra-booking=meeting&meeting-id='+data.id+'&type=iframe" title="description"  height="600" width="100%" ></iframe>'
 
     // Popup open
     sharePopup.value = true;
@@ -321,7 +323,7 @@ const copyMeeting = (link) => {
                             <ul class="tfhb-flexbox tfhb-gap-8">
                                 <li :class="'link'==shareData.share_type ? 'active' : ''" @click="ShareTabs('link')">{{ $tfhb_trans['Share link'] }}</li>
                                 <li :class="'short'==shareData.share_type ? 'active' : ''" @click="ShareTabs('short')">{{ $tfhb_trans['Short code'] }}</li>
-                                <!-- <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li> -->
+                                <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li>
                             </ul>
                         </div>
 
@@ -338,6 +340,13 @@ const copyMeeting = (link) => {
 
                                 <div class="tfhb-copy-btn tfhb-mt-32">
                                     <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.shortcode)">{{ $tfhb_trans['Copy Code'] }}</button>
+                                </div>
+                            </div>
+                            <div class="share-link" v-if="'embed'==shareData.share_type">
+                                <input type="text" :value="shareData.embed" readonly>
+
+                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.embed)">{{ $tfhb_trans['Copy Code'] }}</button>
                                 </div>
                             </div>
                         </div>

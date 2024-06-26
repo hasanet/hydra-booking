@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * @subpackage HydraBooking/app
  * 
  */
-get_header();
+wp_head();
 
 global $wp_query;
 
@@ -123,5 +123,5 @@ $booking = isset($args['booking_data']) ? $args['booking_data'] : array();
 
 
 
-get_footer();
+wp_footer();
 

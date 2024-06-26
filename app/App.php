@@ -44,7 +44,7 @@ class App {
 
         add_rewrite_rule(
             '^meeting/([0-9]+)/?$',
-            'index.php?hydra-booking=meeting&meeting=$matches[1]',
+            'index.php?hydra-booking=meeting&meeting-id=$matches[1]&type=$matches[2]',
             'top'
         );
         // Create Rewrite Rule for Reschedule hydra-booking.local/?hydra-booking=booking&hash=2121&type=reschedule
@@ -109,9 +109,16 @@ class App {
     }
 
     public function tfhb_single_page_template( $template ) {
-      
+  
         if (get_query_var('hydra-booking') === 'meeting' && get_query_var('meeting')) {
+            // echo "hello";
+            // exit;
             $custom_template = load_template(THB_PATH . '/app/Content/Template/single-meeting.php', false);
+            return $custom_template;
+        }
+        if (get_query_var('hydra-booking') === 'meeting' && get_query_var('meeting-id')  && get_query_var('type')) {
+       
+            $custom_template = load_template(THB_PATH . '/app/Content/Template/Iframe.php', true);
             return $custom_template;
         }
 
