@@ -117,7 +117,7 @@ namespace HydraBooking\Admin\Controller;
             'Type your Integrations Title' => __('Type your Integrations Title','hydra-booking'),
             'Other Fields' => __('Other Fields','hydra-booking'),
             'Add New Integrations' => __('Add New Integrations','hydra-booking'),
-            '' => __('','hydra-booking'),
+            'Select Audience' => __('Select Audience','hydra-booking'),
             '' => __('','hydra-booking'),
             '' => __('','hydra-booking'),
             '' => __('','hydra-booking'),

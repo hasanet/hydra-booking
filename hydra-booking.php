@@ -42,6 +42,9 @@ class THB_INIT{
         // Web Hooks
         new HydraBooking\Hooks\WebHook(); 
 
+        // Integrations
+        new HydraBooking\Hooks\Integrations(); 
+
       
         add_action('init', array($this, 'init'));
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );

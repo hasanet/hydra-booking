@@ -28,6 +28,7 @@ const integrationsData = reactive({
     'meeting_id' : props.meetingId,
     'title': '',
     'events': '',
+    'audience' : '',
     'bodys': [
         {
             'name': '',
@@ -87,6 +88,7 @@ const addNewIntegrations = () => {
     integrationsData.title = '';
     integrationsData.webhook = '';
     integrationsData.events = '';
+    integrationsData.audience = '';
     integrationsData.status = '';
     integrationsData.bodys = [
         {
@@ -107,6 +109,7 @@ const editIntegrations = (data, key) => {
     integrationsData.meeting_id = props.meetingId;
     integrationsData.webhook = data.webhook;
     integrationsData.title = data.title;
+    integrationsData.audience = data.audience;
     integrationsData.events = data.events;
     integrationsData.status = data.status;
     integrationsData.bodys = data.bodys;
@@ -123,6 +126,7 @@ const updateHookStatus = (e, data, key) => {
     integrationsData.webhook = data.webhook;
     integrationsData.title = data.title;
     integrationsData.events = data.events;
+    integrationsData.audience = data.audience;
     integrationsData.status = e.target.checked ? 1 : 0;
     integrationsData.bodys = data.bodys;
 
@@ -209,7 +213,18 @@ const deleteBodyField = (key) => {
             :label="$tfhb_trans['Integrations Title']"  
             selected = "1"
             :placeholder="$tfhb_trans['Type your Integrations Title']" 
+            width="50"
         /> 
+
+        <HbDropdown  
+            v-model="integrationsData.audience"
+            required= "true"  
+            :label="$tfhb_trans['Select Audience']"   
+            width="50"
+            selected = "1"
+            placeholder="Select Audience"  
+            :option = "meeting.mailchimp.audience"
+        />
 
         <HbCheckbox 
             required= "true"
@@ -224,13 +239,17 @@ const deleteBodyField = (key) => {
             <p>{{ $tfhb_trans['Other Fields'] }}</p>
             <div class="tfhb-flexbox" v-for="(body, key) in integrationsData.bodys">
                 <div class="tfhb-request-header-fields tfhb-flexbox">
-                    <HbText  
+                    <HbDropdown  
                         v-model="body.name"
-                        required= "true"  
-                        selected = "1"
-                        :placeholder="$tfhb_trans['Enter Name']" 
+                        required= "true"    
                         width="50"
-                    /> 
+                        selected = "1"
+                        placeholder="Select Tag"  
+                        :option = "[
+                            {'name': 'Attendee Time_zone', 'value': 'attendee_time_zone'},
+                            {'name': 'Meeting Dates', 'value': 'meeting_dates'}, 
+                        ]"
+                    />
                     <HbText  
                         v-model="body.value"
                         required= "true"   
