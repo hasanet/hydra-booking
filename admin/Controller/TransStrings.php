@@ -82,6 +82,10 @@ namespace HydraBooking\Admin\Controller;
             'Booking Reminder' => __('Booking Reminder', 'hydra-booking'),
             'Notifications' => __('Notifications', 'hydra-booking'),
             'Paragraph Color' => __('Paragraph Color', 'hydra-booking'),
+            'All' => __('All', 'hydra-booking'),
+            'Conference' => __('Conference', 'hydra-booking'),
+            'Calendars' => __('Calendars', 'hydra-booking'),
+            'Payments' => __('Payments', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),

@@ -141,6 +141,7 @@ onBeforeMount(() => {
                 
                 <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/information'" exact :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/information' }"> <Icon name="UserRound" /> {{ $tfhb_trans['Information'] }}</router-link></li> 
                 <li><router-link :to="'/hosts/profile/'+ $route.params.id +'/availability'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/availability' }"> <Icon name="Clock" /> {{ $tfhb_trans['Availability'] }}</router-link></li>  
+                <li v-if="true == $user.caps.tfhb_manage_integrations"><router-link :to="'/hosts/profile/'+ $route.params.id +'/calendars'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/calendars' }"> <Icon name="CalendarDays" /> {{ $tfhb_trans['Calendars'] }}</router-link></li>  
                 <li v-if="true == $user.caps.tfhb_manage_integrations"><router-link :to="'/hosts/profile/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/hosts/profile/'+ $route.params.id +'/integrations' }"> <Icon name="Unplug" /> {{ $tfhb_trans['Integrations'] }}</router-link></li>  
 
             </ul>  

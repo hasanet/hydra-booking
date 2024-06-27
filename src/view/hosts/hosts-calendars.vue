@@ -196,32 +196,12 @@ onBeforeMount(() => {
 
 <template>
     <div class="tfhb-admin-card-box tfhb-m-0">   
-        <!-- Woo  Integrations  --> 
-        <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" 
-        @update-integrations="UpdateIntegration"
-        :ispopup="popup"
-        @popup-open-control="isPopupOpen"
-        @popup-close-control="isPopupClose" 
-        />
-
-
-        <StripeIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
-        :stripe_data="Integration.stripe" 
-        @update-integrations="UpdateIntegration"
-        :ispopup="spopup"
-        @popup-open-control="isstripePopupOpen"
-        @popup-close-control="isstripePopupClose"
-        />
-
-        <!-- Mailchimp intrigation -->
-        <MailchimpIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
-        :mail_data="Integration.mailchimp" 
-        @update-integrations="UpdateIntegration" 
-        :ispopup="mailpopup"
-        @popup-open-control="ismailchimpPopupOpen"
-        @popup-close-control="ismailchimpPopupClose" 
-        />
-        <!-- Mailchimp intrigation -->
+ 
+        <!-- Host Integration -->
+        <GoogleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
+        <OutlookCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :outlook_calendar="Integration.outlook_calendar" @update-integrations="UpdateIntegration" />
+        <AppleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :apple_calendar="Integration.apple_calendar" @update-integrations="UpdateIntegration" />
+ 
 
     </div> 
 </template>

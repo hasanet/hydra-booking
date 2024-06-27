@@ -12,6 +12,7 @@
             "HydraBooking\\Services\\": "includes/services/",
             "HydraBooking\\PostType\\": "includes/post-type/",
             "HydraBooking\\Hooks\\": "includes/hooks/",
+            "HydraBooking\\Migration\\": "includes/migration/",
             "HydraBooking\\App\\": "app/"
         }
     }
