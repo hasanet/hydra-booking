@@ -23,12 +23,15 @@ const props = defineProps({
 });
 
 const integrationsList = ref(true);
+const integrationsListopen = ref(false);
 const integrationscreate = ref(false);
 const integrationsData = reactive({
     'meeting_id' : props.meetingId,
     'title': '',
     'events': '',
     'audience' : '',
+    'lists' : '',
+    'tags' : '',
     'bodys': [
         {
             'name': '',
@@ -80,15 +83,18 @@ const deleteIntegrations = async (key) => {
     }
 }
 
-const addNewIntegrations = () => {
+const addNewIntegrations = (integration) => {
     integrationsList.value = false;
     integrationscreate.value = true;
+    integrationsListopen.value = false;
 
     integrationsData.key = '';
     integrationsData.title = '';
-    integrationsData.webhook = '';
+    integrationsData.webhook = integration;
     integrationsData.events = '';
     integrationsData.audience = '';
+    integrationsData.tags = '';
+    integrationsData.lists = '';
     integrationsData.status = '';
     integrationsData.bodys = [
         {
@@ -96,6 +102,10 @@ const addNewIntegrations = () => {
             'value': ''
         }
     ];
+}
+
+const openIntegrations =  () => {
+    integrationsListopen.value = true;
 }
 
 const backtointegrationsList = () => {
@@ -110,11 +120,14 @@ const editIntegrations = (data, key) => {
     integrationsData.webhook = data.webhook;
     integrationsData.title = data.title;
     integrationsData.audience = data.audience;
+    integrationsData.tags = data.tags;
+    integrationsData.lists = data.lists;
     integrationsData.events = data.events;
     integrationsData.status = data.status;
     integrationsData.bodys = data.bodys;
 
     integrationsList.value = false;
+    integrationsListopen.value = false;
     integrationscreate.value = true;
 }
 
@@ -127,6 +140,8 @@ const updateHookStatus = (e, data, key) => {
     integrationsData.title = data.title;
     integrationsData.events = data.events;
     integrationsData.audience = data.audience;
+    integrationsData.tags = data.tags;
+    integrationsData.lists = data.lists;
     integrationsData.status = e.target.checked ? 1 : 0;
     integrationsData.bodys = data.bodys;
 
@@ -156,14 +171,23 @@ const deleteBodyField = (key) => {
             <h2>{{ $tfhb_trans['Availability Range for this Booking'] }}</h2> 
             <p>{{ $tfhb_trans['How many days can the invitee schedule?'] }}</p>
         </div>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="integrationsList" @click="addNewIntegrations">
-            <Icon name="PlusCircle" :width="20"/>
-            {{ $tfhb_trans['Add New Integrations'] }}
-        </button>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="integrationscreate" @click="backtointegrationsList">
-            <Icon name="ArrowLeft" :width="20"/>
-            {{ $tfhb_trans['Back'] }}
-        </button>
+        <div class="tfhb-integration-box">
+            <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="integrationsList" @click="integrationsListopen=!integrationsListopen">
+                <Icon name="PlusCircle" :width="20"/>
+                {{ $tfhb_trans['Add New Integrations'] }}
+            </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="integrationscreate" @click="backtointegrationsList">
+                <Icon name="ArrowLeft" :width="20"/>
+                {{ $tfhb_trans['Back'] }}
+            </button>
+
+            <div class="tfhb-integrations-lists" v-if="integrationsListopen">
+                <ul>
+                    <li @click="addNewIntegrations('Mailchimp')">Mailchimp</li>
+                    <li @click="addNewIntegrations('FluentCRM')">FluentCRM</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.integrations && integrationsList">
@@ -194,18 +218,6 @@ const deleteBodyField = (key) => {
     </div>
 
     <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24" v-if="integrationscreate">
-        <!-- <HbDropdown  
-            v-model="integrationsData.webhook"
-            required= "true"  
-            :label="$tfhb_trans['Select Webhook']"   
-            width="50"
-            selected = "1"
-            placeholder="Select Webhook"  
-            :option = "[
-                {'name': 'Webhook', 'value': 'Webhook'},
-                {'name': 'Mailchimp', 'value': 'Mailchimp'}, 
-            ]"
-        /> -->
 
         <HbText  
             v-model="integrationsData.title"
@@ -217,6 +229,7 @@ const deleteBodyField = (key) => {
         /> 
 
         <HbDropdown  
+            v-if="integrationsData.webhook=='Mailchimp'"
             v-model="integrationsData.audience"
             required= "true"  
             :label="$tfhb_trans['Select Audience']"   
@@ -224,6 +237,28 @@ const deleteBodyField = (key) => {
             selected = "1"
             placeholder="Select Audience"  
             :option = "meeting.mailchimp.audience"
+        />
+
+        <HbDropdown  
+            v-if="integrationsData.webhook=='FluentCRM'"
+            v-model="integrationsData.lists"
+            required= "true"  
+            :label="$tfhb_trans['FluentCRM Lists']"   
+            width="50"
+            selected = "1"
+            :placeholder="$tfhb_trans['Select FluentCRM List']"  
+            :option = "meeting.fluentcrm.lists"
+        />
+
+        <HbDropdown  
+            v-if="integrationsData.webhook=='FluentCRM'"
+            v-model="integrationsData.tags"
+            required= "true"  
+            :label="$tfhb_trans['Contact Tags']"   
+            width="50"
+            selected = "1"
+            :placeholder="$tfhb_trans['Select Contact Tag']" 
+            :option = "meeting.fluentcrm.tags"
         />
 
         <HbCheckbox 

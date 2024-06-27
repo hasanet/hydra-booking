@@ -242,7 +242,8 @@ const meetingData = reactive({
     },
     webhook: '',
     integrations: '',
-    mailchimp: ''
+    mailchimp: '',
+    fluentcrm: ''
 });
 
 // Add more Location
@@ -403,6 +404,7 @@ const meetingId = route.params.id;
             meetingData.webhook = response.data.meeting.webhook ? JSON.parse(response.data.meeting.webhook) : '';
             meetingData.integrations = response.data.meeting.integrations ? JSON.parse(response.data.meeting.integrations) : '';
             meetingData.mailchimp = response.data.mailchimp ? response.data.mailchimp : '';
+            meetingData.fluentcrm = response.data.fluentcrm ? response.data.fluentcrm : '';
 
             skeleton.value = false
         }else{ 
