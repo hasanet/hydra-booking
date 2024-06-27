@@ -89,6 +89,12 @@ const routes = [
                         meta: { Capabilities: 'tfhb_manage_integrations' },
                         component: () => import('../view/hosts/hosts-integrations.vue')
                     }, 
+                    {
+                        path: 'calendars',
+                        name: 'HostsProfileCalendars',
+                        meta: { Capabilities: 'tfhb_manage_integrations' },
+                        component: () => import('../view/hosts/hosts-calendars.vue')
+                    }, 
                 ]
             }, 
         ]

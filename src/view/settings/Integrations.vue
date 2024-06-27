@@ -27,6 +27,28 @@ const gpopup = ref(false);
 const spopup = ref(false);
 const mailpopup = ref(false);
 const outlookpopup = ref(false);
+
+const currentHash = ref('all'); 
+ 
+// tfhb-hydra-admin-tabs a clicked using javascript event
+document.addEventListener('click', function (event) {
+    if (event.target.matches('.integrations-submenu')) {
+        // .tfhb-integrations-settings-menu add class expand
+        document.querySelector('.tfhb-integrations-settings-menu').classList.add('expand');
+
+        currentHash.value = event.target.getAttribute('data-filter');
+        // this add class active to the clicked element
+        document.querySelectorAll('.dropdown a').forEach(function (el) {
+            el.classList.remove('active');
+            // 
+        });
+        event.target.classList.add('active');
+    }
+}, false);
+
+ 
+
+ 
 const isPopupOpen = () => {
     popup.value = true;
 }
@@ -178,6 +200,8 @@ const UpdateIntegration = async (key, value) => {
 }
 onBeforeMount(() => {  
     fetchIntegration();
+    // if currentHash == all 
+   
 });
 
 </script>
@@ -199,7 +223,7 @@ onBeforeMount(() => {
 
                 <!-- Woo  Integrations  -->
                 
-                <WooIntegrations :woo_payment="Integration.woo_payment" @update-integrations="UpdateIntegration" />
+                <WooIntegrations :woo_payment="Integration.woo_payment" @update-integrations="UpdateIntegration" v-if="currentHash === 'all' || currentHash === 'payments'"/>
 
                 <!-- Woo Integrations  -->
 
@@ -210,6 +234,7 @@ onBeforeMount(() => {
                 :ispopup="popup"
                 @popup-open-control="isPopupOpen"
                 @popup-close-control="isPopupClose"
+                v-if="currentHash === 'all' || currentHash === 'conference'"
                 />
                 <!-- zoom intrigation -->
 
@@ -220,6 +245,7 @@ onBeforeMount(() => {
                 :ispopup="gpopup"
                 @popup-open-control="isgPopupOpen"
                 @popup-close-control="isgPopupClose" 
+                v-if="currentHash === 'all' || currentHash === 'calendars'"
                 />
                 <!-- zoom intrigation -->
                  
@@ -230,6 +256,7 @@ onBeforeMount(() => {
                 :ispopup="outlookpopup"
                 @popup-open-control="isOutlookPopupOpen"
                 @popup-close-control="isOutlookPopupClose" 
+                v-if="currentHash === 'all' || currentHash === 'calendars'"
                 />
                 <!-- Outlook intrigation -->
 
@@ -238,6 +265,7 @@ onBeforeMount(() => {
                 :apple_calendar="Integration.apple_calendar" 
                 @update-integrations="UpdateIntegration"
                 :ispopup="outlookpopup" 
+                v-if="currentHash === 'all' || currentHash === 'calendars'"
                 />
                 <!-- Apple intrigation -->
 
@@ -248,6 +276,7 @@ onBeforeMount(() => {
                 :ispopup="spopup"
                 @popup-open-control="isstripePopupOpen"
                 @popup-close-control="isstripePopupClose" 
+                v-if="currentHash === 'all' || currentHash === 'payments'"
                 />
                 <!-- stripe intrigation -->
 
@@ -258,6 +287,7 @@ onBeforeMount(() => {
                 :ispopup="mailpopup"
                 @popup-open-control="ismailchimpPopupOpen"
                 @popup-close-control="ismailchimpPopupClose" 
+                v-if="currentHash === 'all' || currentHash === 'all'"
                 />
                 <!-- Mailchimp intrigation -->
           
