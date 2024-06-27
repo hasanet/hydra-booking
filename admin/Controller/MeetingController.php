@@ -349,9 +349,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // New webhook data to be updated
         $newIntegrationsdata = array(
             'title' => !empty($request['title']) ? $request['title'] : '',
+            'webhook' => !empty($request['webhook']) ? $request['webhook'] : '',
             'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
             'events' => !empty($request['events']) ? $request['events'] : '',
-            'audience' => !empty($request['audience']) ? $request['audience'] : '',
+            'audience' => "Mailchimp"==$request['webhook'] && !empty($request['audience']) ? $request['audience'] : '',
+            'tags' => "FluentCRM"==$request['webhook'] && !empty($request['tags']) ? $request['tags'] : '',
+            'lists' => "FluentCRM"==$request['webhook'] && !empty($request['lists']) ? $request['lists'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
@@ -649,6 +652,61 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 			}
 		}
 
+        // FluentCRM
+        $fluentcrm_Data = [];
+        if(!file_exists(WP_PLUGIN_DIR . '/' . 'fluent-crm/fluent-crm.php')){
+            $fluentcrm_Data['status'] = false;
+
+        } else if(!is_plugin_active( 'fluent-crm/fluent-crm.php')){
+            $fluentcrm_Data['status'] = false;
+        }else{
+            $fluentcrm_Data['status'] = true;
+        } 
+        if($fluentcrm_Data['status']){
+            global $wpdb;
+            // Check if table exists
+            $fluent_crm_tags = $wpdb->prefix . 'fc_tags';
+            $fluent_crm_lists = $wpdb->prefix . 'fc_lists';
+            $tags_table_exists = $wpdb->get_var("SHOW TABLES LIKE '$fluent_crm_tags'") == $fluent_crm_tags;
+            $lists_table_exists = $wpdb->get_var("SHOW TABLES LIKE '$fluent_crm_lists'") == $fluent_crm_lists;
+
+            if ($tags_table_exists) {
+                // Table exists, retrieve data
+                $results = $wpdb->get_results("SELECT id, title FROM $fluent_crm_tags", ARRAY_A);
+
+                // Check if results are not empty
+                if (!empty($results)) {
+                    // Output the results as an array
+                    $tags_array = array();
+                    foreach ($results as $row) {
+                        $tags_array[] = array(
+                            'name' => $row['title'],
+                            'value' => $row['id']
+                        );
+                    }
+                    $fluentcrm_Data['tags'] = $tags_array;
+                }
+            }
+
+            if ($lists_table_exists) {
+                // Table exists, retrieve data
+                $results = $wpdb->get_results("SELECT id, title FROM $fluent_crm_lists", ARRAY_A);
+
+                // Check if results are not empty
+                if (!empty($results)) {
+                    // Output the results as an array
+                    $lists_array = array();
+                    foreach ($results as $row) {
+                        $lists_array[] = array(
+                            'name' => $row['title'],
+                            'value' => $row['id']
+                        );
+                    }
+                    $fluentcrm_Data['lists'] = $lists_array;
+                }
+            }
+        }
+
         // Return response
         $data = array(
             'status' => true, 
@@ -657,6 +715,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'wc_product' => $wc_product,  
             'meeting_category' => $term_array,
             'mailchimp' => $mailchimp_Data,
+            'fluentcrm' => $fluentcrm_Data,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
