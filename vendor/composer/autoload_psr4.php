@@ -15,6 +15,7 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'HydraBooking\\Services\\' => array($baseDir . '/includes/services'),
     'HydraBooking\\PostType\\' => array($baseDir . '/includes/post-type'),
+    'HydraBooking\\Migration\\' => array($baseDir . '/includes/migration'),
     'HydraBooking\\Hooks\\' => array($baseDir . '/includes/hooks'),
     'HydraBooking\\DB\\' => array($baseDir . '/includes/database'),
     'HydraBooking\\App\\' => array($baseDir . '/app'),
