@@ -160,6 +160,45 @@ const deleteBodyField = (key) => {
     integrationsData.bodys.splice(key, 1)
 }
 
+const attendeeShortcode = ref([
+    '{{attendee.full_name}}',
+    '{{attendee.email}}',
+    '{{attendee.phone}}',
+    '{{attendee.timezone}}',
+    '{{attendee.address}}',
+]);
+
+const hostShortcode = ref([
+    '{{host.name}}',
+    '{{host.email}}',
+    '{{host.timezone}}'
+]);
+
+const bookingShortcode = ref([
+    '{{booking.meeting_date}}',
+    '{{booking.start_time}}',
+    '{{booking.end_time}}',
+    '{{booking.duration}}',
+    '{{booking.hash}}',
+    '{{booking.meeting_location}}'
+])
+
+const copyShortcode = (value) => { 
+    //  copy to clipboard without navigator 
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    
+    // Show a toast notification or perform any other action
+    toast.success(value + ' is Copied');
+}
+
 </script>
 
 <template>
@@ -301,6 +340,27 @@ const deleteBodyField = (key) => {
                         <Icon name="X" size="20px" /> 
                     </button> 
                 </div>
+            </div>
+        </div>
+
+        <div class="processing-data-shortcode" v-if="'FluentCRM'==integrationsData.webhook">
+            <p>{{ $tfhb_trans['Attendee Data'] }}</p>
+            <div class="tfhb-mail-shortcode tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
+                <span class="tfhb-mail-shortcode-badge"  v-for="(value, key) in attendeeShortcode" :key="key" @click="copyShortcode(value)">{{ value}}</span>
+            </div>
+        </div>
+
+        <div class="processing-data-shortcode" v-if="'FluentCRM'==integrationsData.webhook">
+            <p>{{ $tfhb_trans['Booking Data'] }}</p>
+            <div class="tfhb-mail-shortcode tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
+                <span class="tfhb-mail-shortcode-badge"  v-for="(value, key) in bookingShortcode" :key="key" @click="copyShortcode(value)">{{ value}}</span>
+            </div>
+        </div>
+
+        <div class="processing-data-shortcode" v-if="'FluentCRM'==integrationsData.webhook">
+            <p>{{ $tfhb_trans['Host Data'] }}</p>
+            <div class="tfhb-mail-shortcode tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
+                <span class="tfhb-mail-shortcode-badge"  v-for="(value, key) in hostShortcode" :key="key" @click="copyShortcode(value)">{{ value}}</span>
             </div>
         </div>
 

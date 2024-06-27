@@ -122,9 +122,9 @@ namespace HydraBooking\Admin\Controller;
             'Select FluentCRM List' => __('Select FluentCRM List','hydra-booking'),
             'Contact Tags' => __('Contact Tags','hydra-booking'),
             'Select Contact Tag' => __('Select Contact Tag','hydra-booking'),
-            '' => __('','hydra-booking'),
-            '' => __('','hydra-booking'),
-            '' => __('','hydra-booking'),
+            'Attendee Data' => __('Attendee Data','hydra-booking'),
+            'Host Data' => __('Host Data','hydra-booking'),
+            'Booking Data' => __('Booking Data','hydra-booking'),
             '' => __('','hydra-booking'),
             '' => __('','hydra-booking'),
 
