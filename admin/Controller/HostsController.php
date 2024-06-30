@@ -513,6 +513,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
           
         } 
 
+        // Zoho
+        $zoho = isset($_tfhb_host_integration_settings['zoho']) ? $_tfhb_host_integration_settings['zoho'] : array();
+        if($_tfhb_integration_settings['zoho']['status'] == true){  
+
+            $zoho['type'] = 'zoho';
+            $zoho['status'] = $_tfhb_host_integration_settings['zoho']['status']; 
+            $zoho['client_id'] = $_tfhb_host_integration_settings['zoho']['client_id'];  
+            $zoho['client_secret'] = $_tfhb_host_integration_settings['zoho']['client_secret'];  
+            $zoho['redirect_url'] = $_tfhb_host_integration_settings['zoho']['redirect_url'];  
+            $zoho['access_token'] = $_tfhb_host_integration_settings['zoho']['access_token'];  
+          
+        } 
+
 
         // Checked if woo
         $data = array(
@@ -523,6 +536,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'apple_calendar' => $apple_calendar,  
             'mailchimp' => $mailchimp,  
             'stripe' => $stripe,  
+            'zoho' => $zoho,  
         );
         return rest_ensure_response($data);
     }
@@ -646,6 +660,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $data = array(
                 'status' => true,  
                 'message' => 'Mailchimp Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'zoho'){
+            $_tfhb_host_integration_settings['zoho']['type'] =  'zoho';
+            $_tfhb_host_integration_settings['zoho']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['zoho']['client_id'] =  sanitize_text_field($data['client_id']);
+            $_tfhb_host_integration_settings['zoho']['client_secret'] =  sanitize_text_field($data['client_secret']);
+            $_tfhb_host_integration_settings['zoho']['redirect_url'] =  sanitize_url($data['redirect_url']);
+            $_tfhb_host_integration_settings['zoho']['access_token'] =  sanitize_text_field($data['access_token']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'message' => 'Zoho Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }

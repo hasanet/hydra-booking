@@ -17,7 +17,59 @@ class Integrations{
     }
 
 	public function GetAccessData(){
-		var_dump($_GET); exit();
+		// Set the Client Data 
+
+        if(isset($_GET['code']) && isset($_GET['state'])) {
+			$host_id = $_GET['state'];
+
+			$_tfhb_host_integration_settings =  is_array(get_user_meta($host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($host_id, '_tfhb_host_integration_settings', true) : array(); 
+
+			$client_id = !empty($_tfhb_host_integration_settings['zoho']['client_id']) ? $_tfhb_host_integration_settings['zoho']['client_id'] : '';
+			$client_secret = !empty($_tfhb_host_integration_settings['zoho']['client_secret']) ? $_tfhb_host_integration_settings['zoho']['client_secret'] : '';
+			$redirect_uri = !empty($_tfhb_host_integration_settings['zoho']['redirect_url']) ? $_tfhb_host_integration_settings['zoho']['redirect_url'] : '';
+			$authorization_code = $_GET['code'];
+			try { 
+				
+				$token_url = "https://accounts.zoho.com/oauth/v2/token";
+				$post_fields = http_build_query([
+					'grant_type' => 'authorization_code',
+					'client_id' => $client_id,
+					'client_secret' => $client_secret,
+					'redirect_uri' => $redirect_uri,
+					'code' => $authorization_code
+				]);
+
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $token_url);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+				$response = curl_exec($ch);
+				curl_close($ch);
+
+				$result = json_decode($response, true);
+				
+				if (isset($result['error'])) {
+					echo 'Error: ' . $result['error'];
+				} else {
+					$_tfhb_host_integration_settings['zoho']['access_token'] = $result['access_token'];
+				}
+
+				// save to user metadata
+                update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings, true);
+				 
+				// $redirect_url = get_site_url() . '/wp-admin/admin.php?page=hydra-booking#/hosts/profile/' . $host_id . '/integrations';
+                 
+                // wp_redirect($redirect_url);
+                // wp_die();
+			}
+
+			catch(Exception $e) {
+				echo $e->getMessage();
+				exit(); 
+			}
+		}
     }
 
     // If booking Completed
