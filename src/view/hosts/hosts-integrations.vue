@@ -10,7 +10,7 @@ const currentRoute = useRouter().currentRoute.value.path;
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
 import GoogleCalendarIntegrations from '@/components/hosts/GoogleCalendarIntegrations.vue';
 import OutlookCalendarIntegrations from '@/components/hosts/OutlookCalendarIntegrations.vue';
-import AppleCalendarIntegrations from '@/components/hosts/AppleCalendarIntegrations.vue';
+import ZohoIntegrations from '@/components/hosts/ZohoIntegrations.vue';
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue';
 import MailchimpIntegrations from '@/components/integrations/MailchimpIntegrations.vue'; 
 
@@ -34,7 +34,7 @@ const props = defineProps({
 const popup = ref(false);
 const gpopup = ref(false);
 const spopup = ref(false);
-const outlookpopup = ref(false);
+const zohopopup = ref(false);
 const mailpopup = ref(false);
 const isPopupOpen = () => {
     popup.value = true;
@@ -48,11 +48,11 @@ const isgPopupOpen = () => {
 const isgPopupClose = (data) => {
     gpopup.value = false;
 }
-const isOutlookPopupOpen = () => {
-    outlookpopup.value = true;
+const isZohoPopupOpen = () => {
+    zohopopup.value = true;
 }
-const isOutlookPopupClose = (data) => {
-    outlookpopup.value = false;
+const isZohoPopupClose = (data) => {
+    zohopopup.value = false;
 }
 const isstripePopupOpen = () => {
     spopup.value = true;
@@ -117,7 +117,15 @@ const Integration = reactive( {
         type: 'mailchimp', 
         status: 0, 
         key: ''
-    }
+    },
+    zoho : {
+        type: 'zoho', 
+        status: 0, 
+        client_id: '',
+        client_secret: '',
+        redirect_url: '',
+        access_token: ''
+    },
 });
  
 
@@ -143,6 +151,7 @@ const fetchIntegration = async () => {
             Integration.apple_calendar = response.data.apple_calendar  ? response.data.apple_calendar  : Integration.apple_calendar ;  
             Integration.mailchimp = response.data.mailchimp  ? response.data.mailchimp  : Integration.mailchimp ;  
             Integration.stripe = response.data.stripe  ? response.data.stripe  : Integration.stripe ;  
+            Integration.zoho = response.data.zoho  ? response.data.zoho  : Integration.zoho ;  
             
 
             skeleton.value = false;
@@ -177,6 +186,7 @@ const UpdateIntegration = async (key, value) => {
             gpopup.value = false;
             spopup.value = false;
             mailpopup.value = false;
+            zohopopup.value = false;
             
         }else{
             toast.error(response.data.message, {
@@ -222,6 +232,17 @@ onBeforeMount(() => {
         @popup-close-control="ismailchimpPopupClose" 
         />
         <!-- Mailchimp intrigation -->
+
+        <!-- Zoho intrigation -->
+        <ZohoIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
+        :zoho_data="Integration.zoho" 
+        @update-integrations="UpdateIntegration" 
+        :ispopup="zohopopup"
+        :host_id="props.hostId"
+        @popup-open-control="isZohoPopupOpen"
+        @popup-close-control="isZohoPopupClose" 
+        />
+        <!-- Zoho intrigation -->
 
     </div> 
 </template>
