@@ -56,8 +56,27 @@ class Integrations{
 					$_tfhb_host_integration_settings['zoho']['access_token'] = $result['access_token'];
 				}
 
+				// $url = "https://www.zohoapis.com/crm/v5/Leads?fields=Email";
+				// $headers = [
+				// 	"Authorization: Zoho-oauthtoken {$_tfhb_host_integration_settings['zoho']['access_token']}"
+				// ];
+				// $ch = curl_init();
+				// curl_setopt($ch, CURLOPT_URL, $url);
+				// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+				// $response = curl_exec($ch);
+				// if (curl_errno($ch)) {
+				// 	return ['error' => curl_error($ch)];
+				// }
+				// curl_close($ch);
+				// var_dump(json_decode($response, true)); exit();
+
+
+				
+				
 				// save to user metadata
-                update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings, true);
+                update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
 				 
 				// $redirect_url = get_site_url() . '/wp-admin/admin.php?page=hydra-booking#/hosts/profile/' . $host_id . '/integrations';
                  
@@ -242,54 +261,95 @@ class Integrations{
 
 	// ZohoCRM Callback
 	public function tfhb_zohocrm_callback($booking, $hook, $host) {
-		$client_id = '1000.3W560NMPHP4NN0SPYSIEMRIA136F1S';
-		$client_secret = '70e858682a4b8bc114b2099964e543a08bae57bb2e';
-		$redirect_uri = 'http://tourfic-development-site.local/wp-json/hydra-booking/v1/integration/zoho-api';
-		
-		// Step 1: Generate the Authorization URL and redirect the user
-		$auth_url = "https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id={$client_id}&scope=ZohoCRM.modules.ALL&redirect_uri={$redirect_uri}";
-		$urls = wp_remote_get($auth_url);
-		var_dump($urls); exit();
-		if (!isset($_GET['code'])) {
-			// Redirect user to Zoho Authorization URL
-			header("Location: {$auth_url}");
-			exit();
-		} 
-		else {
-			// Step 2: Get the authorization code from the URL
-			$authorization_code = $_GET['code'];
-			var_dump($authorization_code); exit();
-			// Step 3: Exchange authorization code for access token and refresh token
-			$token_url = "https://accounts.zoho.com/oauth/v2/token";
-			$post_fields = http_build_query([
-				'grant_type' => 'authorization_code',
-				'client_id' => $client_id,
-				'client_secret' => $client_secret,
-				'redirect_uri' => $redirect_uri,
-				'code' => $authorization_code
-			]);
+		$_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
 
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $token_url);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
 
-			$response = curl_exec($ch);
-			curl_close($ch);
+		// $api_url = 'https://www.zohoapis.com/crm/v5/Leads';
 
-			$result = json_decode($response, true);
-			var_dump($result); exit();
-			if (isset($result['error'])) {
-				echo 'Error: ' . $result['error'];
-			} else {
-				$access_token = $result['access_token'];
-				$refresh_token = $result['refresh_token'];
+		// // Prepare the data as a JSON variable
+		// $data = array(
+		// 	"data" => array(
+		// 		array(
+		// 			"Company" => "Themefic",
+		// 			"Last_Name" => "Sydur",
+		// 			"First_Name" => "Hasan",
+		// 			"Email" => "sydur.doe@example.com"
+		// 			// Add more fields as necessary
+		// 		)
+		// 	)
+		// );
 
-				echo "Access Token: {$access_token}<br>";
-				echo "Refresh Token: {$refresh_token}<br>";
-			}
+		// $json_data = json_encode($data);
+
+		// $ch = curl_init();
+
+		// curl_setopt($ch, CURLOPT_URL, $api_url);
+		// curl_setopt($ch, CURLOPT_POST, 1);
+		// curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		// $headers = [
+		// 	'Authorization: Zoho-oauthtoken ' . $access_token,
+		// 	'Content-Type: application/json'
+		// ];
+
+		// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		// $response = curl_exec($ch);
+		// if (curl_errno($ch)) {
+		// 	echo 'Error:' . curl_error($ch);
+		// }
+		// curl_close($ch);
+
+		// echo $response; exit();
+
+
+		// The Zoho CRM API URL to get all modules
+		$api_url = 'https://www.zohoapis.com/crm/v5/settings/modules';
+
+		// Initialize cURL session
+		$ch = curl_init();
+
+		// Set the URL and other necessary options
+		curl_setopt($ch, CURLOPT_URL, $api_url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		// Set the headers, including the authorization token
+		$headers = [
+			'Authorization: Zoho-oauthtoken ' . $access_token,
+			'Content-Type: application/json'
+		];
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		// Execute the cURL session and fetch the response
+		$response = curl_exec($ch);
+
+		// Check for cURL errors
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
 		}
+
+		// Close the cURL session
+		curl_close($ch);
+
+		// Decode the JSON response
+		$response_data = json_decode($response, true);
+		// var_dump($response_data);
+		// Check if the response contains modules
+		if (isset($response_data['modules'])) {
+			// Loop through each module and print its name
+			foreach ($response_data['modules'] as $module) {
+				// echo "Module Name: " . $module['module_name'] . "\n";
+
+				var_dump($module);
+			}
+		} else {
+			echo "No modules found or an error occurred.\n";
+			print_r($response_data); // For debugging purposes
+		}
+
+		exit();
 	}
 
 
