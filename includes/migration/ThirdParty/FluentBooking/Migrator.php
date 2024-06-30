@@ -25,7 +25,8 @@ namespace HydraBooking\Migration\ThirdParty\FluentBooking;
 
 	public function migrate() {
 		// $this->migrateSettings();
-		$this->migrateAvailability();
+		// $this->migrateAvailability();
+		// $this->migrateMeeting();
 
 	}
 
@@ -89,12 +90,7 @@ namespace HydraBooking\Migration\ThirdParty\FluentBooking;
 		$prefix = $wpdb->prefix;
 
 		$days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-
-		// echo '<pre>';
-		// print_r($_tfhb_availability_settings);
-		// echo '</pre>';
-
-	
+ 
 		// Get all availability
 		$availabilities = $wpdb->get_results(
 			$wpdb->prepare(
@@ -104,23 +100,16 @@ namespace HydraBooking\Migration\ThirdParty\FluentBooking;
 		);
 
 
-		foreach($availabilities as $key => $value){
-			
+		foreach($availabilities as $key => $value){ 
 
 			$data = maybe_unserialize($value->value);
-
-			// echo "<pre>";
-			// print_r($data);
-			// echo "</pre>";
-			
-			
+ 
 			// $availability['id'] = isset($value->id) ? sanitize_text_field($value->id) : '';
 			$availability['host'] = isset($value->object_id) ? sanitize_text_field($value->object_id) : '';
-			$availability['title'] = isset($data->title) ? sanitize_text_field($data->title) : '';
-			$availability['time_zone'] = isset($data->time_zone) ? sanitize_text_field($data->time_zone) : ''; 
-			$availability['override'] = '';   
-			
-			$count = 0;
+			$availability['title'] = isset($data->title) ? sanitize_text_field($data->title) : 'No title';
+			$availability['time_zone'] = isset($data['timezone']) ? sanitize_text_field($data['timezone']) : ''; 
+			$availability['override'] = '';    
+			$count = 0; 
 			foreach($data['weekly_schedules'] as $dkey => $dvalue){ 
 				
 				$day = $dkey; // mon 
@@ -150,22 +139,125 @@ namespace HydraBooking\Migration\ThirdParty\FluentBooking;
 				); 
 
 				$date_count++;
-			}
-
-			// echo '<pre>';
-			// print_r($availability);
-			// echo '</pre>';
-
-			// die();
+			} 
 
 			$availability['status'] = 'active';  
 			// Insert Availability
 			$InsertAvailability = new Availability();
 			$insert = $InsertAvailability->add($availability);
 
+
+			$_tfhb_host_info = get_user_meta($value->object_id, '_tfhb_host', true);
+        	$tfhb_host_availability = !empty($_tfhb_host_info['availability']) ? $_tfhb_host_info['availability'] : [];
+			$_tfhb_host_info['availability'][] = $availability;
+			update_user_meta($value->object_id, '_tfhb_host', $_tfhb_host_info);
+
 		}
 	
 		
+	}
+
+	// Migrate Meeting
+	public function migrateMeeting(){
+
+		global $wpdb;
+
+		// Get Wpdb prefix
+		$prefix = $wpdb->prefix;
+
+		// Get all booking 
+		$fluent_calender = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$prefix}fcal_calendars"
+			)
+		);
+
+		// Get all booking 
+		$meeting = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$prefix}tfhb_meetings"
+			)
+		);
+
+		foreach ($fluent_calender as $key => $value){
+			// Convert object to array
+			$value = (array) $value;
+
+			echo "<pre>";
+			print_r($value);
+			echo "</pre>";
+			// Get all booking 
+			$fluent_calender_event = (array) $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT * FROM {$prefix}fcal_calendar_events where calendar_id = %s",
+					$value['id']
+				)
+			);
+			$settings = maybe_unserialize($fluent_calender_event['settings']);
+			$location_settings = maybe_unserialize($fluent_calender_event['location_settings']);
+			$location = [];
+			foreach($location_settings as $lkey => $lvalue){
+				$location[$lvalue['title']] = array(
+					'location' => $lvalue['title'],
+					'address' => $lvalue['display_on_booking'], 
+				);
+			}
+			echo "<pre>";
+			print_r($fluent_calender_event);
+			echo "</pre>"; 
+			echo "<pre>";
+			print_r($settings);
+			echo "</pre>";
+			
+			// Get Current User
+			$current_user = wp_get_current_user();
+			// get user id
+			$current_user_id = $current_user->ID;
+			
+			  // Update Meeting
+			  $data = [ 
+				'id'                        => $value['id'],
+				'user_id'                   => $value['user_id'],
+				'title'                     => isset($value['title']) ? sanitize_text_field($value['title']) : '',
+				'host_id'                   => isset($value['user_id']) ? sanitize_key($value['user_id']) : '',
+				'description'               => isset($value['description']) ? sanitize_text_field($value['description']) : '',
+				'meeting_type'              => isset($fluent_calender_event['event_type']) ? sanitize_text_field($fluent_calender_event['event_type']) : '',
+				'duration'                  => isset($fluent_calender_event['duration']) ? sanitize_text_field($fluent_calender_event['duration']) : '',
+				'custom_duration'           => isset($value['custom_duration']) ? sanitize_text_field($value['custom_duration']) : '',
+				'meeting_locations'         => isset($location) ? $location : '',
+				'meeting_category'          => isset($value['meeting_category']) ? sanitize_text_field($value['meeting_category']) : '',
+				'availability_type'         => isset($value['availability_type']) ? sanitize_text_field($value['availability_type']) : '',
+				'availability_range_type'   => isset($settings['range_type']) ? sanitize_text_field($settings['range_type']) : '',
+				'availability_range'        => isset($settings['range_days']) ? $settings['range_days'] : '',
+				'availability_id'           => isset($fluent_calender_event['availability_id']) ? sanitize_text_field($fluent_calender_event['availability_id']) : '',
+				'availability_custom'       => isset($value['availability_custom']) ?$value['availability_custom'] : '',
+				'buffer_time_before'        => isset($settings['buffer_time_before']) ? sanitize_text_field($settings['buffer_time_before']) : '',
+				'buffer_time_after'         => isset($settings['buffer_time_after']) ? sanitize_text_field($settings['buffer_time_after']) : '',
+				'booking_frequency'         => isset($settings['booking_frequency']) ? $settings['booking_frequency'] : '',
+				'meeting_interval'          => isset($value['meeting_interval']) ? sanitize_text_field($value['meeting_interval']) : '',
+				'recurring_status'          => isset($value['recurring_status']) ? sanitize_text_field($value['recurring_status']) : '',
+				'recurring_repeat'          => isset($value['recurring_repeat']) ? $value['recurring_repeat'] : '',
+				'recurring_maximum'         => isset($value['recurring_maximum']) ? sanitize_text_field($value['recurring_maximum']) : '',
+				'attendee_can_cancel'       => isset($settings['can_not_cancel']['enabled']) ? sanitize_text_field($settings['can_not_cancel']['enabled']) : '',
+				'attendee_can_reschedule'   => isset($settings['can_not_reschedule']['enabled']) ? sanitize_text_field($settings['can_not_reschedule']['enabled']) : '',
+				'questions_type'          => isset($value['questions_type']) ? sanitize_text_field($value['questions_type']) : '',
+				'questions'                 => isset($value['questions']) ? $value['questions'] : '',
+				'notification'              => isset($value['notification']) ? $value['notification'] : '',
+				'payment_status'            => isset($fluent_calender_event['type']) ? sanitize_text_field($fluent_calender_event['type']) : '',
+				'meeting_price'             => isset($value['meeting_price']) ? sanitize_text_field($value['meeting_price']) : '',
+				'payment_currency'          => isset($value['payment_currency']) ? sanitize_text_field($value['payment_currency']) : '',
+				'payment_method'            => isset($value['payment_method']) ? sanitize_text_field($value['payment_method'])  : '',
+				'payment_meta'              => isset($value['payment_meta']) ? $value['payment_meta'] : '',
+				'updated_at'                => date('Y-m-d'),
+				'updated_by'                => $current_user_id
+			];
+		}
+
+
+		// echo "<pre>";
+		// print_r($meeting);
+		// echo "</pre>";
+		exit;
 	}
 
 }
