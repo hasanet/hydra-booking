@@ -243,7 +243,8 @@ const meetingData = reactive({
     webhook: '',
     integrations: '',
     mailchimp: '',
-    fluentcrm: ''
+    fluentcrm: '',
+    zohocrm: ''
 });
 
 // Add more Location
@@ -405,6 +406,7 @@ const meetingId = route.params.id;
             meetingData.integrations = response.data.meeting.integrations ? JSON.parse(response.data.meeting.integrations) : '';
             meetingData.mailchimp = response.data.mailchimp ? response.data.mailchimp : '';
             meetingData.fluentcrm = response.data.fluentcrm ? response.data.fluentcrm : '';
+            meetingData.zohocrm = response.data.zohocrm ? response.data.zohocrm : '';
 
             skeleton.value = false
         }else{ 

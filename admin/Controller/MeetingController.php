@@ -65,6 +65,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'methods' => 'POST',
             'callback' => array($this, 'deleteMeetingIntegration'),
         ));
+        register_rest_route('hydra-booking/v1', '/meetings/integration/fields', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getZohoModulsFields'),
+        ));
 
         register_rest_route('hydra-booking/v1', '/meetings/filter', array(
             'methods' => 'GET',
@@ -355,6 +359,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'audience' => "Mailchimp"==$request['webhook'] && !empty($request['audience']) ? $request['audience'] : '',
             'tags' => "FluentCRM"==$request['webhook'] && !empty($request['tags']) ? $request['tags'] : '',
             'lists' => "FluentCRM"==$request['webhook'] && !empty($request['lists']) ? $request['lists'] : '',
+            'modules' => "ZohoCRM"==$request['webhook'] && !empty($request['modules']) ? $request['modules'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
@@ -707,6 +712,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             }
         }
 
+        // Zoho
+        $client_id = !empty($_tfhb_host_integration_settings['zoho']['client_id']) ? $_tfhb_host_integration_settings['zoho']['client_id'] : '';
+        $client_secret = !empty($_tfhb_host_integration_settings['zoho']['client_secret']) ? $_tfhb_host_integration_settings['zoho']['client_secret'] : '';
+        $access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+        $zoho_modules = !empty($_tfhb_host_integration_settings['zoho']['modules']) ? json_decode($_tfhb_host_integration_settings['zoho']['modules']) : '';
+
+        $zohocrm_Data = [];
+        if(!empty($access_token)){
+            $zohocrm_Data['status'] = true;
+            $zohocrm_Data['modules'] = $zoho_modules;
+        }
+
         // Return response
         $data = array(
             'status' => true, 
@@ -716,6 +733,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_category' => $term_array,
             'mailchimp' => $mailchimp_Data,
             'fluentcrm' => $fluentcrm_Data,
+            'zohocrm' => $zohocrm_Data,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -920,5 +938,66 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 		return $resp;
 	}
+
+    /* Zoho Modules Fileds */
+    public function getZohoModulsFields($request){
+        $host = !empty($request['host_id']) ? $request['host_id'] : '';
+
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
+
+		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+
+        // The Zoho CRM API URL to get all modules
+		$api_url = 'https://www.zohoapis.com/crm/v6/settings/fields?module='.$request['module'];
+
+		// Initialize cURL session
+		$ch = curl_init();
+
+		// Set the URL and other necessary options
+		curl_setopt($ch, CURLOPT_URL, $api_url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		// Set the headers, including the authorization token
+		$headers = [
+			'Authorization: Zoho-oauthtoken ' . $access_token,
+			'Content-Type: application/json'
+		];
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		// Execute the cURL session and fetch the response
+		$response = curl_exec($ch);
+
+		// Check for cURL errors
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+
+		// Close the cURL session
+		curl_close($ch);
+
+		// Decode the JSON response
+		$response_data = json_decode($response, true);
+
+        $fields = [];
+        $response_data = json_decode($response, true);
+        if (isset($response_data['fields'])) {
+            // Loop through each field and print its name
+            foreach ($response_data['fields'] as $field) {
+                $fields[] =  array(
+                    'name' =>  $field['field_label'],
+                    'value' => $field['api_name']
+                );
+            }
+        }
+        
+        // Return response
+        $data = array(
+            'status' => true, 
+            'fields' => $fields,  
+            'message' => 'Fields Data',
+        );
+        return rest_ensure_response($data);
+
+    }
 
 } 

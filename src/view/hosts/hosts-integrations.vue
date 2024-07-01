@@ -124,7 +124,8 @@ const Integration = reactive( {
         client_id: '',
         client_secret: '',
         redirect_url: '',
-        access_token: ''
+        access_token: '',
+        modules: ''
     },
 });
  
@@ -167,7 +168,7 @@ const UpdateIntegration = async (key, value) => {
         id: route.params.id,
         user_id: props.host.user_id,
     };  
-    console.log(data);
+  
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/integration/update', data, {
             headers: {
