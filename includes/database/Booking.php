@@ -81,7 +81,7 @@ class Booking {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
-
+ 
         // json encode meeting locations
         $request['others_info'] = json_encode($request['others_info']);
         $request['meeting_locations'] = json_encode($request['meeting_locations']);
