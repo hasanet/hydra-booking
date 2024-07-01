@@ -59,6 +59,8 @@ class Meeting {
                 payment_meta LONGTEXT NULL, 
                 webhook LONGTEXT NULL, 
                 integrations LONGTEXT NULL, 
+                max_book_per_slot VARCHAR(20) NULL, 
+                is_display_max_book_slot VARCHAR(20) NULL, 
                 status VARCHAR(20) NULL, 
                 created_by VARCHAR(20) NOT NULL, 
                 updated_by VARCHAR(20) NOT NULL, 

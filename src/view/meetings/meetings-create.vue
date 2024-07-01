@@ -242,6 +242,8 @@ const meetingData = reactive({
     },
     webhook: '',
     integrations: '',
+    max_book_per_slot: 1,
+    is_display_max_book_slot: 0,
     mailchimp: '',
     fluentcrm: '',
     zohocrm: ''

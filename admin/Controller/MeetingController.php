@@ -795,6 +795,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'meeting_price'             => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
             'payment_currency'          => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
             'payment_method'            => isset($request['payment_method']) ? sanitize_text_field($request['payment_method'])  : '',
+            'max_book_per_slot'            => isset($request['max_book_per_slot']) ? sanitize_text_field($request['max_book_per_slot'])  : '',
+            'is_display_max_book_slot'            => isset($request['is_display_max_book_slot']) ? sanitize_text_field($request['is_display_max_book_slot'])  : '',
             'payment_meta'              => isset($request['payment_meta']) ? $request['payment_meta'] : '',
             'updated_at'                => date('Y-m-d'),
             'updated_by'                => $current_user_id

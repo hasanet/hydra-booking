@@ -221,6 +221,8 @@ namespace HydraBooking\Admin\Controller;
             'Level' => __('Level', 'hydra-booking'),
             'Required' => __('Required', 'hydra-booking'),
             'Add Another Location' => __('Add Another Location', 'hydra-booking'),
+            'Max invitees in a spot' => __('Max invitees in a spot', 'hydra-booking'),
+            'Display remaining spots on booking page' => __('Display remaining spots on booking page', 'hydra-booking'),
             'Availability title'=> __('Availability title', 'hydra-booking'),
             'Attendee can cancel this meeting' => __('Attendee can cancel this meeting', 'hydra-booking'),
             'Attendee can reschedule this meeting' => __('Attendee can reschedule this meeting', 'hydra-booking'),

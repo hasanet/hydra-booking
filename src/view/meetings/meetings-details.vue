@@ -147,6 +147,27 @@ const tfhbValidateInput = (fieldName) => {
             </div>
         </div>
 
+        <div v-if="meeting.meeting_type == 'one-to-group'" class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0 tfhb-full-width">  
+            <div class="tfhb-meeting-location tfhb-flexbox tfhb-gap-16" > 
+                <HbText  
+                        v-model="meeting.max_book_per_slot"  
+                        type= "number"
+                        :label="$tfhb_trans['Max invitees in a spot']"   
+                        :placeholder="'Max invitees in a spot'" 
+                        :width= "100"
+                       
+                    /> 
+
+                    <HbSwitch 
+                        v-model="meeting.is_display_max_book_slot" 
+                        type="checkbox" 
+                        required= "true" 
+                        :label="$tfhb_trans['Display remaining spots on booking page']" 
+                    />
+            </div>  
+        </div>
+
+
         <!-- Category -->
         <HbDropdown 
             v-model="meeting.meeting_category" 
