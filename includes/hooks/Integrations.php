@@ -56,30 +56,55 @@ class Integrations{
 					$_tfhb_host_integration_settings['zoho']['access_token'] = $result['access_token'];
 				}
 
-				// $url = "https://www.zohoapis.com/crm/v5/Leads?fields=Email";
-				// $headers = [
-				// 	"Authorization: Zoho-oauthtoken {$_tfhb_host_integration_settings['zoho']['access_token']}"
-				// ];
-				// $ch = curl_init();
-				// curl_setopt($ch, CURLOPT_URL, $url);
-				// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+				// The Zoho CRM API URL to get all modules
+				$api_url = 'https://www.zohoapis.com/crm/v5/settings/modules';
 
-				// $response = curl_exec($ch);
-				// if (curl_errno($ch)) {
-				// 	return ['error' => curl_error($ch)];
-				// }
-				// curl_close($ch);
-				// var_dump(json_decode($response, true)); exit();
+				// Initialize cURL session
+				$ch = curl_init();
 
+				// Set the URL and other necessary options
+				curl_setopt($ch, CURLOPT_URL, $api_url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-				
+				// Set the headers, including the authorization token
+				$headers = [
+					'Authorization: Zoho-oauthtoken ' . $_tfhb_host_integration_settings['zoho']['access_token'],
+					'Content-Type: application/json'
+				];
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+				// Execute the cURL session and fetch the response
+				$response = curl_exec($ch);
+
+				// Check for cURL errors
+				if (curl_errno($ch)) {
+					echo 'Error:' . curl_error($ch);
+				}
+
+				// Close the cURL session
+				curl_close($ch);
+
+				// Decode the JSON response
+				$integration_modules = [];
+				$response_data = json_decode($response, true);
+				if (isset($response_data['modules'])) {
+					// Loop through each module and print its name
+					foreach ($response_data['modules'] as $module) {
+						$integration_modules[] =  array(
+							'name' =>  $module['module_name'],
+							'value' => $module['api_name']
+						);
+					}
+				}
+
+				$_tfhb_host_integration_settings['zoho']['modules'] = json_encode($integration_modules);
 				
 				// save to user metadata
                 update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
-				 
+				
 				// $redirect_url = get_site_url() . '/wp-admin/admin.php?page=hydra-booking#/hosts/profile/' . $host_id . '/integrations';
-                 
+				// var_dump($redirect_url); exit();
+                
                 // wp_redirect($redirect_url);
                 // wp_die();
 			}
@@ -335,8 +360,6 @@ class Integrations{
 
 		// Decode the JSON response
 		$response_data = json_decode($response, true);
-		// var_dump($response_data);
-		// Check if the response contains modules
 		if (isset($response_data['modules'])) {
 			// Loop through each module and print its name
 			foreach ($response_data['modules'] as $module) {

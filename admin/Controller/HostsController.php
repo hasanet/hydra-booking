@@ -515,7 +515,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Zoho
         $zoho = isset($_tfhb_host_integration_settings['zoho']) ? $_tfhb_host_integration_settings['zoho'] : array();
-        if($_tfhb_integration_settings['zoho']['status'] == true){  
+        if($_tfhb_integration_settings['zoho']['client_id']){  
 
             $zoho['type'] = 'zoho';
             $zoho['status'] = $_tfhb_host_integration_settings['zoho']['status']; 
@@ -523,6 +523,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $zoho['client_secret'] = $_tfhb_host_integration_settings['zoho']['client_secret'];  
             $zoho['redirect_url'] = $_tfhb_host_integration_settings['zoho']['redirect_url'];  
             $zoho['access_token'] = $_tfhb_host_integration_settings['zoho']['access_token'];  
+            $zoho['modules'] = json_decode($_tfhb_host_integration_settings['zoho']['modules']);
           
         } 
 
@@ -669,6 +670,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $_tfhb_host_integration_settings['zoho']['client_secret'] =  sanitize_text_field($data['client_secret']);
             $_tfhb_host_integration_settings['zoho']['redirect_url'] =  sanitize_url($data['redirect_url']);
             $_tfhb_host_integration_settings['zoho']['access_token'] =  sanitize_text_field($data['access_token']);
+            $_tfhb_host_integration_settings['zoho']['modules'] =  json_encode($data['modules']);
 
             // update User Meta  
             update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);

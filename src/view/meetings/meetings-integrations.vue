@@ -31,6 +31,7 @@ const integrationsData = reactive({
     'events': '',
     'audience' : '',
     'lists' : '',
+    'modules' : '',
     'tags' : '',
     'bodys': [
         {
@@ -41,6 +42,7 @@ const integrationsData = reactive({
     'status': '',
 });
 
+const dataFields = ref('');
 
 const updateIntegrations = async () => {
     // Api Submission
@@ -95,6 +97,7 @@ const addNewIntegrations = (integration) => {
     integrationsData.audience = '';
     integrationsData.tags = '';
     integrationsData.lists = '';
+    integrationsData.modules = '';
     integrationsData.status = '';
     integrationsData.bodys = [
         {
@@ -102,10 +105,6 @@ const addNewIntegrations = (integration) => {
             'value': ''
         }
     ];
-}
-
-const openIntegrations =  () => {
-    integrationsListopen.value = true;
 }
 
 const backtointegrationsList = () => {
@@ -122,6 +121,7 @@ const editIntegrations = (data, key) => {
     integrationsData.audience = data.audience;
     integrationsData.tags = data.tags;
     integrationsData.lists = data.lists;
+    integrationsData.modules = data.modules;
     integrationsData.events = data.events;
     integrationsData.status = data.status;
     integrationsData.bodys = data.bodys;
@@ -142,6 +142,7 @@ const updateHookStatus = (e, data, key) => {
     integrationsData.audience = data.audience;
     integrationsData.tags = data.tags;
     integrationsData.lists = data.lists;
+    integrationsData.modules = data.modules;
     integrationsData.status = e.target.checked ? 1 : 0;
     integrationsData.bodys = data.bodys;
 
@@ -194,9 +195,30 @@ const copyShortcode = (value) => {
     textarea.select();
     document.execCommand('copy');
     document.body.removeChild(textarea);
-    
     // Show a toast notification or perform any other action
     toast.success(value + ' is Copied');
+}
+
+// modules callback
+const moduleFields = async (e) => {
+    if(e.value){
+        let data = {
+            host_id: props.meeting.host_id,
+            module: e.value
+        };  
+        try { 
+            const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/integration/fields', data, {
+                headers: {
+                    'X-WP-Nonce': tfhb_core_apps.rest_nonce
+                } 
+            } );
+            if (response.data.status) { 
+                dataFields.value = response.data.fields;
+            }
+        } catch (error) {
+            console.log(error);
+        } 
+    }
 }
 
 </script>
@@ -224,6 +246,7 @@ const copyShortcode = (value) => {
                 <ul>
                     <li @click="addNewIntegrations('Mailchimp')">Mailchimp</li>
                     <li @click="addNewIntegrations('FluentCRM')">FluentCRM</li>
+                    <li @click="addNewIntegrations('ZohoCRM')">ZohoCRM</li>
                 </ul>
             </div>
         </div>
@@ -300,6 +323,18 @@ const copyShortcode = (value) => {
             :option = "meeting.fluentcrm.tags"
         />
 
+        <HbDropdown  
+            v-if="integrationsData.webhook=='ZohoCRM'"
+            v-model="integrationsData.tags"
+            required= "true"  
+            :label="$tfhb_trans['Modules']"   
+            width="50"
+            selected = "1"
+            :placeholder="$tfhb_trans['Select Modules']" 
+            :option = "meeting.zohocrm.modules"
+            @tfhb-onchange="moduleFields"
+        />
+
         <HbCheckbox 
             required= "true"
             v-model="integrationsData.events"
@@ -319,10 +354,7 @@ const copyShortcode = (value) => {
                         width="50"
                         selected = "1"
                         placeholder="Select Tag"  
-                        :option = "[
-                            {'name': 'Attendee Time_zone', 'value': 'attendee_time_zone'},
-                            {'name': 'Meeting Dates', 'value': 'meeting_dates'}, 
-                        ]"
+                        :option = "dataFields"
                     />
                     <HbText  
                         v-model="body.value"
