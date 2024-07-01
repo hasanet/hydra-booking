@@ -128,15 +128,18 @@ class Integrations{
             foreach($integrationsdata as $hook){
 
                 // integrations
-                // if( !empty($hook['webhook']) && 'Mailchimp'==$hook['webhook'] && !empty($hook['events']) && in_array("Booking Completed", $hook['events']) && !empty($hook['status']) ){
-                //     $this->tfhb_mailchimp_callback($booking, $hook, $MeetingData->host_id);
-                // }
+                if( !empty($hook['webhook']) && 'Mailchimp'==$hook['webhook'] && !empty($hook['events']) && in_array("Booking Completed", $hook['events']) && !empty($hook['status']) ){
+                    $this->tfhb_mailchimp_callback($booking, $hook, $MeetingData->host_id);
+                }
 
-				// if( !empty($hook['webhook']) && 'FluentCRM'==$hook['webhook'] && !empty($hook['events']) && in_array("Booking Completed", $hook['events']) && !empty($hook['status']) ){
-                //     $this->tfhb_fluentcrm_callback($booking, $hook, $MeetingData->host_id);
-                // }
+				if( !empty($hook['webhook']) && 'FluentCRM'==$hook['webhook'] && !empty($hook['events']) && in_array("Booking Completed", $hook['events']) && !empty($hook['status']) ){
+                    $this->tfhb_fluentcrm_callback($booking, $hook, $MeetingData->host_id);
+                }
 
-				$this->tfhb_zohocrm_callback($booking, $hook, $MeetingData->host_id);
+				if( !empty($hook['webhook']) && 'ZohoCRM'==$hook['webhook'] && !empty($hook['events']) && in_array("Booking Completed", $hook['events']) && !empty($hook['status']) ){
+                    $this->tfhb_zohocrm_callback($booking, $hook, $MeetingData->host_id);
+                }
+
             }
         }
         
@@ -285,94 +288,51 @@ class Integrations{
 	}
 
 	// ZohoCRM Callback
-	public function tfhb_zohocrm_callback($booking, $hook, $host) {
+	function tfhb_zohocrm_callback($booking, $hook, $host) {
 		$_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
-
 		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
 
-		// $api_url = 'https://www.zohoapis.com/crm/v5/Leads';
+		$extra_fields = !empty( $hook['bodys'] ) ? $hook['bodys'] : array();
+		$data = array(
+			"data" => array()
+		);
 
-		// // Prepare the data as a JSON variable
-		// $data = array(
-		// 	"data" => array(
-		// 		array(
-		// 			"Company" => "Themefic",
-		// 			"Last_Name" => "Sydur",
-		// 			"First_Name" => "Hasan",
-		// 			"Email" => "sydur.doe@example.com"
-		// 			// Add more fields as necessary
-		// 		)
-		// 	)
-		// );
+		$temp_module_Data = array();
 
-		// $json_data = json_encode($data);
-
-		// $ch = curl_init();
-
-		// curl_setopt($ch, CURLOPT_URL, $api_url);
-		// curl_setopt($ch, CURLOPT_POST, 1);
-		// curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		// $headers = [
-		// 	'Authorization: Zoho-oauthtoken ' . $access_token,
-		// 	'Content-Type: application/json'
-		// ];
-
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-		// $response = curl_exec($ch);
-		// if (curl_errno($ch)) {
-		// 	echo 'Error:' . curl_error($ch);
-		// }
-		// curl_close($ch);
-
-		// echo $response; exit();
-
-
-		// The Zoho CRM API URL to get all modules
-		$api_url = 'https://www.zohoapis.com/crm/v5/settings/modules';
-
-		// Initialize cURL session
-		$ch = curl_init();
-
-		// Set the URL and other necessary options
-		curl_setopt($ch, CURLOPT_URL, $api_url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		// Set the headers, including the authorization token
-		$headers = [
-			'Authorization: Zoho-oauthtoken ' . $access_token,
-			'Content-Type: application/json'
-		];
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-		// Execute the cURL session and fetch the response
-		$response = curl_exec($ch);
-
-		// Check for cURL errors
-		if (curl_errno($ch)) {
-			echo 'Error:' . curl_error($ch);
+		foreach ( $extra_fields as $extra_field ) {
+			$field_name = $extra_field['name'];
+			$field_value = $extra_field['value'];
+			$temp_module_Data[$field_name ] = $field_value;
 		}
 
-		// Close the cURL session
-		curl_close($ch);
+		$data['data'][] = $temp_module_Data;
 
-		// Decode the JSON response
-		$response_data = json_decode($response, true);
-		if (isset($response_data['modules'])) {
-			// Loop through each module and print its name
-			foreach ($response_data['modules'] as $module) {
-				// echo "Module Name: " . $module['module_name'] . "\n";
+		if(!empty($hook['modules'])){
+			$api_url = 'https://www.zohoapis.com/crm/v5/'.$hook['modules'];
 
-				var_dump($module);
+			$json_data = json_encode($data);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $api_url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	
+			$headers = [
+				'Authorization: Zoho-oauthtoken ' . $access_token,
+				'Content-Type: application/json'
+			];
+	
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	
+			$response = curl_exec($ch);
+			if (curl_errno($ch)) {
+				echo 'Error:' . curl_error($ch);
 			}
-		} else {
-			echo "No modules found or an error occurred.\n";
-			print_r($response_data); // For debugging purposes
+			curl_close($ch);
+	
+			echo $response; exit();
 		}
-
-		exit();
+		
 	}
 
 

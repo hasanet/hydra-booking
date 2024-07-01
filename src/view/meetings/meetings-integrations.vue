@@ -325,7 +325,7 @@ const moduleFields = async (e) => {
 
         <HbDropdown  
             v-if="integrationsData.webhook=='ZohoCRM'"
-            v-model="integrationsData.tags"
+            v-model="integrationsData.modules"
             required= "true"  
             :label="$tfhb_trans['Modules']"   
             width="50"

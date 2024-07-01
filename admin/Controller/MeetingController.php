@@ -359,6 +359,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'audience' => "Mailchimp"==$request['webhook'] && !empty($request['audience']) ? $request['audience'] : '',
             'tags' => "FluentCRM"==$request['webhook'] && !empty($request['tags']) ? $request['tags'] : '',
             'lists' => "FluentCRM"==$request['webhook'] && !empty($request['lists']) ? $request['lists'] : '',
+            'modules' => "ZohoCRM"==$request['webhook'] && !empty($request['modules']) ? $request['modules'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
@@ -984,7 +985,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             foreach ($response_data['fields'] as $field) {
                 $fields[] =  array(
                     'name' =>  $field['field_label'],
-                    'value' => $field['display_label']
+                    'value' => $field['api_name']
                 );
             }
         }
