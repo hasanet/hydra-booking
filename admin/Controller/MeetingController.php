@@ -947,6 +947,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
 
+        $access_token = $this->refreshToken($host);
+        
         // The Zoho CRM API URL to get all modules
 		$api_url = 'https://www.zohoapis.com/crm/v6/settings/fields?module='.$request['module'];
 
@@ -999,5 +1001,47 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
 
     }
+
+    // Refresh Token
+	public function refreshToken($host){
+		$_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
+
+		$client_id = !empty($_tfhb_host_integration_settings['zoho']['client_id']) ? $_tfhb_host_integration_settings['zoho']['client_id'] : '';
+		$client_secret = !empty($_tfhb_host_integration_settings['zoho']['client_secret']) ? $_tfhb_host_integration_settings['zoho']['client_secret'] : '';
+		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+		$refresh_token = !empty($_tfhb_host_integration_settings['zoho']['refresh_token']) ? $_tfhb_host_integration_settings['zoho']['refresh_token'] : '';
+
+		$url = "https://accounts.zoho.com/oauth/v2/token";
+		$data = array(
+			'grant_type' => 'refresh_token',
+			'client_id' => $client_id,
+			'client_secret' => $client_secret,
+			'refresh_token' => $refresh_token
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+		curl_close($ch);
+
+		$response_data = json_decode($response, true);
+		
+		if( !empty($response_data['access_token']) ){
+			$_tfhb_host_integration_settings['zoho']['access_token'] = $response_data['access_token'];
+
+			// save to user metadata
+			update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+			return $response_data['access_token'];
+		}
+	}
 
 } 
