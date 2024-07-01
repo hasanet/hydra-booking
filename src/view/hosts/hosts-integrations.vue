@@ -125,6 +125,7 @@ const Integration = reactive( {
         client_secret: '',
         redirect_url: '',
         access_token: '',
+        refresh_token: '',
         modules: ''
     },
 });

@@ -524,6 +524,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $zoho['redirect_url'] = $_tfhb_host_integration_settings['zoho']['redirect_url'];  
             $zoho['access_token'] = $_tfhb_host_integration_settings['zoho']['access_token'];  
             $zoho['modules'] = json_decode($_tfhb_host_integration_settings['zoho']['modules']);
+            $zoho['refresh_token'] = json_decode($_tfhb_host_integration_settings['zoho']['refresh_token']);
           
         } 
 
@@ -670,6 +671,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $_tfhb_host_integration_settings['zoho']['client_secret'] =  sanitize_text_field($data['client_secret']);
             $_tfhb_host_integration_settings['zoho']['redirect_url'] =  sanitize_url($data['redirect_url']);
             $_tfhb_host_integration_settings['zoho']['access_token'] =  sanitize_text_field($data['access_token']);
+            $_tfhb_host_integration_settings['zoho']['refresh_token'] =  sanitize_text_field($data['refresh_token']);
             $_tfhb_host_integration_settings['zoho']['modules'] =  json_encode($data['modules']);
 
             // update User Meta  
