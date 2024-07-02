@@ -8,11 +8,10 @@ import { toast } from "vue3-toastify";
 // Get Current Route url
 const currentRoute = useRouter().currentRoute.value.path;
 import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
-import GoogleCalendarIntegrations from '@/components/hosts/GoogleCalendarIntegrations.vue';
-import OutlookCalendarIntegrations from '@/components/hosts/OutlookCalendarIntegrations.vue';
 import ZohoIntegrations from '@/components/hosts/ZohoIntegrations.vue';
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue';
 import MailchimpIntegrations from '@/components/integrations/MailchimpIntegrations.vue'; 
+import PaypalIntegrations from '@/components/integrations/PaypalIntegrations.vue'; 
 
 const route = useRoute();
 //  Load Time Zone 
@@ -32,7 +31,7 @@ const props = defineProps({
 
 
 const popup = ref(false);
-const gpopup = ref(false);
+const paypalpopup = ref(false);
 const spopup = ref(false);
 const zohopopup = ref(false);
 const mailpopup = ref(false);
@@ -42,11 +41,11 @@ const isPopupOpen = () => {
 const isPopupClose = (data) => {
     popup.value = false;
 }
-const isgPopupOpen = () => {
-    gpopup.value = true;
+const ispaypalPopupOpen = () => {
+    paypalpopup.value = true;
 }
-const isgPopupClose = (data) => {
-    gpopup.value = false;
+const ispaypalPopupClose = (data) => {
+    paypalpopup.value = false;
 }
 const isZohoPopupOpen = () => {
     zohopopup.value = true;
@@ -113,6 +112,12 @@ const Integration = reactive( {
         public_key: '',
         secret_key: ''
     },
+    paypal : {
+        type: 'paypal', 
+        status: 0, 
+        client_id: '',
+        secret_key: '',
+    },
     mailchimp : {
         type: 'mailchimp', 
         status: 0, 
@@ -154,6 +159,7 @@ const fetchIntegration = async () => {
             Integration.mailchimp = response.data.mailchimp  ? response.data.mailchimp  : Integration.mailchimp ;  
             Integration.stripe = response.data.stripe  ? response.data.stripe  : Integration.stripe ;  
             Integration.zoho = response.data.zoho  ? response.data.zoho  : Integration.zoho ;  
+            Integration.paypal = response.data.paypal  ? response.data.paypal  : Integration.paypal ;  
             
 
             skeleton.value = false;
@@ -185,7 +191,7 @@ const UpdateIntegration = async (key, value) => {
             }); 
             
             popup.value = false;
-            gpopup.value = false;
+            paypalpopup.value = false;
             spopup.value = false;
             mailpopup.value = false;
             zohopopup.value = false;
@@ -224,6 +230,16 @@ onBeforeMount(() => {
         @popup-open-control="isstripePopupOpen"
         @popup-close-control="isstripePopupClose"
         />
+
+        <!-- paypal intrigation -->
+        <PaypalIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations"
+        :paypal_data="Integration.paypal" 
+        @update-integrations="UpdateIntegration" 
+        :ispopup="paypalpopup"
+        @popup-open-control="ispaypalPopupOpen"
+        @popup-close-control="ispaypalPopupClose" 
+        />
+        <!-- paypal intrigation -->
 
         <!-- Mailchimp intrigation -->
         <MailchimpIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 

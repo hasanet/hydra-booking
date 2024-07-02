@@ -58,6 +58,7 @@ class App {
         add_filter( 'single_template', array($this, 'tfhb_single_meeting_template' ));
 
         add_action( 'hydra_booking/stripe_payment_method', array($this, 'tfhb_stripe_payment_callback'), 10, 2 );
+        add_action( 'hydra_booking/paypal_payment_method', array($this, 'tfhb_paypal_payment_callback'), 10, 2 );
     }
 
     public function tfhb_single_meeting_template($single_template){
@@ -155,6 +156,7 @@ class App {
         return $template;
     }
 
+    // Stripe Callback
     public function tfhb_stripe_payment_callback($data, $booking_id){
 
         if(file_exists(THB_PATH . '/app/integration/stripe/vendor/autoload.php')) {
@@ -225,7 +227,37 @@ class App {
             $data = array('success' => false, 'data' => $th->getMessage());
             echo wp_json_encode($data);
         }
+        }
     }
+
+    // Paypal Callback
+    public function tfhb_paypal_payment_callback($data, $booking_id){
+        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+		if($_tfhb_integration_settings['paypal']){
+			$client_id = $_tfhb_integration_settings['paypal']['client_id'];
+            $client_secret = $_tfhb_integration_settings['paypal']['secret_key'];
+
+
+			$ch = curl_init();
+
+			curl_setopt($ch, CURLOPT_URL, "https://api.sandbox.paypal.com/v1/oauth2/token");
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_USERPWD, $client_id . ":" . $client_secret);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+
+			$response = curl_exec($ch);
+			if (empty($response)) die("Error: No response.");
+			$jsonResponse = json_decode($response);
+			curl_close($ch);
+
+			var_dump($jsonResponse); exit();
+			$accessToken = $jsonResponse->access_token;
+
+
+		}
     }
 }
 

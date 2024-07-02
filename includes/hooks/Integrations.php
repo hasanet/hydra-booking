@@ -338,8 +338,6 @@ class Integrations{
 		
 	}
 
-
-
     /* Mailchimp config set */
 	private function set_config( $api_key = '', $path = '' ) {
 
