@@ -87,7 +87,7 @@ const removeExtraFrequency = (key) => {
             <!-- Buffer time after meeting -->
 
             <!-- Booking Frequency -->
-
+           
             <HbCounter
                 :label="$tfhb_trans['Booking frequency']"
                 width="50"

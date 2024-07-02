@@ -369,10 +369,9 @@ class HydraBookingShortcode {
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
         $host_meta = get_user_meta($host_id, '_tfhb_host', true); 
+ 
 
-        // Checked if the booking is already booked
-
-          
+      
         $check_booking = $booking->get(
             array(
                 'meeting_dates' => $data['meeting_dates'], 
@@ -380,11 +379,22 @@ class HydraBookingShortcode {
                 'end_time' => $data['end_time']
             )
         );
- 
 
-        if($check_booking){
-            wp_send_json_error( array( 'message' => 'Already Booked' ) );
+        if('one-to-group' == $meta_data['meeting_type'] ){
+            $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1;
+
+            if(count($check_booking) >= $max_book_per_slot){
+                wp_send_json_error( array( 'message' => 'Already Booked' ) );
+            }
+           
+        }else{
+
+            if($check_booking){
+                wp_send_json_error( array( 'message' => 'Already Booked' ) );
+            }
         }
+
+        
 
 
         // Get booking Data using Hash
@@ -506,7 +516,51 @@ class HydraBookingShortcode {
             wp_send_json_success(  $response );
                 
         }
-            
+
+        // Booking Frequency
+
+        $current_user_booking =  $booking->get(array('email' => $data['email'], 'meeting_id' => $data['meeting_id']) );
+         
+        if($current_user_booking){
+            $last_items_of_booking = end($current_user_booking);
+        
+         
+
+            $booking_frequency = isset($meta_data['booking_frequency']) ? $meta_data['booking_frequency'] : array();
+            // echo "<pre>";
+            // print_r($last_items_of_booking);
+            // echo "</pre>";
+            if( $booking_frequency ){ 
+                $created_date = $last_items_of_booking->created_at; // 2024-07-02 14:26:29
+                $current_date = date('Y-m-d H:i:s');
+              
+                $last_created_date = date('Y-m-d', strtotime($created_date));
+                foreach($booking_frequency as $key => $value){ 
+                    $days = isset($value['times']) ? $value['times'] : 1; 
+                    $limit = isset($value['limit']) ? $value['limit'] : 1; 
+                   
+                    $booking_frequency_date = date('Y-m-d', strtotime($last_created_date. ' + '.$days.' days'));
+                    $total_booking = count(array_filter($current_user_booking, function($booking) use ($booking_frequency_date, $last_created_date ) {
+                        $created_date = date('Y-m-d', strtotime($booking->created_at));
+                        // Check if the created date is between last_created_date and booking_frequency_date 
+                        return strtotime($last_created_date) >= strtotime($created_date) || strtotime($created_date) <= strtotime($booking_frequency_date);
+                    }));
+                    
+                    //  if currentdate is greater than booking_frequency_date then you can book the meeting
+                    if(strtotime($current_date) > strtotime($booking_frequency_date)){
+                        continue;
+                    }
+                    if($total_booking >= $limit){
+                        wp_send_json_error( array( 'message' => 'You can not book the meeting before '.$booking_frequency_date.' days' ) );
+                     
+                    }
+
+                     
+    
+                } 
+            }
+        }
+        
 
         // Create a new booking
 

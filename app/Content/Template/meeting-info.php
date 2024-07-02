@@ -135,7 +135,7 @@ $stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key
                             Recurring for  <span>'.esc_attr($meeting['recurring_repeat'][0]['limit']).'</span> '.esc_attr($meeting['recurring_repeat'][0]['times']).'
                         </li>'; 
                 }
-            ?>
+            ?> 
         </ul>
 
         <div class="tfhb-timezone ">  
