@@ -52,9 +52,13 @@ namespace HydraBooking\Admin\Controller;
 
         // Meeting time zone 
         $time_zone = isset($MeetingsData->time_zone) ? $MeetingsData->time_zone : 'UTC';
-       
+        
+
          // Meeting Information
         $data = get_post_meta($MeetingsData->post_id, '__tfhb_meeting_opt', true);
+
+        $meeting_type = isset($data['meeting_type']) ? $data['meeting_type'] : 'one-to-single';
+        $max_book_per_slot = isset($data['max_book_per_slot']) ? $data['max_book_per_slot'] : 1;
       
         if( isset($data['availability_type']) && 'settings' === $data['availability_type']){  
             $_tfhb_availability_settings = get_user_meta( $MeetingsData-> host_id, '_tfhb_host', true); 
@@ -95,14 +99,35 @@ namespace HydraBooking\Admin\Controller;
 
         // Get All Booking Data.
         $booking = new Booking();
+      
         $bookings = $booking->get(array('meeting_dates' => $selected_date));  
  
-     
+        
         $disabled_times = array();
-        foreach($bookings as $booking){
+        foreach($bookings as $booking){ 
+            $meeting_dates = $booking->meeting_dates;
             $start_time = $booking->start_time;
             $end_time = $booking->end_time;
             $time_zone = $booking->attendee_time_zone; 
+          
+            if('one-to-group' == $meeting_type ){ 
+                // Get All Booking Data.
+                $booking = new Booking();
+                $check_booking = $booking->get(
+                    array(
+                        'meeting_dates' => $meeting_dates, 
+                        'start_time' => $start_time, 
+                        'end_time' => $end_time
+                    )
+                ); 
+                
+                if(count($check_booking) != $max_book_per_slot){  
+                    continue;
+                }
+               
+            }
+
+            
  
             $start_time = $this->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
             $end_time = $this->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);

@@ -48,7 +48,7 @@ function CounterDec(key){
                         required= "true"  
                         selected = "1"
                         placeholder="Select Time Zone"  
-                        :option = "{'Month': 'Month','Year': 'Year'}" 
+                        :option = "{'1': 'Per Day','7': 'Per Week','30': 'Per Month','365': 'Per Year'}" 
                     /> 
 
                     <div v-if="repater && key == 0" class="tfhb-availability-schedule-clone-single">
