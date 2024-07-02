@@ -232,6 +232,7 @@ class App {
 
     // Paypal Callback
     public function tfhb_paypal_payment_callback($data, $booking_id){
+        var_dump($data); exit();
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
 		if($_tfhb_integration_settings['paypal']){
 			$client_id = $_tfhb_integration_settings['paypal']['client_id'];

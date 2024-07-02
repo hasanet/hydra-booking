@@ -72,6 +72,7 @@ const changeTab = (e) => {
                         :option = "[
                             {name: 'Woocommerce', value: 'woo_payment'},  
                             {name: 'Stripe Pay', value: 'stripe_payment'},  
+                            {name: 'Paypal', value: 'paypal_payment'},  
                         ]"   
                     /> 
                     <!-- Woo Integrations  -->
@@ -89,7 +90,7 @@ const changeTab = (e) => {
                     :option = "props.wcProduct"   
                 /> 
             </div>
-            <div v-if="meeting.payment_status == 1 && meeting.payment_method=='stripe_payment'" class="tfhb-single-form-field" style="width: 100%;" selected="1">
+            <div v-if="meeting.payment_status == 1 && meeting.payment_method=='stripe_payment' || meeting.payment_method=='paypal_payment'" class="tfhb-single-form-field" style="width: 100%;" selected="1">
                 <div class="tfhb-single-form-field-wrap tfhb-field-input">
                     <label>{{ $tfhb_trans['Price'] }} <span> *</span></label>
                     <div class="tfhb-meeting-currency tfhb-flexbox tfhb-justify-normal tfhb-gap-0">
