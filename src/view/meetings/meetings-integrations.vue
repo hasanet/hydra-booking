@@ -33,6 +33,7 @@ const integrationsData = reactive({
     'lists' : '',
     'modules' : '',
     'tags' : '',
+    'fields': '',
     'bodys': [
         {
             'name': '',
@@ -98,6 +99,7 @@ const addNewIntegrations = (integration) => {
     integrationsData.tags = '';
     integrationsData.lists = '';
     integrationsData.modules = '';
+    integrationsData.fields = '';
     integrationsData.status = '';
     integrationsData.bodys = [
         {
@@ -122,6 +124,7 @@ const editIntegrations = (data, key) => {
     integrationsData.tags = data.tags;
     integrationsData.lists = data.lists;
     integrationsData.modules = data.modules;
+    integrationsData.fields = data.fields;
     integrationsData.events = data.events;
     integrationsData.status = data.status;
     integrationsData.bodys = data.bodys;
@@ -143,6 +146,7 @@ const updateHookStatus = (e, data, key) => {
     integrationsData.tags = data.tags;
     integrationsData.lists = data.lists;
     integrationsData.modules = data.modules;
+    integrationsData.fields = data.fields;
     integrationsData.status = e.target.checked ? 1 : 0;
     integrationsData.bodys = data.bodys;
 
@@ -213,7 +217,7 @@ const moduleFields = async (e) => {
                 } 
             } );
             if (response.data.status) { 
-                dataFields.value = response.data.fields;
+                integrationsData.fields = response.data.fields;
             }
         } catch (error) {
             console.log(error);
@@ -354,7 +358,7 @@ const moduleFields = async (e) => {
                         width="50"
                         selected = "1"
                         placeholder="Select Tag"  
-                        :option = "dataFields"
+                        :option = "integrationsData.fields"
                     />
                     <HbText  
                         v-model="body.value"

@@ -360,6 +360,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'tags' => "FluentCRM"==$request['webhook'] && !empty($request['tags']) ? $request['tags'] : '',
             'lists' => "FluentCRM"==$request['webhook'] && !empty($request['lists']) ? $request['lists'] : '',
             'modules' => "ZohoCRM"==$request['webhook'] && !empty($request['modules']) ? $request['modules'] : '',
+            'fields' => !empty($request['fields']) ? $request['fields'] : '',
             'status' => !empty($request['status']) ? $request['status'] : '',
         );
     
