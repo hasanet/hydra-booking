@@ -503,6 +503,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         
         } 
 
+        // Paypal API
+        $paypal = isset($_tfhb_host_integration_settings['paypal']) ? $_tfhb_host_integration_settings['paypal'] : array();
+        if($_tfhb_integration_settings['paypal']['status'] == true){  
+
+        $paypal['type'] = 'paypal';
+        $paypal['status'] = $_tfhb_host_integration_settings['paypal']['status']; 
+        $paypal['client_id'] = $_tfhb_host_integration_settings['paypal']['client_id'];  
+        $paypal['secret_key'] = $_tfhb_host_integration_settings['paypal']['secret_key']; 
+        
+        } 
+
         // Mailchimp API
         $mailchimp = isset($_tfhb_host_integration_settings['mailchimp']) ? $_tfhb_host_integration_settings['mailchimp'] : array();
         if($_tfhb_integration_settings['mailchimp']['status'] == true){  
@@ -539,6 +550,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'mailchimp' => $mailchimp,  
             'stripe' => $stripe,  
             'zoho' => $zoho,  
+            'paypal' => $paypal
         );
         return rest_ensure_response($data);
     }
@@ -680,6 +692,20 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $data = array(
                 'status' => true,  
                 'message' => 'Zoho Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'paypal'){
+            $_tfhb_host_integration_settings['paypal']['type'] =  'paypal';
+            $_tfhb_host_integration_settings['paypal']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['paypal']['client_id'] =  sanitize_text_field($data['client_id']);
+            $_tfhb_host_integration_settings['paypal']['secret_key'] =  sanitize_text_field($data['secret_key']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'message' => 'Paypal Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }

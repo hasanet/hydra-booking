@@ -13,6 +13,7 @@ import OutlookCalendarIntegrations from '@/components/integrations/OutlookCalend
 import AppleCalendarIntegrations from '@/components/integrations/AppleCalendarIntegrations.vue'; 
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue'; 
 import MailchimpIntegrations from '@/components/integrations/MailchimpIntegrations.vue'; 
+import PaypalIntegrations from '@/components/integrations/PaypalIntegrations.vue'; 
 
 // import Form Field 
 import Icon from '@/components/icon/LucideIcon.vue' 
@@ -27,6 +28,7 @@ const gpopup = ref(false);
 const spopup = ref(false);
 const mailpopup = ref(false);
 const outlookpopup = ref(false);
+const paypalpopup = ref(false);
 
 const currentHash = ref('all'); 
  
@@ -81,6 +83,13 @@ const ismailchimpPopupClose = (data) => {
     mailpopup.value = false;
 }
 
+const ispaypalPopupOpen = () => {
+    paypalpopup.value = true;
+}
+const ispaypalPopupClose = (data) => {
+    paypalpopup.value = false;
+}
+
 const Integration = reactive( {
     woo_payment : {
         type: 'payment', 
@@ -124,13 +133,18 @@ const Integration = reactive( {
         status: 0, 
         public_key: '',
         secret_key: '',
-
     },
     mailchimp : {
         type: 'mailchimp', 
         status: 0, 
         key: ''
-    }
+    },
+    paypal : {
+        type: 'paypal', 
+        status: 0, 
+        client_id: '',
+        secret_key: '',
+    },
 });
 
 //  update Integration
@@ -151,6 +165,7 @@ const fetchIntegration = async () => {
 
             Integration.stripe= response.data.integration_settings.stripe ? response.data.integration_settings.stripe : Integration.stripe;
             Integration.mailchimp= response.data.integration_settings.mailchimp ? response.data.integration_settings.mailchimp : Integration.mailchimp;
+            Integration.paypal= response.data.integration_settings.paypal ? response.data.integration_settings.paypal : Integration.paypal;
 
             skeleton.value = false;
         }
@@ -182,6 +197,7 @@ const UpdateIntegration = async (key, value) => {
             spopup.value = false;
             spopup.value = false;
             mailpopup.value = false;
+            paypalpopup.value = false;
             
         }else{
             toast.error(response.data.message, {
@@ -290,6 +306,17 @@ onBeforeMount(() => {
                 v-if="currentHash === 'all' || currentHash === 'all'"
                 />
                 <!-- Mailchimp intrigation -->
+
+                <!-- paypal intrigation -->
+                <PaypalIntegrations 
+                :paypal_data="Integration.paypal" 
+                @update-integrations="UpdateIntegration" 
+                :ispopup="paypalpopup"
+                @popup-open-control="ispaypalPopupOpen"
+                @popup-close-control="ispaypalPopupClose" 
+                v-if="currentHash === 'all' || currentHash === 'payments'"
+                />
+                <!-- paypal intrigation -->
           
 
             </div> 
