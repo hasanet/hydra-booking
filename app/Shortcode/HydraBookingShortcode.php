@@ -519,7 +519,7 @@ class HydraBookingShortcode {
 
         // Booking Frequency
 
-        $current_user_booking =  $booking->get(array('email' => $data['email'], 'meeting_id' => $data['meeting_id']) );
+        $current_user_booking =  $booking->get(array( 'meeting_id' => $data['meeting_id']) );
          
         if($current_user_booking){
             $last_items_of_booking = end($current_user_booking);
@@ -527,9 +527,7 @@ class HydraBookingShortcode {
          
 
             $booking_frequency = isset($meta_data['booking_frequency']) ? $meta_data['booking_frequency'] : array();
-            // echo "<pre>";
-            // print_r($last_items_of_booking);
-            // echo "</pre>";
+            
             if( $booking_frequency ){ 
                 $created_date = $last_items_of_booking->created_at; // 2024-07-02 14:26:29
                 $current_date = date('Y-m-d H:i:s');
@@ -551,7 +549,7 @@ class HydraBookingShortcode {
                         continue;
                     }
                     if($total_booking >= $limit){
-                        wp_send_json_error( array( 'message' => 'You can not book the meeting before '.$booking_frequency_date.' days' ) );
+                        wp_send_json_error( array( 'message' => ' Meeting Frequency Limit Reached' ) );
                      
                     }
 
