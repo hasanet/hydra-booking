@@ -23,15 +23,6 @@ defined( 'ABSPATH' ) || exit;
 ?> 
 <div class="tfhb-meeting-confirmation" >
     <?php 
-//      echo "<pre>";
-//  print_r($booking);
-//  echo "</pre>";
-//  echo "<pre>";
-//  print_r($host);
-//  echo "</pre>";
-//  echo "<pre>";
-//  print_r($meeting);
-//  echo "</pre>";
         // Hook for before confirmation
         do_action('hydra_booking/before_meeting_confirmation');
     
@@ -43,18 +34,19 @@ defined( 'ABSPATH' ) || exit;
     </div>
 
     <div class="tfhb-meeting-hostinfo">
-        <h4><?php echo $meeting->title ?></h4>
+        <h4 class="tfhb-mb-16"><?php echo $meeting->title ?></h4>
         <ul>
             <li class="tfhb-flexbox tfhb-gap-8">
                 <div class="tfhb-icon">
-                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                    <img src="<?php echo THB_URL.'assets/app/images/user.svg'; ?>" alt="User">
                 </div>
                 <?php echo  !empty($host['first_name']) ?  ''.esc_html($host['first_name']).'  '.esc_html($host['last_name']).'' : '' ?>
                 <span>Host</span>
             </li>
+            <?php if(!empty($booking['start_time'])){ ?>
             <li class="tfhb-flexbox tfhb-gap-8">
                 <div class="tfhb-icon">
-                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                    <img src="<?php echo THB_URL.'assets/app/images/Meeting.svg'; ?>" alt="User">
                 </div>
                 <!--date stored in this format  2024-05-24  9:00pm-9:45pm, Saturday, April 25 -->
                 <?php  
@@ -62,19 +54,17 @@ defined( 'ABSPATH' ) || exit;
                     echo  !empty($booking['start_time']) ?  ''.esc_html($booking['start_time']).' - '.esc_html($booking['end_time']).', '.esc_html(date('l, F j', strtotime($booking['meeting_dates']))).'' : '' 
                 ?>
             </li>
+            <?php } ?>
+            <?php if(!empty($booking['attendee_time_zone'])){ ?>
             <li class="tfhb-flexbox tfhb-gap-8">
                 <div class="tfhb-icon">
-                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
+                    <img src="<?php echo THB_URL.'assets/app/images/globe.svg'; ?>" alt="User">
                 </div>
                 <!-- Asia/Dhaka  -->
                 <?php echo  !empty($booking['attendee_time_zone']) ?  ''.esc_html($booking['attendee_time_zone']).'' : '' ?>
 
             </li>
-            <!-- <li class="tfhb-flexbox tfhb-gap-8">
-                <div class="tfhb-icon">
-                    <img src="<?php echo THB_URL.'assets/app/images/location.svg'; ?>" alt="User">
-                </div>  
-            </li> -->
+            <?php } ?>
             <!-- Meeting location -->
             <?php 
                 if(!empty($booking['meeting_locations'])) {

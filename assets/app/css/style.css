@@ -728,6 +728,10 @@
   gap: 8px;
 }
 
+.tfhb-mb-16 {
+  margin-bottom: 16px;
+}
+
 .tfhb-select2-dropdown.select2-dropdown--below {
   top: 20px;
 }
