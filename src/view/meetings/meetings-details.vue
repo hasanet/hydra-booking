@@ -30,6 +30,12 @@ const props = defineProps({
 });
 
 const tfhbValidateInput = (fieldName) => {
+    
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);

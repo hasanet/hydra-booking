@@ -428,6 +428,11 @@ onBeforeMount(() => {
 
 const UpdateMeetingData = async (validator_field) => {
     
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+    
     // Errors Added
     if(validator_field){
         validator_field.forEach(field => {
