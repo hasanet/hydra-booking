@@ -40,10 +40,12 @@ class THB_INIT{
         new HydraBooking\Hooks\MailHooks(); 
 
         // Web Hooks
-        new HydraBooking\Hooks\WebHook(); 
+        new HydraBooking\Services\Integrations\WebHook\WebHook(); 
 
         // Integrations
-        new HydraBooking\Hooks\Integrations(); 
+        new HydraBooking\Services\Integrations\MailChimp\MailChimp(); 
+        new HydraBooking\Services\Integrations\Zoho\Zoho(); 
+        new HydraBooking\Services\Integrations\FluentCRM\FluentCRM(); 
 
       
         add_action('init', array($this, 'init'));
