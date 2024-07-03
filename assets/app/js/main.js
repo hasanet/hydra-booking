@@ -220,6 +220,7 @@
 				var payment_type = $this.find("#payment_method").val();
 				var meeting_price = $this.find("#meeting_price").val();
 				var stripe_public_key = $this.find("#stpublic_key").val();
+				var paypal_public_key = $this.find("#paypal_public_key").val();
 				var payment_currency = $this.find("#payment_currency").val();
 				if("stripe_payment"!=payment_type && "paypal_payment"!=payment_type){
 					var data  = new FormData(this); 
@@ -327,12 +328,13 @@
 				}
 
 				if("paypal_payment"==payment_type){
+					// 'AQyFCpzKPySeYI-n5FvZZ91zosqIEjguVDGrkUVFsW74o89Rj620Tol_4n-4JnaB_Fu8WojSvlSpzifa'
 					$this.find('.tfhb-confirmation-button').empty();
 					paypal.Button.render({
 						// Configure environment
 						env: 'sandbox',
 						client: {
-							sandbox: 'AQyFCpzKPySeYI-n5FvZZ91zosqIEjguVDGrkUVFsW74o89Rj620Tol_4n-4JnaB_Fu8WojSvlSpzifa',
+							sandbox: paypal_public_key,
 						},
 						// Customize button (optional)
 						locale: 'en_US',
@@ -356,7 +358,6 @@
 						onAuthorize: function (data, actions) {
 							return actions.payment.execute()
 							.then(function () {
-								console.log(data);
 								jQuery.ajax({
 									url: tfhb_app_booking.ajax_url,
 									method: 'POST',
