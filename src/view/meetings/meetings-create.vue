@@ -15,7 +15,7 @@ const skeleton = ref(true);
 const timeZone = reactive({});
 const meetingCategory = reactive({});
 const wcProduct = reactive({});
-
+const formsList = reactive({});
 const meetingData = reactive({
     id: 0,
     user_id: 0,
@@ -140,6 +140,8 @@ const meetingData = reactive({
     attendee_can_cancel: 1,
     attendee_can_reschedule: 1, 
     questions_type: 'custom',
+    form_type: '',
+    form_id: '',
     questions: [
         {
             label: 'name',
@@ -321,6 +323,7 @@ const meetingId = route.params.id;
             timeZone.value = response.data.time_zone;  
 
             wcProduct.value = response.data.wc_product;  
+            formsList.value = response.data.formsList;  
             meetingCategory.value = response.data.meeting_category;
 
             meetingData.id = response.data.meeting.id
@@ -378,12 +381,15 @@ const meetingId = route.params.id;
             if(response.data.meeting.questions_type){
                 meetingData.questions_type = response.data.meeting.questions_type
             }
+            if(response.data.meeting.questions_form_type){
+                meetingData.questions_form_type = response.data.meeting.questions_form_type
+            }
 
             if(response.data.meeting.questions){
                 meetingData.questions = JSON.parse(response.data.meeting.questions)
             }
             if(response.data.meeting.questions_form){
-                meetingData.questions_form = JSON.parse(response.data.meeting.questions_form)
+                meetingData.questions_form = response.data.meeting.questions_form
             }
             if(response.data.meeting.notification && "string" == typeof response.data.meeting.notification){
                 meetingData.notification = JSON.parse(response.data.meeting.notification)
@@ -549,6 +555,7 @@ const TfhbPrevNavigator = () => {
             :meeting="meetingData" 
             :timeZone="timeZone.value" 
             :wcProduct="wcProduct.value" 
+            :formsList="formsList.value" 
             :meetingCategory="meetingCategory.value" 
             @add-more-location="addMoreLocations" 
             @remove-meeting-location="removeLocations" 

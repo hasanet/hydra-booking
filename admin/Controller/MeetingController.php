@@ -101,6 +101,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'getTheHostAvailabilityData'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
+
+                
+        register_rest_route('hydra-booking/v1', '/meetings/question/forms-list', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getQuestionFormsList'),
+        ));
+
     }
     // Meeting List
     public function getMeetingsData() { 
@@ -725,6 +732,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $zohocrm_Data['modules'] = $zoho_modules;
         }
 
+        // Fetch Questions Data
+        $questions_form_type = !empty($MeetingData->questions_form_type) ? $MeetingData->questions_form_type : '';
+        $questions_form = !empty($MeetingData->questions_form) ? $MeetingData->questions_form : 0;
+        $formsList = array();
+        if( $questions_form_type ){
+            $formsList = $this->getQuestionFormsData($questions_form_type);
+        }
+
         // Return response
         $data = array(
             'status' => true, 
@@ -735,6 +750,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'mailchimp' => $mailchimp_Data,
             'fluentcrm' => $fluentcrm_Data,
             'zohocrm' => $zohocrm_Data,
+            'formsList' => $formsList,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -790,6 +806,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'attendee_can_cancel'       => isset($request['attendee_can_cancel']) ? sanitize_text_field($request['attendee_can_cancel']) : '',
             'attendee_can_reschedule'   => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
             'questions_type'          => isset($request['questions_type']) ? sanitize_text_field($request['questions_type']) : '',
+            'questions_form_type'          => isset($request['questions_form_type']) ? sanitize_text_field($request['questions_form_type']) : '',
+            'questions_form'          => isset($request['questions_form']) ? sanitize_text_field($request['questions_form']) : '',
             'questions'                 => isset($request['questions']) ? $request['questions'] : '',
             'notification'              => isset($request['notification']) ? $request['notification'] : '',
             'payment_status'            => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
@@ -1046,5 +1064,40 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 			return $response_data['access_token'];
 		}
 	}
+
+    // Meeting Questions Forms List
+    public function getQuestionFormsList(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $form_type = $request['form_type'];
+        $questionForms = $this->getQuestionFormsData($form_type);
+
+        $data = array(
+            'status' => true, 
+            'questionForms' => $questionForms,  
+            'message' => 'Question Forms Data',
+        );
+        return rest_ensure_response($data);
+    }
+    // Fetch Forms list based on form Types
+    public function getQuestionFormsData($form_type){
+        $questionForms = [];
+        if($form_type == 'wpcf7'){
+            $args = array(
+                'post_type' => 'wpcf7_contact_form',
+                'posts_per_page' => -1,
+            );
+            $forms = get_posts($args);
+            
+            foreach ($forms as $form) {
+                $questionForms[] = array(
+                    'name' => $form->post_title,
+                    'value' => $form->ID
+                );
+            }
+
+             
+        }
+        return $questionForms;
+    }
 
 } 

@@ -157,8 +157,7 @@ const UpdateIntegration = async (key, value) => {
         value: value,
         id: route.params.id,
         user_id: props.host.user_id,
-    };  
-    console.log(data);
+    };   
     try { 
         const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/hosts/integration/update', data, {
             headers: {
@@ -195,11 +194,10 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box tfhb-m-0">   
- 
+    <div class="tfhb-admin-card-box tfhb-m-0">    
         <!-- Host Integration -->
-        <GoogleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
-        <OutlookCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :outlook_calendar="Integration.outlook_calendar" @update-integrations="UpdateIntegration" />
+        <GoogleCalendarIntegrations v-if="Integration.google_calendar.status == '1'" display="list" class="tfhb-flexbox tfhb-host-integrations" :google_calendar="Integration.google_calendar" @update-integrations="UpdateIntegration" />
+        <OutlookCalendarIntegrations v-if="Integration.outlook_calendar.status == '1'" display="list" class="tfhb-flexbox tfhb-host-integrations" :outlook_calendar="Integration.outlook_calendar" @update-integrations="UpdateIntegration" />
         <AppleCalendarIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" :apple_calendar="Integration.apple_calendar" @update-integrations="UpdateIntegration" />
  
 

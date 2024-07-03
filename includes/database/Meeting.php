@@ -49,6 +49,7 @@ class Meeting {
                 attendee_can_cancel VARCHAR(20) NULL,
                 attendee_can_reschedule VARCHAR(20) NULL,
                 questions_type VARCHAR(20) NULL,
+                questions_form_type LONGTEXT NULL,
                 questions_form LONGTEXT NULL,
                 questions LONGTEXT NULL, 
                 notification LONGTEXT NULL, 

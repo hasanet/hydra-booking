@@ -103,7 +103,8 @@ class HydraBookingShortcode {
         $DateTimeZone = new DateTimeController('UTC');
         $time_zone = $DateTimeZone->TimeZone();
 
-     
+    
+    
         // Start Buffer
         ob_start();
 
@@ -151,7 +152,7 @@ class HydraBookingShortcode {
                         <?php 
                         // Load Meeting Form Template
                         load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
-                            'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
+                            'meeting' => $meta_data,  
                             'booking_data' => $booking_data,
                         ]);
                         ?>

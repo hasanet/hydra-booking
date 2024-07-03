@@ -274,6 +274,7 @@ namespace HydraBooking\Admin\Controller;
             'Create custom form' => __('Create custom form', 'hydra-booking'),
             'Use existing form' => __('Use existing form', 'hydra-booking'),
             'Add more questions' => __('Add more questions', 'hydra-booking'),
+            'Select Form Types' => __('Select Form Types', 'hydra-booking'),
             'Add New Availability' => __('Add New Availability', 'hydra-booking'),
             'New standard in online payment' => __('New standard in online payment', 'hydra-booking'),
             'Google Calendar' => __('Google Calendar', 'hydra-booking'),
