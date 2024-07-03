@@ -1,11 +1,8 @@
 <script setup>
-import {reactive, ref} from 'vue'
-import Icon from '@/components/icon/LucideIcon.vue'
+import {ref} from 'vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue'
 
 // component
-import ZoomIntregration from '@/components/integrations/ZoomIntegrations.vue';
-import WooIntegrations from '@/components/integrations/WooIntegrations.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue';
 
 const emit = defineEmits(["update-meeting"]); 
@@ -28,20 +25,6 @@ const props = defineProps({
 
 const host = ref(true);
 const attendee = ref(false);
-
-// Update Notification 
-const changeTab = (e) => {  
-    // get data-tab attribute value of clicked button
-    const tab = e.target.getAttribute('data-tab'); 
-    if(tab == 'host') {  
-        host.value = true;
-        attendee.value = false;  
-    } else { 
-        host.value = false;
-        attendee.value = true; 
-    }
-
-}
 
 </script>
 

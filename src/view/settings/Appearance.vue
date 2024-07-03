@@ -4,7 +4,6 @@ import { useRouter, RouterView,} from 'vue-router'
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbImageSelect from '@/components/form-fields/HbImageSelect.vue'
-import ColorPicker from 'primevue/colorpicker';
 import axios from 'axios' 
 import { toast } from "vue3-toastify";
 import LvColorpicker from 'lightvue/color-picker';

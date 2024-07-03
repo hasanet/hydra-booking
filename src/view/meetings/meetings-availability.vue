@@ -1,7 +1,6 @@
 <script setup>
 import {ref, onBeforeMount, reactive} from 'vue'
 import axios from 'axios'  
-import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';

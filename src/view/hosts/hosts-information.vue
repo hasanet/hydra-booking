@@ -1,17 +1,10 @@
 <script setup>
-import { reactive, onBeforeMount, ref } from 'vue';
-import { useRouter, RouterView } from 'vue-router' 
-import axios from 'axios'  
-import Icon from '@/components/icon/LucideIcon.vue'
-import HbSelect from '@/components/form-fields/HbSelect.vue'
 
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
-import HbImageBox from '@/components/form-fields/HbImageBox.vue'
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
 import HbRadio from '@/components/form-fields/HbRadio.vue'
-import { Upload } from 'lucide-vue-next';
 import useValidators from '@/store/validator'
 const { errors, isEmpty } = useValidators();
 

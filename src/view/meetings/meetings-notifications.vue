@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue'
+import {ref} from 'vue'
 import Icon from '@/components/icon/LucideIcon.vue'
 import MailNotifications from '@/components/notifications/MailNotifications.vue'
 

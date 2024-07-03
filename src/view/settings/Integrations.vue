@@ -1,7 +1,6 @@
 <script setup> 
 // Use children routes for the tabs 
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import { toast } from "vue3-toastify"; 
 

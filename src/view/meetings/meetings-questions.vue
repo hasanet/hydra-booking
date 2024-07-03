@@ -3,7 +3,6 @@ import {reactive, ref} from 'vue'
 import HbQuestion from '@/components/widgets/HbQuestion.vue'
 import HbQuestionForm from '@/components/widgets/HbQuestionForm.vue'
 import Icon from '@/components/icon/LucideIcon.vue'
-import HbSwitch from '@/components/form-fields/HbSwitch.vue'
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
 
 const emit = defineEmits(["update-meeting", "limits-frequency-add"]); 

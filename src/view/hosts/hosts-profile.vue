@@ -6,7 +6,6 @@ import { toast } from "vue3-toastify";
 import Icon from '@/components/icon/LucideIcon.vue'
 import useValidators from '@/store/validator'
 const { errors } = useValidators();
-const error = reactive({})
 
 // Get Current Route url 
 const route = useRoute();
