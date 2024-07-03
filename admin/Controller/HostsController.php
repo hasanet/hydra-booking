@@ -511,6 +511,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $paypal['status'] = $_tfhb_host_integration_settings['paypal']['status']; 
         $paypal['client_id'] = $_tfhb_host_integration_settings['paypal']['client_id'];  
         $paypal['secret_key'] = $_tfhb_host_integration_settings['paypal']['secret_key']; 
+        $paypal['environment'] =  $_tfhb_host_integration_settings['paypal']['environment'];
         
         } 
 
@@ -699,6 +700,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $_tfhb_host_integration_settings['paypal']['status'] =  sanitize_text_field($data['status']);
             $_tfhb_host_integration_settings['paypal']['client_id'] =  sanitize_text_field($data['client_id']);
             $_tfhb_host_integration_settings['paypal']['secret_key'] =  sanitize_text_field($data['secret_key']);
+            $_tfhb_host_integration_settings['paypal']['environment'] =  sanitize_text_field($data['environment']);
 
             // update User Meta  
             update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);

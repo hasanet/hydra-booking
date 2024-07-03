@@ -6,6 +6,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue' 
 import HbPopup from '@/components/widgets/HbPopup.vue';  
 import HbSwitch from '@/components/form-fields/HbSwitch.vue'; 
+import HbDropdown from '@/components/form-fields/HbDropdown.vue';
 
 const props = defineProps([
     'class', 
@@ -26,7 +27,7 @@ const closePopup = () => {
       <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box ">
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
             <span class="tfhb-integrations-single-block-icon">
-                <img :src="$tfhb_url+'/assets/images/stripe.png'" alt="">
+                <img :src="$tfhb_url+'/assets/images/paypal.svg'" alt="">
             </span> 
 
             <div class="cartbox-text">
@@ -52,6 +53,17 @@ const closePopup = () => {
                 <p>
                     {{ $tfhb_trans['Please read the documentation here for step by step guide to know how you can get api credentials from Paypal Account'] }}
                 </p>
+                <HbDropdown 
+                    v-model="paypal_data.environment"
+                    required= "true"  
+                    :label="$tfhb_trans['Environment']"   
+                    selected = "1"
+                    placeholder="Select Environment"  
+                    :option = "[
+                        {name: 'SandBox', value: 'sandbox'},  
+                        {name: 'Production', value: 'live'},  
+                    ]" 
+                />
                 <HbText  
                     v-model="paypal_data.client_id"  
                     required= "true"  

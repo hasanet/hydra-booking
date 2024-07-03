@@ -8,7 +8,6 @@ import HbDropdown from '@/components/form-fields/HbDropdown.vue';
 import HbText from '@/components/form-fields/HbText.vue';
 import HbSwitch from '@/components/form-fields/HbSwitch.vue'; 
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
-import HbRadio from '@/components/form-fields/HbRadio.vue';
 
 const props = defineProps({
     meetingId: {

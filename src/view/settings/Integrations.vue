@@ -141,6 +141,7 @@ const Integration = reactive( {
     },
     paypal : {
         type: 'paypal', 
+        environment: '',
         status: 0, 
         client_id: '',
         secret_key: '',
