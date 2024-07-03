@@ -6,7 +6,6 @@ import { toast } from "vue3-toastify";
 import Icon from '@/components/icon/LucideIcon.vue'
 import useValidators from '@/store/validator'
 const { errors } = useValidators();
-const error = reactive({})
 
 // Get Current Route url 
 const route = useRoute();
@@ -42,6 +41,11 @@ const AvailabilityTabs = (type) => {
 // Save and Update Host Info
 const UpdateHostsInformation = async (validator_field) => {
 
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+    
     // Errors Added
     if(validator_field){
         validator_field.forEach(field => {

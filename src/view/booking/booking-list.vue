@@ -3,26 +3,15 @@ import { ref, reactive, onBeforeMount, computed } from 'vue';
 import axios from 'axios'  
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import Icon from '@/components/icon/LucideIcon.vue'
-import HbText from '@/components/form-fields/HbText.vue';
 import HbSelect from '@/components/form-fields/HbSelect.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
-import AutoComplete from 'primevue/autocomplete';
 import { toast } from "vue3-toastify"; 
 import useDateFormat from '@/store/dateformat'
 const { Tfhb_Date, Tfhb_Time } = useDateFormat();
 import { Meeting } from '@/store/meetings'
 import { Booking } from '@/store/booking'
 
-const booking_data = reactive({
-    meeting: '',
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
-});
-
 const BookingDetailsPopup = ref(false);
-const BackendBooking = ref(false);
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
 

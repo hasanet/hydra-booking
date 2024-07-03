@@ -475,6 +475,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $_tfhb_integration_settings['paypal']['status'] =  sanitize_text_field($data['status']);
             $_tfhb_integration_settings['paypal']['client_id'] =  sanitize_text_field($data['client_id']);
             $_tfhb_integration_settings['paypal']['secret_key'] =  sanitize_text_field($data['secret_key']);
+            $_tfhb_integration_settings['paypal']['environment'] =  sanitize_text_field($data['environment']);
 
             // update option
             update_option('_tfhb_integration_settings', $_tfhb_integration_settings);

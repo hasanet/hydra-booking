@@ -2,7 +2,6 @@
 import { ref, reactive, onBeforeMount } from 'vue';
 import { useRouter, useRoute, RouterView } from 'vue-router' 
 import axios from 'axios'  
-import Icon from '@/components/icon/LucideIcon.vue' 
 import { toast } from "vue3-toastify"; 
 
 // Get Current Route url
@@ -114,6 +113,7 @@ const Integration = reactive( {
     },
     paypal : {
         type: 'paypal', 
+        environment: '',
         status: 0, 
         client_id: '',
         secret_key: '',

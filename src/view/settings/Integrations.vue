@@ -1,7 +1,6 @@
 <script setup> 
 // Use children routes for the tabs 
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import { toast } from "vue3-toastify"; 
 
@@ -141,6 +140,7 @@ const Integration = reactive( {
     },
     paypal : {
         type: 'paypal', 
+        environment: '',
         status: 0, 
         client_id: '',
         secret_key: '',

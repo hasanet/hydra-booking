@@ -1,7 +1,6 @@
 <script setup>
 import {ref, onBeforeMount, reactive} from 'vue'
 import axios from 'axios'  
-import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
@@ -60,6 +59,11 @@ const Settings_Avalibility_Callback = (e) => {
 }
 
 const tfhbValidateInput = (fieldName) => {
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+    
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
@@ -267,7 +271,7 @@ const isobjectempty = (data) => {
 </script>
 
 <template>
-   
+
     <div class="meeting-create-details tfhb-gap-24">
         <div class="tfhb-meeting-range tfhb-full-width">
             <div class="tfhb-admin-title" >

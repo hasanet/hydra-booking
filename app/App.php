@@ -232,33 +232,55 @@ class App {
 
     // Paypal Callback
     public function tfhb_paypal_payment_callback($data, $booking_id){
-        var_dump($data); exit();
-        $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
-		if($_tfhb_integration_settings['paypal']){
-			$client_id = $_tfhb_integration_settings['paypal']['client_id'];
-            $client_secret = $_tfhb_integration_settings['paypal']['secret_key'];
+
+        if(!empty($data['paymentID']) && !empty($data['paymentToken']) && !empty($data['payerID'])){
+            $booking = new Booking();
+            $bookingdata = [ 
+                'id' => $booking_id,
+                'payment_status' => 'Completed'
+            ];
+            // Booking Update
+            $bookingUpdate = $booking->update($bookingdata);
+
+            $charge = array(
+                'paymentID' => !empty($data['paymentID']) ? $data['paymentID'] : '',
+                'paymentToken' => !empty($data['paymentToken']) ? $data['paymentToken'] : '',
+                'payerID' => !empty($data['payerID']) ? $data['payerID'] : '',
+            );
+            // Data for Transactions Table
+            $tdata = [ 
+                'booking_id' => $booking_id,
+                'transation_history' => wp_json_encode($charge)
+            ];
+            $Transactions =  new Transactions();
+            $Transactions = $Transactions->add($tdata);
+        }
+        
+        // $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+		// if($_tfhb_integration_settings['paypal']){
+		// 	$client_id = $_tfhb_integration_settings['paypal']['client_id'];
+        //     $client_secret = $_tfhb_integration_settings['paypal']['secret_key'];
 
 
-			$ch = curl_init();
+		// 	$ch = curl_init();
 
-			curl_setopt($ch, CURLOPT_URL, "https://api.sandbox.paypal.com/v1/oauth2/token");
-			curl_setopt($ch, CURLOPT_HEADER, false);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_USERPWD, $client_id . ":" . $client_secret);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+		// 	curl_setopt($ch, CURLOPT_URL, "https://api.sandbox.paypal.com/v1/oauth2/token");
+		// 	curl_setopt($ch, CURLOPT_HEADER, false);
+		// 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		// 	curl_setopt($ch, CURLOPT_POST, true);
+		// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// 	curl_setopt($ch, CURLOPT_USERPWD, $client_id . ":" . $client_secret);
+		// 	curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
 
-			$response = curl_exec($ch);
-			if (empty($response)) die("Error: No response.");
-			$jsonResponse = json_decode($response);
-			curl_close($ch);
+		// 	$response = curl_exec($ch);
+		// 	if (empty($response)) die("Error: No response.");
+		// 	$jsonResponse = json_decode($response);
+		// 	curl_close($ch);
 
-			var_dump($jsonResponse); exit();
-			$accessToken = $jsonResponse->access_token;
+		// 	var_dump($jsonResponse); exit();
+		// 	$accessToken = $jsonResponse->access_token;
 
-
-		}
+		// }
     }
 }
 

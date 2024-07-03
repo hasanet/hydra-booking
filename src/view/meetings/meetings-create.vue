@@ -7,7 +7,6 @@ import { toast } from "vue3-toastify";
 import useValidators from '@/store/validator'
 import { Availability } from '@/store/availability';
 const { errors } = useValidators();
-const error = reactive({})
 
 const route = useRoute();
 const router = useRouter();
@@ -433,6 +432,11 @@ onBeforeMount(() => {
 
 
 const UpdateMeetingData = async (validator_field) => {
+    
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
     
     // Errors Added
     if(validator_field){

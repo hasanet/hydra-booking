@@ -1,7 +1,7 @@
 <script setup> 
 // Use children routes for the tabs 
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView,} from 'vue-router' 
+import { useRouter } from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import { toast } from "vue3-toastify";
@@ -30,6 +30,11 @@ const generalSettings = reactive({
 // Field Validator
 
 const tfhbValidateInput = (fieldName) => {
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], generalSettings[fieldParts[0]]);
@@ -72,6 +77,12 @@ const fetchGeneralSettings = async () => {
     } 
 }
 const UpdateGeneralSettings = async () => { 
+
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+    
     // Errors Added
     let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'date_format', 'country']
     if(validator_field){

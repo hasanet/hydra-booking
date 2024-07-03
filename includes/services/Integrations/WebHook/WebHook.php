@@ -1,5 +1,5 @@
 <?php
-namespace HydraBooking\Hooks;
+namespace HydraBooking\Services\Integrations\WebHook;
 use HydraBooking\DB\Meeting;
 class WebHook{
 

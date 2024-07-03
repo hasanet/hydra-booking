@@ -22,10 +22,11 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
 // Stripe Public api Key
 $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
 $stripePublicKey = !empty($_tfhb_integration_settings['stripe']['public_key']) ? $_tfhb_integration_settings['stripe']['public_key'] : '';
+$paypalPublicKey = !empty($_tfhb_integration_settings['paypal']['client_id']) ? $_tfhb_integration_settings['paypal']['client_id'] : '';
 
 $_tfhb_host_integration_settings = get_user_meta($host['host_id'], '_tfhb_host_integration_settings');
-
 $stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key']) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripePublicKey;
+$paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id']) ? $_tfhb_host_integration_settings['paypal']['client_id'] : $paypalPublicKey;
 
 ?> 
 <div class="tfhb-meeting-info">
@@ -40,6 +41,7 @@ $stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key
         <input type="hidden" id="payment_amount" name="payment_amount" value="<?php echo !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : ''; ?>">
         <input type="hidden" id="payment_currency" name="payment_currency" value="<?php echo !empty($meeting['payment_currency']) ? $meeting['payment_currency'] : 'USD'; ?>">
         <input type="hidden" id="stpublic_key" name="public_key" value="<?php echo $stripePublicKey; ?>">
+        <input type="hidden" id="paypal_public_key" name="public_key" value="<?php echo $paypalPublicKey; ?>">
         <?php 
             if(!empty($booking_data)) {    
                 echo '<input type="hidden" id="booking_hash" name="booking_hash" value="'.esc_attr($booking_data->hash).'">'; 

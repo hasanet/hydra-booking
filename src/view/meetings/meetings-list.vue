@@ -12,7 +12,6 @@ const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false);
 const isModalOpened = ref(false);
-const skeleton = ref(true);
 const sharePopup = ref(false)
 
 const openModal = () => {

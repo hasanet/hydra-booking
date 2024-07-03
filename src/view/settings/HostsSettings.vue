@@ -1,18 +1,11 @@
 <script setup> 
 // Use children routes for the tabs 
-import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView,} from 'vue-router'  
+import { onBeforeMount } from 'vue';
+import { RouterView } from 'vue-router'  
 import Icon from '@/components/icon/LucideIcon.vue'
 
 // Store 
 import { hostsSettings } from '@/store/settings/hostsSettings';
-
-const datahostsSettings = reactive({});
-
-// import Form Field 
-import HbSelect from '@/components/form-fields/HbSelect.vue' 
-import MailNotifications from '@/components/notifications/MailNotifications.vue'
-
 
  
 onBeforeMount(() => {   

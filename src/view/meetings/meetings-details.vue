@@ -1,5 +1,4 @@
 <script setup>
-import { reactive, onBeforeMount } from 'vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
@@ -30,6 +29,12 @@ const props = defineProps({
 });
 
 const tfhbValidateInput = (fieldName) => {
+    
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
