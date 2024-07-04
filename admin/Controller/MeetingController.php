@@ -663,7 +663,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 			} else {
 				$mailchimp_Data['status'] = false;
 			}
-		}
+		}else{
+            $mailchimp_Data['status'] = false;
+        }
 
         // FluentCRM
         $fluentcrm_Data = [];
@@ -730,6 +732,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if(!empty($access_token)){
             $zohocrm_Data['status'] = true;
             $zohocrm_Data['modules'] = $zoho_modules;
+        }else{
+            $zohocrm_Data['status'] = false;
         }
 
         // Fetch Questions Data
