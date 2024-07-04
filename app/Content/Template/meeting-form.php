@@ -48,12 +48,15 @@ defined( 'ABSPATH' ) || exit;
        
         <?php  
 
-            if( $questions_type == 'custom'  ){
+            if( $questions_type != 'custom'  ){
+                // echo do_shortcode('[wpforms id="349"]');
                  if($questions_form_type == 'wpcf7'){
                     echo do_shortcode('[contact-form-7 id="'.$questions_form.'"]');
+                    
                  }
 
             }else{
+                echo '<form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">';
                 if(is_array($questions) && !empty($questions)){ 
                     $disable = !empty($booking_data) ? 'disabled' : '';
                     
@@ -106,11 +109,13 @@ defined( 'ABSPATH' ) || exit;
             
                     endforeach;
                 }
+                 
            
 
         ?> 
 
             <?php if(!empty( $booking_data )): ?>
+                
                 <div class="tfhb-forms">
                     <div  class="tfhb-single-form">
                         <label for="attendee_name"> Reason for Reschedule </label>
@@ -130,18 +135,17 @@ defined( 'ABSPATH' ) || exit;
                     </div>
     
                 </div>
-            <?php endif ?>
-        
-            
-            
-           
-    <?php  }; ?>
-    <div class="tfhb-confirmation-button">
-        <button class="tfhb-flexbox tfhb-gap-8 tfhb-booking-submit">
-            <?php echo  !empty($booking_data) ? 'Reschedule' : 'Confirm' ?>  
-            <img src="<?php echo THB_URL.'assets/app/images/arrow-right.svg'; ?>" alt="arrow"> 
-        </button>
-    </div>
+            <?php endif ?> 
+            <div class="tfhb-confirmation-button">
+                <button class="tfhb-flexbox tfhb-gap-8 tfhb-booking-submit">
+                    <?php echo  !empty($booking_data) ? 'Reschedule' : 'Confirm' ?>  
+                    <img src="<?php echo THB_URL.'assets/app/images/arrow-right.svg'; ?>" alt="arrow"> 
+                </button>
+            </div>
+    <?php  
+        echo '</form>';
+    }; ?>
+  
     </div>
 
     <?php 

@@ -127,7 +127,7 @@ class HydraBookingShortcode {
                 }
     
             ?>
-            <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">
+            <!-- <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data"> -->
                 <div class="tfhb-meeting-card">
                         <?php   
                         // Load Meeting Info Template  
@@ -158,7 +158,7 @@ class HydraBookingShortcode {
                         ?>
                 </div>
 
-            </form>
+            <!-- </form> -->
                 
         </div>
         <?php 
@@ -296,10 +296,19 @@ class HydraBookingShortcode {
             $meeting_hash = md5(sanitize_text_field($_POST['meeting_dates']) . sanitize_text_field($_POST['meeting_time_start']) . sanitize_text_field($_POST['meeting_time_end']) . sanitize_text_field($_POST['meeting_id']) . rand(1000, 9999));
 
         }
-         
+        
+            
+    
+       
   
         // sanitize the data 
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
+
+        $meeting = new Meeting(); 
+        $MeetingData = $meeting->get( $data['meeting_id'] ); 
+
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+
         $data['host_id'] = isset($_POST['host_id']) ? sanitize_text_field($_POST['host_id']) : 0;
         $data['attendee_id'] = isset($_POST['attendee_id']) ? sanitize_text_field($_POST['attendee_id']) : 0; 
         $data['hash'] = $meeting_hash; 
@@ -315,11 +324,28 @@ class HydraBookingShortcode {
         $data['address'] = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : '';
 
         $data['others_info'] = array();
-        if(isset($_POST['question']) && !empty($_POST['question'])){ 
-            foreach($_POST['question'] as $key => $question){
+   
+        $questions = isset($_POST['question']) ? $_POST['question'] : array();
+   
+
+        // Contact form fields 
+        if($meta_data['questions_type'] == 'existing'){
+         
+           if($meta_data['questions_form_type'] == 'wpcf7'){
+                $questions = array_filter($_POST, function($key) {
+                    return strpos($key, 'question_') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+           }
+             
+        }
+       
+       
+        if(isset($questions) && !empty($questions)){ 
+            foreach($questions as $key => $question){
                 $data['others_info'][$key] = sanitize_text_field($question);
             } 
-        }
+        } 
+   
 
         $data['country'] = isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '';
         $data['ip_address'] = isset($_POST['ip_address']) ? sanitize_text_field($_POST['ip_address']) : '';
@@ -339,13 +365,7 @@ class HydraBookingShortcode {
         $data['reason'] = '';
         $data['booking_type'] = 'single';
 
-          
-        // Load The Thankyou Template 
-        $meeting = new Meeting(); 
-        $MeetingData = $meeting->get( $data['meeting_id'] ); 
-
-        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-
+       
         // Payment Method
         if(true == $meta_data['payment_status']){ 
 

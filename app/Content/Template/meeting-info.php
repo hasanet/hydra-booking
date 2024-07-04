@@ -141,7 +141,7 @@ $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id'
         </ul>
 
         <div class="tfhb-timezone ">  
-            <select class="tfhb-time-zone-select" name="attendee_time_zone" id="">
+            <select class="tfhb-time-zone-select" name="attendee_time_zone" id="attendee_time_zone">
                 <?php 
                     if(!empty($time_zone)) {
                         $selected_timezone = $meeting['availability_custom']['time_zone'] ; 
