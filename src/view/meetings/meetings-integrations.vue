@@ -247,9 +247,9 @@ const moduleFields = async (e) => {
 
             <div class="tfhb-integrations-lists" v-if="integrationsListopen">
                 <ul>
-                    <li @click="addNewIntegrations('Mailchimp')">Mailchimp</li>
-                    <li @click="addNewIntegrations('FluentCRM')">FluentCRM</li>
-                    <li @click="addNewIntegrations('ZohoCRM')">ZohoCRM</li>
+                    <li @click="addNewIntegrations('Mailchimp')" v-if="meeting.mailchimp.status">{{ $tfhb_trans['Mailchimp'] }}</li>
+                    <li @click="addNewIntegrations('FluentCRM')" v-if="meeting.fluentcrm.status">{{ $tfhb_trans['FluentCRM'] }}</li>
+                    <li @click="addNewIntegrations('ZohoCRM')" v-if="meeting.zohocrm.status">{{ $tfhb_trans['ZohoCRM'] }}</li>
                 </ul>
             </div>
         </div>

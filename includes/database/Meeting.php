@@ -37,7 +37,7 @@ class Meeting {
                 availability_range_type VARCHAR(20) NULL,
                 availability_range LONGTEXT NULL, 
                 availability_type VARCHAR(20) NULL,
-                availability_id INT(11) NULL,
+                availability_id VARCHAR(11) NULL,
                 availability_custom LONGTEXT NULL, 
                 buffer_time_before VARCHAR(20) NULL,
                 buffer_time_after VARCHAR(20) NULL,

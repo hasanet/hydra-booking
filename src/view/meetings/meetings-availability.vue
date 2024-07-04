@@ -84,15 +84,18 @@ const fetchHostAvailability = async (host) => {
             delete HostAvailabilities[key];
         }
         if("settings"==response.data.host_availble){
-            console.log(response.data.host.availability);
             Settings_avalibility.value = response.data.host;
         }else{
-            // use Each Loop
-            for (const key in response.data.host.availability) {
-                HostAvailabilities.push({
-                    name: response.data.host.availability[key].title,
-                    value: key // Adjust 'someValue' as per your data structure
-                });
+            Settings_avalibility.value = '';
+            if(response.data.host.availability){
+
+                // use Each Loop
+                for (const key in response.data.host.availability) {
+                    HostAvailabilities.push({
+                        name: response.data.host.availability[key].title,
+                        value: key // Adjust 'someValue' as per your data structure
+                    });
+                }
             }
         }
     } catch (error) {

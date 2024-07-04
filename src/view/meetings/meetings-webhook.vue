@@ -234,18 +234,6 @@ const deleteBodyField = (key) => {
     </div>
 
     <div class="tfhb-admin-card-box tfhb-webhook-box tfhb-full-width tfhb-gap-24" v-if="webhookcreate">
-        <HbDropdown  
-            v-model="webhookData.webhook"
-            required= "true"  
-            :label="$tfhb_trans['Select Webhook']"   
-            width="50"
-            selected = "1"
-            placeholder="Select Webhook"  
-            :option = "[
-                {'name': 'Webhook', 'value': 'Webhook'},
-                {'name': 'Mailchimp', 'value': 'Mailchimp'}, 
-            ]"
-        />
 
         <HbText  
             v-model="webhookData.url"
@@ -253,7 +241,6 @@ const deleteBodyField = (key) => {
             :label="$tfhb_trans['Webhook URL']"  
             selected = "1"
             :placeholder="$tfhb_trans['Type your Webhook URL']" 
-            width="50"
         /> 
 
         <HbDropdown  
