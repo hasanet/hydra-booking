@@ -199,6 +199,9 @@ const tfhbValidateInput = (fieldName) => {
                     :label="field.placeholder"   
                     :placeholder="field.placeholder"  
                     :type="field.type"  
+                    @keyup="field.required == 1 ? tfhbValidateInput('others_information.'+field.label) : ''"
+                    @click="field.required == 1 ? tfhbValidateInput('others_information.'+field.label) : ''"
+                    :errors="field.required == 1 ? errors['others_information___' + field.label] : ''"
                 />
             </div>
             
