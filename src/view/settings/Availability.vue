@@ -108,9 +108,9 @@ const openModal = () => {
 
 // Edit availability
 const EditAvailabilitySettings = async (key, id, availability ) => { 
-    availabilityDataSingle.value.time_slots = GeneralSettings.value.week_start_from ?  Availability.RearraingeWeekStart(GeneralSettings.value.week_start_from, availabilityDataSingle.value.time_slots) : availabilityDataSingle.value.time_slots;
-  // availabilityDataSingle.value.key = key;
   availabilityDataSingle.value = availability;
+
+  availabilityDataSingle.value.time_slots = GeneralSettings.value.week_start_from ?  Availability.RearraingeWeekStart(GeneralSettings.value.week_start_from, availabilityDataSingle.value.time_slots) : availabilityDataSingle.value.time_slots;
   isModalOpened.value = true;
 }
 
