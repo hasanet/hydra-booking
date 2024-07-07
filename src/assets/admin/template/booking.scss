@@ -33,6 +33,211 @@
         width: 980px;
         margin: 0 auto;
     }
+
+    // Booking Calendar
+    .tfhb-booking-calendar{
+        border-radius: 16px 16px 0px 0px;
+        background: #FFF;
+        padding: 24px;
+        margin-right: 16px;
+
+        .fc-header-toolbar{
+            .fc-toolbar-chunk{
+                &:nth-child(2){
+                    >div{
+                        display: flex;
+                        align-items: 16px;
+                        gap: 28px;
+                        button{
+                            height: 24px;
+                            width: 24px;
+                            border-radius: 8px;
+                            border: 0.2px solid #E3CFD7;
+                            background: #FFF;
+                            padding: 0;
+                            span{
+                                margin: 0px !important;
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 100%;
+                                &::before{
+                                    color: #F62881;
+                                }
+                            }
+                        }
+                        h2{
+                            color: #765664 !important;
+                            font-size: 22px;
+                            font-style: normal;
+                            font-weight: 400 !important;
+                            line-height: 112%;
+                            margin: 0 !important;
+                        }
+                    }
+                }
+                &:nth-child(3){
+                    .fc-button-group{
+                        border-radius: 24px;
+                        border: 1px solid #F6EEF2;
+                        background: #FFF;
+                        padding: 4px;
+                        display: flex;
+                        gap: 8px;
+                        button{
+                            background: #FFF;
+                            color: #8F707D;
+                            font-size: 15px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 24px; /* 160% */
+                            border: 0px solid;
+                            padding: 8px 12px;
+                            border-radius: 24px;
+                            text-transform: capitalize;
+                            &:focus{
+                                box-shadow: none;
+                                outline: none;
+                            }
+                            &.fc-button-active{
+                                background: #F6EEF2;
+                                color: #F62881;
+                                position: relative;
+                                padding-left: 27px;
+                                &::before{
+                                    position: absolute;
+                                    content: "";
+                                    left: 12px;
+                                    height: 7px;
+                                    width: 7px;
+                                    background: #F62881;
+                                    border-radius: 50%;
+                                    top: 50%;
+                                    margin-top: -3.5px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+
+        table{
+            border: 0px solid;
+            .fc-scrollgrid-section-header{
+                th{
+                    border: 0px solid;
+                    .fc-col-header{
+                        tr{
+                            th{
+                                border: 0px solid;
+                                a{
+                                    color: #765664;
+                                    font-size: 15px;
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    line-height: 24px; /* 160% */
+                                    padding: 8px;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
+            .fc-scrollgrid-section-body{
+                > td{
+                    border: 0px solid;
+                }
+                table{
+                    tr{
+                        td{
+                            border: 1px solid #F6EEF2;
+                            padding: 8px;
+                            .fc-daygrid-day-top{
+                                a{
+                                    color: #211319;
+                                    font-size: 15px;
+                                    font-style: normal;
+                                    font-weight: 600;
+                                    line-height: 24px; /* 160% */
+                                }
+                            }
+                            .fc-daygrid-day-events{
+                                .fc-daygrid-event-harness{
+                                    margin-bottom: 8px;
+                                    &:last-child{
+                                        margin-bottom: 0px;
+                                    }
+                                    &:nth-child(odd){
+                                        a{
+                                            border-radius: 8px;
+                                            border: 0px solid;
+                                            border-left: 1px solid #002AB3;
+                                            background: #EBEFFF;
+                                            padding: 6px 8px;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            font-size: 13px;
+                                            font-style: normal;
+                                            font-weight: 600;
+                                            line-height: 20px; /* 153.846% */
+                                            .fc-event-main{
+                                                color: #002AB3;
+                                            }
+                                        }
+                                    }
+                                    &:nth-child(even){
+                                        a{
+                                            border-radius: 8px;
+                                            border: 0px solid;
+                                            border-left: 1px solid #17723F;
+                                            background: #E6FAEE;
+                                            padding: 6px 8px;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            font-size: 13px;
+                                            font-style: normal;
+                                            font-weight: 600;
+                                            line-height: 20px; /* 153.846% */
+                                            .fc-event-main{
+                                                color: #17723F;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .fc-daygrid-day-bottom{
+                                a.fc-more-link{
+                                    border-radius: 16px;
+                                    border: 1px solid #F62881;
+                                    background: #FAF5F7;
+                                    overflow: hidden;
+                                    color: #F62881;
+                                    text-overflow: ellipsis;
+                                    font-size: 13px;
+                                    font-style: normal;
+                                    font-weight: 600;
+                                    line-height: 20px; /* 153.846% */
+                                    padding: 6px 8px;
+                                }
+                            }
+                        }
+                        td.fc-day-other{
+                            .fc-daygrid-day-top{
+                                opacity: 1;
+                                a{
+                                    color: #E3CFD7;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 .tfhb-booking-details{
     margin-right: 15px;

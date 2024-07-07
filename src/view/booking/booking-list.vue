@@ -11,6 +11,11 @@ const { Tfhb_Date, Tfhb_Time } = useDateFormat();
 import { Meeting } from '@/store/meetings'
 import { Booking } from '@/store/booking'
 
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+
 const BookingDetailsPopup = ref(false);
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
@@ -91,6 +96,28 @@ const prevPage = () => {
     currentPage.value -= 1;
   }
 };
+
+const calendarOptions = {
+        plugins: [ 
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin
+        ],
+        initialView: 'dayGridMonth',
+        events: [
+          { title: 'event 1', date: '2024-07-01' },
+          { title: 'event 2', date: '2024-07-07' },
+          { title: 'lorem ipsum doller set amet asdf asdf', date: '2024-07-07' },
+          { title: 'lorem ipsum doller set amet dsaf asd f', date: '2024-07-07' },
+          { title: 'event 2', date: '2024-07-07', time: '12am' },
+        ],
+        headerToolbar: {
+          left: '',
+          center: 'prev,title,next',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        dayMaxEvents: 3,
+      }
 
 </script>
 <template>
@@ -189,6 +216,17 @@ const prevPage = () => {
 </HbPopup>
 
 <!-- Booking Quick View End -->
+
+<!-- <FullCalendar :options="calendarOptions" /> -->
+
+<div class="tfhb-booking-calendar">
+    <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
+        <template v-slot:eventContent='arg'>
+            <b>{{ arg.timeText }}</b>
+            {{ arg.event.title }}
+        </template>
+    </FullCalendar>
+</div>
 
 <div :class="{ 'tfhb-skeleton': Booking.skeleton }"  class="tfhb-booking-details tfhb-mt-32">
     <table class="table" cellpadding="0" :cellspacing="0">
