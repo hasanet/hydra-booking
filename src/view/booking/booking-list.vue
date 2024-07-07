@@ -105,18 +105,19 @@ const calendarOptions = {
         ],
         initialView: 'dayGridMonth',
         events: [
-          { title: 'event 1', date: '2024-07-01' },
-          { title: 'event 2', date: '2024-07-07' },
-          { title: 'lorem ipsum doller set amet asdf asdf', date: '2024-07-07' },
-          { title: 'lorem ipsum doller set amet dsaf asd f', date: '2024-07-07' },
-          { title: 'event 2', date: '2024-07-07', time: '12am' },
+          { title: 'event 1', start: '2024-07-01T12:30:00' },
+          { title: 'event 2', start: '2024-07-07T12:30:00' },
+          { title: 'lorem ipsum doller set amet asdf asdf', start: '2024-07-07T12:30:00' },
+          { title: 'lorem ipsum doller set amet dsaf asd f', start: '2024-07-07T12:30:00' },
+          { title: 'event 2', start: '2024-07-07T16:00:00'},
         ],
         headerToolbar: {
           left: '',
           center: 'prev,title,next',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'timeGridDay,timeGridWeek,dayGridMonth'
         },
         dayMaxEvents: 3,
+        allDaySlot: false
       }
 
 </script>

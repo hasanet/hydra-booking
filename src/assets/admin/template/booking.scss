@@ -42,6 +42,7 @@
         margin-right: 16px;
 
         .fc-header-toolbar{
+            margin-bottom: 0px;
             .fc-toolbar-chunk{
                 &:nth-child(2){
                     >div{
@@ -156,6 +157,8 @@
                         td{
                             border: 1px solid #F6EEF2;
                             padding: 8px;
+                            // height: 150px;
+                            background-color: transparent;
                             .fc-daygrid-day-top{
                                 a{
                                     color: #211319;
@@ -235,7 +238,113 @@
                         }
                     }
                 }
+                .fc-timegrid-body{
+                    .fc-timegrid-cols{
+                       table{
+                        tbody{
+                            tr{
+                                td{
+                                    .fc-timegrid-col-events{
+                                        .fc-timegrid-event-harness{
+                                            width: 100% !important;
+
+                                            &:last-child{
+                                                margin-bottom: 0px;
+                                            }
+                                            &:nth-child(odd){
+                                                a{
+                                                    border-radius: 8px;
+                                                    border: 0px solid;
+                                                    border-left: 1px solid #002AB3;
+                                                    background: #EBEFFF;
+                                                    padding: 6px 8px;
+                                                    overflow: hidden;
+                                                    text-overflow: ellipsis;
+                                                    font-size: 13px;
+                                                    font-style: normal;
+                                                    font-weight: 600;
+                                                    line-height: 20px; /* 153.846% */
+                                                    .fc-event-main{
+                                                        color: #002AB3;
+                                                    }
+                                                }
+                                            }
+                                            &:nth-child(even){
+                                                a{
+                                                    border-radius: 8px;
+                                                    border: 0px solid;
+                                                    border-left: 1px solid #17723F;
+                                                    background: #E6FAEE;
+                                                    padding: 6px 8px;
+                                                    overflow: hidden;
+                                                    text-overflow: ellipsis;
+                                                    font-size: 13px;
+                                                    font-style: normal;
+                                                    font-weight: 600;
+                                                    line-height: 20px; /* 153.846% */
+                                                    .fc-event-main{
+                                                        color: #17723F;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                       } 
+                    }
+                }
             }
+        }
+
+        .fc-theme-standard .fc-popover{
+
+            .fc-popover-body {
+                .fc-daygrid-event-harness{
+                    margin-bottom: 8px;
+                    &:last-child{
+                        margin-bottom: 0px;
+                    }
+                    &:nth-child(odd){
+                        a{
+                            border-radius: 8px;
+                            border: 0px solid;
+                            border-left: 1px solid #002AB3;
+                            background: #EBEFFF;
+                            padding: 6px 8px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 20px; /* 153.846% */
+                            .fc-event-main{
+                                color: #002AB3;
+                            }
+                        }
+                    }
+                    &:nth-child(even){
+                        a{
+                            border-radius: 8px;
+                            border: 0px solid;
+                            border-left: 1px solid #17723F;
+                            background: #E6FAEE;
+                            padding: 6px 8px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 20px; /* 153.846% */
+                            .fc-event-main{
+                                color: #17723F;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
