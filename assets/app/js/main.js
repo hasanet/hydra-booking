@@ -1,7 +1,7 @@
 (function ($) {
 
     $(document).ready(function () {
-		
+	 
         /**
          * Time Zone Change
          * @author Jahid
@@ -234,10 +234,53 @@
 				
 				tfhb_from_submission($this, preloader, InformationData);
 			});
+			// WPForms Form Submission
+			// $(document).on('wpformsAjaxSubmitSuccess', function(event ) { 
+			// 	var data = new FormData(event.target);
+			// 	// get all wpforms[fields] data as object
+				
+			// 	var InformationData = {};
+			// 	data.forEach(function(value, key){
+			// 		InformationData[key] = value;
+			// 	});
+			// 	console.log(InformationData);
+			// 	console.log(event);
+			// });
+
+			// Forminator Form Submission
+			$(document).on('forminator:form:submit:success', function(event, response ) { 
+				
+				var InformationData = {};
+				response.forEach(function(value, key){
+					InformationData[key] = value;
+				}); 
+				
+				
+				tfhb_from_submission($this, preloader, InformationData);
+			});
+
+			// Fluent Forms Form Submission
+			$(document).on('fluentform_submission_success', function(event, response) {
+				var data = new FormData(response.form[0]);
+				var InformationData = {};
+				data.forEach(function(value, key){
+					InformationData[key] = value;
+				}); 
+				
+				
+				tfhb_from_submission($this, preloader, InformationData);
+			});
+
+			// gravity Forms Form Submission
+			// $(document).on('gform_confirmation_loaded', function(event, response ) {  
+			// 	 console.log(response); 
+			// });
+		
 		});
 
 
 		function tfhb_from_submission($this, preloader, InformationData){
+			
 			$this.find('.tfhb-notice').hide();
 			$this.find('.tfhb-meeting-card').append(preloader);
 
@@ -287,7 +330,8 @@
 				payment_currency: payment_currency,
 			}; 
 			// Push object information data to data
-			Object.assign(data, InformationData); 
+			data = Object.assign(InformationData, data); 
+			 
 			   $.ajax({
 				   url: tfhb_app_booking.ajax_url, 
 				   type: 'POST',

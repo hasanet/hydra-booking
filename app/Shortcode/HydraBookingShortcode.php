@@ -327,7 +327,7 @@ class HydraBookingShortcode {
    
         $questions = isset($_POST['question']) ? $_POST['question'] : array();
    
-
+   
         // Contact form fields 
         if($meta_data['questions_type'] == 'existing'){
          
@@ -336,7 +336,71 @@ class HydraBookingShortcode {
                     return strpos($key, 'question_') === 0;
                 }, ARRAY_FILTER_USE_KEY);
            }
-             
+          
+           if($meta_data['questions_form_type'] == 'fluent-forms'){
+                
+                $questions = array_filter($_POST, function($key) {
+                    return strpos($key, 'question_') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                if(isset($_POST['names']) && is_array($_POST['names'])){
+                    $data['attendee_name'] = $_POST['names']['first_name']. ' ' . $_POST['names']['last_name'];
+                }
+            }
+
+           if($meta_data['questions_form_type'] == 'forminator'){
+               
+                $data['email'] = $_POST['email-1'];
+                unset($_POST['email-1']);
+                
+                $attendee_names = array_filter($_POST, function($key) {
+                    return strpos($key, 'name-1') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                $data['attendee_name'] = '';
+                foreach($attendee_names as $key => $name){
+                    $data['attendee_name'] .= $name. ' ';
+                    unset($_POST[$key]);
+                }
+
+        
+                $address = array_filter($_POST, function($key) {
+                    return strpos($key, 'address-1') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                foreach($address as $key => $name){
+                    $data['address'] .= $name. ' ';
+                    unset($_POST[$key]);
+                } 
+                $questions = $_POST;
+                unset($questions['_wp_http_referer']);
+                unset($questions['action']);
+                unset($questions['current_url']);
+                unset($questions['form_id']);
+                unset($questions['form_type']);
+                unset($questions['forminator_nonce']);
+                unset($questions['nonce']);
+                unset($questions['page_id']);
+                unset($questions['referer_url']);
+                unset($questions['render_id']);
+                unset($questions['nonce']);
+                unset($questions['meeting_id']);
+                unset($questions['host_id']);
+                unset($questions['meeting_dates']);
+                unset($questions['meeting_duration']);
+                unset($questions['meeting_time_start']);
+                unset($questions['meeting_time_end']);
+                unset($questions['recurring_maximum']);
+                unset($questions['attendee_time_zone']);
+                unset($questions['payment_type']);
+                unset($questions['meeting_price']);
+                unset($questions['payment_amount']);
+                unset($questions['stripe_public_key']);
+                unset($questions['payment_currency']);
+
+              
+ 
+            }
         }
        
        
