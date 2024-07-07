@@ -1097,9 +1097,42 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                     'name' => $form->post_title,
                     'value' => $form->ID
                 );
+            } 
+        }else if($form_type == 'fluent-forms'){
+            $args = array(
+                'post_type' => 'forminator_forms',
+                'posts_per_page' => -1,
+            );
+            $forms = get_posts($args);
+            
+            foreach ($forms as $form) {
+                $questionForms[] = array(
+                    'name' => $form->post_title,
+                    'value' => $form->ID
+                );
+            } 
+        }else if($form_type == 'fluent-forms'){
+            // Query arguments get custom fluentform_forms data all into custom database table
+             global $wpdb;
+            $table_name = $wpdb->prefix . 'fluentform_forms';
+            $results = $wpdb->get_results("SELECT id, title FROM $table_name");
+            foreach ($results as $form) {
+                $questionForms[] = array(
+                    'name' => $form->title,
+                    'value' => $form->id
+                );
             }
-
-             
+        }else if($form_type == 'gravityforms'){
+            // Query arguments get custom fluentform_forms data all into custom database table
+             global $wpdb;
+            $table_name = $wpdb->prefix . 'gf_form';
+            $results = $wpdb->get_results("SELECT id, title FROM $table_name");
+            foreach ($results as $form) {
+                $questionForms[] = array(
+                    'name' => $form->title,
+                    'value' => $form->id
+                );
+            }
         }
         return $questionForms;
     }

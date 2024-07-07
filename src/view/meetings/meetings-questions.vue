@@ -182,6 +182,9 @@ const GetFormsData = async (e) => {
                     placeholder="Select Form Types"   
                     :option = "[
                         {'name': 'Contact Form 7', 'value': 'wpcf7'},  
+                        {'name': 'Fluent Forms', 'value': 'fluent-forms'},  
+                        {'name': 'Forminator Forms', 'value': 'forminator'},  
+                        {'name': 'Gravity Forms', 'value': 'gravityforms'},  
                     ]"
                     @tfhb-onchange="GetFormsData" 
                     
