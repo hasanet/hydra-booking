@@ -273,6 +273,7 @@
 
 			// gravity Forms Form Submission
 			// $(document).on('gform_confirmation_loaded', function(event, response ) {  
+			// 	event.preventDefault();
 			// 	 console.log(response); 
 			// });
 		

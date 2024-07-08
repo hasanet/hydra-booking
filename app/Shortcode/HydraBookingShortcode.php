@@ -459,6 +459,7 @@ class HydraBookingShortcode {
       
         $check_booking = $booking->get(
             array(
+                'meeting_id' => $data['meeting_id'], 
                 'meeting_dates' => $data['meeting_dates'], 
                 'start_time' => $data['start_time'], 
                 'end_time' => $data['end_time']
@@ -466,6 +467,7 @@ class HydraBookingShortcode {
         );
 
         if('one-to-group' == $meta_data['meeting_type'] ){
+           
             $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1;
 
             if(count($check_booking) >= $max_book_per_slot){

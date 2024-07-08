@@ -39,23 +39,25 @@ namespace HydraBooking\Admin\Controller;
     }
     public function getAvailableTimeData($meeting_id, $selected_date, $selected_time_zone, $selected_time_format){
 
-        $meeting_id =isset($meeting_id ) ? $meeting_id : '';
+        $meeting_id = isset($meeting_id ) ? $meeting_id : '';
                
         $selected_date = isset($selected_date) ? sanitize_text_field($selected_date) : '';
       
         $selected_time_zone = isset($selected_time_zone) ? sanitize_text_field($selected_time_zone) : 'UTC';
-
+      
         $selected_time_format =  isset($selected_time_format) ? sanitize_text_field($selected_time_format) : '12';
        
         $meeting = new Meeting();
         $MeetingsData = $meeting->get($meeting_id);
 
-        // Meeting time zone 
-        $time_zone = isset($MeetingsData->time_zone) ? $MeetingsData->time_zone : 'UTC';
+       
         
 
          // Meeting Information
         $data = get_post_meta($MeetingsData->post_id, '__tfhb_meeting_opt', true);
+
+
+    
 
         $meeting_type = isset($data['meeting_type']) ? $data['meeting_type'] : 'one-to-single';
         $max_book_per_slot = isset($data['max_book_per_slot']) ? $data['max_book_per_slot'] : 1;
@@ -71,6 +73,10 @@ namespace HydraBooking\Admin\Controller;
         }else{ 
             $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
         }
+        // Meeting time zone 
+        $time_zone = isset($availability_data['time_zone']) ? $availability_data['time_zone'] : 'UTC';
+
+      
 
         // Disable Unavailable days
         $time_slots = isset($availability_data['time_slots']) ? $availability_data['time_slots'] : array(); 
@@ -102,25 +108,28 @@ namespace HydraBooking\Admin\Controller;
       
         $bookings = $booking->get(array('meeting_dates' => $selected_date));  
  
-        
+      
         $disabled_times = array();
         foreach($bookings as $booking){ 
             $meeting_dates = $booking->meeting_dates;
             $start_time = $booking->start_time;
             $end_time = $booking->end_time;
             $time_zone = $booking->attendee_time_zone; 
-          
-            if('one-to-group' == $meeting_type ){ 
+           
+
+            if('one-to-group' == $meeting_type ){
+             
                 // Get All Booking Data.
                 $booking = new Booking();
                 $check_booking = $booking->get(
                     array(
+                        'meeting_id' => $meeting_id, 
                         'meeting_dates' => $meeting_dates, 
                         'start_time' => $start_time, 
                         'end_time' => $end_time
                     )
                 ); 
-                
+              
                 if(count($check_booking) != $max_book_per_slot){  
                     continue;
                 }
@@ -138,7 +147,7 @@ namespace HydraBooking\Admin\Controller;
             );
 
         }
-    
+      
 
          // Time Slot
          $time_slots_data = array();
@@ -203,11 +212,12 @@ namespace HydraBooking\Admin\Controller;
         $timeSlots = [];
     
         $skip_before_meeting_start = 100; // Example value, replace with your actual setting
-        $start = new \DateTime($selected_date . ' ' . $startTime, new \DateTimeZone($time_zone));
-        $end = new \DateTime($selected_date . ' ' . $endTime, new \DateTimeZone($time_zone));
+        $start = new \DateTime($selected_date . ' ' . $startTime, new \DateTimeZone($selected_time_zone));
+        $end = new \DateTime($selected_date . ' ' . $endTime, new \DateTimeZone($selected_time_zone));
         $current = clone $start;
         $before = clone $start;
         $after = clone $start;
+        
     
         $diff = $duration * 60; // Convert to seconds
         $before_diff = $buffer_time_before * 60; // Convert to seconds

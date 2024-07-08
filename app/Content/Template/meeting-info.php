@@ -178,8 +178,7 @@ $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id'
         </div>
     </div>
 
-    <?php 
-
+    <?php  
         // Hooks After Meeting Info
          do_action('hydra_booking/after_meeting_info');
     

@@ -48,13 +48,9 @@ defined( 'ABSPATH' ) || exit;
        
         <?php  
 
-            if( $questions_type != 'custom'  ){
-                // echo do_shortcode('[wpforms id="349"]');
-                 if($questions_form_type == 'wpcf7'){
-                    // echo do_shortcode('[contact-form-7 id="'.$questions_form.'"]');
-                    // echo do_shortcode('[wpforms id="349"]');
-                    // echo do_shortcode('[forminator_form id="371"]'); 
-                    // echo do_shortcode('[gravityform id="1" title="true"]');
+            if( $questions_type != 'custom'  ){ 
+                if($questions_form_type == 'wpcf7'){
+                    echo do_shortcode('[contact-form-7 id="'.$questions_form.'"]'); 
                     
                  }
                  elseif($questions_form_type == 'fluent-forms'){
@@ -66,10 +62,10 @@ defined( 'ABSPATH' ) || exit;
                  elseif($questions_form_type == 'forminator'){
                     echo do_shortcode('[forminator_form id="'.$questions_form.'"]');
                 }
-                 elseif($questions_form_type == 'gravityforms'){
-                    echo do_shortcode('[gravityform id="'.$questions_form.'" title="false" description="false" ajax="true"]');
+                //  elseif($questions_form_type == 'gravityforms'){
+                //     echo do_shortcode('[gravityform id="'.$questions_form.'" title="false" description="false" ajax="true"]');
                     
-                }
+                // }
                 
             }else{
                 echo '<form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">';
