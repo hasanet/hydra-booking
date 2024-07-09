@@ -148,8 +148,17 @@ class Booking {
             $i = 0;
             foreach($where as $k => $v){
                 if($i == 0){
+                    if($k == 'meeting_dates'){
+                        $sql .= " FIND_IN_SET('$v', $k)";
+                        continue;
+                    }
                     $sql .= " $k = '$v'";
+                   
                 }else{
+                    if($k == 'meeting_dates'){
+                        $sql .= " AND FIND_IN_SET('$v', $k)";
+                        continue;
+                    }
                     $sql .= " AND $k = '$v'";
                 }
                 $i++;
@@ -159,6 +168,7 @@ class Booking {
 
              // Add Limit if exist
              $sql .= $limit != null ? " LIMIT $limit" : "";
+             
      
             if($FirstOrFaill == true){
                 // only get first item 

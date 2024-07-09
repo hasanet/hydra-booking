@@ -8,6 +8,7 @@ const props = defineProps([
     'required',
     'type',
     'label',
+    'counterLabel',
     'width',
     'subtitle',
     'counter_value',
@@ -37,7 +38,8 @@ function CounterDec(key){
                         <div class="tfhb-dec" @click="CounterDec(key)">
                             <Icon name="Minus" />
                         </div>
-                        <span>{{ counter.limit = counter.limit}} {{ $tfhb_trans['Booking'] }}</span>
+
+                        <span>{{ counter.limit = counter.limit}} {{ counterLabel }}</span>
                         <div class="tfhb-inc" @click="CounterInc(key)">
                             <Icon name="Plus" />
                         </div>
@@ -48,7 +50,7 @@ function CounterDec(key){
                         required= "true"  
                         selected = "1"
                         placeholder="Select Time Zone"  
-                        :option = "{'1': 'Per Day','7': 'Per Week','30': 'Per Month','365': 'Per Year'}" 
+                        :option = "{'days': 'Days','weeks': 'Weeks','months': 'Months','years': 'Years'}" 
                     /> 
 
                     <div v-if="repater && key == 0" class="tfhb-availability-schedule-clone-single">

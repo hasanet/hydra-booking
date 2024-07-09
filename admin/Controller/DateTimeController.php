@@ -106,8 +106,8 @@ namespace HydraBooking\Admin\Controller;
         // Get All Booking Data.
         $booking = new Booking();
       
-        $bookings = $booking->get(array('meeting_dates' => $selected_date));  
- 
+        $bookings = $booking->get(array('meeting_id' => $meeting_id, 'meeting_dates' => $selected_date));  
+      
       
         $disabled_times = array();
         foreach($bookings as $booking){ 
@@ -142,12 +142,16 @@ namespace HydraBooking\Admin\Controller;
             $end_time = $this->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
 
             $disabled_times[] = array(
-                'start_time' => $start_time,
-                'end_time' => $end_time,
+                'start' => $start_time,
+                'end' => $end_time,
             );
 
         }
-      
+        // echo "<pre>";
+        // print_r($disabled_times);
+        // echo "</pre>";
+        // die();
+     
 
          // Time Slot
          $time_slots_data = array();
@@ -185,23 +189,18 @@ namespace HydraBooking\Admin\Controller;
             $time_slots_data = array_merge($time_slots_data, $generatedSlots);
  
         }
-      
-         // if date already exists remove that array
+        
+         // if date time_slots_data any array match with disabled_times any array  exists remove that array without loop form 
+         $time_slots_data = array_filter($time_slots_data, function($slot) use ($disabled_times) {
+            return !in_array($slot, $disabled_times);
+        });  
+        // return $time_slots_data;
          $data= array();
-            foreach($time_slots_data as $key => $value){ 
-                //  array filter and remove if date already exists
-                if($disabled_times != null && !empty($disabled_times)){
-                    foreach ($disabled_times as $key => $disabled_time) {
-                        if($value['start'] != $disabled_time['start_time'] && $value['end'] != $disabled_time['end_time']){
-                               $data[] = $value;
-                        }
-                    }
-                }else{
-                    $data[] = $value;
-                }
-               
-            };
-         
+        foreach($time_slots_data as $key => $value){ 
+            //  array filter and remove if date already exists
+            $data[] = $value;
+            
+        }; 
         return $data;
 
 
