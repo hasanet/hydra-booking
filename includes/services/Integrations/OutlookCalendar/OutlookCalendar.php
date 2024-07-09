@@ -235,91 +235,92 @@ class OutlookCalendar{
         $start_time = strtotime($data->start_time); // 03:45 AM
         $end_time = strtotime($data->end_time); // 04:30 AM
         $meeting_dates = $data->meeting_dates; // 2024-06-12
-        // 2024-06-02T10:00:00 
-        $start_date = date('Y-m-d', strtotime($meeting_dates)) . 'T' . date('H:i:s', $start_time);
-        $end_date = date('Y-m-d', strtotime($meeting_dates)) . 'T' . date('H:i:s', $end_time);
-
-      
- 
-        $setData = array(
-           'subject' => 'Meeting with ' . $data->attendee_name,
-            'body' => array(
-                'contentType' => 'HTML',
-                'content' =>  'Title: ' . $data->meeting_title,
-            ),
-            'start' => array(
-                'dateTime' => $start_date,
-                'timeZone' => $data->attendee_time_zone,
-            ),
-            'end' => array(
-                'dateTime' =>  $end_date,
-                'timeZone' => $data->attendee_time_zone,
-            ),
-            'location' => array(
-                'displayName' => 'Location: ' . $data->meeting_location,
-            ),
-            'attendees' => array(
-                array('emailAddress' => array('address' => $data->email)),
-                array('emailAddress' => array('address' => $data->host_email)),
-            ), 
-        );  
-
- 
-
+        
+        
         // Set the Access Token
         $this->refreshToken($data->host_id);
- 
- 
-        $_tfhb_host_integration_settings =  is_array(get_user_meta($data->host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($data->host_id, '_tfhb_host_integration_settings', true) : array();
-        $outlook_calendar = isset($_tfhb_host_integration_settings['outlook_calendar']) ? $_tfhb_host_integration_settings['outlook_calendar'] : array();
-        $calendarId = isset($outlook_calendar['selected_calendar_id']) ? $outlook_calendar['selected_calendar_id'] : '';
-
+     
+        $meeting_dates = explode(',', $meeting_dates);
         
-       
-        if($calendarId){
-            $meeting_calendar = json_decode($data->meeting_calendar, true);
-            // $meeting_calendar = '';
-            
-            if($meeting_calendar != '' && isset($meeting_calendar['outlook_calendar']['id'])){ 
-                $url =  $this->calendarEvent . $calendarId . '/events/' . $meeting_calendar['outlook_calendar']['id'];
-                $response = wp_remote_post($url, array(
-                    'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
-                    'body' => json_encode($setData),
-                    'method' => 'PUT',
-                    'data_format' => 'body',
-                )); 
+        $outlook_calendar_data = array();
+        foreach ($meeting_dates as $meeting_date) {
+            $start_date = date('Y-m-d', strtotime($meeting_date)) . 'T' . date('H:i:s', $start_time);
+            $end_date = date('Y-m-d', strtotime($meeting_date)) . 'T' . date('H:i:s', $end_time);
+    
+            $setData = array(
+            'subject' => 'Meeting with ' . $data->attendee_name,
+                'body' => array(
+                    'contentType' => 'HTML',
+                    'content' =>  'Title: ' . $data->meeting_title,
+                ),
+                'start' => array(
+                    'dateTime' => $start_date,
+                    'timeZone' => $data->attendee_time_zone,
+                ),
+                'end' => array(
+                    'dateTime' =>  $end_date,
+                    'timeZone' => $data->attendee_time_zone,
+                ),
+                'location' => array(
+                    'displayName' => 'Location: ' . $data->meeting_location,
+                ),
+                'attendees' => array(
+                    array('emailAddress' => array('address' => $data->email)),
+                    array('emailAddress' => array('address' => $data->host_email)),
+                ), 
+            );   
+
+            $_tfhb_host_integration_settings =  is_array(get_user_meta($data->host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($data->host_id, '_tfhb_host_integration_settings', true) : array();
+            $outlook_calendar = isset($_tfhb_host_integration_settings['outlook_calendar']) ? $_tfhb_host_integration_settings['outlook_calendar'] : array();
+            $calendarId = isset($outlook_calendar['selected_calendar_id']) ? $outlook_calendar['selected_calendar_id'] : '';
+ 
+            if($calendarId){
+                $meeting_calendar = json_decode($data->meeting_calendar, true);
+                // $meeting_calendar = '';
                 
-            }else{
-                $url =   $this->calendarEvent . $calendarId . '/events';
-               
+                if($meeting_calendar != '' && isset($meeting_calendar['outlook_calendar']['id'])){ 
+                    $url =  $this->calendarEvent . $calendarId . '/events/' . $meeting_calendar['outlook_calendar']['id'];
+                    $response = wp_remote_post($url, array(
+                        'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
+                        'body' => json_encode($setData),
+                        'method' => 'PUT',
+                        'data_format' => 'body',
+                    )); 
+                    
+                }else{
+                    $url =   $this->calendarEvent . $calendarId . '/events';
+                
 
-                $response = wp_remote_post($url, array(
-                    'headers' => array( 
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                        'Content-Type' => 'application/json'
-                    ),
-                    'body' => json_encode($setData), 
-                )); 
-
-    
-
-            }
+                    $response = wp_remote_post($url, array(
+                        'headers' => array( 
+                            'Authorization' => 'Bearer ' . $this->accessToken,
+                            'Content-Type' => 'application/json'
+                        ),
+                        'body' => json_encode($setData), 
+                    )); 
 
         
-            
-            $body = wp_remote_retrieve_body($response);   
 
-            // Update the Booking
-            $google_calendar_data['outlook_calendar'] = json_decode($body, true);
-            $update = array();
-            $update['id'] = $data->id;
-            $update['meeting_calendar'] = json_encode($google_calendar_data, true);
-    
-            $booking = new Booking();
-    
-            $booking->update($update);  
+                }
+
+            
+                
+                $body = wp_remote_retrieve_body($response);   
+
+                $outlook_calendar_data[] = json_decode($body, true);
+                 
+            }
         }
-       
+
+        // Update the Booking
+        $outlook_calendar_data['outlook_calendar'] = $outlook_calendar_data;
+        $update = array();
+        $update['id'] = $data->id;
+        $update['meeting_calendar'] = json_encode($outlook_calendar_data, true);
+
+        $booking = new Booking();
+
+        $booking->update($update); 
     }
 
 }

@@ -222,7 +222,7 @@ namespace HydraBooking\Admin\Controller;
             'Booking frequency' => __('Booking frequency', 'hydra-booking'),
             'Limit how many times this meeting can be booked' => __("Limit how many times this meeting can be booked", 'hydra-booking'),
             'Repeats every' => __("Repeats every", 'hydra-booking'),
-            'For a maximum of' => __("For a maximum of", 'hydra-booking'),
+            'Maximum number of bookings' => __("Maximum number of bookings", 'hydra-booking'),
             'Field type' => __("Field type", 'hydra-booking'),
             'Type level here' => __('Type level here', 'hydra-booking'),
             'Type Placeholder here' => __('Type Placeholder here', 'hydra-booking'),

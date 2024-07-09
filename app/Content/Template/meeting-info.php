@@ -124,6 +124,7 @@ $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id'
             ?> 
             <?php 
                 if(!empty($meeting['recurring_status']) && true == $meeting['recurring_status']) {  
+                    
                     echo '<li class="tfhb-flexbox tfhb-gap-8">
                             <input type="hidden" id="recurring_maximum" name="recurring_maximum" value="'.esc_attr($meeting['recurring_maximum']).'">
                             <div class="tfhb-icon">  
@@ -134,7 +135,9 @@ $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id'
                                 <path d="M5.33333 10.6667H2V14" stroke="#765664" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div> 
-                            Recurring for  <span>'.esc_attr($meeting['recurring_repeat'][0]['limit']).'</span> '.esc_attr($meeting['recurring_repeat'][0]['times']).'
+                            <div>
+                                Recurring every  <span>'.esc_attr($meeting['recurring_repeat'][0]['limit']).'</span> '.esc_attr($meeting['recurring_repeat'][0]['times']).' for  <span>'.esc_attr($meeting['recurring_maximum']).'</span>  Bookings
+                            </div>
                         </li>'; 
                 }
             ?> 
