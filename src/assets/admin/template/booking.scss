@@ -26,6 +26,32 @@
             }
         }
     }
+    .tfhb-booking-view{
+        border-radius: 8px;
+        border: 1px solid #F6EEF2;
+        background: #FFF;
+        padding: 4px;
+        .tfhb-list-calendar{
+            ul{
+                align-items: center;
+                li{
+                    height: 32px;
+                    width: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    &.active{
+                        border-radius: 4px;
+                        background: #FEE6F0;
+                        svg{
+                            color: #F62881;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .tfhb-booking-create{
         border-radius: 16px;
         background: #fff;
@@ -345,6 +371,17 @@
                 }
             }
 
+        }
+        .fc-dayGridMonth-view{
+            .fc-scrollgrid-section-body{
+                table{
+                    tr{
+                        td{
+                            height: 150px;
+                        }
+                    }
+                }
+            }
         }
     }
 }
