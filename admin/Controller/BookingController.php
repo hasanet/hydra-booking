@@ -82,11 +82,32 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
             $bookingsList = $booking->get(null, true, false, false, false, false, $HostData->id);
         }
+
+        $extractedBookings = array_map(function($booking) {
+            return [
+                'title' => $booking->title,
+                'meeting_dates' => $booking->meeting_dates,
+                'start_time' => $booking->start_time,
+                'end_time' => $booking->end_time,
+            ];
+        }, $bookingsList);
+
+        $booking_array = array();
+        foreach ($extractedBookings as $book) {
+            $booking_array[] = array(
+                'title' => $book['title'],
+                'start' => $book['meeting_dates'].'T'.$book['start_time'],
+                'end' => $book['meeting_dates'].'T'.$book['end_time'],
+            );
+        }
         
+        // var_dump($booking_array);
+
         // Return response
         $data = array(
             'status' => true, 
             'bookings' => $bookingsList,  
+            'booking_calendar' => $booking_array,
             'message' => 'Booking Data Successfully Retrieve!', 
         );
         return rest_ensure_response($data);

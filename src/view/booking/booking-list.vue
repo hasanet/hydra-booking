@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount, computed } from 'vue';
+import { ref, reactive, onBeforeMount, onMounted, computed } from 'vue';
 import axios from 'axios'  
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import Icon from '@/components/icon/LucideIcon.vue'
@@ -12,13 +12,11 @@ import { Meeting } from '@/store/meetings'
 import { Booking } from '@/store/booking'
 
 import FullCalendar from '@fullcalendar/vue3'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
 
 const BookingDetailsPopup = ref(false);
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
+const bookingView = ref('list');
 
 const TfhbFormatMeetingLocation = (address) => {
     const meeting_address = JSON.parse(address)
@@ -29,7 +27,6 @@ onBeforeMount(() => {
     Booking.fetchBookings();
     Meeting.fetchMeetings();
 });
-
 
 // Booking Status Changed
 const meeting_status = reactive({});
@@ -97,29 +94,6 @@ const prevPage = () => {
   }
 };
 
-const calendarOptions = {
-        plugins: [ 
-            dayGridPlugin,
-            timeGridPlugin,
-            interactionPlugin
-        ],
-        initialView: 'dayGridMonth',
-        events: [
-          { title: 'event 1', start: '2024-07-01T12:30:00' },
-          { title: 'event 2', start: '2024-07-07T12:30:00' },
-          { title: 'lorem ipsum doller set amet asdf asdf', start: '2024-07-07T12:30:00' },
-          { title: 'lorem ipsum doller set amet dsaf asd f', start: '2024-07-07T12:30:00' },
-          { title: 'event 2', start: '2024-07-07T16:00:00'},
-        ],
-        headerToolbar: {
-          left: '',
-          center: 'prev,title,next',
-          right: 'timeGridDay,timeGridWeek,dayGridMonth'
-        },
-        dayMaxEvents: 3,
-        allDaySlot: false
-      }
-
 </script>
 <template>
 
@@ -127,6 +101,18 @@ const calendarOptions = {
 <!-- :class="{ 'tfhb-skeleton': Booking.skeleton }" -->
 <div class="tfhb-dashboard-heading tfhb-flexbox">
     <div class="tfhb-filter-box tfhb-flexbox">
+        <div class="tfhb-booking-view">
+            <div class="tfhb-list-calendar">
+                <ul class="tfhb-flexbox tfhb-gap-8">
+                    <li :class="'list'==bookingView ? 'active' : ''" @click="bookingView='list'">
+                        <Icon name="List" size="20" />
+                    </li>
+                    <li :class="'calendar'==bookingView ? 'active' : ''" @click="bookingView='calendar'">
+                        <Icon name="CalendarDays" size="20" />
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="tfhb-header-filters">
             <input type="text" placeholder="Host name or meeting title" /> 
             <span><Icon name="Search" size="20" /></span>
@@ -218,18 +204,17 @@ const calendarOptions = {
 
 <!-- Booking Quick View End -->
 
-<!-- <FullCalendar :options="calendarOptions" /> -->
 
-<div class="tfhb-booking-calendar">
-    <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
+<div class="tfhb-booking-calendar tfhb-mt-32" v-if="bookingView=='calendar'">
+    <FullCalendar class='demo-app-calendar' :options='Booking.calendarbooking'>
         <template v-slot:eventContent='arg'>
-            <b>{{ arg.timeText }}</b>
+            <!-- <b>{{ arg.timeText }}</b> -->
             {{ arg.event.title }}
         </template>
     </FullCalendar>
 </div>
 
-<div :class="{ 'tfhb-skeleton': Booking.skeleton }"  class="tfhb-booking-details tfhb-mt-32">
+<div :class="{ 'tfhb-skeleton': Booking.skeleton }"  class="tfhb-booking-details tfhb-mt-32" v-if="bookingView=='list'">
     <table class="table" cellpadding="0" :cellspacing="0">
         <thead>
             <tr>
