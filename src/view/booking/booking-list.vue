@@ -14,6 +14,7 @@ import { Booking } from '@/store/booking'
 import FullCalendar from '@fullcalendar/vue3'
 
 const BookingDetailsPopup = ref(false);
+const BookingEditPopup = ref(false);
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
 const bookingView = ref('list');
@@ -93,6 +94,10 @@ const prevPage = () => {
     currentPage.value -= 1;
   }
 };
+
+const bookingCalendarPopup = (booking_id) => {
+    BookingEditPopup.value = true;
+}
 
 </script>
 <template>
@@ -204,15 +209,31 @@ const prevPage = () => {
 
 <!-- Booking Quick View End -->
 
-
+<!-- Booking Calendar View -->
 <div class="tfhb-booking-calendar tfhb-mt-32" v-if="bookingView=='calendar'">
     <FullCalendar class='demo-app-calendar' :options='Booking.calendarbooking'>
         <template v-slot:eventContent='arg'>
             <!-- <b>{{ arg.timeText }}</b> -->
-            {{ arg.event.title }}
+            <b class="tfhb-calendar-popup" @click="bookingCalendarPopup(arg.event.id)">{{ arg.event.title }}</b>
         </template>
     </FullCalendar>
 </div>
+<!-- Booking Calendar View -->
+
+<!-- Booking Calendar Edit -->
+
+<HbPopup :isOpen="BookingEditPopup" @modal-close="BookingEditPopup = false" max_width="300px" name="first-modal" gap="24px">
+    <template #header> 
+        <h3>Booking Edit</h3>
+    </template>
+
+    <template #content> 
+        
+
+    </template> 
+</HbPopup>
+
+<!-- Booking Calendar Edit -->
 
 <div :class="{ 'tfhb-skeleton': Booking.skeleton }"  class="tfhb-booking-details tfhb-mt-32" v-if="bookingView=='list'">
     <table class="table" cellpadding="0" :cellspacing="0">

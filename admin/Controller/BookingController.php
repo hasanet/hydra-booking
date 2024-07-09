@@ -85,6 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         $extractedBookings = array_map(function($booking) {
             return [
+                'id' => $booking->id,
                 'title' => $booking->title,
                 'meeting_dates' => $booking->meeting_dates,
                 'start_time' => $booking->start_time,
@@ -95,6 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $booking_array = array();
         foreach ($extractedBookings as $book) {
             $booking_array[] = array(
+                'id' => $book['id'],
                 'title' => $book['title'],
                 'start' => $book['meeting_dates'].'T'.$book['start_time'],
                 'end' => $book['meeting_dates'].'T'.$book['end_time'],
