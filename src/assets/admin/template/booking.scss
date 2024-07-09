@@ -82,6 +82,10 @@
                             border: 0.2px solid #E3CFD7;
                             background: #FFF;
                             padding: 0;
+                            &:focus{
+                                box-shadow: none;
+                                outline: none;
+                            }
                             span{
                                 margin: 0px !important;
                                 height: 100%;
