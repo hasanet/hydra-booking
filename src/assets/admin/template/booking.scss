@@ -378,6 +378,10 @@
                     tr{
                         td{
                             height: 150px;
+                            .fc-daygrid-day-events{
+                                left: 8px;
+                                right: 8px;
+                            }
                         }
                     }
                 }
