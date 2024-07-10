@@ -5,6 +5,7 @@ import 'primevue/resources/themes/aura-light-green/theme.css'
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbSelect from '@/components/form-fields/HbSelect.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue'; 
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import { toast } from "vue3-toastify"; 
 import useDateFormat from '@/store/dateformat'
 const { Tfhb_Date, Tfhb_Time } = useDateFormat();
@@ -12,6 +13,9 @@ import { Meeting } from '@/store/meetings'
 import { Booking } from '@/store/booking'
 
 import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
 
 const BookingDetailsPopup = ref(false);
 const BookingEditPopup = ref(false);
@@ -95,8 +99,28 @@ const prevPage = () => {
   }
 };
 
-const bookingCalendarPopup = (booking_id) => {
+const singleCalendarBookingData = ref('');
+const bookingCalendarPopup = (data) => {
+    singleCalendarBookingData.value = data;
     BookingEditPopup.value = true;
+}
+
+const deleteBooking = async ($id, $host) => { 
+    let deleteBooking = {
+        id: $id,
+        host: $host
+    }
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/delete', deleteBooking);
+
+        if (response.data.status) { 
+            Booking.calendarbooking.events = response.data.booking_calendar;  
+            BookingEditPopup.value = false;
+            toast.success(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 </script>
@@ -214,7 +238,7 @@ const bookingCalendarPopup = (booking_id) => {
     <FullCalendar class='demo-app-calendar' :options='Booking.calendarbooking'>
         <template v-slot:eventContent='arg'>
             <!-- <b>{{ arg.timeText }}</b> -->
-            <b class="tfhb-calendar-popup" @click="bookingCalendarPopup(arg.event.id)">{{ arg.event.title }}</b>
+            <b class="tfhb-calendar-popup" @click="bookingCalendarPopup(arg.event)">{{ arg.event.title }}</b>
         </template>
     </FullCalendar>
 </div>
@@ -222,14 +246,49 @@ const bookingCalendarPopup = (booking_id) => {
 
 <!-- Booking Calendar Edit -->
 
-<HbPopup :isOpen="BookingEditPopup" @modal-close="BookingEditPopup = false" max_width="300px" name="first-modal" gap="24px">
+<HbPopup :isOpen="BookingEditPopup" @modal-close="BookingEditPopup = false" max_width="300px" name="first-modal" gap="24px" class="tfhb-booking-calendar-popup">
     <template #header> 
-        <h3>Booking Edit</h3>
+        <h3>{{ singleCalendarBookingData.title }}</h3>
     </template>
 
     <template #content> 
-        
+        <HbDropdown  
+            v-model="singleCalendarBookingData.extendedProps.status"
+            :label="$tfhb_trans['Status']" 
+            :selected = "1"
+            placeholder="Select Booking status"   
+            :option = "[
+                {'name': 'Pending', 'value': 'pending'},  
+                {'name': 'Confirmed', 'value': 'confirmed'},   
+                {'name': 'Canceled', 'value': 'canceled'}
+            ]" 
+        />  
 
+        <div class="tfhb-single-form-field" style="width: 100%;">
+            <div class="tfhb-single-form-field-wrap tfhb-field-input">
+                <label>Date</label>
+                <div class="tfhb-time-date-view tfhb-flexbox">
+                    <Icon name="CalendarDays" size="20" />
+                    <input type="text" readonly :value="singleCalendarBookingData.extendedProps.booking_date">
+                </div>
+            </div>
+        </div>
+
+        <div class="tfhb-single-form-field" style="width: 100%;">
+            <div class="tfhb-single-form-field-wrap tfhb-field-input">
+                <label>Time</label>
+                <div class="tfhb-time-date-view tfhb-flexbox">
+                    <Icon name="Clock4" size="20" />
+                    <input type="text" readonly :value="singleCalendarBookingData.extendedProps.booking_time">
+                </div>
+            </div>
+        </div>
+
+        <div class="tfhb-popup-actions tfhb-flexbox tfhb-full-width">
+            <a href="#" class="tfhb-btn boxed-btn flex-btn"><Icon name="Video" size="20" /> {{ $tfhb_trans['Join Meet'] }}</a>
+
+            <button class="tfhb-btn boxed-btn flex-btn tfhb-warning" @click="deleteBooking(singleCalendarBookingData.extendedProps.booking_id, singleCalendarBookingData.extendedProps.host_id)">{{ $tfhb_trans['Delete'] }}</button>
+        </div>
     </template> 
 </HbPopup>
 
