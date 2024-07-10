@@ -12,6 +12,7 @@ use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
 use HydraBooking\Admin\Controller\ScheduleController;
 use HydraBooking\Services\Integrations\AppleCalendar\AppleCalendar;
+use HydraBooking\DB\BookingMeta;
 
  
 class HydraBookingShortcode {
@@ -35,6 +36,9 @@ class HydraBookingShortcode {
         // Booking Cancel
         add_action('wp_ajax_nopriv_tfhb_meeting_form_cencel', array($this, 'tfhb_meeting_form_cencel_callback'));
         add_action('wp_ajax_tfhb_meeting_form_cencel', array($this, 'tfhb_meeting_form_cencel_callback'));
+
+        //
+        add_action('hydra_booking/after_booking_completed', array($this, 'insert_calender_after_booking_completed'));
     }
 
     public function hydra_booking_shortcode($atts) { 
@@ -58,12 +62,7 @@ class HydraBookingShortcode {
         );
 
         $calendar_id = $atts['id']; 
-        // new AppleCalendar('info@themefic.com', 'veuq-bfpa-nksb-sqlw');
-         
-        // echo "<pre>";
-        // // print_r();$appleCalendar->getCalendars()
-        // echo "</pre>";
-        // exit;
+        
 
         // Get Meeting
         $meeting = new Meeting();
@@ -317,10 +316,8 @@ class HydraBookingShortcode {
         $data['duration'] = isset($_POST['duration']) ? sanitize_text_field($_POST['duration']) : 0;
         $data['attendee_name'] = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
         $data['email'] = isset($_POST['email']) ? sanitize_text_field($_POST['email']) : '';
-        $data['address'] = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : '';
-
-        $data['others_info'] = array();
-   
+        $data['address'] = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : ''; 
+        $data['others_info'] = array(); 
         $questions = isset($_POST['question']) ? $_POST['question'] : array();
 
 
@@ -425,9 +422,7 @@ class HydraBookingShortcode {
             foreach($questions as $key => $question){
                 $data['others_info'][$key] = sanitize_text_field($question);
             } 
-        } 
-   
-
+        }  
         $data['country'] = isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '';
         $data['ip_address'] = isset($_POST['ip_address']) ? sanitize_text_field($_POST['ip_address']) : '';
         $data['device'] = isset($_POST['device']) ? sanitize_text_field($_POST['device']) : '';
@@ -483,16 +478,12 @@ class HydraBookingShortcode {
             )
         );
 
-        if('one-to-group' == $meta_data['meeting_type'] ){
-           
-            $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1;
-
+        if('one-to-group' == $meta_data['meeting_type'] ){ 
+            $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1; 
             if(count($check_booking) >= $max_book_per_slot){
                 wp_send_json_error( array( 'message' => 'Already Booked' ) );
-            }
-           
-        }else{
-
+            } 
+        }else{ 
             if($check_booking){
                 wp_send_json_error( array( 'message' => 'Already Booked' ) );
             }
@@ -501,8 +492,7 @@ class HydraBookingShortcode {
         
 
 
-        // Get booking Data using Hash
-
+        // Get booking Data using Hash 
         if(isset($_POST['action_type']) && 'reschedule' == $_POST['action_type']){ 
 
             // if general_settings['allowed_reschedule_before_meeting_start'] is available exp 100 then check the time before reschedule
@@ -619,12 +609,9 @@ class HydraBookingShortcode {
             // $booking_meta, $MeetingData, $host_meta
             wp_send_json_success(  $response );
                 
-        }
-
-        // Booking Frequency
-
-        $current_user_booking =  $booking->get(array( 'meeting_id' => $data['meeting_id']) );
-         
+        } 
+        // Booking Frequency 
+        $current_user_booking =  $booking->get(array( 'meeting_id' => $data['meeting_id']) ); 
         if($current_user_booking){
             $last_items_of_booking = end($current_user_booking);
         
@@ -661,11 +648,8 @@ class HydraBookingShortcode {
     
                 } 
             }
-        }
-        
-
-        // Create a new booking
-
+        } 
+        // Create a new booking 
         $title = 'New booking Booking ';
 
         // Create an array to store the post data for meeting the current row
@@ -807,6 +791,91 @@ class HydraBookingShortcode {
         return $confirmation_template;
     }
 
+
+    // Insert Calender After Booking Schedule
+    public function insert_calender_after_booking_completed($data){
+       
+        $booking = new Booking();
+        $meeting = new Meeting();
+        $BookingMeta = new BookingMeta();
+        $MeetingData = $meeting->get( $data->meeting_id );
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+        if('one-to-group' == $meta_data['meeting_type'] ){
+            $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1; 
+            $check_booking = $booking->get(
+                array(
+                    'meeting_id' => $data->meeting_id, 
+                    'meeting_dates' => $data->meeting_dates, 
+                    'start_time' => $data->start_time, 
+                    'end_time' => $data->end_time
+                ),
+                false,
+                false, 
+                false,
+                'id DESC',
+            );
+            
+            // unset if check_booking has current booking data->id without loop and array maps or filter
+            $check_booking = array_filter($check_booking, function($booking) use ($data) {
+                return $booking->id !== $data->id;
+            });
+            // Get First Items form the array
+            $first_item = reset($check_booking);
+            
+            if($first_item->meeting_calendar != 'null' && !empty($first_item->meeting_calendar) && $first_item->meeting_calendar != 0 ){
+             
+                $booking_calendar = $BookingMeta->getFirstOrFail(
+                    $first_item->meeting_calendar
+                );
+                $update = array();
+                $update['id'] = $data->id;
+                $update['meeting_calendar'] = $booking_calendar->id;
+               
+                $booking->update($update); 
+                $booking_calendar_value = json_decode($booking_calendar->value);
+               
+                $booking_calendar_value =  apply_filters('hydra_booking_calendar_add_new_attendee', $booking_calendar_value, $data);
+
+                // Update the Booking meta 
+                $booking_meta = array(
+                    'id' => $booking_calendar->id, 
+                    'value' => json_encode($booking_calendar_value, true),
+                );
+
+                $BookingMeta->update($booking_meta);
+                
+                return ;
+                
+
+            } 
+             
+        }else{
+             // Update the Booking
+            $calendar_data = apply_filters('after_booking_completed_calendar_data', $data);
+        
+            $booking_meta = array(
+                'booking_id' => $data->id,
+                'meta_key' => 'booking_calendar',
+                'value' => json_encode($calendar_data, true),
+            );
+            
+            $insert = $BookingMeta->add($booking_meta);
+
+            $insert_id = $insert['insert_id'];
+            if ( $insert_id === false ) {
+                return false;
+            }
+
+            $update = array();
+            $update['id'] = $data->id;
+            $update['meeting_calendar'] = $insert_id;
+    
+            $booking->update($update); 
+        }
+       
+        return true;
+      
+    }
 
     // Already Booked Times Callback
     public function tfhb_already_booked_times_callback() { 

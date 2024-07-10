@@ -167,8 +167,7 @@ class Booking {
              $sql .= $orderBy != null ? " ORDER BY $orderBy" : " ORDER BY id DESC";
 
              // Add Limit if exist
-             $sql .= $limit != null ? " LIMIT $limit" : "";
-             
+             $sql .= $limit != null ? " LIMIT $limit" : ""; 
      
             if($FirstOrFaill == true){
                 // only get first item 

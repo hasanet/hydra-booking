@@ -7,6 +7,7 @@ use HydraBooking\DB\Booking;
 use HydraBooking\DB\Meeting;
 use HydraBooking\DB\Transactions;
 use HydraBooking\DB\Meta;
+use HydraBooking\DB\BookingMeta;
 
 class Migrator {
 
@@ -41,6 +42,10 @@ class Migrator {
         // Meta migration
         $Meta =  new Meta();
         $Meta->migrate();
+
+        // BookingMeta migration
+        $BookingMeta =  new BookingMeta();
+        $BookingMeta->migrate();
     }
 
     /**

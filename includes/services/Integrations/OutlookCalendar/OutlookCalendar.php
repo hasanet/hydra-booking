@@ -25,8 +25,8 @@ class OutlookCalendar{
 
         $this->setClientData();  
 
-        add_action('hydra_booking/after_booking_completed', array($this, 'InsertOutLookCalender'));
-        add_action('hydra_booking/after_booking_schedule', array($this, 'InsertOutLookCalender'));
+        // add_action('hydra_booking/after_booking_completed', array($this, 'InsertOutLookCalender'));
+        // add_action('hydra_booking/after_booking_schedule', array($this, 'InsertOutLookCalender'));
     }
 
     // Set Client Data
