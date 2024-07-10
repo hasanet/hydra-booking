@@ -31,7 +31,6 @@ const Meeting = reactive({
             const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/delete', deleteMeeting, {
                    
             } );
-            console.log(response);
             if (response.data.status) { 
                 this.meetings = response.data.meetings;  
                 toast.success(response.data.message); 

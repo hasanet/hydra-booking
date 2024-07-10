@@ -240,6 +240,9 @@
                                             }
                                         }
                                     }
+                                    .tfhb-calendar-popup{
+                                        cursor: pointer;
+                                    }
                                 }
                             }
                             .fc-daygrid-day-bottom{
@@ -387,6 +390,48 @@
                                 right: 8px;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+    .tfhb-booking-calendar-popup{
+        .tfhb-popup-wrap{
+            padding: 16px 20px 20px 20px !important;
+            .tfhb-dashboard-heading{
+                flex-wrap: nowrap !important;
+            }
+            .tfhb-single-form-field-wrap{
+                .tfhb-time-date-view{
+                    border-radius: 4px;
+                    border: 1px solid #F6EEF2;
+                    background-color: transparent;
+                    padding: 8px 8px 8px 12px;
+                    flex-wrap: nowrap !important;
+                    justify-content: normal !important;
+                    gap: 8px !important;
+                    height: 40px;
+                    input{
+                        min-width: auto !important;
+                        padding: 0;
+                        border: 0px;
+                        height: auto;
+                    }
+                }
+            }
+            .tfhb-popup-actions{
+                .tfhb-btn{
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    &.tfhb-warning{
+                        border-radius: 8px;
+                        border: 1px solid #AC0C22;
+                        background: #FEECEE;
+                        color: #AC0C22;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px; /* 160% */
                     }
                 }
             }

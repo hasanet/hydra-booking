@@ -149,9 +149,6 @@ namespace HydraBooking\Admin\Controller;
             'Enter Your Paypal Secret' => __('Enter Your Paypal Secret','hydra-booking'),
             'FluentCRM' => __('FluentCRM','hydra-booking'),
             'ZohoCRM' => __('ZohoCRM','hydra-booking'),
-            '' => __('','hydra-booking'),
-            '' => __('','hydra-booking'),
-            '' => __('','hydra-booking'),
 
             // Hosts
             'Add New Host' =>  __('Add New Host', 'hydra-booking'), 
@@ -381,6 +378,9 @@ namespace HydraBooking\Admin\Controller;
             'Last 7 Days' => __('Last 7 Days', 'hydra-booking'),
             'This month' => __('This month', 'hydra-booking'),
             'This Year' => __('This Year', 'hydra-booking'),
+            'Join Meet' => __('Join Meet','hydra-booking'),
+            '' => __('','hydra-booking'),
+            '' => __('','hydra-booking'),
            
         );
      } 
