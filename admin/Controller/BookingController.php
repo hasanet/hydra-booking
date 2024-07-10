@@ -545,6 +545,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
     public function updateBooking(){
         $request = json_decode(file_get_contents('php://input'), true);
         $booking_id = $request['id'];
+        $booking_owner = $request['host'];
+
         if (empty($booking_id) || $booking_id == 0) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Booking'));
         }
@@ -558,8 +560,46 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Booking Update
         $bookingUpdate = $booking->update($data);
 
-        // Booking Lists 
-        $booking_List = $booking->get(null, true);
+        $current_user = get_userdata($booking_owner);
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+
+        if(!empty($current_user_role) && "administrator"==$current_user_role){
+            $bookingsList = $booking->get(null, true);
+        }
+        if(!empty($current_user_role) && "tfhb_host"==$current_user_role){
+            $host = new Host();
+            $HostData = $host->get( $current_user_id  );
+            $bookingsList = $booking->get(null, true, false, false, false, false, $HostData->user_id);
+
+        }
+
+        $extractedBookings = array_map(function($booking) {
+            return [
+                'id' => $booking->id,
+                'title' => $booking->title,
+                'meeting_dates' => $booking->meeting_dates,
+                'start_time' => $booking->start_time,
+                'end_time' => $booking->end_time,
+                'status' => $booking->booking_status,
+                'host_id' => $booking->host_id,
+            ];
+        }, $bookingsList);
+
+        $booking_array = array();
+        foreach ($extractedBookings as $book) {
+            $booking_array[] = array(
+                'booking_id' => $book['id'],
+                'title' => $book['title'],
+                'start' => $book['meeting_dates'].'T'.$book['start_time'],
+                'end' => $book['meeting_dates'].'T'.$book['end_time'],
+                'status' => $book['status'],
+                'booking_date' => $book['meeting_dates'],
+                'booking_time' => $book['start_time'].' - '.$book['end_time'],
+                'host_id' => $book['host_id'],
+            );
+        }
 
         // Single Booking 
         $single_booking_meta = $booking->get(['id'=>$request['id']],false, true);
@@ -579,7 +619,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Return response
         $data = array(
             'status' => true,  
-            'booking' => $booking_List, 
+            'booking' => $bookingsList, 
+            'booking_calendar' => $booking_array,
             'message' => 'Booking Updated Successfully', 
         );
         return rest_ensure_response($data);

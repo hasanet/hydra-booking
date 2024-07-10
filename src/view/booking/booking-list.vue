@@ -35,8 +35,9 @@ onBeforeMount(() => {
 
 // Booking Status Changed
 const meeting_status = reactive({});
-const UpdateMeetingStatus = async (id, status) => {    
+const UpdateMeetingStatus = async (id, host, status) => {    
     meeting_status.id = id
+    meeting_status.host = host
     meeting_status.status = status
    try { 
         // axisos sent dataHeader Nonce Data
@@ -48,6 +49,8 @@ const UpdateMeetingStatus = async (id, status) => {
 
         if (response.data.status) {  
             Booking.bookings = response.data.booking; 
+            Booking.calendarbooking.events = response.data.booking_calendar;
+            BookingEditPopup.value = false;
 
             toast.success(response.data.message, {
                 position: 'bottom-right', // Set the desired position
@@ -69,6 +72,49 @@ const Tfhb_Booking_View = async (data) => {
     singleBookingData.value = data;
     BookingDetailsPopup.value = true;
 }
+
+
+const singleCalendarBookingData = reactive({
+    title: '',
+    booking_id: '',
+    status: '',
+    booking_date: '',
+    booking_time: '',
+    host_id: '',
+});
+const bookingCalendarPopup = (data) => {
+    singleCalendarBookingData.title = data.title;
+    singleCalendarBookingData.booking_id = data.extendedProps.booking_id;
+    singleCalendarBookingData.status = data.extendedProps.status;
+    singleCalendarBookingData.booking_date = data.extendedProps.booking_date;
+    singleCalendarBookingData.booking_time = data.extendedProps.booking_time;
+    singleCalendarBookingData.host_id = data.extendedProps.host_id;
+    BookingEditPopup.value = true;
+}
+
+const deleteBooking = async ($id, $host) => { 
+    let deleteBooking = {
+        id: $id,
+        host: $host
+    }
+    try { 
+        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/delete', deleteBooking);
+
+        if (response.data.status) { 
+            Booking.bookings = response.data.bookings; 
+            Booking.calendarbooking.events = response.data.booking_calendar;  
+            BookingEditPopup.value = false;
+            toast.success(response.data.message); 
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+const Booking_Status_Callback = (e) => {
+    UpdateMeetingStatus(singleCalendarBookingData.booking_id, singleCalendarBookingData.host_id, e.value);
+}
+
+
 
 // Pagination
 const totalPages = computed(() => {
@@ -98,30 +144,6 @@ const prevPage = () => {
     currentPage.value -= 1;
   }
 };
-
-const singleCalendarBookingData = ref('');
-const bookingCalendarPopup = (data) => {
-    singleCalendarBookingData.value = data;
-    BookingEditPopup.value = true;
-}
-
-const deleteBooking = async ($id, $host) => { 
-    let deleteBooking = {
-        id: $id,
-        host: $host
-    }
-    try { 
-        const response = await axios.post(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/delete', deleteBooking);
-
-        if (response.data.status) { 
-            Booking.calendarbooking.events = response.data.booking_calendar;  
-            BookingEditPopup.value = false;
-            toast.success(response.data.message); 
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 </script>
 <template>
@@ -252,8 +274,9 @@ const deleteBooking = async ($id, $host) => {
     </template>
 
     <template #content> 
+
         <HbDropdown  
-            v-model="singleCalendarBookingData.extendedProps.status"
+            v-model="singleCalendarBookingData.status"
             :label="$tfhb_trans['Status']" 
             :selected = "1"
             placeholder="Select Booking status"   
@@ -261,7 +284,8 @@ const deleteBooking = async ($id, $host) => {
                 {'name': 'Pending', 'value': 'pending'},  
                 {'name': 'Confirmed', 'value': 'confirmed'},   
                 {'name': 'Canceled', 'value': 'canceled'}
-            ]" 
+            ]"
+            @tfhb-onchange="Booking_Status_Callback" 
         />  
 
         <div class="tfhb-single-form-field" style="width: 100%;">
@@ -269,7 +293,7 @@ const deleteBooking = async ($id, $host) => {
                 <label>Date</label>
                 <div class="tfhb-time-date-view tfhb-flexbox">
                     <Icon name="CalendarDays" size="20" />
-                    <input type="text" readonly :value="singleCalendarBookingData.extendedProps.booking_date">
+                    <input type="text" readonly :value="singleCalendarBookingData.booking_date">
                 </div>
             </div>
         </div>
@@ -279,7 +303,7 @@ const deleteBooking = async ($id, $host) => {
                 <label>Time</label>
                 <div class="tfhb-time-date-view tfhb-flexbox">
                     <Icon name="Clock4" size="20" />
-                    <input type="text" readonly :value="singleCalendarBookingData.extendedProps.booking_time">
+                    <input type="text" readonly :value="singleCalendarBookingData.booking_time">
                 </div>
             </div>
         </div>
@@ -287,7 +311,7 @@ const deleteBooking = async ($id, $host) => {
         <div class="tfhb-popup-actions tfhb-flexbox tfhb-full-width">
             <a href="#" class="tfhb-btn boxed-btn flex-btn"><Icon name="Video" size="20" /> {{ $tfhb_trans['Join Meet'] }}</a>
 
-            <button class="tfhb-btn boxed-btn flex-btn tfhb-warning" @click="deleteBooking(singleCalendarBookingData.extendedProps.booking_id, singleCalendarBookingData.extendedProps.host_id)">{{ $tfhb_trans['Delete'] }}</button>
+            <button class="tfhb-btn boxed-btn flex-btn tfhb-warning" @click="deleteBooking(singleCalendarBookingData.booking_id, singleCalendarBookingData.host_id)">{{ $tfhb_trans['Delete'] }}</button>
         </div>
     </template> 
 </HbPopup>
@@ -348,10 +372,10 @@ const deleteBooking = async ($id, $host) => {
                             </svg>
                             <div class="tfhb-status-popup">
                                 <ul class="tfhb-flexbox tfhb-gap-2">
-                                    <li @click="UpdateMeetingStatus(book.id, 'approved')">{{ $tfhb_trans['Approved'] }}</li>
-                                    <li class="pending" @click="UpdateMeetingStatus(book.id, 'pending')">{{ $tfhb_trans['Pending'] }}</li>
-                                    <li class="schedule" @click="UpdateMeetingStatus(book.id, 'schedule')">{{ $tfhb_trans['Re-schedule'] }}</li>
-                                    <li class="canceled" @click="UpdateMeetingStatus(book.id, 'canceled')">{{ $tfhb_trans['Canceled'] }}</li>
+                                    <li @click="UpdateMeetingStatus(book.id, book.host_id, 'approved')">{{ $tfhb_trans['Approved'] }}</li>
+                                    <li class="pending" @click="UpdateMeetingStatus(book.id, book.host_id, 'pending')">{{ $tfhb_trans['Pending'] }}</li>
+                                    <li class="schedule" @click="UpdateMeetingStatus(book.id, book.host_id, 'schedule')">{{ $tfhb_trans['Re-schedule'] }}</li>
+                                    <li class="canceled" @click="UpdateMeetingStatus(book.id, book.host_id, 'canceled')">{{ $tfhb_trans['Canceled'] }}</li>
                                 </ul>
                             </div>
                         </div>
