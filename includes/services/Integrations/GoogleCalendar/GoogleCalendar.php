@@ -341,15 +341,13 @@ class GoogleCalendar{
         // Set the Access Token
         $this->refreshToken($booking->host_id);
         $events = $data->google_calendar;
-      
-        $google_calendar_data = array();
+       
         $google_calendar_body = array();
         foreach ($events as $event) {
             $event_id = $event->id;
           
             $new_attendees = array('email' => $booking->email);
-            // add new attendee also remaing existing attendee
-            $attendees = $event->attendees;
+            // add new attendee also remaing existing attendee 
             $event->attendees[] = $new_attendees;    
 
             $_tfhb_host_integration_settings =  is_array(get_user_meta($booking->host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($booking->host_id, '_tfhb_host_integration_settings', true) : array();
