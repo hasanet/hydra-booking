@@ -68,13 +68,18 @@
         margin-right: 16px;
 
         .fc-header-toolbar{
-            margin-bottom: 0px;
             .fc-toolbar-chunk{
                 &:nth-child(2){
+                    position: absolute;
+                    left: 50%;
+                    width: 300px;
+                    margin-left: -150px;
+                    text-align: center;
                     >div{
                         display: flex;
-                        align-items: 16px;
+                        align-items: center;
                         gap: 28px;
+                        justify-content: center;
                         button{
                             height: 24px;
                             width: 24px;
@@ -109,6 +114,11 @@
                     }
                 }
                 &:nth-child(3){
+                    position: absolute;
+                    left: 50%;
+                    width: 220px;
+                    margin-left: -117px;
+                    top: 100px;
                     .fc-button-group{
                         border-radius: 24px;
                         border: 1px solid #F6EEF2;
