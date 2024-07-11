@@ -53,6 +53,7 @@ const CreateHosts = async (host) => {
                 "autoClose": 1500,
             });  
             closeModal(); 
+            hosts.data = response.data.hosts;  
             router.push({ name: 'HostsProfile', params: { id: response.data.id} });
             // Redirecto to Other Route
             // router.push({ name: 'HostsProfile' });

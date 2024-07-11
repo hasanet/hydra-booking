@@ -7,6 +7,8 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbPopup from '@/components/widgets/HbPopup.vue';  
+// import { Copy } from 'lucide-vue-next';
+import { toast } from "vue3-toastify"; 
 
 const props = defineProps([
     'google_calendar', 
@@ -18,7 +20,7 @@ const emit = defineEmits([ "update-integrations", 'popup-open-control', 'popup-c
 
 const closePopup = () => { 
     emit('popup-close-control', false)
-}
+} 
 </script>
  
 <template>
@@ -71,8 +73,8 @@ const closePopup = () => {
                 /> 
                 <HbText  
                     v-model="google_calendar.redirect_url"  
-                    required= "true"  
-                    :label="$tfhb_trans['Redirect Url']"  
+                    required= "true"   
+                    :label="$tfhb_trans['Redirect Url']"   
                     selected = "1" 
                     :placeholder="$tfhb_trans['Enter Redirect Url']"  
                 /> 

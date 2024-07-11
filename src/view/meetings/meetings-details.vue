@@ -102,11 +102,11 @@ const tfhbValidateInput = (fieldName) => {
                 v-if="'custom'==meeting.duration"
             /> 
              <!-- Custom Duration -->
-            <HbSwitch 
+            <!-- <HbSwitch 
                 type="checkbox" 
                 required= "true" 
                 :label="$tfhb_trans['Allow attendee to select duration']" 
-            />
+            /> -->
         </div>
 
         <div class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0 tfhb-full-width"> 
@@ -120,8 +120,9 @@ const tfhbValidateInput = (fieldName) => {
                         :selected = "1"
                         :placeholder="$tfhb_trans['Location']" 
                         :option = "[
-                            {name: 'Zoom', value: 'zoom'}, 
-                            {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)'},
+                            {name: 'Zoom', value: 'zoom', disable: true}, 
+                            {name: 'Google Meet', value: 'meet', disable: true}, 
+                            {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)',},
                             {name: 'In Person (Organizer Address)', value: 'In Person (Organizer Address)'},
                             {name: 'Attendee Phone Number', value: 'Attendee Phone Number'},
                             {name: 'Organizer Phone Number', value: 'Organizer Phone Number'},

@@ -108,6 +108,7 @@ const Integration = reactive( {
     stripe : {
         type: 'stripe', 
         status: 0, 
+        connection_status: 0, 
         public_key: '',
         secret_key: ''
     },
@@ -115,12 +116,14 @@ const Integration = reactive( {
         type: 'paypal', 
         environment: '',
         status: 0, 
+        connection_status: 0, 
         client_id: '',
         secret_key: '',
     },
     mailchimp : {
         type: 'mailchimp', 
         status: 0, 
+        connection_status: 0, 
         key: ''
     },
     zoho : {
@@ -213,9 +216,10 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box tfhb-m-0">   
+    <div class="tfhb-admin-card-box tfhb-m-0">    
         <!-- Woo  Integrations  --> 
         <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" 
+        v-if="Integration.zoom_meeting.connection_status == 1"
         @update-integrations="UpdateIntegration"
         :ispopup="popup"
         @popup-open-control="isPopupOpen"
@@ -223,7 +227,8 @@ onBeforeMount(() => {
         />
 
 
-        <StripeIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
+        <StripeIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations"  
+        v-if="Integration.stripe.connection_status == 1"
         :stripe_data="Integration.stripe" 
         @update-integrations="UpdateIntegration"
         :ispopup="spopup"
@@ -233,6 +238,7 @@ onBeforeMount(() => {
 
         <!-- paypal intrigation -->
         <PaypalIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations"
+        v-if="Integration.paypal.connection_status == 1"
         :paypal_data="Integration.paypal" 
         @update-integrations="UpdateIntegration" 
         :ispopup="paypalpopup"
@@ -243,6 +249,7 @@ onBeforeMount(() => {
 
         <!-- Mailchimp intrigation -->
         <MailchimpIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
+        v-if="Integration.mailchimp.connection_status == 1"
         :mail_data="Integration.mailchimp" 
         @update-integrations="UpdateIntegration" 
         :ispopup="mailpopup"
@@ -252,7 +259,7 @@ onBeforeMount(() => {
         <!-- Mailchimp intrigation -->
 
         <!-- Zoho intrigation -->
-        <ZohoIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations" 
+        <ZohoIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations"  
         :zoho_data="Integration.zoho" 
         @update-integrations="UpdateIntegration" 
         :ispopup="zohopopup"

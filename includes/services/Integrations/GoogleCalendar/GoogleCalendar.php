@@ -40,7 +40,12 @@ class GoogleCalendar{
         // Set the Client Data
         $this->clientId = isset($google_calendar['client_id']) ? $google_calendar['client_id'] : '';
         $this->clientSecret = isset($google_calendar['secret_key']) ? $google_calendar['secret_key'] : '';
-        $this->redirectUrl =  isset($google_calendar['redirect_url']) ? $google_calendar['redirect_url'] : '';
+        $this->redirectUrl =  isset($google_calendar['redirect_url']) ? $google_calendar['redirect_url'] : $this->setRredirectUrl();
+    }
+
+    public function setRredirectUrl(){
+        // example : wp-json/hydra-booking/v1/integration/google-api
+        return get_rest_url() . 'hydra-booking/v1/integration/google-api';
     }
     // Set Access Token
     public function setAccessToken($host_id){

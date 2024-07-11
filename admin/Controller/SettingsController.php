@@ -8,6 +8,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\AuthController;
  use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  use HydraBooking\Admin\Controller\ScheduleController;
+ use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
  // Use DB 
 use HydraBooking\DB\Availability;
 // exit
@@ -343,6 +344,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
         }else{
             $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
+        }
+
+        if(!isset($_tfhb_integration_settings['google_calendar'])){
+            $GoogleCalendar = new GoogleCalendar();
+            $_tfhb_integration_settings['google_calendar']['type'] =  'calendar';
+            $_tfhb_integration_settings['google_calendar']['status'] =  0;
+            $_tfhb_integration_settings['google_calendar']['connection_status'] =  0;
+            $_tfhb_integration_settings['google_calendar']['client_id'] =  '';
+            $_tfhb_integration_settings['google_calendar']['secret_key'] =  '';
+            $_tfhb_integration_settings['google_calendar']['redirect_url'] =  $GoogleCalendar->redirectUrl;
+            
+
         }
 
         // Checked if woo
