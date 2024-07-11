@@ -204,42 +204,34 @@
                                     &:last-child{
                                         margin-bottom: 0px;
                                     }
-                                    &:nth-child(odd){
-                                        a{
-                                            border-radius: 8px;
-                                            border: 0px solid;
+                                    a{
+                                        border: 0px solid;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        font-size: 13px;
+                                        font-style: normal;
+                                        font-weight: 600;
+                                        line-height: 20px; /* 153.846% */
+                                        padding: 0;
+                                        background: transparent;
+                                        b{
+                                            padding: 6px 8px;
+                                            color: #002AB3;
+                                            width: 100%;
                                             border-left: 1px solid #002AB3;
                                             background: #EBEFFF;
-                                            padding: 6px 8px;
-                                            overflow: hidden;
-                                            text-overflow: ellipsis;
-                                            font-size: 13px;
-                                            font-style: normal;
-                                            font-weight: 600;
-                                            line-height: 20px; /* 153.846% */
-                                            .fc-event-main{
-                                                color: #002AB3;
-                                            }
-                                        }
-                                    }
-                                    &:nth-child(even){
-                                        a{
                                             border-radius: 8px;
-                                            border: 0px solid;
+                                            display: block;
+                                            line-height: 15px;
+                                            cursor: pointer;
+                                        }
+                                        b.confirmed{
+                                            color: #17723F;
                                             border-left: 1px solid #17723F;
                                             background: #E6FAEE;
-                                            padding: 6px 8px;
-                                            overflow: hidden;
-                                            text-overflow: ellipsis;
-                                            font-size: 13px;
-                                            font-style: normal;
-                                            font-weight: 600;
-                                            line-height: 20px; /* 153.846% */
-                                            .fc-event-main{
-                                                color: #17723F;
-                                            }
                                         }
                                     }
+                
                                     .tfhb-calendar-popup{
                                         cursor: pointer;
                                     }
@@ -284,40 +276,31 @@
                                             &:last-child{
                                                 margin-bottom: 0px;
                                             }
-                                            &:nth-child(odd){
-                                                a{
-                                                    border-radius: 8px;
-                                                    border: 0px solid;
+                                            a{
+                                                border: 0px solid;
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;
+                                                font-size: 13px;
+                                                font-style: normal;
+                                                font-weight: 600;
+                                                line-height: 20px; /* 153.846% */
+                                                padding: 0;
+                                                background: transparent;
+                                                b{
+                                                    padding: 6px 8px;
+                                                    color: #002AB3;
+                                                    width: 100%;
                                                     border-left: 1px solid #002AB3;
                                                     background: #EBEFFF;
-                                                    padding: 6px 8px;
-                                                    overflow: hidden;
-                                                    text-overflow: ellipsis;
-                                                    font-size: 13px;
-                                                    font-style: normal;
-                                                    font-weight: 600;
-                                                    line-height: 20px; /* 153.846% */
-                                                    .fc-event-main{
-                                                        color: #002AB3;
-                                                    }
-                                                }
-                                            }
-                                            &:nth-child(even){
-                                                a{
                                                     border-radius: 8px;
-                                                    border: 0px solid;
+                                                    display: block;
+                                                    line-height: 15px;
+                                                    cursor: pointer;
+                                                }
+                                                b.confirmed{
+                                                    color: #17723F;
                                                     border-left: 1px solid #17723F;
                                                     background: #E6FAEE;
-                                                    padding: 6px 8px;
-                                                    overflow: hidden;
-                                                    text-overflow: ellipsis;
-                                                    font-size: 13px;
-                                                    font-style: normal;
-                                                    font-weight: 600;
-                                                    line-height: 20px; /* 153.846% */
-                                                    .fc-event-main{
-                                                        color: #17723F;
-                                                    }
                                                 }
                                             }
                                         }
@@ -339,40 +322,31 @@
                     &:last-child{
                         margin-bottom: 0px;
                     }
-                    &:nth-child(odd){
-                        a{
-                            border-radius: 8px;
-                            border: 0px solid;
+                    a{
+                        border: 0px solid;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 20px; /* 153.846% */
+                        padding: 0;
+                        background: transparent;
+                        b{
+                            padding: 6px 8px;
+                            color: #002AB3;
+                            width: 100%;
                             border-left: 1px solid #002AB3;
                             background: #EBEFFF;
-                            padding: 6px 8px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            font-size: 13px;
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 20px; /* 153.846% */
-                            .fc-event-main{
-                                color: #002AB3;
-                            }
-                        }
-                    }
-                    &:nth-child(even){
-                        a{
                             border-radius: 8px;
-                            border: 0px solid;
+                            display: block;
+                            line-height: 15px;
+                            cursor: pointer;
+                        }
+                        b.confirmed{
+                            color: #17723F;
                             border-left: 1px solid #17723F;
                             background: #E6FAEE;
-                            padding: 6px 8px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            font-size: 13px;
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 20px; /* 153.846% */
-                            .fc-event-main{
-                                color: #17723F;
-                            }
                         }
                     }
                 }

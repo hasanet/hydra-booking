@@ -147,7 +147,6 @@ const prevPage = () => {
 
 </script>
 <template>
-
 <!-- {{ tfhbClass }} -->
 <!-- :class="{ 'tfhb-skeleton': Booking.skeleton }" -->
 <div class="tfhb-dashboard-heading tfhb-flexbox">
@@ -260,7 +259,8 @@ const prevPage = () => {
     <FullCalendar class='demo-app-calendar' :options='Booking.calendarbooking'>
         <template v-slot:eventContent='arg'>
             <!-- <b>{{ arg.timeText }}</b> -->
-            <b class="tfhb-calendar-popup" @click="bookingCalendarPopup(arg.event)">{{ arg.event.title }}</b>
+            <!-- {{ arg.event.extendedProps.status }} -->
+            <b class="tfhb-calendar-popup" :class="arg.event.extendedProps.status" @click="bookingCalendarPopup(arg.event)">{{ arg.event.title }}</b>
         </template>
     </FullCalendar>
 </div>

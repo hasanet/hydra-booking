@@ -13,7 +13,7 @@ const Booking = reactive({
             interactionPlugin
         ],
         initialView: 'dayGridMonth',
-        events: 'asdf',
+        events: '',
         headerToolbar: {
             left: '',
             center: 'prev,title,next',
