@@ -27,6 +27,8 @@ class OutlookCalendar{
 
         // add_action('hydra_booking/after_booking_completed', array($this, 'InsertOutLookCalender'));
         // add_action('hydra_booking/after_booking_schedule', array($this, 'InsertOutLookCalender'));
+        add_filter('after_booking_completed_calendar_data', array($this, 'InsertOutLookCalender'));
+        add_filter('hydra_booking_calendar_add_new_attendee', array($this, 'addAttendeeOutlookCalender'), 10, 2);
     }
 
     // Set Client Data
@@ -321,6 +323,45 @@ class OutlookCalendar{
         $booking = new Booking();
 
         $booking->update($update); 
+    }
+
+    // Add Attendee to Outlook Calendar
+    public function addAttendeeOutlookCalender($data, $booking){
+        $this->refreshToken($booking->host_id);
+        $events = $data->outlook_calendar;
+
+        $outlook_calendar_body = array();
+        foreach ($events as $event) {
+            $event_id = $event->id;
+          
+            $new_attendees = array('email' => $booking->email);
+            // add new attendee also remaing existing attendee 
+            $event->attendees[] = $new_attendees;    
+
+            $_tfhb_host_integration_settings =  is_array(get_user_meta($booking->host_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($booking->host_id, '_tfhb_host_integration_settings', true) : array();
+            $outlook_calendar = isset($_tfhb_host_integration_settings['outlook_calendar']) ? $_tfhb_host_integration_settings['outlook_calendar'] : array();
+            $calendarId = isset($outlook_calendar['selected_calendar_id']) ? $outlook_calendar['selected_calendar_id'] : '';
+        
+            if($calendarId){
+
+                $url = $this->calendarEvent . $calendarId . '/events/' . $event_id;
+                $response = wp_remote_post($url, array(
+                    'headers' => array( 'Authorization' => 'Bearer ' . $this->accessToken),
+                        'body' => json_encode($event),
+                        'method' => 'PUT',
+                        'data_format' => 'body',
+                )); 
+                $body = wp_remote_retrieve_body($response);  
+                
+                $outlook_calendar_body[] = json_decode($body, true);
+                
+            }
+        }
+
+        // Update the Booking
+        $data->outlook_calendar = $outlook_calendar_body;
+      
+        return $data;
     }
 
 }

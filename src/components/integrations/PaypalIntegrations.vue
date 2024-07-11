@@ -22,7 +22,7 @@ const closePopup = () => {
 
 </script>
 
-<template>
+<template> 
       <!-- paypal Integrations  -->
       <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box ">
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
@@ -39,7 +39,9 @@ const closePopup = () => {
             <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ paypal_data.secret_key ? 'Settings' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
-                <HbSwitch @change="emit('update-integrations', 'paypal', paypal_data)" v-model="paypal_data.status"    />
+                <HbSwitch 
+                v-if="paypal_data.secret_key != '' &&  paypal_data.client_id  != '' && paypal_data.secret_key != null &&  paypal_data.client_id  != null" 
+                @change="emit('update-integrations', 'paypal', paypal_data)" v-model="paypal_data.status"    />
             <!-- Swicher --> 
         </div>
 

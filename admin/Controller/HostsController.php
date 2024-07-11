@@ -218,7 +218,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'about' => '',
             'avatar' => '',
             'featured_image' => '', 
-            'status' => 1, 
+            'status' => 'activate', 
         ];
 
         // Insert Host
@@ -496,10 +496,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $stripe = isset($_tfhb_host_integration_settings['stripe']) ? $_tfhb_host_integration_settings['stripe'] : array();
         if($_tfhb_integration_settings['stripe']['status'] == true){  
 
-        $stripe['type'] = 'stripe';
-        $stripe['status'] = $_tfhb_host_integration_settings['stripe']['status']; 
-        $stripe['public_key'] = $_tfhb_host_integration_settings['stripe']['public_key'];  
-        $stripe['secret_key'] = $_tfhb_host_integration_settings['stripe']['secret_key']; 
+            $stripe['type'] = 'stripe';
+            $stripe['status'] = $_tfhb_host_integration_settings['stripe']['status']; 
+            $stripe['connection_status'] = $_tfhb_integration_settings['stripe']['status']; 
+            $stripe['public_key'] = $_tfhb_host_integration_settings['stripe']['public_key'];  
+            $stripe['secret_key'] = $_tfhb_host_integration_settings['stripe']['secret_key']; 
         
         } 
 
@@ -509,6 +510,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         $paypal['type'] = 'paypal';
         $paypal['status'] = $_tfhb_host_integration_settings['paypal']['status']; 
+        $paypal['connection_status'] = $_tfhb_integration_settings['paypal']['status']; 
         $paypal['client_id'] = $_tfhb_host_integration_settings['paypal']['client_id'];  
         $paypal['secret_key'] = $_tfhb_host_integration_settings['paypal']['secret_key']; 
         $paypal['environment'] =  $_tfhb_host_integration_settings['paypal']['environment'];
@@ -521,6 +523,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
             $mailchimp['type'] = 'mailchimp';
             $mailchimp['status'] = $_tfhb_host_integration_settings['mailchimp']['status']; 
+            $mailchimp['connection_status'] = $_tfhb_integration_settings['mailchimp']['status']; 
             $mailchimp['key'] = $_tfhb_host_integration_settings['mailchimp']['key'];  
           
         } 
@@ -551,7 +554,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'mailchimp' => $mailchimp,  
             'stripe' => $stripe,  
             'zoho' => $zoho,  
-            'paypal' => $paypal
+            'paypal' => $paypal,
+            '_tfhb_integration_settings' => $_tfhb_integration_settings,
         );
         return rest_ensure_response($data);
     }

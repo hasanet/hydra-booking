@@ -46,7 +46,10 @@ const closePopup = () => {
 
             <!-- Checkbox swicher -->
 
-            <HbSwitch @change="emit('update-integrations', 'zoho', zoho_data)" v-model="zoho_data.status"    />
+            <HbSwitch 
+                v-if="zoho_data.access_token != '' &&  zoho_data.access_token  != null " 
+                @change="emit('update-integrations', 'zoho', zoho_data)" v-model="zoho_data.status"  
+              />
             <!-- Swicher --> 
         </div>
 

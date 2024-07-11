@@ -73,8 +73,9 @@ const handleChange = (e) => {
                     v-model="props.modelValue"  
                     @change="handleChange"   
                     :filter="filter == true ? true : false"
-                    :options="option"  
-                    :placeholder="placeholder" 
+                    :options="option"
+                    :placeholder="placeholder"  
+                    :optionDisabled="disabled"
                     :style="{ 'width': '100%' }"  
                 />
                 <Dropdown 
@@ -85,6 +86,7 @@ const handleChange = (e) => {
                     :options="option" 
                     optionLabel="name"
                     optionValue="value"
+                    optionDisabled="disable"
                     :placeholder="placeholder" 
                     :style="{ 'width': '100%' }"  
                     @click="emit('add-click')"

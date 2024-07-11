@@ -39,7 +39,10 @@ const closePopup = () => {
             <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ stripe_data.secret_key ? 'Settings' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
-                <HbSwitch @change="emit('update-integrations', 'stripe', stripe_data)" v-model="stripe_data.status"    />
+            <HbSwitch 
+                v-if="stripe_data.secret_key != '' &&  stripe_data.public_key  != '' && stripe_data.secret_key != 'null' &&  stripe_data.public_key  != 'null'" 
+                @change="emit('update-integrations', 'stripe', stripe_data)" v-model="stripe_data.status"    
+             />
             <!-- Swicher --> 
         </div>
 

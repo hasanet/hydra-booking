@@ -39,7 +39,10 @@ const closePopup = () => {
             <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ mail_data.key ? 'Settings' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
-                <HbSwitch @change="emit('update-integrations', 'mailchimp', mail_data)" v-model="mail_data.status"    />
+                <HbSwitch
+                v-if="mail_data.key != '' &&  mail_data.key  != null " 
+                 @change="emit('update-integrations', 'mailchimp', mail_data)" v-model="mail_data.status"   
+                />
             <!-- Swicher --> 
         </div>
 
