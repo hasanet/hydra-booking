@@ -14,6 +14,10 @@ const skeleton = ref(true);
 const timeZone = reactive({});
 const meetingCategory = reactive({});
 const wcProduct = reactive({});
+const integrations = reactive({
+    google_calendar_status : 1,
+    zoom_meeting_status : 1,
+});
 const formsList = reactive({});
 const meetingData = reactive({
     id: 0,
@@ -250,6 +254,7 @@ const meetingData = reactive({
     zohocrm: ''
 });
 
+
 // Add more Location
 function addMoreLocations(){
     meetingData.meeting_locations.push({
@@ -320,6 +325,9 @@ const meetingId = route.params.id;
         if (response.data.status == true) { 
             // Time Zone = 
             timeZone.value = response.data.time_zone;  
+            console.log(response.data.integrations);
+            integrations.google_calendar_status = response.data.integrations.google_calendar_status && response.data.integrations.google_calendar_status == 1 ? false : true;  
+            integrations.zoom_meeting_status = response.data.integrations.zoom_meeting_status && response.data.integrations.zoom_meeting_status == 1  ? false : true;  
 
             wcProduct.value = response.data.wc_product;  
             formsList.value = response.data.formsList;  
@@ -557,6 +565,7 @@ const TfhbPrevNavigator = () => {
             <router-view 
             :meetingId ="meetingId" 
             :meeting="meetingData" 
+            :integrations="integrations" 
             :timeZone="timeZone.value" 
             :wcProduct="wcProduct.value" 
             :formsList="formsList.value" 
