@@ -660,6 +660,25 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 				$mailchimp_Data['status'] = true;
                 $aud_lists = $this->get_audiance($api_key);
                 $mailchimp_Data['audience'] = $aud_lists;
+
+                $mail_fields = $this->get_mailchimp_fields($api_key);
+                if(!empty($mail_fields)){
+                    $data_fields = array(
+                        array(
+                            'name' => 'Email Address',
+                            'value' => 'EMAIL'
+                        )
+                    );
+                    $mail_fields = json_decode($mail_fields); 
+                    if(!empty($mail_fields->merge_fields)){
+                        foreach($mail_fields->merge_fields as $field){
+                            $data_fields[] = array(
+                                'name' => $field->name,
+                                'value' => $field->tag
+                            );
+                        }
+                    }
+                }
 			} else {
 				$mailchimp_Data['status'] = false;
 			}
@@ -755,6 +774,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'fluentcrm' => $fluentcrm_Data,
             'zohocrm' => $zohocrm_Data,
             'formsList' => $formsList,
+            'fields' => $data_fields,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -946,6 +966,38 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 		$url = "https://$server_prefix.api.mailchimp.com/3.0/$path";
 
+		$curl = curl_init( $url );
+		curl_setopt( $curl, CURLOPT_URL, $url );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+
+		$headers = array(
+			"Authorization: Bearer $api_key"
+		);
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+		//for debug only!
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, false );
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
+
+		$resp = curl_exec( $curl );
+		curl_close( $curl );
+
+		return $resp;
+	}
+
+    /* Mailchimp Fields */
+	private function get_mailchimp_fields( $api_key = '', $path = '' ) {
+
+
+		$server_prefix = explode( "-", $api_key );
+
+		if ( ! isset( $server_prefix[1] ) ) {
+			return;
+		}
+		$server_prefix = $server_prefix[1];
+
+		$url = "https://$server_prefix.api.mailchimp.com/3.0/lists/35ddee1e82/merge-fields";
+
+        
 		$curl = curl_init( $url );
 		curl_setopt( $curl, CURLOPT_URL, $url );
 		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );

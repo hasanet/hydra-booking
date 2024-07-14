@@ -228,7 +228,7 @@ const moduleFields = async (e) => {
 
 <template>
 
-<!-- {{ integrationsData  }} -->
+{{ integrationsData  }}
 <div class="meeting-create-details tfhb-gap-24">
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
