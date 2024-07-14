@@ -84,7 +84,7 @@ const UpdateGeneralSettings = async () => {
     });
     
     // Errors Added
-    let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'date_format', 'country']
+    let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'country']
     if(validator_field){
         validator_field.forEach(field => {
 
