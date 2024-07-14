@@ -14,6 +14,7 @@ const props = defineProps([
     'counter_value',
     'description', 
     'repater', 
+    'limit'
 ])
 const emit = defineEmits(['update:counter_value','limits-frequency-add', 'limits-frequency-remove'])
 const counter_number = ref(1);
@@ -21,7 +22,13 @@ function CounterInc(key){
     props.counter_value[key].limit ++;
 }
 function CounterDec(key){
-    props.counter_value[key].limit --;
+    if ( props.limit && props.counter_value[key].limit > props.limit ) {
+        props.counter_value[key].limit --;
+    }
+
+    if ( !props.limit ) {
+        props.counter_value[key].limit --;
+    }
 }
 
 </script>
