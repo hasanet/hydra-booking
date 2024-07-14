@@ -9,6 +9,7 @@ const props = defineProps([
     'subtitle',
     'placeholder',
     'description', 
+    'limit',
     'disabled', 
     'errors'
 ])
@@ -36,6 +37,7 @@ const emit = defineEmits(['update:modelValue'])
           :placeholder="placeholder"
           :disabled="disabled"
           :class="errors ? 'tfhb-required' : ''"
+          :min="limit"
         /> 
              
     </div> 

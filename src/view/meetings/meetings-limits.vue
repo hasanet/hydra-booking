@@ -151,6 +151,7 @@ const removeExtraFrequency = (key) => {
                     selected = "1"
                     :placeholder="$tfhb_trans['Use meeting length (default)']" 
                     width="50"  
+                    limit="1"
                 /> 
 
 

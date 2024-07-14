@@ -14,7 +14,6 @@ const Availability = reactive({
                 throw new Error('Network response was not ok');
             }
             const availabilityData = await response.json();
-            console.log(availabilityData.general_settings);
  
             this.availabilities = availabilityData.availability.reduce((acc, available) => {
                 acc[available.id] = available.title;
