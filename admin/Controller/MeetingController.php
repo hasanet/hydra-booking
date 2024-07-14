@@ -595,6 +595,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $meeting = new Meeting();
         $MeetingData = $meeting->get( $id );
 
+        // Integration
+        $integrations = array();
+
         if(empty($MeetingData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
@@ -634,6 +637,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // WooCommerce Product
         $woo_commerce = new  WooBooking();
         $wc_product =  $woo_commerce->getAllProductList();
+
+        // google  Meeting
+        if($_tfhb_integration_settings['google_calendar']){
+            $integrations['google_calendar_status'] = isset($_tfhb_integration_settings['google_calendar']['status']) ? $_tfhb_integration_settings['google_calendar']['status'] : 0; 
+        }
+        // Zoom Meeting
+        if($_tfhb_integration_settings['zoom_meeting']){
+            $integrations['zoom_meeting_status'] = isset($_tfhb_integration_settings['zoom_meeting']['status']) ? $_tfhb_integration_settings['zoom_meeting']['status'] : 0; 
+        }
 
         // Meeting Category
         $terms = get_terms(array(
@@ -755,6 +767,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'fluentcrm' => $fluentcrm_Data,
             'zohocrm' => $zohocrm_Data,
             'formsList' => $formsList,
+            'integrations' => $integrations,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);

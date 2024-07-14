@@ -17,6 +17,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    integrations: {
+        type: Object,
+        required: true
+    },
     meetingCategory: {
         type: Object,
         required: true
@@ -44,9 +48,12 @@ const tfhbValidateInput = (fieldName) => {
     }
 };
 
+// const google_calendar_status =  integrations.google_calendar_status == 1 ? 0 : 1;
+// const zoom_meeting_status = integrations.zoom_meeting_status == 1 ? 0 : 1;
+
 </script>
 
-<template>
+<template> 
     <div class="meeting-create-details tfhb-gap-24">
         <HbText  
             v-model="meeting.title" 
@@ -120,8 +127,8 @@ const tfhbValidateInput = (fieldName) => {
                         :selected = "1"
                         :placeholder="$tfhb_trans['Location']" 
                         :option = "[
-                            {name: 'Zoom', value: 'zoom', disable: true}, 
-                            {name: 'Google Meet', value: 'meet', disable: true}, 
+                            {name: 'Zoom', value: 'zoom', disable:  integrations.zoom_meeting_status}, 
+                            {name: 'Google Meet', value: 'meet', disable: integrations.google_calendar_status}, 
                             {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)',},
                             {name: 'In Person (Organizer Address)', value: 'In Person (Organizer Address)'},
                             {name: 'Attendee Phone Number', value: 'Attendee Phone Number'},
