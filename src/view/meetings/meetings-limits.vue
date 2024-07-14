@@ -98,6 +98,7 @@ const removeExtraFrequency = (key) => {
                 :counter_value="meeting.booking_frequency"
                 @limits-frequency-add="addExtraFrequency"
                 @limits-frequency-remove="removeExtraFrequency"
+                limit="1"
             />
 
             <!-- Meeting interval -->
@@ -141,6 +142,7 @@ const removeExtraFrequency = (key) => {
                 width="50"
                 :repater="false"
                 :counter_value="meeting.recurring_repeat"
+                limit="1"
             />
             
             <!-- For a maximum of --> 
@@ -151,6 +153,7 @@ const removeExtraFrequency = (key) => {
                     selected = "1"
                     :placeholder="$tfhb_trans['Use meeting length (default)']" 
                     width="50"  
+                    limit="1"
                 /> 
 
 
