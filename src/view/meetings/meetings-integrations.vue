@@ -315,6 +315,7 @@ const moduleFields = async (e) => {
             selected = "1"
             :placeholder="$tfhb_trans['Select FluentCRM List']"  
             :option = "meeting.fluentcrm.lists"
+            @tfhb-onchange="moduleFields"
         />
 
         <HbDropdown  

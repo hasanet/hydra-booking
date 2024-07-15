@@ -1051,7 +1051,44 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 }
             }
         }else{
-
+            $fields = array(
+                array(
+                    'name' => 'First Name',
+                    'value' => 'first_name'
+                ),
+                array(
+                    'name' => 'Last Name',
+                    'value' => 'last_name'
+                ),
+                array(
+                    'name' => 'Email',
+                    'value' => 'email'
+                ),
+                array(
+                    'name' => 'Phone',
+                    'value' => 'phone'
+                ),
+                array(
+                    'name' => 'Timezone',
+                    'value' => 'timezone'
+                ),
+                array(
+                    'name' => 'Address',
+                    'value' => 'address_line_1'
+                ),
+                array(
+                    'name' => 'Postal Code',
+                    'value' => 'postal_code'
+                ),
+                array(
+                    'name' => 'City',
+                    'value' => 'city'
+                ),
+                array(
+                    'name' => 'Country',
+                    'value' => 'country'
+                )
+            );
         }
         
         // Return response
