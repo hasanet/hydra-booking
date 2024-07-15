@@ -672,25 +672,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 				$mailchimp_Data['status'] = true;
                 $aud_lists = $this->get_audiance($api_key);
                 $mailchimp_Data['audience'] = $aud_lists;
-
-                $mail_fields = $this->get_mailchimp_fields($api_key);
-                if(!empty($mail_fields)){
-                    $data_fields = array(
-                        array(
-                            'name' => 'Email Address',
-                            'value' => 'EMAIL'
-                        )
-                    );
-                    $mail_fields = json_decode($mail_fields); 
-                    if(!empty($mail_fields->merge_fields)){
-                        foreach($mail_fields->merge_fields as $field){
-                            $data_fields[] = array(
-                                'name' => $field->name,
-                                'value' => $field->tag
-                            );
-                        }
-                    }
-                }
 			} else {
 				$mailchimp_Data['status'] = false;
 			}
@@ -786,7 +767,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'fluentcrm' => $fluentcrm_Data,
             'zohocrm' => $zohocrm_Data,
             'formsList' => $formsList,
-            'fields' => $data_fields,
             'integrations' => $integrations,
             'message' => 'Meeting Data',
         );
@@ -997,9 +977,96 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		return $resp;
 	}
 
-    /* Mailchimp Fields */
-	private function get_mailchimp_fields( $api_key = '', $path = '' ) {
+    /* Modules Fileds */
+    public function getZohoModulsFields($request){
+        $host = !empty($request['host_id']) ? $request['host_id'] : '';
+        $hook_type = !empty($request['webhook']) ? $request['webhook'] : '';
+        
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
 
+        if('ZohoCRM'==$hook_type){
+            $access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+            $access_token = $this->refreshToken($host);
+            // The Zoho CRM API URL to get all modules
+            $api_url = 'https://www.zohoapis.com/crm/v6/settings/fields?module='.$request['module'];
+
+            // Initialize cURL session
+            $ch = curl_init();
+            // Set the URL and other necessary options
+            curl_setopt($ch, CURLOPT_URL, $api_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Set the headers, including the authorization token
+            $headers = [
+                'Authorization: Zoho-oauthtoken ' . $access_token,
+                'Content-Type: application/json'
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // Execute the cURL session and fetch the response
+            $response = curl_exec($ch);
+
+            // Check for cURL errors
+            if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+            }
+            // Close the cURL session
+            curl_close($ch);
+
+            // Decode the JSON response
+            $response_data = json_decode($response, true);
+
+            $fields = [];
+            $response_data = json_decode($response, true);
+            if (isset($response_data['fields'])) {
+                // Loop through each field and print its name
+                foreach ($response_data['fields'] as $field) {
+                    $fields[] =  array(
+                        'name' =>  $field['field_label'],
+                        'value' => $field['api_name']
+                    );
+                }
+            }
+        }elseif('Mailchimp'==$hook_type){
+            $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+            $api_key = !empty($_tfhb_integration_settings['mailchimp']['key']) ? $_tfhb_integration_settings['mailchimp']['key'] : '';
+            $api_key = !empty($_tfhb_host_integration_settings['mailchimp']['key']) ? $_tfhb_host_integration_settings['mailchimp']['key'] : $api_key;
+
+            $mail_fields = $this->get_mailchimp_fields($api_key, $request['module']);
+            if(!empty($mail_fields)){
+                $fields = array(
+                    array(
+                        'name' => 'Email Address',
+                        'value' => 'EMAIL'
+                    )
+                );
+                $mail_fields = json_decode($mail_fields); 
+                if(!empty($mail_fields->merge_fields)){
+                    foreach($mail_fields->merge_fields as $field){
+                        $fields[] = array(
+                            'name' => $field->name,
+                            'value' => $field->tag
+                        );
+                    }
+                }
+            }
+        }else{
+
+        }
+        
+        // Return response
+        $data = array(
+            'status' => true, 
+            'fields' => $fields,  
+            'message' => 'Fields Data',
+        );
+        return rest_ensure_response($data);
+
+    }
+
+
+    /* Mailchimp Fields */
+	private function get_mailchimp_fields( $api_key = '', $module = '' ) {
 
 		$server_prefix = explode( "-", $api_key );
 
@@ -1008,9 +1075,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		}
 		$server_prefix = $server_prefix[1];
 
-		$url = "https://$server_prefix.api.mailchimp.com/3.0/lists/35ddee1e82/merge-fields";
-
-        
+		$url = "https://$server_prefix.api.mailchimp.com/3.0/lists/$module/merge-fields";
 		$curl = curl_init( $url );
 		curl_setopt( $curl, CURLOPT_URL, $url );
 		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
@@ -1028,69 +1093,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 		return $resp;
 	}
-
-    /* Zoho Modules Fileds */
-    public function getZohoModulsFields($request){
-        $host = !empty($request['host_id']) ? $request['host_id'] : '';
-
-        $_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
-
-		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
-
-        $access_token = $this->refreshToken($host);
-        
-        // The Zoho CRM API URL to get all modules
-		$api_url = 'https://www.zohoapis.com/crm/v6/settings/fields?module='.$request['module'];
-
-		// Initialize cURL session
-		$ch = curl_init();
-
-		// Set the URL and other necessary options
-		curl_setopt($ch, CURLOPT_URL, $api_url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		// Set the headers, including the authorization token
-		$headers = [
-			'Authorization: Zoho-oauthtoken ' . $access_token,
-			'Content-Type: application/json'
-		];
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-		// Execute the cURL session and fetch the response
-		$response = curl_exec($ch);
-
-		// Check for cURL errors
-		if (curl_errno($ch)) {
-			echo 'Error:' . curl_error($ch);
-		}
-
-		// Close the cURL session
-		curl_close($ch);
-
-		// Decode the JSON response
-		$response_data = json_decode($response, true);
-
-        $fields = [];
-        $response_data = json_decode($response, true);
-        if (isset($response_data['fields'])) {
-            // Loop through each field and print its name
-            foreach ($response_data['fields'] as $field) {
-                $fields[] =  array(
-                    'name' =>  $field['field_label'],
-                    'value' => $field['api_name']
-                );
-            }
-        }
-        
-        // Return response
-        $data = array(
-            'status' => true, 
-            'fields' => $fields,  
-            'message' => 'Fields Data',
-        );
-        return rest_ensure_response($data);
-
-    }
 
     // Refresh Token
 	public function refreshToken($host){

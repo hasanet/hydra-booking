@@ -21,7 +21,7 @@ const BookingDetailsPopup = ref(false);
 const BookingEditPopup = ref(false);
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
-const bookingView = ref('list');
+const bookingView = ref('calendar');
 
 const TfhbFormatMeetingLocation = (address) => {
     const meeting_address = JSON.parse(address)

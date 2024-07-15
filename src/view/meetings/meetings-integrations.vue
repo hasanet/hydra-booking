@@ -207,6 +207,7 @@ const moduleFields = async (e) => {
     if(e.value){
         let data = {
             host_id: props.meeting.host_id,
+            webhook: integrationsData.webhook,
             module: e.value
         };  
         try { 
@@ -228,7 +229,7 @@ const moduleFields = async (e) => {
 
 <template>
 
-{{ integrationsData  }}
+<!-- {{ integrationsData  }} -->
 <div class="meeting-create-details tfhb-gap-24">
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
@@ -302,6 +303,7 @@ const moduleFields = async (e) => {
             selected = "1"
             placeholder="Select Audience"  
             :option = "meeting.mailchimp.audience"
+            @tfhb-onchange="moduleFields"
         />
 
         <HbDropdown  
