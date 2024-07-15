@@ -36,6 +36,7 @@ const integrationsData = reactive({
     'bodys': [
         {
             'name': '',
+            'type': 'Settings',
             'value': ''
         }
     ],
@@ -103,6 +104,7 @@ const addNewIntegrations = (integration) => {
     integrationsData.bodys = [
         {
             'name': '',
+            'type': 'Settings',
             'value': ''
         }
     ];
@@ -156,6 +158,7 @@ const updateHookStatus = (e, data, key) => {
 const addBodyField = () => {
     integrationsData.bodys.push({
         name: '',
+        type: 'Settings',
         value: '',
     });
 }
@@ -164,42 +167,10 @@ const deleteBodyField = (key) => {
     integrationsData.bodys.splice(key, 1)
 }
 
-const attendeeShortcode = ref([
-    '{{attendee.full_name}}',
-    '{{attendee.email}}',
-    '{{attendee.phone}}',
-    '{{attendee.timezone}}',
-    '{{attendee.address}}',
-]);
-
-const hostShortcode = ref([
-    '{{host.name}}',
-    '{{host.email}}',
-    '{{host.timezone}}'
-]);
-
-const bookingShortcode = ref([
-    '{{booking.meeting_date}}',
-    '{{booking.start_time}}',
-    '{{booking.end_time}}',
-    '{{booking.duration}}',
-    '{{booking.hash}}',
-    '{{booking.meeting_location}}'
-])
-
-const copyShortcode = (value) => { 
-    //  copy to clipboard without navigator 
-    const textarea = document.createElement('textarea');
-    textarea.value = value;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'absolute';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    // Show a toast notification or perform any other action
-    toast.success(value + ' is Copied');
+const BodyValues = (key, value) => {
+    if(value!='tfhb_ct'){
+        integrationsData.bodys[key].value = value
+    }
 }
 
 // modules callback
@@ -229,7 +200,7 @@ const moduleFields = async (e) => {
 
 <template>
 
-<!-- {{ integrationsData  }} -->
+<!-- {{ integrationsData.bodys  }} -->
 <div class="meeting-create-details tfhb-gap-24">
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
@@ -362,7 +333,34 @@ const moduleFields = async (e) => {
                         placeholder="Select Tag"  
                         :option = "integrationsData.fields"
                     />
+                    <HbDropdown  
+                        v-show="body.type!='tfhb_ct'"
+                        v-model="body.type"
+                        required= "true"  
+                        width="50"
+                        selected = "1"
+                        :placeholder="$tfhb_trans['Enter Value']" 
+                        :option = "[
+                            {'name': '{{attendee.full_name}}', 'value': '{{attendee.full_name}}'}, 
+                            {'name': '{{attendee.email}}', 'value': '{{attendee.email}}'},
+                            {'name': '{{attendee.phone}}', 'value': '{{attendee.phone}}'},
+                            {'name': '{{attendee.timezone}}', 'value': '{{attendee.timezone}}'},
+                            {'name': '{{attendee.address}}', 'value': '{{attendee.address}}'},
+                            {'name': '{{booking.meeting_date}}', 'value': '{{booking.meeting_date}}'},
+                            {'name': '{{booking.start_time}}', 'value': '{{booking.start_time}}'},
+                            {'name': '{{booking.end_time}}', 'value': '{{booking.end_time}}'},
+                            {'name': '{{booking.duration}}', 'value': '{{booking.duration}}'},
+                            {'name': '{{booking.hash}}', 'value': '{{booking.hash}}'},
+                            {'name': '{{host.name}}', 'value': '{{host.name}}'},
+                            {'name': '{{host.email}}', 'value': '{{host.email}}'},
+                            {'name': '{{host.timezone}}', 'value': '{{host.timezone}}'},
+                            {'name': 'Custom', 'value': 'tfhb_ct'},
+                        ]"
+                        @tfhb_body_value_change="BodyValues"
+                        :single_key = "key"
+                    />
                     <HbText  
+                        v-show="body.type=='tfhb_ct'"
                         v-model="body.value"
                         required= "true"   
                         selected = "1"
@@ -378,27 +376,6 @@ const moduleFields = async (e) => {
                         <Icon name="X" size="20px" /> 
                     </button> 
                 </div>
-            </div>
-        </div>
-
-        <div class="processing-data-shortcode" v-if="'FluentCRM'==integrationsData.webhook">
-            <p>{{ $tfhb_trans['Attendee Data'] }}</p>
-            <div class="tfhb-mail-shortcode tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
-                <span class="tfhb-mail-shortcode-badge"  v-for="(value, key) in attendeeShortcode" :key="key" @click="copyShortcode(value)">{{ value}}</span>
-            </div>
-        </div>
-
-        <div class="processing-data-shortcode" v-if="'FluentCRM'==integrationsData.webhook">
-            <p>{{ $tfhb_trans['Booking Data'] }}</p>
-            <div class="tfhb-mail-shortcode tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
-                <span class="tfhb-mail-shortcode-badge"  v-for="(value, key) in bookingShortcode" :key="key" @click="copyShortcode(value)">{{ value}}</span>
-            </div>
-        </div>
-
-        <div class="processing-data-shortcode" v-if="'FluentCRM'==integrationsData.webhook">
-            <p>{{ $tfhb_trans['Host Data'] }}</p>
-            <div class="tfhb-mail-shortcode tfhb-flexbox tfhb-gap-8 tfhb-justify-normal"> 
-                <span class="tfhb-mail-shortcode-badge"  v-for="(value, key) in hostShortcode" :key="key" @click="copyShortcode(value)">{{ value}}</span>
             </div>
         </div>
 
