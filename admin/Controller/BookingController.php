@@ -62,6 +62,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         ));  
        
     }
+
+   
     // Booking List
     public function getBookingsData() { 
 

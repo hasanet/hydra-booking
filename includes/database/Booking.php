@@ -143,6 +143,7 @@ class Booking {
         $meeting_table = $wpdb->prefix . 'tfhb_meetings';
         $host_table = $wpdb->prefix . 'tfhb_hosts';
 
+ 
         if(is_array($where) && $join==false){
             $sql = "SELECT * FROM $table_name WHERE ";
             $i = 0;

@@ -1,5 +1,8 @@
 <?php
 namespace HydraBooking\Hooks;
+
+// Use
+use HydraBooking\DB\Meeting;
 class MailHooks{
     // Approved
     // Pending
@@ -11,11 +14,17 @@ class MailHooks{
         add_action('hydra_booking/after_booking_schedule', [$this, 'pushBookingToscheduled'], 10, 1);
     }
 
+    public function getMeetingData($meeting_id){
+
+        $meeting = new Meeting();
+        $meeting_data = $meeting->get($meeting_id);
+       return get_post_meta( $meeting_data->post_id, '__tfhb_meeting_opt', true );
+    }
+
     // If booking Status is Complted
     public function pushBookingToCompleted($booking){
-        $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
-        $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
-
+        $Meeting_meta = $this->getMeetingData($booking->meeting_id);
+        $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : ''; 
         if(!empty($_tfhb_notification_settings)){
 
             // Host Confirmation Email, If Settings Enable for Host Confirmation
@@ -78,8 +87,10 @@ class MailHooks{
 
     // If booking Status is Cancel
     public function pushBookingToCanceled($booking){
-        $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
+        $Meeting_meta = $this->getMeetingData($booking->meeting_id);
         $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
+
+     
 
         if(!empty($_tfhb_notification_settings)){
 

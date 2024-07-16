@@ -700,16 +700,20 @@ class HydraBookingShortcode {
             }
         } 
         
- 
+      
         // Load Meeting Confirmation Template 
         $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
 
  
 
-        $single_booking_meta = $booking->get($result['insert_id'], false);
-
+        $single_booking_meta = $booking->get(
+            array('id' => $result['insert_id']),
+            false,
+        ); 
         // After Booking Hooks
         do_action('hydra_booking/after_booking_confirmation', $single_booking_meta);
+
+        
 
         // Single Booking & Mail Notification, Google Calendar 
         do_action('hydra_booking/after_booking_completed', $single_booking_meta);
@@ -850,9 +854,11 @@ class HydraBookingShortcode {
             } 
              
         }else{
+          
              // Update the Booking
-            $calendar_data = apply_filters('after_booking_completed_calendar_data', $data);
-        
+            $calendar_data = apply_filters('after_booking_completed_calendar_data', [], $data);
+         
+         
             $booking_meta = array(
                 'booking_id' => $data->id,
                 'meta_key' => 'booking_calendar',

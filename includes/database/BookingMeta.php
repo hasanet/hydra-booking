@@ -51,11 +51,7 @@ class BookingMeta {
      */
     public function add($request) {
          
-        global $wpdb;
-        echo "<pre>";
-        print_r($request);
-        echo "</pre>";
-
+        global $wpdb; 
         $table_name = $wpdb->prefix . $this->table;
 
         // insert availability
