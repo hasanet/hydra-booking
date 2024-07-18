@@ -168,6 +168,11 @@
         table{
             border: 0px solid;
             .fc-scrollgrid-section-header{
+                .fc-scroller-harness{
+                    .fc-scroller{
+                        overflow: hidden !important;
+                    }
+                }
                 th{
                     border: 0px solid;
                     .fc-col-header{
