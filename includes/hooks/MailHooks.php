@@ -3,6 +3,7 @@ namespace HydraBooking\Hooks;
 
 // Use
 use HydraBooking\DB\Meeting;
+
 class MailHooks{
     // Approved
     // Pending

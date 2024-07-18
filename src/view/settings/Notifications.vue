@@ -96,6 +96,24 @@ const Notification = reactive(  {
      }
 });
 
+// Host Booking Confirm PopUp
+const hostBookingConfirmPopUp = ref(false);
+// Host Booking Cencel PopUp
+const hostBookingCencelPopUp = ref(false);
+// Host Booking Reschedule PopUp
+const hostBookingReschedulePopUp = ref(false);
+// Host Booking Reminder PopUp
+const hostBookingReminderPopUp = ref(false);
+
+// Attendee Booking Confirm PopUp
+const attendeeBookingConfirmPopUp = ref(false);
+// Attendee Booking Cancel PopUp
+const attendeeBookingCancelPopUp = ref(false);
+// Attendee Booking Reschedule PopUp
+const attendeeBookingReschedulePopUp = ref(false);
+// Attendee Booking Reminder PopUp
+const attendeeBookingReminderPopUp = ref(false);
+
 
 // Update Notification 
 
@@ -188,26 +206,26 @@ onBeforeMount(() => {
  
                 <!-- Single Notification  -->
                 <MailNotifications 
-                    title="Send Email to Host" 
+                    title="Send Email to Host for Booking Confirmation" 
                    :label="$tfhb_trans['Booking Confirmation']" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_confirmation"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="hostBookingConfirmPopUp"
+                    @popup-open-control="hostBookingConfirmPopUp = true"
+                    @popup-close-control="hostBookingConfirmPopUp = false"
                 /> 
                 <!-- Single Integrations  -->
 
 
                 <!-- Single Notification  -->
                 <MailNotifications 
-                    title="Send Email to Host" 
+                    title="Send Email to Host for Booking Cancels" 
                     :label="$tfhb_trans['Booking Cancel']" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_cancel"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="hostBookingCencelPopUp"
+                    @popup-open-control="hostBookingCencelPopUp = true"
+                    @popup-close-control="hostBookingCencelPopUp = false"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -217,9 +235,9 @@ onBeforeMount(() => {
                     :label="$tfhb_trans['Booking Reschedule']" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_reschedule"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="hostBookingReschedulePopUp"
+                    @popup-open-control="hostBookingReschedulePopUp = true"
+                    @popup-close-control="hostBookingReschedulePopUp = false"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -229,9 +247,9 @@ onBeforeMount(() => {
                     :label="$tfhb_trans['Booking Reminder']" 
                     @update-notification="UpdateNotification"
                     :data="Notification.host.booking_reminder"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="hostBookingReminderPopUp"
+                    @popup-open-control="hostBookingReminderPopUp = true"
+                    @popup-close-control="hostBookingReminderPopUp = false"
                 /> 
                 <!-- Single Integrations  -->
  
@@ -245,9 +263,9 @@ onBeforeMount(() => {
                     :label="$tfhb_trans['Booking Confirmation']" 
                     @update-notification="UpdateNotification"
                     :data="Notification.attendee.booking_confirmation"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="attendeeBookingConfirmPopUp"
+                    @popup-open-control="attendeeBookingConfirmPopUp = true"
+                    @popup-close-control="attendeeBookingConfirmPopUp = false"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -258,9 +276,9 @@ onBeforeMount(() => {
                     :label="$tfhb_trans['Booking Cancel']"  
                     @update-notification="UpdateNotification"
                     :data="Notification.attendee.booking_cancel"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="attendeeBookingCancelPopUp"
+                    @popup-open-control="attendeeBookingCancelPopUp = true"
+                    @popup-close-control="attendeeBookingCancelPopUp = false"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -269,9 +287,9 @@ onBeforeMount(() => {
                     title="Send Email to Attendee" 
                     :label="$tfhb_trans['Booking Reschedule']"
                     :data="Notification.attendee.booking_reschedule"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="attendeeBookingReschedulePopUp"
+                    @popup-open-control="attendeeBookingReschedulePopUp = true"
+                    @popup-close-control="attendeeBookingReschedulePopUp = false"
                 /> 
                 <!-- Single Integrations  -->
 
@@ -281,9 +299,9 @@ onBeforeMount(() => {
                     :label="$tfhb_trans['Booking Reminder']" 
                     @update-notification="UpdateNotification"
                     :data="Notification.attendee.booking_reminder"  
-                    :ispopup="popup"
-                    @popup-open-control="isPopupOpen"
-                    @popup-close-control="isPopupClose"
+                    :ispopup="attendeeBookingReminderPopUp"
+                    @popup-open-control="attendeeBookingReminderPopUp = true"
+                    @popup-close-control="attendeeBookingReminderPopUp = false"
                 /> 
                 <!-- Single Integrations  -->
  

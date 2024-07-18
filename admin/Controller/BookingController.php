@@ -428,7 +428,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Check if user is already a booking
         $booking = new Booking();
         // Insert booking
-        $singlebooking = $booking->get($booking_id);
+        $singlebooking = $booking->get(
+            array('id' => $booking_id), 
+            false, 
+            true
+        );
 
         
 
@@ -478,55 +482,59 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Get All Booking Data.
         $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
+        // $date_time = new DateTimeController( $selected_time_zone );
         $date_time = new DateTimeController( $selected_time_zone );
+        $data_time = $date_time->getAvailableTimeData($meeting_id, $selected_date, $selected_time_zone, $selected_time_format);
  
 
-        $disabled_times = array();
-        foreach($bookings as $booking){
-            $start_time = $booking->start_time;
-            $end_time = $booking->end_time;
-            $time_zone = $booking->attendee_time_zone; 
+    
+
+        // $disabled_times = array();
+        // foreach($bookings as $booking){
+        //     $start_time = $booking->start_time;
+        //     $end_time = $booking->end_time;
+        //     $time_zone = $booking->attendee_time_zone; 
  
-            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
-            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
+        //     $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
+        //     $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
 
-            $disabled_times[] = array(
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            );
+        //     $disabled_times[] = array(
+        //         'start_time' => $start_time,
+        //         'end_time' => $end_time,
+        //     );
 
-        }
+        // }
 
-        // Time Slot
-        $time_slots_data = array();
-        // get Selected Date day
-        $selected_day = date('l', strtotime($selected_date));
+        // // Time Slot
+        // $time_slots_data = array();
+        // // get Selected Date day
+        // $selected_day = date('l', strtotime($selected_date));
         
-        // only get selected day time slot in single array using array finter
-        $selected_available_time = array();
-        $selected_available = array();
-        foreach ($time_slots as $single) {
-            if($single['day'] == $selected_day){
-                $selected_available = $single;
-            }
-        }
-        $times = $selected_available ? $selected_available['times'] : array();
-        foreach($times as $key => $value){
-            $start_time = $value['start']; 
-            $end_time = $value['end'];
-            $generatedSlots = $this->generateTimeSlots($start_time, $end_time, $duration, $meeting_interval, $buffer_time_before, $buffer_time_after, $selected_date, $selected_time_format, $selected_time_zone);
-            $time_slots_data = array_merge($time_slots_data, $generatedSlots);
+        // // only get selected day time slot in single array using array finter
+        // $selected_available_time = array();
+        // $selected_available = array();
+        // foreach ($time_slots as $single) {
+        //     if($single['day'] == $selected_day){
+        //         $selected_available = $single;
+        //     }
+        // }
+        // $times = $selected_available ? $selected_available['times'] : array();
+        // foreach($times as $key => $value){
+        //     $start_time = $value['start']; 
+        //     $end_time = $value['end'];
+        //     $generatedSlots = $this->generateTimeSlots($start_time, $end_time, $duration, $meeting_interval, $buffer_time_before, $buffer_time_after, $selected_date, $selected_time_format, $selected_time_zone);
+        //     $time_slots_data = array_merge($time_slots_data, $generatedSlots);
 
-        }
-        // if date already exists remove that array
-        $time_slots_data = array_filter($time_slots_data, function($time_slot) use ($disabled_times) {
-            foreach ($disabled_times as $disabled_time) {
-                if ($time_slot['start'] === $disabled_time['start_time'] && $time_slot['end'] === $disabled_time['end_time']) {
-                    return false;
-                }
-            }
-            return true;
-        }); 
+        // }
+        // // if date already exists remove that array
+        // $time_slots_data = array_filter($time_slots_data, function($time_slot) use ($disabled_times) {
+        //     foreach ($disabled_times as $disabled_time) {
+        //         if ($time_slot['start'] === $disabled_time['start_time'] && $time_slot['end'] === $disabled_time['end_time']) {
+        //             return false;
+        //         }
+        //     }
+        //     return true;
+        // }); 
 
         $singlebooking->times = [
             'start' => $singlebooking->start_time,
@@ -536,7 +544,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $data = array(
             'status' => true, 
             'booking' => $singlebooking,  
-            'times'  => $time_slots_data,
+            'times'  => $data_time,
             'message' => 'Booking Data',
         );
         return rest_ensure_response($data);

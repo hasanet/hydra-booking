@@ -29,7 +29,7 @@ class GoogleCalendar{
 
         // add_action('hydra_booking/after_booking_completed', array($this, 'InsertGoogleCalender'));
         // add_action('hydra_booking/after_booking_schedule', array($this, 'InsertGoogleCalender'));
-        add_filter('after_booking_completed_calendar_data', array($this, 'InsertGoogleCalender'));
+        add_filter('after_booking_completed_calendar_data', array($this, 'InsertGoogleCalender'), 10, 2);
         add_filter('hydra_booking_calendar_add_new_attendee', array($this, 'addAttendeeGoogleCalender'), 10, 2);
     }
 
