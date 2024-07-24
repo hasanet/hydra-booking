@@ -50,8 +50,17 @@ defined( 'ABSPATH' ) || exit;
                 </div>
                 <!--date stored in this format  2024-05-24  9:00pm-9:45pm, Saturday, April 25 -->
                 <?php  
+
+                    $meeting_dates = explode(',', $booking['meeting_dates']);
+                                                
+                    $date_strings = '';
+                    foreach( $meeting_dates as $key => $date) {
                     
-                    echo  !empty($booking['start_time']) ?  ''.esc_html($booking['start_time']).' - '.esc_html($booking['end_time']).', '.esc_html(date('l, F j', strtotime($booking['meeting_dates']))).'' : '' 
+                        $date_strings .= date('l, F j', strtotime($date));
+                        $date_strings .= ', ';
+                    }
+                    
+                    echo  !empty($booking['start_time']) ?  ''.esc_html($booking['start_time']).' - '.esc_html($booking['end_time']).', '.esc_html($date_strings).'' : '' 
                 ?>
             </li>
             <?php } ?>

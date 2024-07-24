@@ -13,6 +13,10 @@ import { toast } from "vue3-toastify";
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
 
+const user = tfhb_core_apps.user || '';
+const user_id = user.id || '';
+const user_role = user.role[0] || '';
+
 const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting", "add-overrides-time", "remove-overrides-time"]); 
 const props = defineProps({
     meetingId: {
@@ -30,9 +34,15 @@ const props = defineProps({
 
 });
 
+
 // Fetch Single Availability while Schdeule on change 
 const Settings_avalibility = ref();
 const fetchAvailabilitySettings = async (availability_id) => {
+    if('tfhb_host' == user_role && props.meeting.host_id == ''){
+        props.meeting.host_id = user_id
+    }
+    
+
     let data = {
         host_id: props.meeting.host_id,
         availability_id: availability_id
@@ -133,6 +143,11 @@ const fetchSingleAvailabilitySettings = async (host_id, availability_id) => {
 onBeforeMount(() => { 
     Availability.getGeneralSettings();
     Host.fetchHosts().then(() => {
+        if('tfhb_host' == user_role && props.meeting.host_id == ''){
+           
+            props.meeting.host_id = user_id
+            alert(props.meeting.host_id);
+        }
         if(props.meeting.host_id!=0){
             fetchHostAvailability(props.meeting.host_id);
             fetchSingleAvailabilitySettings(props.meeting.host_id, props.meeting.availability_id);
@@ -274,7 +289,7 @@ const isobjectempty = (data) => {
 </script>
 
 <template>
-
+    
     <div class="meeting-create-details tfhb-gap-24">
         <div class="tfhb-meeting-range tfhb-full-width">
             <div class="tfhb-admin-title" >
@@ -335,6 +350,7 @@ const isobjectempty = (data) => {
         <!-- Select Host -->
 
         <HbDropdown 
+            v-if="'tfhb_host' != user_role"
             v-model="meeting.host_id"
             required= "true" 
             :label="$tfhb_trans['Select Host']"  
@@ -347,7 +363,7 @@ const isobjectempty = (data) => {
             @tfhb-onchange="Host_Avalibility_Callback"
         />
 
-        <div class="tfhb-add-moreinfo tfhb-full-width" v-if="isobjectempty(Host.hosts)">
+        <div class="tfhb-add-moreinfo tfhb-full-width" v-if="isobjectempty(Host.hosts) && 'tfhb_host' != user_role">
             <router-link :to="'/hosts/list'" exact :class="'tfhb-btn tfhb-inline-flex tfhb-gap-8 tfhb-justify-normal tfhb-height-auto'">
                 <Icon name="PlusCircle" :width="20"/>
                 Create Host

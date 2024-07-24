@@ -28,7 +28,11 @@ $_tfhb_host_integration_settings = get_user_meta($host['host_id'], '_tfhb_host_i
 $stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key']) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripePublicKey;
 $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id']) ? $_tfhb_host_integration_settings['paypal']['client_id'] : $paypalPublicKey;
 
+// echo "<pre>";
+// echo print_r($meeting);
+// echo "</pre>";
 ?> 
+
 <div class="tfhb-meeting-info">
     <div class="hidden-field">
         <input type="hidden" id="meeting_id" name="meeting_id" value="<?php echo $meeting['id']; ?>">
@@ -108,6 +112,8 @@ $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id'
             ?>
             <?php 
                 if(!empty($meeting['payment_status']) && true == $meeting['payment_status']) {  
+
+
                     $price = !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : 'Free';
                     echo '<li class="tfhb-flexbox tfhb-gap-8">
                             <input type="hidden" id="meeting_price" name="meeting_price" value="'.esc_attr($price).'">
