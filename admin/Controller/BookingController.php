@@ -96,14 +96,19 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
                 'host_id' => $booking->host_id,
             ];
         }, $bookingsList);
-
+        
         $booking_array = array();
         foreach ($extractedBookings as $book) {
+
+            // Convert start and end times to 24-hour format
+            $start_time_24hr  = date("H:i", strtotime($book['start_time']));
+            $end_time_24hr  = date("H:i", strtotime($book['end_time']));
+            
             $booking_array[] = array(
                 'booking_id' => $book['id'],
                 'title' => $book['title'],
-                'start' => $book['meeting_dates'].'T'.$book['start_time'],
-                'end' => $book['meeting_dates'].'T'.$book['end_time'],
+                'start' => $book['meeting_dates'].'T'.$start_time_24hr,
+                'end' => $book['meeting_dates'].'T'.$end_time_24hr,
                 'status' => $book['status'],
                 'booking_date' => $book['meeting_dates'],
                 'booking_time' => $book['start_time'].' - '.$book['end_time'],
@@ -399,11 +404,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         $booking_array = array();
         foreach ($extractedBookings as $book) {
+            // Convert start and end times to 24-hour format
+            $start_time_24hr  = date("H:i", strtotime($book['start_time']));
+            $end_time_24hr  = date("H:i", strtotime($book['end_time']));
+
             $booking_array[] = array(
                 'booking_id' => $book['id'],
                 'title' => $book['title'],
-                'start' => $book['meeting_dates'].'T'.$book['start_time'],
-                'end' => $book['meeting_dates'].'T'.$book['end_time'],
+                'start' => $book['meeting_dates'].'T'.$start_time_24hr,
+                'end' => $book['meeting_dates'].'T'.$end_time_24hr,
                 'status' => $book['status'],
                 'booking_date' => $book['meeting_dates'],
                 'booking_time' => $book['start_time'].' - '.$book['end_time'],
@@ -599,11 +608,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         $booking_array = array();
         foreach ($extractedBookings as $book) {
+            // Convert start and end times to 24-hour format
+            $start_time_24hr  = date("H:i", strtotime($book['start_time']));
+            $end_time_24hr  = date("H:i", strtotime($book['end_time']));
+
             $booking_array[] = array(
                 'booking_id' => $book['id'],
                 'title' => $book['title'],
-                'start' => $book['meeting_dates'].'T'.$book['start_time'],
-                'end' => $book['meeting_dates'].'T'.$book['end_time'],
+                'start' => $book['meeting_dates'].'T'.$start_time_24hr,
+                'end' => $book['meeting_dates'].'T'.$end_time_24hr,
                 'status' => $book['status'],
                 'booking_date' => $book['meeting_dates'],
                 'booking_time' => $book['start_time'].' - '.$book['end_time'],
@@ -612,8 +625,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
 
         // Single Booking 
-        $single_booking_meta = $booking->get(['id'=>$request['id']],false, true);
-
+        // $single_booking_meta = $booking->get(['id'=>$request['id']],false, true);
+        $single_booking_meta = $booking->get($request['id'], false, false);
         if("approved"==$request['status']){
             do_action('hydra_booking/after_booking_completed', $single_booking_meta);
         }

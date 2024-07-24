@@ -16,10 +16,9 @@ class MailHooks{
     }
 
     public function getMeetingData($meeting_id){
-
         $meeting = new Meeting();
         $meeting_data = $meeting->get($meeting_id);
-       return get_post_meta( $meeting_data->post_id, '__tfhb_meeting_opt', true );
+        return get_post_meta( $meeting_data->post_id, '__tfhb_meeting_opt', true );
     }
 
     // If booking Status is Complted
