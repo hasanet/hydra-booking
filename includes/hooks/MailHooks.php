@@ -2,7 +2,9 @@
 namespace HydraBooking\Hooks;
 
 // Use
-use HydraBooking\DB\Meeting;
+use HydraBooking\DB\Meeting;   
+use HydraBooking\DB\Host;
+
 
 class MailHooks{
     // Approved
@@ -15,16 +17,30 @@ class MailHooks{
         add_action('hydra_booking/after_booking_schedule', [$this, 'pushBookingToscheduled'], 10, 1);
     }
 
+    // Get Meeting Data
     public function getMeetingData($meeting_id){
         $meeting = new Meeting();
         $meeting_data = $meeting->get($meeting_id);
         return get_post_meta( $meeting_data->post_id, '__tfhb_meeting_opt', true );
     }
 
+    // Get Host Data
+    public function getHostData($host_id){
+        $host = new Host();
+        $host_data = $host->get($host_id);
+        return $host_data;
+
+    }
+
     // If booking Status is Complted
     public function pushBookingToCompleted($booking){
+       
+        
         $Meeting_meta = $this->getMeetingData($booking->meeting_id);
-        $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : ''; 
+        $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
+        $hostData = $this->getHostData($booking->host_id);
+       
+        
         if(!empty($_tfhb_notification_settings)){
 
             // Host Confirmation Email, If Settings Enable for Host Confirmation
@@ -45,7 +61,7 @@ class MailHooks{
                 $body = wp_kses_post($this->email_body_open().$finalbody.$this->email_body_close()) ;
 
                 // Host Email
-                $mailto = !empty($booking->host_email) ? $booking->host_email : '';
+                $mailto = !empty($hostData->email) ? $hostData->email : '';
 
                 $headers = [
                     'Reply-To: ' . $replyTo
@@ -87,15 +103,19 @@ class MailHooks{
 
     // If booking Status is Cancel
     public function pushBookingToCanceled($booking){
+
         $Meeting_meta = $this->getMeetingData($booking->meeting_id);
         $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
-
-     
-
+        $hostData = $this->getHostData($booking->host_id);
+       
+        // tfhb_print_r($hostData);
         if(!empty($_tfhb_notification_settings)){
+      
 
             // Host Canceled Email, If Settings Enable for Host Canceled
             if(!empty($_tfhb_notification_settings['host']['booking_cancel']['status'])){
+
+                
                 // From Email
                 $replyTo = !empty($_tfhb_notification_settings['host']['booking_cancel']['form']) ? $_tfhb_notification_settings['host']['booking_cancel']['form'] : get_option('admin_email');
 
@@ -112,12 +132,11 @@ class MailHooks{
                 $body = wp_kses_post($this->email_body_open().$finalbody.$this->email_body_close()) ;
 
                 // Host Email
-                $mailto = !empty($booking->host_email) ? $booking->host_email : '';
+                $mailto = !empty($hostData->email) ? $hostData->email : '';
 
                 $headers = [
                     'Reply-To: ' . $replyTo
                 ];
-
                 Mailer::send($mailto, $subject, $body, $headers);
             }
 
@@ -154,8 +173,13 @@ class MailHooks{
 
     // If booking Status is ReSchedule
     public function pushBookingToscheduled($booking){
-        $Meeting_meta = get_post_meta( $booking->post_id, '__tfhb_meeting_opt', true );
+       
+
+
+        $Meeting_meta = $this->getMeetingData($booking->meeting_id);
         $_tfhb_notification_settings = !empty($Meeting_meta['notification']) ? $Meeting_meta['notification'] : '';
+        $hostData = $this->getHostData($booking->host_id);
+       
 
         if(!empty($_tfhb_notification_settings)){
 
@@ -177,7 +201,7 @@ class MailHooks{
                 $body = wp_kses_post($this->email_body_open().$finalbody.$this->email_body_close()) ;
 
                 // Host Email
-                $mailto = !empty($booking->host_email) ? $booking->host_email : '';
+                $mailto = !empty($hostData->host_email) ? $hostData->host_email : '';
 
                 $headers = [
                     'Reply-To: ' . $replyTo
