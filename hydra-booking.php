@@ -30,6 +30,13 @@ class THB_INIT{
             require_once THB_PATH . '/vendor/autoload.php'; 
         }
 
+        // Helper Function
+        // Load Vendor Auto Load
+        if(file_exists(THB_PATH . '/includes/helper/helper-functions.php')) {
+           
+            require_once THB_PATH . '/includes/helper/helper-functions.php'; 
+        }
+
         // Activation Hooks
         new HydraBooking\Hooks\ActivationHooks();  
 

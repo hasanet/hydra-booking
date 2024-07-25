@@ -65,10 +65,10 @@
 			let date = new Date();
 			let year = date.getFullYear();
 			let month = date.getMonth();
-
 		
 			const tfhb_calendar_navs = $this.find(".tfhb-calendar-navigation span");
 
+			console.log(calenderData)
 
 			// Array of month names
 			const months = [
@@ -222,7 +222,7 @@
 				}); 
 				
 				
-				tfhb_from_submission($this, preloader, InformationData);
+				tfhb_from_submission($this, preloader, InformationData, calenderData);
 			});
 			document.addEventListener( 'wpcf7mailsent', function( event ) {
 				var data = event.detail.formData;
@@ -232,7 +232,7 @@
 					InformationData[key] = value;
 				}); 
 				
-				tfhb_from_submission($this, preloader, InformationData);
+				tfhb_from_submission($this, preloader, InformationData, calenderData);
 			});
 			// WPForms Form Submission
 			// $(document).on('wpformsAjaxSubmitSuccess', function(event ) { 
@@ -256,7 +256,7 @@
 				}); 
 				
 				
-				tfhb_from_submission($this, preloader, InformationData);
+				tfhb_from_submission($this, preloader, InformationData, calenderData);
 			});
 
 			// Fluent Forms Form Submission
@@ -268,7 +268,7 @@
 				}); 
 				
 				
-				tfhb_from_submission($this, preloader, InformationData);
+				tfhb_from_submission($this, preloader, InformationData, calenderData);
 			});
 
 			// gravity Forms Form Submission
@@ -280,7 +280,7 @@
 		});
 
 
-		function tfhb_from_submission($this, preloader, InformationData){
+		function tfhb_from_submission($this, preloader, InformationData, calenderData){
 			
 			$this.find('.tfhb-notice').hide();
 			$this.find('.tfhb-meeting-card').append(preloader);
@@ -309,29 +309,35 @@
 		   var paypal_public_key = $this.find("#paypal_public_key").val();
 		   var payment_currency = $this.find("#payment_currency").val();
 
-		   if("stripe_payment"!=payment_type && "paypal_payment"!=payment_type){
-			   var data  = {
-				action: 'tfhb_meeting_form_submit',
-				nonce: tfhb_app_booking.nonce,
-				meeting_id: meeting_id,
-				host_id: host_id,
-				meeting_dates: meeting_dates,
-				meeting_duration: meeting_duration,
-				meeting_time_start: meeting_time_start,
-				meeting_time_end: meeting_time_end,
-				booking_hash: booking_hash,
-				action_type: action_type,
-				recurring_maximum: recurring_maximum,
-				attendee_time_zone: attendee_time_zone,
-				tfhb_time_format: tfhb_time_format,
-				payment_type: payment_type,
-				meeting_price: meeting_price,
-				payment_amount: payment_amount,
-				stripe_public_key: stripe_public_key,
-				payment_currency: payment_currency,
-			}; 
-			// Push object information data to data
-			data = Object.assign(InformationData, data); 
+		//    Payment Status
+		   var payment_status = calenderData.payment_status;
+
+
+		   var data  = {
+			action: 'tfhb_meeting_form_submit',
+			nonce: tfhb_app_booking.nonce,
+			meeting_id: meeting_id,
+			host_id: host_id,
+			meeting_dates: meeting_dates,
+			meeting_duration: meeting_duration,
+			meeting_time_start: meeting_time_start,
+			meeting_time_end: meeting_time_end,
+			booking_hash: booking_hash,
+			action_type: action_type,
+			recurring_maximum: recurring_maximum,
+			attendee_time_zone: attendee_time_zone,
+			tfhb_time_format: tfhb_time_format,
+			payment_type: payment_type,
+			meeting_price: meeting_price,
+			payment_amount: payment_amount,
+			stripe_public_key: stripe_public_key,
+			payment_currency: payment_currency,
+		}; 
+		// Push object information data to data
+		data = Object.assign(InformationData, data); 
+
+		   if(payment_status != 1 || ( payment_status == 1 && "woo_payment"==payment_type)){
+			  
 			 
 			   $.ajax({
 				   url: tfhb_app_booking.ajax_url, 
@@ -374,27 +380,19 @@
 			   });
 		   }
 
-		   if("stripe_payment"==payment_type){
+		   if("stripe_payment"==payment_type && payment_status == 1){
+				
 			   var handler = StripeCheckout.configure({
 			   key: stripe_public_key, // your publisher key id
 			   locale: 'auto',
 			   token: function (token) {
+					data = Object.assign(data, {
+						tokenId: token.id,
+					});
 				   jQuery.ajax({
 					   url: tfhb_app_booking.ajax_url,
 					   method: 'POST',
-					   data: {
-						   tokenId: token.id, 
-						   action: 'tfhb_meeting_form_submit',
-						   nonce: tfhb_app_booking.nonce,
-						   meeting_id: $this.find("#meeting_id").val(),
-						   host_id: $this.find("#host_id").val(),
-						   meeting_dates: $this.find("#meeting_dates").val(),
-						   meeting_time_start: $this.find("#meeting_time_start").val(),
-						   meeting_time_end: $this.find("#meeting_time_end").val(),
-						   name: $this.find("#name").val(),
-						   email: $this.find("#email").val(),
-						   address: $this.find("#address").val(),
-					   },
+					   data: data,
 					   dataType: "json",
 					   success: function( response ) {
 						   if(response.success){
@@ -436,7 +434,7 @@
 			   });
 		   }
 
-		   if("paypal_payment"==payment_type){
+		   if("paypal_payment"==payment_type && payment_status == 1){
 			   // 'AQyFCpzKPySeYI-n5FvZZ91zosqIEjguVDGrkUVFsW74o89Rj620Tol_4n-4JnaB_Fu8WojSvlSpzifa'
 			   $this.find('.tfhb-confirmation-button').empty();
 			   paypal.Button.render({

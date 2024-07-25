@@ -85,8 +85,8 @@ const questions_data =  reactive({});
         </h2> 
         <p>{{ $tfhb_trans['Date and Time Settings'] }}</p>
     </div>
-    <div class="tfhb-admin-card-box  tfhb-gap-24 tfhb-m-0"  >   
-        <div v-if="hostsSettings.others_information.enable_others_information && hostsSettings.others_information.fields !=''" class="tfhb-host-info-builder-wrap  tfhb-mb-16" >
+    <div v-if="hostsSettings.others_information.enable_others_information "  class="tfhb-admin-card-box  tfhb-gap-24 tfhb-m-0"  >   
+        <div v-if="hostsSettings.others_information.fields !=''"  class="tfhb-host-info-builder-wrap  tfhb-mb-16" >
             <HbQuestion 
                 :question_value="hostsSettings.others_information.fields"
                 :skip_remove="-1"

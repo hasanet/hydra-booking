@@ -2,16 +2,11 @@
 namespace HydraBooking\App\Shortcode;
 // use Classes
 use HydraBooking\DB\Meeting;
-use HydraBooking\DB\Availability; 
 use HydraBooking\Admin\Controller\DateTimeController;
 use HydraBooking\DB\Booking;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
-use HydraBooking\Admin\Controller\CountryController;
-use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
-use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
-use HydraBooking\Admin\Controller\ScheduleController;
-use HydraBooking\Services\Integrations\AppleCalendar\AppleCalendar;
+
 use HydraBooking\DB\BookingMeta;
 
  
@@ -39,6 +34,19 @@ class HydraBookingShortcode {
 
         //
         add_action('hydra_booking/after_booking_completed', array($this, 'insert_calender_after_booking_completed'));
+
+        // $this->tfhdb_wp_mail_sent();
+    }
+
+    //Test Wp Mail Sent
+    public function tfhdb_wp_mail_sent(){
+        $to = 'sydurrahmant1@gmail.com';
+        $subject = "Hello World";
+        $body = "Allah Mohan";
+        $headers = [];
+        $attachments = [];
+
+        wp_mail($to, $subject, $body, $headers, $attachments);
     }
 
     public function hydra_booking_shortcode($atts) { 
@@ -182,6 +190,7 @@ class HydraBookingShortcode {
         if(!is_array($data) || empty($data)) {
             return;
         }
+      
 
         $id = isset($data['id']) ? $data['id'] : 0;
         $host_id = isset($data['host_id']) ? $data['host_id'] : 0;
@@ -226,6 +235,8 @@ class HydraBookingShortcode {
         $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
 
 
+        $payment_status = isset($data['payment_status']) && !empty($data['payment_status']) ? $data['payment_status'] : 0;
+
         // Enqueue Scripts Register scripts 
         if(!wp_script_is('tfhb-app-script', 'enqueued')) {
             wp_enqueue_script('tfhb-app-script');
@@ -242,6 +253,7 @@ class HydraBookingShortcode {
             'meeting_id' => $id,
             'host_id' => $host_id,
             'duration' => $duration,
+            'payment_status' => $payment_status,
             'meeting_interval' => $meeting_interval,
             'buffer_time_before' => $buffer_time_before,
             'buffer_time_after' => $buffer_time_after,
@@ -726,18 +738,22 @@ class HydraBookingShortcode {
 
         // Meeting Location Check
         $meeting_locations = json_decode($single_booking_meta->meeting_location);
+        
+        
         $zoom_exists = false;
-        if (is_array($meeting_locations)) {
-            foreach ($meeting_locations as $location) {
-                if (isset($location->location) && $location->location === "zoom") {
-                    $zoom_exists = true;
-                    break;
-                }
-            }
+        if(is_array($meeting_locations)){
+            // if in array location value is meet then set google meet using array filter  
+            $meeting_location = array_filter($meeting_locations, function($location){
+                return $location['location'] == 'zoom';
+            });
+
+            $zoom_exists  = count($meeting_location) > 0 ? true : false; 
         }
+        
 
         // Global Integration
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        
         if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
             $account_id = $_tfhb_integration_settings['zoom_meeting']['account_id'];
             $app_client_id = $_tfhb_integration_settings['zoom_meeting']['app_client_id'];
@@ -751,13 +767,27 @@ class HydraBookingShortcode {
             $app_secret_key = $_tfhb_host_integration_settings['zoom_meeting']['app_secret_key'];
         }
         
-        if( $zoom_exists && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+        
+        if($zoom_exists == true && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+        //     echo "<pre>";
+        // print_r($account_id);
+        // echo "<br>";
+        // print_r($app_client_id);
+        // echo "<br>";
+        // print_r($app_secret_key);
+        // echo "</pre>";
+        // exit;
             $zoom = new ZoomServices(
                 sanitize_text_field($account_id), 
                 sanitize_text_field($app_client_id),  
                 sanitize_text_field($app_secret_key)
             ); 
             $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
+        //         echo "<pre>";
+        // print_r($meeting_creation);
+        // echo "<br>";
+        // exit;
+            
             $meeting_location_data["zoom"]['address'] = $meeting_creation;
 
             // Get Post Meta 

@@ -558,6 +558,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if (empty($meeting_id) || $meeting_id == 0) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
+
+        $current_user = wp_get_current_user();
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+
         // Delete Meeting
         $meeting = new Meeting();
         $meetingDelete = $meeting->delete($meeting_id);
@@ -573,12 +579,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             delete_post_meta( $post_id, '__tfhb_meeting_opt' ); 
         }
 
+       
+
         // Meeting Lists
-        $MeetingsList = $meeting->get();
+        if(!empty($current_user_role) && "administrator"==$current_user_role){
+            $MeetingsList = $meeting->get();
+        }
+
+        if(!empty($current_user_role) && "tfhb_host"==$current_user_role){
+            $MeetingsList = $meeting->get(null, null, $current_user_id);
+        }
         // Return response
         $data = array(
             'status' => true, 
             'meetings' => $MeetingsList,  
+            'data' => $current_user_id,  
             'message' => 'Meeting Deleted Successfully', 
         );
         return rest_ensure_response($data);
@@ -626,9 +641,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }else{
             $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
         }
-        if(empty($MeetingData->payment_meta)){
-            $MeetingData->payment_meta = $_tfhb_integration_settings;
-        }
+        // if(empty($MeetingData->payment_meta)){
+        //     $MeetingData->payment_meta = $_tfhb_integration_settings;
+        // }
 
         // Time Zone 
         $DateTimeZone = new DateTimeController('UTC');
@@ -837,6 +852,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'updated_at'                => date('Y-m-d'),
             'updated_by'                => $current_user_id
         ];
+
+        // if Payment Methood is woo_payment
+        if('woo_payment' == $data['payment_method']){
+            $products = wc_get_product($data['payment_meta']['product_id']);
+            $data['meeting_price'] = $products->price;
+
+        }
 
         // Meeting Update into 
         $meeting_post_data = array(
