@@ -1,0 +1,98 @@
+.tfhb-setup-wizard {
+    padding-top: 200px !important;
+    background-color: #fff;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    padding: 88px 0;
+    justify-content: center !important;
+
+    .tfhb-single-form-field {
+        min-width: 400px !important;
+        margin-bottom: 8px;
+    }
+    .tfhb-setup-wizard-header {
+        padding: 24px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--Surface-Secondary, #FFF);
+        box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
+
+        .tfhb-s-w-logo img {
+            height: 40px;
+            width: 40px;
+        }
+
+        .tfhb-s-w-cta {
+            a {
+                font-weight: 700;
+                color: $primaryi;
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 24px;
+            }
+
+            span {
+                width: 2px;
+                display: inline-block;
+                height: 16px;
+                background-color: $ui500;
+            }
+        }
+    }
+
+    .tfhb-setup-wizard-content-wrap {
+
+
+        border-radius: 16px;
+        border: 2px solid $ui50;
+        background: #FFF;
+        box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
+        width: 80%;
+        // height: 669px;
+        padding: 88px 180px;
+        flex-direction: column;
+        gap: 72px !important;
+        justify-content: center !important;
+
+        .tfhb-s-w-icon-text {
+            text-align: center;
+
+            h2 {
+                color: $ui900;
+                font-size: 26px;
+                font-weight: 600;
+                line-height: 33px;
+                /* 33.8px */
+                margin-top: 32px !important;
+            }
+            p{
+                color: $ui600;
+                font-size: 15px;
+                font-weight: 400;
+                line-height: 24px; /* 160% */}
+        }
+
+        .tfhb-step-bar {
+            width: 24px;
+            height: 8px;
+            border-radius: 8px;
+            background: $primaryi50;
+        }
+
+        .tfhb-step-bar.active {
+            background: $primaryi500;
+        }
+
+        .tfhb-submission-btn {
+            justify-content: center !important;
+            button {
+                margin: 0 auto;
+            }
+        }
+    }
+
+}

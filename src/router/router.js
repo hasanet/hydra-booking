@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import Dashboard from '../view/dashboard/Dashboard.vue';  
 import Booking from '../view/booking/booking.vue'; 
 import Settings from '../view/settings/Settings.vue';
+import setupWizard from '../view/setup-wizard/setup-wizard.vue';
 import Hosts from '../view/hosts/hosts.vue';
 import Meetings from '../view/meetings/meetings.vue';
 import { AuthData } from '@/store/auth';
@@ -241,6 +242,17 @@ const routes = [
             },  
              
         ]
+        
+    },
+    // ...
+
+     // Setup Wizard routes
+     {
+        path: '/setup-wizard',
+        component: setupWizard,
+        meta: { Capabilities: 'tfhb_manage_settings' },
+        // redirect: { name: 'SettingsGeneral' },
+       
         
     },
     // ...

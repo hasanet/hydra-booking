@@ -66,6 +66,11 @@ namespace HydraBooking\Admin\Controller;
                 'Title' => esc_html__('Settings', 'thb-hydra-booking'),
                 'capability' => 'tfhb_manage_settings', 
             ),
+            array(
+                'id' => 'setup-wizard',
+                'Title' => esc_html__('Setup Wizard', 'thb-hydra-booking'),
+                'capability' => 'tfhb_manage_settings', 
+            ),
           
         );
          
