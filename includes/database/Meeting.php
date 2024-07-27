@@ -204,15 +204,38 @@ class Meeting {
                 $sql .= (!empty($filterData['title']) || isset($filterData['fhosts'])) ? " AND" : "";
                 $sql .= " meeting_category IN ($category_ids)";
             }
+           
+            $data = $wpdb->get_results($sql);
 
             if (!empty($filterData['startDate']) && !empty($filterData['endDate'])) {
-                // Escape and format dates for SQL query
+                
                 $startDate = date('Y-m-d', strtotime($filterData['startDate']));
                 $endDate = date('Y-m-d', strtotime($filterData['endDate']));
-                $sql .= " JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$startDate'), '$') AND JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$endDate'), '$')";
-            }
 
-            $data = $wpdb->get_results($sql);
+                $filteredData = array_filter($data, function($row) use ($startDate, $endDate) {
+                    $customAvailableData = json_decode($row->availability_custom, true);
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        // Handle JSON decoding error if any
+                        return false;
+                    }
+                
+                    if (!isset($customAvailableData['date_slots'])) {
+                        return false;
+                    }
+                    foreach ($customAvailableData['date_slots'] as $dateSlot) {
+                        // Split the dates if they are comma-separated
+                        $dates = explode(', ', $dateSlot['date']);
+                        
+                        foreach ($dates as $date) {
+                            if ($date >= $startDate && $date <= $endDate) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+            }
 
         }elseif(!empty($user_id)){
             $data = $wpdb->get_results(

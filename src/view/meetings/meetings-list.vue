@@ -113,13 +113,13 @@ const copyMeeting = (link) => {
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
                             <label>
-                                <input type="checkbox" :value="key" v-model="filterData.fhosts" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
+                                <input type="checkbox" :value="shost.value" v-model="filterData.fhosts" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
                                 <span class="checkmark"></span>
-                                {{ shost }}
+                                {{ shost.name }}
                             </label>
-                            <div class="tfhb-category-items">
+                            <!-- <div class="tfhb-category-items">
                                 25
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>
@@ -131,15 +131,15 @@ const copyMeeting = (link) => {
                 </div>
                 <div class="tfhb-filter-category-box" v-show="FilterCatgoryPreview">
                     <ul class="tfhb-flexbox">
-                        <li class="tfhb-flexbox" v-for="(mcategory, key) in Meeting.meetingCategory.data" :key="key">
+                        <li class="tfhb-flexbox" v-for="(mcategory, key) in Meeting.meetingCategory" :key="key">
                             <label>
                                 <input type="checkbox" :value="mcategory.id" v-model="filterData.fcategory" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
                                 <span class="checkmark"></span>
                                 {{ mcategory.name }}
                             </label>
-                            <div class="tfhb-category-items">
+                            <!-- <div class="tfhb-category-items">
                                 25
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>
