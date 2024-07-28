@@ -57,8 +57,8 @@ const GettingStart = () => {
                 :label="'Receive updates and promotions'" 
             />
         </div>
-        <div class="tfhb-submission-btn">
-            <button @click="GettingStart" class="tfhb-btn boxed-btn tfhb-flexbox" >Get Started in a Minute <Icon name="ChevronRight" size="20" />  </button>
+        <div class="tfhb-submission-btn tfhb-flexbox">
+            <button @click="GettingStart" class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" >Get Started in a Minute <Icon name="ChevronRight" size="20" />  </button>
         </div>
      </div>
      <!-- Getting Start -->

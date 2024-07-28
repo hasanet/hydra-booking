@@ -19,7 +19,7 @@ import StepFour from './StepFour.vue';
 
 <template>
     {{ setupWizard }}
-   <div class="tfhb-setup-wizard tfhb-flexbox" 
+   <div class="tfhb-setup-wizard tfhb-flexbox tfhb-hydra-wrap" 
         :style="'background-image: url(' + $tfhb_url+'/assets/images/setup-wizard.png' + ')'" 
         alt=""
     >

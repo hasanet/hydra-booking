@@ -38,12 +38,12 @@ const props = defineProps({
         </div>
         <div class="tfhb-s-w-getting-email">
 
-            <button class="tfhb-btn secondary-btn tfhb-flexbox" >Import demo data<Icon name="ChevronRight" size="20" />  </button>
+            <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" @click="props.setupWizard.importDemoMeeting" >Import demo data<Icon name="ChevronRight" size="20" />  </button>
              
         </div>
         <div class="tfhb-submission-btn tfhb-flexbox">
-            <button class="tfhb-btn secondary-btn tfhb-flexbox" > <Icon name="ChevronLeft" size="20" /> Back </button>
-            <button class="tfhb-btn boxed-btn tfhb-flexbox" >Next<Icon name="ChevronRight" size="20" />  </button>
+            <button class="tfhb-btn secondary-btn tfhb-flexbox tfhb-gap-8" > <Icon name="ChevronLeft" size="20" /> Back </button>
+            <!-- <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" >Next<Icon name="ChevronRight" size="20" />  </button> -->
         </div>
      </div>
      <!-- Step Three -->

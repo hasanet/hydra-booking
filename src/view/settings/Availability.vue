@@ -190,6 +190,7 @@ onBeforeMount(() => {
          <AvailabilitySingle  v-for="(availability, key) in AvailabilityGet.data" :availability="availability" :key="key" @delete-availability="deleteAvailabilitySettings(key, availability.id)" @edit-availability="EditAvailabilitySettings(key, availability.id, availability)"  />
 
          <AvailabilityPopupSingle v-if="isModalOpened" :timeZone="timeZone.value" :availabilityDataSingle="availabilityDataSingle.value" :isOpen="isModalOpened" @modal-close="closeModal"  @update-availability="fetchAvailabilitySettingsUpdate" />
+    
     </div>
 </div>
  
