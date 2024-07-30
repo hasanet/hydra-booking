@@ -55,6 +55,14 @@ if (currentIndex !== null) {
   tfhb_menuItems[currentIndex].classList.add('current');
 }
 
+// if tfhb-setup-wizard has class add class into body else remove
+const tfhb_setup_wizard = document.querySelector('.tfhb-setup-wizard');
+if(tfhb_setup_wizard){
+  document.body.classList.add('tfhb-setup-wizard-body');
+}else{
+  document.body.classList.remove('tfhb-setup-wizard-body');
+}
+
 </script>
 
 <template>    

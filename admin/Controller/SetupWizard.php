@@ -4,6 +4,7 @@ namespace HydraBooking\Admin\Controller;
 //  Use Namespace
 // Use DB 
 use HydraBooking\DB\Host;
+use HydraBooking\DB\Meeting;
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -35,15 +36,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // GET Current User
         $current_user = wp_get_current_user();
         $host = $this->CreateHost($current_user);
+       
+        $request['host_id'] = $host->id;
+        $request['user_id'] = $host->user_id;
 
         // Checked if Host Already Exist
+
+        $meeting = $this->CreateDemoMeetings($request);
+        
         
         
 
         $data = array(
             'status' => true, 
             'message' => 'General Settings Updated Successfully', 
-            'data' => $host, 
+            'meeting' => $meeting, 
         );
         return rest_ensure_response($data);
     }
@@ -89,6 +96,53 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }
 
         return $host_data;
+    }
+
+
+    // Create Demo Meetings
+    public function CreateDemoMeetings($request){
+        
+        // Create an array to store the post data for meeting the current row
+        $meeting_post_data = array(
+            'post_type'    => 'tfhb_meeting',
+            'post_title'   => esc_html($request['business_type']),
+            'post_status'  => 'publish',
+            'post_author'  => $request['user_id']
+        );
+        $meeting_post_id = wp_insert_post( $meeting_post_data );
+
+        $data = [ 
+            'user_id' => $request['user_id'],
+            'host_id' => $request['host_id'],
+            'meeting_type' => 'one-to-one', 
+            'title' => esc_html($request['business_type']),
+            'post_id' => $meeting_post_id,
+            'availability_type' => 'custom',
+            'availability_custom' => isset($request['availabilityDataSingle']) ? json_encode($request['availabilityDataSingle']) : '',
+            'created_by' => $request['user_id'],
+            'updated_by' => $request['user_id'], 
+            'created_at' => date('Y-m-d'),
+            'updated_at' => date('Y-m-d'),
+            'status'    => 'draft'
+        ];
+        
+        // Check if user is already a meeting
+        $meeting = new Meeting();
+        // Insert meeting
+        $meetingInsert = $meeting->add($data);
+        if(!$meetingInsert['status']) {
+            return rest_ensure_response(array('status' => false, 'message' => 'Error while creating meeting'));
+        }
+        $meetings_id = $meetingInsert['insert_id'];
+
+        // Meetings Id into Post Meta
+        update_post_meta( $meeting_post_id, '__tfhb_meeting_id', $meetings_id );
+
+        // meetings Lists 
+        $meeting = $meeting->get($meetings_id);
+
+        return $meeting;
+
     }
 }
 ?>

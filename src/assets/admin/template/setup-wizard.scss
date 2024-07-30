@@ -1,3 +1,19 @@
+
+// .tfhb-setup-wizard-body {
+//     #wpadminbar, #adminmenuwrap, #adminmenuback, #wpfooter {
+//         display: none;
+//       }
+      
+//       #wpcontent {
+//         margin-left: 0;
+//         padding: 0;
+//       }
+//       #wpbody-content, .tfhb-admin-app {
+//         padding: 0;
+//       }
+// }
+  
+ 
 .tfhb-setup-wizard {
     padding-top: 200px !important;
     background-color: #fff;
@@ -97,27 +113,28 @@
 
 
 
-    .tfhb-s-w-availability-wrap {
-      
-        .tfhb-popup.tfhb-availability-popup {
-            .tfhb-popup-wrap{
+        .tfhb-s-w-availability-wrap {
 
-                max-width: 100% !important;
-                width: 100% !important;
-                
-            }
-            position: relative !important;
-            background-color: transparent !important;
+            .tfhb-popup.tfhb-availability-popup {
+                .tfhb-popup-wrap {
 
-            .tfhb-dashboard-heading {
-                display: none;
-            }
+                    max-width: 100% !important;
+                    width: 100% !important;
 
-            .tfhb-btn.boxed-btn {
-                display: none;
+                }
+
+                position: relative !important;
+                background-color: transparent !important;
+
+                .tfhb-dashboard-heading {
+                    display: none;
+                }
+
+                .tfhb-btn.boxed-btn {
+                    display: none;
+                }
             }
         }
-    }
 
         .tfhb-submission-btn {
             justify-content: center !important;
@@ -127,5 +144,77 @@
             }
         }
     }
+
+    .tfhb-meetings-list-content {
+        .tfhb-single-meeting {
+            width: 100% !important;
+        }
+    }
+
+    .tfhb-s-w-step-end {
+        width: 100% !important;
+        .tfhb-s-w-integrations-wrap{
+            width: 100% !important;
+        }
+
+        .tfhb-s-w-integrations-bar {
+            width: 100%;
+            padding: 8px 16px;
+            align-self: stretch;
+            border-radius: 8px;
+            background: var(--Surface-Primary, #FAF5F7);
+
+            .tfhb-integrations-list {
+                color: var(--Text-Paragraph, #765664);
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 24px;
+                position: relative;
+            }
+
+            .tfhb-integrations-searchbar {
+                position: relative;
+
+                input {
+                    height: 40px;
+                    padding: 8px 44px 8px 12px;
+                    align-self: stretch;
+                    border-radius: 4px;
+                    border: 1px solid var(--Border, #F6EEF2);
+                    background: #FFF;
+                }
+
+                svg {
+                    position: absolute;
+                    right: 11px;
+                    top: 11px;
+                }
+            }
+        }
+
+        .tfhb-host-integrations.tfhb-integrations-single-block.tfhb-admin-card-box {
+            width: calc(50% - 12px) !important;
+            margin-bottom: 0 !important;
+        }
+
+        .tfhb-s-w-integrations-dropdown {
+            padding: 8px;
+
+            .tfhb-dropdown-wrap {
+                background-color: #fff !important;
+
+                &.active {
+                    left: 0;
+                    top: 100%;
+                }
+
+                span {
+                    padding: 4px 8px;
+                }
+            }
+        }
+    }
+
+
 
 }

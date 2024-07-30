@@ -4,12 +4,13 @@ import { toast } from "vue3-toastify";
 
 const setupWizard = reactive({
     skeleton: true,
-    currentStep: 'step-three',
-    // currentStep: 'getting-start',
+    // currentStep: 'step-end',
+    currentStep: 'getting-start',
     data: {
         email: '',
         enable_recevie_updates: 1,
         business_type : '',
+        meeting : {},
         availabilityDataSingle: {
             key: 0,
             id: 0,
@@ -104,7 +105,8 @@ const setupWizard = reactive({
             } );
     
             if (response.data.status) { 
-                
+                this.data.meeting = response.data.meeting;
+                this.currentStep = 'step-four';
                  
             }
         } catch (error) {

@@ -52,7 +52,6 @@ const StepOne = () => {
                     v-model="props.setupWizard.data.business_type"  
                     required= "true"  
                     :label="'Your business type?'"   
-                    width="50"
                     selected = "1"
                     placeholder="Select Your Business Type"  
                     :option = "[
@@ -65,7 +64,7 @@ const StepOne = () => {
         </div>
         <div class="tfhb-submission-btn tfhb-flexbox">
             <button @click="props.setupWizard.currentStep = 'getting-start'" class="tfhb-btn secondary-btn tfhb-flexbox tfhb-gap-8" > <Icon name="ChevronLeft" size="20" /> Back </button>
-            
+
             <button @click="StepOne" class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" >Next<Icon name="ChevronRight" size="20" />  </button>
         </div>
      </div>

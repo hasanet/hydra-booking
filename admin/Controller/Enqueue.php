@@ -28,7 +28,10 @@ use HydraBooking\Admin\Controller\AuthController;
             'caps' =>  $user->userAllCaps(),
         ); 
 
-        wp_enqueue_script('thb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
+        // enqueue styles
+        wp_enqueue_style('tfhb-admin-style', THB_URL . 'assets/admin/css/tfhb-admin-style.css', array(), null);
+
+        wp_enqueue_script('tfhb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
         // wp_enqueue_script('thb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
         wp_enqueue_script('tfhb-vue-core', 'http://localhost:5173/src/main.js', [], time(), true);
         wp_localize_script('tfhb-vue-core', 'tfhb_core_apps', [

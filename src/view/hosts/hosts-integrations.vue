@@ -216,9 +216,10 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box tfhb-m-0">    
+    <div class="tfhb-admin-card-box tfhb-hydra-wrap tfhb-m-0">    
         <!-- Woo  Integrations  --> 
-        <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" :zoom_meeting="Integration.zoom_meeting" 
+        <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" 
+        :zoom_meeting="Integration.zoom_meeting" 
         v-if="Integration.zoom_meeting.connection_status == 1"
         @update-integrations="UpdateIntegration"
         :ispopup="popup"

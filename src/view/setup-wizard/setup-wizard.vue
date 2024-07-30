@@ -13,12 +13,16 @@ import StepOne from './StepOne.vue';
 import StepTwo from './StepTwo.vue';
 import StepThree from './StepThree.vue';
 import StepFour from './StepFour.vue';
+import StepEnd from './StepEnd.vue';
 
 
+// add class into body
+document.body.classList.add('tfhb-setup-wizard-body');
+
+ 
 </script>
 
 <template>
-    {{ setupWizard }}
    <div class="tfhb-setup-wizard tfhb-flexbox tfhb-hydra-wrap" 
         :style="'background-image: url(' + $tfhb_url+'/assets/images/setup-wizard.png' + ')'" 
         alt=""
@@ -66,6 +70,11 @@ import StepFour from './StepFour.vue';
         :setupWizard="setupWizard"
     />
 
+    <!-- Step End -->
+    <StepEnd 
+        v-if="setupWizard.currentStep  == 'step-end'"
+        :setupWizard="setupWizard"
+    />
    </div>
 </template>
  
