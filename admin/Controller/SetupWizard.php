@@ -75,13 +75,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $email_subscribe['subscribe_ip'] = $_SERVER['REMOTE_ADDR'];
         $email_subscribe['subscribe_user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         $email_subscribe['subscribe_referer'] = $_SERVER['HTTP_REFERER']; 
-        // get subscriber device  from user agent
-        $email_subscribe['subscribe_device'] = $this->getDeviceType($_SERVER['HTTP_USER_AGENT']);
+        // get subscriber device  from user agent 
 
 
-        
+        // Update Email Subscribe Option
         update_option('tfhb_hydra_email_subscribe', $email_subscribe);
-         
+
+        // Update General Settings available
+        $availability_settings = get_option('_tfhb_availability_settings'); 
+        // get last array data
+        $last_data = end($availability_settings);
+        $new_id =  $last_data['id'] + 1;
+        $availabilityDataSingle = $request['availabilityDataSingle'];
+        $availabilityDataSingle['id'] = $new_id;
+        $availability_settings[] = $availabilityDataSingle; 
+        update_option('_tfhb_availability_settings', $availability_settings, true);
 
         // Checked if Host Already Exist
 
@@ -95,6 +103,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'message' => 'General Settings Updated Successfully', 
             'meeting' => $meeting, 
             'email_subscribe' => $email_subscribe, 
+            'availability_settings' => $availability_settings, 
         );
         return rest_ensure_response($data);
     }
@@ -154,20 +163,26 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'post_author'  => $request['user_id']
         );
         $meeting_post_id = wp_insert_post( $meeting_post_data );
-
+        $meeting_slug = get_post_field( 'post_name', $meeting_post_id ); 
         $data = [ 
             'user_id' => $request['user_id'],
             'host_id' => $request['host_id'],
             'meeting_type' => 'one-to-one', 
+            'duration' => 30,  
             'title' => esc_html($request['business_type']),
+            'slug' => esc_url( $meeting_slug ),
             'post_id' => $meeting_post_id,
-            'availability_type' => 'custom',
+            'questions_type' => 'custom',
+            'questions' => 'custom',
+            'availability_type' => '[{"label":"name","type":"Text","placeholder":"Name","options":[],"required":1},{"label":"email","type":"Email","options":[],"placeholder":"Email","required":1},{"label":"address","type":"Text","placeholder":"Address","options":[],"required":1}]',
             'availability_custom' => isset($request['availabilityDataSingle']) ? json_encode($request['availabilityDataSingle']) : '',
+            'max_book_per_slot' => 1,
+            'is_display_max_book_slot' => '0',
             'created_by' => $request['user_id'],
             'updated_by' => $request['user_id'], 
             'created_at' => date('Y-m-d'),
             'updated_at' => date('Y-m-d'),
-            'status'    => 'draft'
+            'status'    => 'publish'
         ];
         
         // Check if user is already a meeting

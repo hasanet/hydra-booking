@@ -13,8 +13,7 @@ const setupWizard = reactive({
         enable_recevie_updates: 1,
         business_type : '',
         meeting : {},
-        availabilityDataSingle: {
-            key: 0,
+        availabilityDataSingle: { 
             id: 0,
             title: '',
             time_zone: '',
@@ -131,8 +130,7 @@ const setupWizard = reactive({
             if (response.data.status) { 
                 this.pre_loader = 'false';
                 this.data.meeting = response.data.meeting;
-                this.currentStep = 'step-four';
-                 
+                this.currentStep = 'step-four'; 
             }
         } catch (error) {
 

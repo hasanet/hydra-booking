@@ -253,7 +253,7 @@ const StepFour = () => {
         </div>
       
         <div class="tfhb-submission-btn tfhb-flexbox">
-            <button class="tfhb-btn secondary-btn tfhb-flexbox tfhb-gap-8" > <Icon name="ChevronLeft" size="20" /> Back </button>
+            <button class="tfhb-btn secondary-btn tfhb-flexbox tfhb-gap-8" @click="props.setupWizard.currentStep = 'step-three'" > <Icon name="ChevronLeft" size="20" /> Back </button>
             <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" @click="StepFour" >Complete setup<Icon name="ChevronRight" size="20" />  </button>
         </div>
      </div>
