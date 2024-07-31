@@ -5,6 +5,7 @@ namespace HydraBooking\Admin\Controller;
 // Use DB 
 use HydraBooking\DB\Host;
 use HydraBooking\DB\Meeting;
+use HydraBooking\Admin\Controller\DateTimeController;
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -20,6 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
    public function create_endpoint(){
+        register_rest_route('hydra-booking/v1', '/setup-wizard/fetch', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'fetchSetupWizard'),
+            // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
+        )); 
+
         register_rest_route('hydra-booking/v1', '/setup-wizard/import-meeting', array(
             'methods' => 'POST',
             'callback' => array($this, 'ImportMeetingDemo'),
@@ -27,6 +34,25 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         )); 
 
     } 
+
+    // Fatch Setup Wizard
+    public function fetchSetupWizard(){ 
+
+        $DateTimeZone = new DateTimeController('UTC');
+        $time_zone = $DateTimeZone->TimeZone();
+        // Get Current User email FORM wp_get_current_user
+        $current_user = wp_get_current_user();
+        $current_user_email = $current_user->data->user_email;
+ 
+
+
+        $data = array(
+            'status' => true,  
+            'time_zone' => $time_zone, 
+            'user_email' => $current_user_email, 
+        );
+        return rest_ensure_response($data);
+    }
 
 
     // Import Meeting Demo
@@ -40,6 +66,23 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $request['host_id'] = $host->id;
         $request['user_id'] = $host->user_id;
 
+        // collect email form request
+        $email_subscribe = array();
+        $email_subscribe['email'] = $request['email'];
+        $email_subscribe['subscribe_status'] = $request['enable_recevie_updates'];
+        $email_subscribe['subscribe_date'] = date('Y-m-d');
+        $email_subscribe['subscribe_time'] = date('H:i:s');
+        $email_subscribe['subscribe_ip'] = $_SERVER['REMOTE_ADDR'];
+        $email_subscribe['subscribe_user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $email_subscribe['subscribe_referer'] = $_SERVER['HTTP_REFERER']; 
+        // get subscriber device  from user agent
+        $email_subscribe['subscribe_device'] = $this->getDeviceType($_SERVER['HTTP_USER_AGENT']);
+
+
+        
+        update_option('tfhb_hydra_email_subscribe', $email_subscribe);
+         
+
         // Checked if Host Already Exist
 
         $meeting = $this->CreateDemoMeetings($request);
@@ -51,6 +94,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true, 
             'message' => 'General Settings Updated Successfully', 
             'meeting' => $meeting, 
+            'email_subscribe' => $email_subscribe, 
         );
         return rest_ensure_response($data);
     }
@@ -144,5 +188,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return $meeting;
 
     }
+    
 }
 ?>

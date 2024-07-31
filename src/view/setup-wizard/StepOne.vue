@@ -33,14 +33,14 @@ const StepOne = () => {
 <template>
     <!-- Step One -->
     <div class="tfhb-setup-wizard-content-wrap tfhb-s-w-step-one tfhb-flexbox">
-        <div class="tfhb-step-wizard-steper tfhb-flexbox tfhb-gap-16" >
-            <span class="tfhb-step-bar step-1 active"></span>
-            <span class="tfhb-step-bar step-1 "></span>
-            <span class="tfhb-step-bar step-1 "></span>
-            <span class="tfhb-step-bar step-1 "></span>
-        </div>
+       
         <div class="tfhb-s-w-icon-text">
-           
+            <div class="tfhb-step-wizard-steper tfhb-flexbox tfhb-gap-16" >
+                <span class="tfhb-step-bar step-1 active"></span>
+                <span class="tfhb-step-bar step-1 "></span>
+                <span class="tfhb-step-bar step-1 "></span>
+                <span class="tfhb-step-bar step-1 "></span>
+            </div>
             <h2>Simplify Your Work with Hydrabooking</h2>
             <p>Our intuitive setup process makes Hydrabooking a breeze to use, even for non-technical users.</p>
         </div>

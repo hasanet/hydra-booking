@@ -67,8 +67,7 @@
 			let month = date.getMonth();
 		
 			const tfhb_calendar_navs = $this.find(".tfhb-calendar-navigation span");
-
-			console.log(calenderData)
+ 
 
 			// Array of month names
 			const months = [

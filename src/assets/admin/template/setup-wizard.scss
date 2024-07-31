@@ -15,16 +15,26 @@
   
  
 .tfhb-setup-wizard {
-    padding-top: 200px !important;
+    padding: 130px 0 !important;
     background-color: #fff;
     background-size: cover;
-    background-position: center center;
-    position: relative;
+    background-position: center center; 
     padding: 88px 0;
     justify-content: center !important;
     width: 100% !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100% !important;
+    width: 100% !important;
+    overflow: auto;
 
-    &.tfhb-s-w-step-one,
+    .tfhb-s-w-preloader{
+        height: 20px;
+        width: 20px;
+    }
+
+    .tfhb-s-w-step-one,
     .tfhb-s-w-geting-start {
         .tfhb-single-form-field {
             min-width: 400px !important;
@@ -74,9 +84,9 @@
         box-shadow: 0px 8px 16px 0px rgba(40, 16, 26, 0.04);
         width: 80%;
         // height: 669px;
-        padding: 88px 120px;
+        padding: 64px 120px;
         flex-direction: column;
-        gap: 72px !important;
+        gap: 56px !important;
         justify-content: center !important;
 
         .tfhb-s-w-icon-text {
@@ -99,7 +109,9 @@
                 /* 160% */
             }
         }
-
+        .tfhb-step-wizard-steper{
+            justify-content: center !important;
+        }
         .tfhb-step-bar {
             width: 24px;
             height: 8px;
@@ -151,8 +163,7 @@
         }
     }
 
-    .tfhb-s-w-step-end {
-        width: 100% !important;
+    .tfhb-s-w-step-end { 
         .tfhb-s-w-integrations-wrap{
             width: 100% !important;
         }

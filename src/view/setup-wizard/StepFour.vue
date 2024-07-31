@@ -63,14 +63,14 @@ const StepFour = () => {
 
      <!-- Step Four -->
      <div class="tfhb-setup-wizard-content-wrap tfhb-admin-meetings tfhb-s-w-step-four tfhb-flexbox">
-        <div class="tfhb-step-wizard-steper tfhb-flexbox tfhb-gap-16" >
-            <span class="tfhb-step-bar step-1 active"></span>
-            <span class="tfhb-step-bar step-1 active"></span>
-            <span class="tfhb-step-bar step-1 active"></span>
-            <span class="tfhb-step-bar step-1 active"></span>
-        </div>
+       
         <div class="tfhb-s-w-icon-text">
-           
+            <div class="tfhb-step-wizard-steper tfhb-flexbox tfhb-gap-16" >
+                <span class="tfhb-step-bar step-1 active"></span>
+                <span class="tfhb-step-bar step-1 active"></span>
+                <span class="tfhb-step-bar step-1 active"></span>
+                <span class="tfhb-step-bar step-1 active"></span>
+            </div>
             <h2>Your Meeting is ready!</h2>
             <p>All set! Your Hydrabooking meeting is good to go.   Click "Preview" to peek at your booking page or "Share" to send the link to your attendees</p>
         </div>

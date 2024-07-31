@@ -16,6 +16,9 @@ class DeactivationHooks{
 
         $this->remove_cron_job_schedule();
 
+        // Deactivate Options 
+        $this->tfhb_options_deactivation_hooks();
+
 
     }
 
@@ -43,6 +46,15 @@ class DeactivationHooks{
 
             wp_clear_scheduled_hook('tfhb_after_booking_completed_schedule');
         }
+    }
+
+    // Deactivate Options
+    public function tfhb_options_deactivation_hooks(){
+
+        // Delete Quick Setup Option
+        delete_option('tfhb_hydra_quick_setup');
+
+        
     }
     
 }

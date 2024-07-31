@@ -35,22 +35,28 @@ use HydraBooking\DB\Migrator;
       register_activation_hook(THB_URL, array($this, 'activate'));
 
       Migration::instance();
-
+      
+      add_action('admin_init', array($this, 'tfhb_hydra_activation_redirect'));
  
  
 
     }
 
     public function activate() {
-        // $Migrator = new Migrator();
-        new Migrator();
-
-     
-
-
+      // $Migrator = new Migrator();
+      new Migrator(); 
 
     }
 
+    public function tfhb_hydra_activation_redirect() {
+      if (!get_option('tfhb_hydra_quick_setup')) {
+
+        update_option('tfhb_hydra_quick_setup', 1);
+        wp_redirect(admin_url('admin.php?page=hydra-booking#/setup-wizard'));
+
+        // exit;
+      }
+    }
 
 
  

@@ -74,6 +74,14 @@ const FilterBySearch = (e) => {
     console.log(e.target.value);
 }
  
+const RedirectToDeshboard = () => {
+    // redirect with windows reload 
+    // remove body class
+    document.querySelector('body').classList.remove('tfhb-setup-wizard-body');
+
+    window.location.href = $tfhb_hydra_admin_url; 
+    // w
+}
 
  
 const isPopupOpen = () => {
@@ -368,7 +376,8 @@ onBeforeMount(() => {
             
         </div>
         <div class="tfhb-submission-btn tfhb-flexbox">
-            <router-link class="tfhb-btn boxed-btn tfhb-flexbox tfhb-flexbox tfhb-gap-8" to="/" > Visit Dashboard <Icon name="ChevronRight" size="20" /> </router-link>
+             <a @click="RedirectToDeshboard" :href="$tfhb_hydra_admin_url + ''"  class="tfhb-btn boxed-btn tfhb-flexbox tfhb-flexbox tfhb-gap-8" > Visit Dashboard <Icon name="ChevronRight" size="20" /> </a>
+            
         </div>
      </div>
      <!-- Step End-->

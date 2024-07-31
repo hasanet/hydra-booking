@@ -1,10 +1,5 @@
 <script setup>
-import { RouterView } from 'vue-router' 
-import HbText from '@/components/form-fields/HbText.vue'
-import HbDropdown from '@/components/form-fields/HbDropdown.vue'
-import HbDateTime from '@/components/form-fields/HbDateTime.vue';
-import Icon from '@/components/icon/LucideIcon.vue'
-import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import { ref, reactive, onBeforeMount } from 'vue'; 
 import { setupWizard } from '@/store/setupWizard';
 
 // Component
@@ -19,10 +14,14 @@ import StepEnd from './StepEnd.vue';
 // add class into body
 document.body.classList.add('tfhb-setup-wizard-body');
 
+onBeforeMount(() => { 
+    setupWizard.fetchSetupWizard(); 
+});
+
  
 </script>
 
-<template>
+<template> 
    <div class="tfhb-setup-wizard tfhb-flexbox tfhb-hydra-wrap" 
         :style="'background-image: url(' + $tfhb_url+'/assets/images/setup-wizard.png' + ')'" 
         alt=""
