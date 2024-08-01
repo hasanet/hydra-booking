@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Update General Settings available
         $availability_settings = get_option('_tfhb_availability_settings'); 
         // get last array data
-        $last_data = !empty($availability_settings) ?  end($availability_settings) : '';
+        $last_data = !empty($availability_settings) ?  end($availability_settings) : array();
         $new_id =  $last_data['id'] + 1;
         $availabilityDataSingle = $request['availabilityDataSingle'];
         $availabilityDataSingle['id'] = $new_id;
