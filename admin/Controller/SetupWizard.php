@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Update General Settings available
         $availability_settings = get_option('_tfhb_availability_settings'); 
         // get last array data
-        $last_data = !empty($availability_settings) ?  end($availability_settings) : '';
+        $last_data = !empty($availability_settings) ?  end($availability_settings) : array();
         $new_id =  $last_data['id'] + 1;
         $availabilityDataSingle = $request['availabilityDataSingle'];
         $availabilityDataSingle['id'] = $new_id;
@@ -184,6 +184,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'questions_type' => 'custom',
             'questions' => '[{"label":"name","type":"Text","placeholder":"Name","options":[],"required":1},{"label":"email","type":"Email","options":[],"placeholder":"Email","required":1},{"label":"address","type":"Text","placeholder":"Address","options":[],"required":1}]',
             'payment_status' => 0,
+            'payment_method' => '',
             'max_book_per_slot' => 1,
             'is_display_max_book_slot' => '0',
             'created_by' => $request['user_id'],
