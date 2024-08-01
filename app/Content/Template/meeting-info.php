@@ -28,9 +28,9 @@ $_tfhb_host_integration_settings = get_user_meta($host['host_id'], '_tfhb_host_i
 $stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key']) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripePublicKey;
 $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id']) ? $_tfhb_host_integration_settings['paypal']['client_id'] : $paypalPublicKey;
 
-// echo "<pre>";
-// echo print_r($meeting);
-// echo "</pre>";
+
+
+
 ?> 
 
 <div class="tfhb-meeting-info">
@@ -149,10 +149,11 @@ $paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id'
             ?> 
         </ul>
 
-        <div class="tfhb-timezone ">  
+        <div class="tfhb-timezone ">   
             <select class="tfhb-time-zone-select" name="attendee_time_zone" id="attendee_time_zone">
                 <?php 
                     if(!empty($time_zone)) {
+                      
                         $selected_timezone = $meeting['availability_custom']['time_zone'] ; 
                         if('settings' === $meeting['availability_type']){
                             $_tfhb_availability_settings = get_user_meta($meeting['host_id'], '_tfhb_host', true); 

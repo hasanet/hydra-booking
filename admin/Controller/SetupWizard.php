@@ -165,17 +165,25 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $meeting_post_id = wp_insert_post( $meeting_post_data );
         $meeting_slug = get_post_field( 'post_name', $meeting_post_id ); 
         $data = [ 
-            'user_id' => $request['user_id'],
-            'host_id' => $request['host_id'],
-            'meeting_type' => 'one-to-one', 
-            'duration' => 30,  
-            'title' => esc_html($request['business_type']),
             'slug' => esc_url( $meeting_slug ),
+            'host_id' => $request['host_id'],
+            'user_id' => $request['user_id'],
             'post_id' => $meeting_post_id,
-            'questions_type' => 'custom',
-            'questions' => 'custom',
-            'availability_type' => '[{"label":"name","type":"Text","placeholder":"Name","options":[],"required":1},{"label":"email","type":"Email","options":[],"placeholder":"Email","required":1},{"label":"address","type":"Text","placeholder":"Address","options":[],"required":1}]',
+            'title' => esc_html($request['business_type']),
+            'description' => '', 
+            'meeting_type' => 'one-to-one', 
+            'duration' => '30',  
+            'meeting_locations' => '[{"location":"Attendee Phone Number","address":""}]',  
+            'availability_range_type' => 'indefinitely',
+            'availability_type' => 'custom',
+            'availability_id' => '0',
             'availability_custom' => isset($request['availabilityDataSingle']) ? json_encode($request['availabilityDataSingle']) : '',
+            'booking_frequency' => '[{"limit":1,"times":"Year"}]',
+            'recurring_status' => '0',
+            'recurring_repeat' => '[{"limit":1,"times":"Year"}]',
+            'questions_type' => 'custom',
+            'questions' => '[{"label":"name","type":"Text","placeholder":"Name","options":[],"required":1},{"label":"email","type":"Email","options":[],"placeholder":"Email","required":1},{"label":"address","type":"Text","placeholder":"Address","options":[],"required":1}]',
+            'payment_status' => 0,
             'max_book_per_slot' => 1,
             'is_display_max_book_slot' => '0',
             'created_by' => $request['user_id'],
@@ -196,6 +204,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
         // Meetings Id into Post Meta
         update_post_meta( $meeting_post_id, '__tfhb_meeting_id', $meetings_id );
+
+        $data['id'] = $meetings_id;
+        $data['meeting_locations'] = json_decode($data['meeting_locations'], true);
+        $data['availability_custom'] = json_decode($data['availability_custom'], true);
+        $data['questions'] = json_decode($data['questions'], true); 
+        //Updated post meta
+        update_post_meta( $meeting_post_id, '__tfhb_meeting_opt', $data );
 
         // meetings Lists 
         $meeting = $meeting->get($meetings_id);

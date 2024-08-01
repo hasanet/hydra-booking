@@ -75,14 +75,15 @@ class HydraBookingShortcode {
         // Get Meeting
         $meeting = new Meeting();
         $MeetingData = $meeting->get( $calendar_id ); 
+     
 
         if(!$MeetingData){
             return 'Invalid Meeting ID';
         }
      
-        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true); 
         $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
-  
+ 
         //  Reschedule Booking
         $booking_data = array();
 
@@ -190,7 +191,8 @@ class HydraBookingShortcode {
         if(!is_array($data) || empty($data)) {
             return;
         }
-      
+
+
 
         $id = isset($data['id']) ? $data['id'] : 0;
         $host_id = isset($data['host_id']) ? $data['host_id'] : 0;
@@ -246,8 +248,7 @@ class HydraBookingShortcode {
         if(!wp_script_is('tfhb-select2-script', 'enqueued')) {
             wp_enqueue_script('tfhb-select2-script');
         }
-        
-
+         
         // Localize Script
         wp_localize_script('tfhb-app-script', 'tfhb_app_booking_'.$id, array( 
             'meeting_id' => $id,
