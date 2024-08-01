@@ -11,6 +11,7 @@
   gap: 24px;
   width: fit-content;
   position: relative;
+  margin: 0 auto;
 }
 @media only screen and (max-width: 1170px) {
   .tfhb-meeting-box .tfhb-meeting-card, .tfhb-booking-cencel .tfhb-meeting-card {
@@ -317,6 +318,7 @@
   font-weight: 400;
   line-height: 24px; /* 160% */
   padding: 16px 0;
+  box-sizing: border-box;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.inactive, .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.inactive {
   color: var(--tfhb-paragraph-color);
@@ -327,6 +329,7 @@
   position: static !important;
   margin: 0 !important;
   border: 0px solid !important;
+  box-sizing: inherit;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current, .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current {
   position: relative;
@@ -345,6 +348,7 @@
   z-index: -1;
   margin-left: -45%;
   top: 5%;
+  box-sizing: inherit;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current.active, .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current.active {
   color: #ffffff !important;
@@ -363,6 +367,7 @@
   z-index: -1;
   margin-left: -45%;
   top: 5%;
+  box-sizing: inherit;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current.active::before, .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current.active::before {
   position: absolute;
@@ -374,6 +379,7 @@
   bottom: 9px;
   left: 50%;
   margin-left: -8px;
+  box-sizing: inherit;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-times, .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-times {
   width: 224px;
@@ -720,6 +726,10 @@
 
 .tfhb-gap-8 {
   gap: 8px;
+}
+
+.tfhb-mb-16 {
+  margin-bottom: 16px;
 }
 
 .tfhb-select2-dropdown.select2-dropdown--below {

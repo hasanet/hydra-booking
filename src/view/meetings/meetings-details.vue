@@ -1,5 +1,4 @@
 <script setup>
-import { reactive, onBeforeMount } from 'vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbText from '@/components/form-fields/HbText.vue'
 import HbTextarea from '@/components/form-fields/HbTextarea.vue'
@@ -18,6 +17,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    integrations: {
+        type: Object,
+        required: true
+    },
     meetingCategory: {
         type: Object,
         required: true
@@ -30,6 +33,12 @@ const props = defineProps({
 });
 
 const tfhbValidateInput = (fieldName) => {
+    
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
@@ -39,9 +48,12 @@ const tfhbValidateInput = (fieldName) => {
     }
 };
 
+// const google_calendar_status =  integrations.google_calendar_status == 1 ? 0 : 1;
+// const zoom_meeting_status = integrations.zoom_meeting_status == 1 ? 0 : 1;
+
 </script>
 
-<template>
+<template> 
     <div class="meeting-create-details tfhb-gap-24">
         <HbText  
             v-model="meeting.title" 
@@ -97,11 +109,11 @@ const tfhbValidateInput = (fieldName) => {
                 v-if="'custom'==meeting.duration"
             /> 
              <!-- Custom Duration -->
-            <HbSwitch 
+            <!-- <HbSwitch 
                 type="checkbox" 
                 required= "true" 
                 :label="$tfhb_trans['Allow attendee to select duration']" 
-            />
+            /> -->
         </div>
 
         <div class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0 tfhb-full-width"> 
@@ -115,8 +127,9 @@ const tfhbValidateInput = (fieldName) => {
                         :selected = "1"
                         :placeholder="$tfhb_trans['Location']" 
                         :option = "[
-                            {name: 'Zoom', value: 'zoom'}, 
-                            {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)'},
+                            {name: 'Zoom', value: 'zoom', disable:  integrations.zoom_meeting_status}, 
+                            {name: 'Google Meet', value: 'meet', disable: integrations.google_calendar_status}, 
+                            {name: 'In Person (Attendee Address)', value: 'In Person (Attendee Address)',},
                             {name: 'In Person (Organizer Address)', value: 'In Person (Organizer Address)'},
                             {name: 'Attendee Phone Number', value: 'Attendee Phone Number'},
                             {name: 'Organizer Phone Number', value: 'Organizer Phone Number'},
@@ -146,6 +159,27 @@ const tfhbValidateInput = (fieldName) => {
                 </div>
             </div>
         </div>
+
+        <div v-if="meeting.meeting_type == 'one-to-group'" class="tfhb-admin-card-box tfhb-no-flexbox tfhb-m-0 tfhb-full-width">  
+            <div class="tfhb-meeting-location tfhb-flexbox tfhb-gap-16" > 
+                <HbText  
+                        v-model="meeting.max_book_per_slot"  
+                        type= "number"
+                        :label="$tfhb_trans['Max invitees in a spot']"   
+                        :placeholder="'Max invitees in a spot'" 
+                        :width= "100"
+                       
+                    /> 
+
+                    <HbSwitch 
+                        v-model="meeting.is_display_max_book_slot" 
+                        type="checkbox" 
+                        required= "true" 
+                        :label="$tfhb_trans['Display remaining spots on booking page']" 
+                    />
+            </div>  
+        </div>
+
 
         <!-- Category -->
         <HbDropdown 

@@ -28,7 +28,10 @@ use HydraBooking\Admin\Controller\AuthController;
             'caps' =>  $user->userAllCaps(),
         ); 
 
-        wp_enqueue_script('thb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
+        // enqueue styles
+        wp_enqueue_style('tfhb-admin-style', THB_URL . 'assets/admin/css/tfhb-admin-style.css', array(), null);
+
+        wp_enqueue_script('tfhb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
         // wp_enqueue_script('thb-app-script', THB_URL . 'assets/admin/js/main.js', array('jquery'), null, true);
         // wp_enqueue_script('tfhb-vue-core', 'http://localhost:5173/src/main.js', [], time(), true);
 
@@ -41,9 +44,10 @@ use HydraBooking\Admin\Controller\AuthController;
         wp_localize_script('tfhb-vue-core', 'tfhb_core_apps', [
             // 'url' => THB_URL,
             'rest_nonce' => wp_create_nonce( 'wp_rest' ),
-            'admin_url' => site_url(),
+            'admin_url' =>  site_url(),
             'ajax_url' =>  admin_url('admin-ajax.php'),
             'tfhb_url' => THB_URL,
+            'tfhb_hydra_admin_url' =>  admin_url('admin.php?page=hydra-booking#/'),
             'user' => $user_auth,
             'trans' => TransStrings::getTransStrings(),
         ]);

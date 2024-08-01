@@ -21,12 +21,13 @@ const props = defineProps([
   ])
 
  
-const emit = defineEmits(['update:modelValue', 'tfhb-onchange', 'add-change', 'add-click', 'tfhb_start_change'])
+const emit = defineEmits(['update:modelValue', 'tfhb-onchange', 'add-change', 'add-click', 'tfhb_start_change', 'tfhb_body_value_change'])
 const handleChange = (e) => {  
     emit('update:modelValue', e.value)
     emit('tfhb-onchange', e)
     emit('add-change', e)
     emit('tfhb_start_change', props.parent_key, props.single_key, e.value)
+    emit('tfhb_body_value_change', props.single_key, e.value);
 }
 </script>
 
@@ -73,8 +74,9 @@ const handleChange = (e) => {
                     v-model="props.modelValue"  
                     @change="handleChange"   
                     :filter="filter == true ? true : false"
-                    :options="option"  
-                    :placeholder="placeholder" 
+                    :options="option"
+                    :placeholder="placeholder"  
+                    :optionDisabled="disabled"
                     :style="{ 'width': '100%' }"  
                 />
                 <Dropdown 
@@ -85,6 +87,7 @@ const handleChange = (e) => {
                     :options="option" 
                     optionLabel="name"
                     optionValue="value"
+                    optionDisabled="disable"
                     :placeholder="placeholder" 
                     :style="{ 'width': '100%' }"  
                     @click="emit('add-click')"

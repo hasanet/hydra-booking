@@ -33,7 +33,7 @@ const hostsSettings = reactive({
                 if(response.data.hosts_settings){
 
                     this.settings.others_information.enable_others_information = response.data.hosts_settings.others_information.enable_others_information;
-                    this.settings.others_information.fields = response.data.hosts_settings.others_information.fields;
+                    this.settings.others_information.fields = response.data.hosts_settings.others_information.fields ? response.data.hosts_settings.others_information.fields :   this.settings.others_information.fields;
                     this.settings.permission = response.data.hosts_settings.permission;
                    
                 }

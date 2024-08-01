@@ -1,8 +1,28 @@
 import { ref, reactive } from 'vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import axios from 'axios'  
 
 const Booking = reactive({
     bookings: [],
+    calendarbooking: {
+        plugins: [ 
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin
+        ],
+        initialView: 'dayGridMonth',
+        events: '',
+        headerToolbar: {
+            left: '',
+            center: 'prev,title,next',
+            right: 'timeGridDay,timeGridWeek,dayGridMonth'
+        },
+        dayMaxEvents: 3,
+        allDaySlot: false,
+        dayMaxEventRows: true,
+    },
     skeleton : ref(true),
 
     // booking List
@@ -16,22 +36,9 @@ const Booking = reactive({
 
         if (response.data.status) { 
             this.bookings = response.data.bookings;
+            this.calendarbooking.events = response.data.booking_calendar;
             this.skeleton = false;
         }
-
-        // const apiUrl = tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/booking/lists';
-        // try {
-        //     const response = await fetch(apiUrl, {
-        //         method: 'GET'
-        //     });
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-        //     const bookingsData = await response.json();
-        //     this.bookings = bookingsData.bookings;
-        // } catch (error) {
-        //     console.error('Error fetching Bookings:', error);
-        // }
     }
     
 })

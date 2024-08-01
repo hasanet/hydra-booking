@@ -2,13 +2,14 @@
 namespace HydraBooking\App\Shortcode;
 // use Classes
 use HydraBooking\DB\Meeting;
-use HydraBooking\DB\Availability; 
 use HydraBooking\Admin\Controller\DateTimeController;
 use HydraBooking\DB\Booking;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
-use HydraBooking\Admin\Controller\CountryController;
-use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
+
+use HydraBooking\DB\BookingMeta;
+
+ 
 class HydraBookingShortcode {
     public function __construct() { 
 
@@ -30,6 +31,22 @@ class HydraBookingShortcode {
         // Booking Cancel
         add_action('wp_ajax_nopriv_tfhb_meeting_form_cencel', array($this, 'tfhb_meeting_form_cencel_callback'));
         add_action('wp_ajax_tfhb_meeting_form_cencel', array($this, 'tfhb_meeting_form_cencel_callback'));
+
+        //
+        add_action('hydra_booking/after_booking_completed', array($this, 'insert_calender_after_booking_completed'));
+
+        // $this->tfhdb_wp_mail_sent();
+    }
+
+    //Test Wp Mail Sent
+    public function tfhdb_wp_mail_sent(){
+        $to = 'sydurrahmant1@gmail.com';
+        $subject = "Hello World";
+        $body = "Allah Mohan";
+        $headers = [];
+        $attachments = [];
+
+        wp_mail($to, $subject, $body, $headers, $attachments);
     }
 
     public function hydra_booking_shortcode($atts) { 
@@ -39,6 +56,7 @@ class HydraBookingShortcode {
         if(!isset($atts['id']) || $atts['id'] == 0){
             return 'Please provide a valid Meeting id';
         }  
+
 
         // Attributes
         $atts = shortcode_atts(
@@ -52,23 +70,19 @@ class HydraBookingShortcode {
         );
 
         $calendar_id = $atts['id']; 
+        
 
         // Get Meeting
         $meeting = new Meeting();
         $MeetingData = $meeting->get( $calendar_id ); 
+     
 
         if(!$MeetingData){
             return 'Invalid Meeting ID';
         }
      
-        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true); 
         $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
-
-        echo "<pre>";
-        print_r($general_settings);
-        echo "</pre>";
-  
-        
  
         //  Reschedule Booking
         $booking_data = array();
@@ -97,7 +111,8 @@ class HydraBookingShortcode {
         $DateTimeZone = new DateTimeController('UTC');
         $time_zone = $DateTimeZone->TimeZone();
 
-     
+    
+    
         // Start Buffer
         ob_start();
 
@@ -116,13 +131,13 @@ class HydraBookingShortcode {
                     echo '<div class="tfhb-reschedule-box">';
                     echo '<p>'.__('You are rescheduling the booking:', 'hydra-booking').' '.esc_html($booking_data->start_time).' - '.esc_html($booking_data->end_time).', '.esc_html(date('F j, Y', strtotime($booking_data->meeting_dates))).' ('.esc_html($booking_data->attendee_time_zone).')</p>';
                     echo '</div>';
+
                 }
     
             ?>
-            <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">
+            <!-- <form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data"> -->
                 <div class="tfhb-meeting-card">
-                        <?php  
-
+                        <?php   
                         // Load Meeting Info Template  
                         load_template(THB_PATH . '/app/Content/Template/meeting-info.php', false, [
                             'meeting' => $meta_data,
@@ -145,13 +160,13 @@ class HydraBookingShortcode {
                         <?php 
                         // Load Meeting Form Template
                         load_template(THB_PATH . '/app/Content/Template/meeting-form.php', false, [
-                            'questions' => isset($meta_data['questions']) ? $meta_data['questions'] : [],  
+                            'meeting' => $meta_data,  
                             'booking_data' => $booking_data,
                         ]);
                         ?>
                 </div>
 
-            </form>
+            <!-- </form> -->
                 
         </div>
         <?php 
@@ -177,8 +192,11 @@ class HydraBookingShortcode {
             return;
         }
 
+
+
         $id = isset($data['id']) ? $data['id'] : 0;
         $host_id = isset($data['host_id']) ? $data['host_id'] : 0;
+
 
         // Check if id is not set
         if(0 === $id && 0 === $host_id) {
@@ -198,11 +216,11 @@ class HydraBookingShortcode {
             $availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array(); 
         }
          
-       
- 
+        
 
         // Availability Range
         $availability_range = isset($data['availability_range']) ? $data['availability_range'] : array();
+        $availability_range_type = isset($data['availability_range_type']) ? $data['availability_range_type'] : array();
 
         // Duration
         $duration = isset($data['duration']) && !empty($data['duration'])? $data['duration'] : 30;
@@ -219,6 +237,8 @@ class HydraBookingShortcode {
         $meeting_interval = isset($data['meeting_interval']) && !empty($data['meeting_interval']) ? $data['meeting_interval'] : 0;
 
 
+        $payment_status = isset($data['payment_status']) && !empty($data['payment_status']) ? $data['payment_status'] : 0;
+
         // Enqueue Scripts Register scripts 
         if(!wp_script_is('tfhb-app-script', 'enqueued')) {
             wp_enqueue_script('tfhb-app-script');
@@ -228,18 +248,19 @@ class HydraBookingShortcode {
         if(!wp_script_is('tfhb-select2-script', 'enqueued')) {
             wp_enqueue_script('tfhb-select2-script');
         }
-        
-
+         
         // Localize Script
         wp_localize_script('tfhb-app-script', 'tfhb_app_booking_'.$id, array( 
             'meeting_id' => $id,
             'host_id' => $host_id,
             'duration' => $duration,
+            'payment_status' => $payment_status,
             'meeting_interval' => $meeting_interval,
             'buffer_time_before' => $buffer_time_before,
             'buffer_time_after' => $buffer_time_after,
             'availability' => $availability_data,
             'availability_range' => $availability_range,
+            'availability_range_type' => $availability_range_type,
         ));
 
     }
@@ -247,6 +268,7 @@ class HydraBookingShortcode {
 
     // Form Submit Callback
     public function tfhb_meeting_form_submit_callback() { 
+
         // Checked Nonce validation
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
             wp_send_json_error( array( 'message' => 'Nonce verification failed' ) );
@@ -271,6 +293,11 @@ class HydraBookingShortcode {
 
         $booking = new Booking();
 
+        // General Settings
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+
+
+
         // Generate Meeting Hash Based on start time and end time and Date And Meeting id + random number  
         if(isset($_POST['booking_hash'])){
 
@@ -281,10 +308,15 @@ class HydraBookingShortcode {
             $meeting_hash = md5(sanitize_text_field($_POST['meeting_dates']) . sanitize_text_field($_POST['meeting_time_start']) . sanitize_text_field($_POST['meeting_time_end']) . sanitize_text_field($_POST['meeting_id']) . rand(1000, 9999));
 
         }
-         
-  
+
         // sanitize the data 
         $data['meeting_id'] = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
+
+        $meeting = new Meeting(); 
+        $MeetingData = $meeting->get( $data['meeting_id'] ); 
+
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+
         $data['host_id'] = isset($_POST['host_id']) ? sanitize_text_field($_POST['host_id']) : 0;
         $data['attendee_id'] = isset($_POST['attendee_id']) ? sanitize_text_field($_POST['attendee_id']) : 0; 
         $data['hash'] = $meeting_hash; 
@@ -297,15 +329,113 @@ class HydraBookingShortcode {
         $data['duration'] = isset($_POST['duration']) ? sanitize_text_field($_POST['duration']) : 0;
         $data['attendee_name'] = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
         $data['email'] = isset($_POST['email']) ? sanitize_text_field($_POST['email']) : '';
-        $data['address'] = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : '';
+        $data['address'] = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : ''; 
+        $data['others_info'] = array(); 
+        $questions = isset($_POST['question']) ? $_POST['question'] : array();
 
-        $data['others_info'] = array();
-        if(isset($_POST['question']) && !empty($_POST['question'])){ 
-            foreach($_POST['question'] as $key => $question){
-                $data['others_info'][$key] = sanitize_text_field($question);
-            } 
+
+   
+   
+        // Contact form fields 
+        if($meta_data['questions_type'] == 'existing'){
+         
+           if($meta_data['questions_form_type'] == 'wpcf7'){
+                $questions = array_filter($_POST, function($key) {
+                    return strpos($key, 'question_') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+           }
+          
+           if($meta_data['questions_form_type'] == 'fluent-forms'){
+                
+                $questions = array_filter($_POST, function($key) {
+                    return strpos($key, 'question_') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                if(isset($_POST['names']) && is_array($_POST['names'])){
+                    $data['attendee_name'] = $_POST['names']['first_name']. ' ' . $_POST['names']['last_name'];
+                }
+            }
+
+           if($meta_data['questions_form_type'] == 'forminator'){
+               
+                $data['email'] = $_POST['email-1'];
+                unset($_POST['email-1']);
+                
+                $attendee_names = array_filter($_POST, function($key) {
+                    return strpos($key, 'name-1') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                $data['attendee_name'] = '';
+                foreach($attendee_names as $key => $name){
+                    $data['attendee_name'] .= $name. ' ';
+                    unset($_POST[$key]);
+                }
+
+        
+                $address = array_filter($_POST, function($key) {
+                    return strpos($key, 'address-1') === 0;
+                }, ARRAY_FILTER_USE_KEY);
+
+                foreach($address as $key => $name){
+                    $data['address'] .= $name. ' ';
+                    unset($_POST[$key]);
+                } 
+                $questions = $_POST;
+                unset($questions['_wp_http_referer']);
+                unset($questions['action']);
+                unset($questions['current_url']);
+                unset($questions['form_id']);
+                unset($questions['form_type']);
+                unset($questions['forminator_nonce']);
+                unset($questions['nonce']);
+                unset($questions['page_id']);
+                unset($questions['referer_url']);
+                unset($questions['render_id']);
+                unset($questions['nonce']);
+                unset($questions['meeting_id']);
+                unset($questions['host_id']);
+                unset($questions['meeting_dates']);
+                unset($questions['meeting_duration']);
+                unset($questions['meeting_time_start']);
+                unset($questions['meeting_time_end']);
+                unset($questions['recurring_maximum']);
+                unset($questions['attendee_time_zone']);
+                unset($questions['payment_type']);
+                unset($questions['meeting_price']);
+                unset($questions['payment_amount']);
+                unset($questions['stripe_public_key']);
+                unset($questions['payment_currency']);
+
+              
+ 
+            }
         }
 
+        // Recurring Meeting
+        if(isset($meta_data['recurring_status']) && $meta_data['recurring_status'] == true){
+            $recurring_repeat = isset($meta_data['recurring_repeat']) ? $meta_data['recurring_repeat'] : array();
+            $recurring_repeat_limit = isset($recurring_repeat[0]['limit']) ? $recurring_repeat[0]['limit'] : array();
+            $recurring_repeat_times = isset($recurring_repeat[0]['times']) ? $recurring_repeat[0]['times'] : array();
+            $recurring_maximum = isset($meta_data['recurring_maximum']) ? $meta_data['recurring_maximum'] : 0;
+            $meeting_dates = isset($_POST['meeting_dates']) ? sanitize_text_field($_POST['meeting_dates']) : '';
+            // based on the recurring repeat limit and times 
+            $next_date = $meeting_dates; 
+
+            for($i = 1; $i < $recurring_maximum; $i++){ 
+
+                $recurring_current_date = date('Y-m-d', strtotime($next_date. ' + '.$recurring_repeat_limit.' '.$recurring_repeat_times.''));
+                $meeting_dates .=  ','.$recurring_current_date;
+                $next_date = $recurring_current_date; 
+            }
+            $data['meeting_dates'] = $meeting_dates;
+ 
+        } 
+       
+        if(isset($questions) && !empty($questions)){ 
+            foreach($questions as $key => $question){
+                $data['others_info'][$key] = sanitize_text_field($question);
+            } 
+        }  
         $data['country'] = isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '';
         $data['ip_address'] = isset($_POST['ip_address']) ? sanitize_text_field($_POST['ip_address']) : '';
         $data['device'] = isset($_POST['device']) ? sanitize_text_field($_POST['device']) : '';
@@ -320,17 +450,11 @@ class HydraBookingShortcode {
             } 
         }
         $data['cancelled_by'] = '';
-        $data['status'] = 'pending';
+        $data['status'] = isset($general_settings['booking_status']) && $general_settings['booking_status'] == 1 ? 'confirmed' : 'pending'; 
         $data['reason'] = '';
         $data['booking_type'] = 'single';
 
-          
-        // Load The Thankyou Template 
-        $meeting = new Meeting(); 
-        $MeetingData = $meeting->get( $data['meeting_id'] ); 
-
-        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
-
+       
         // Payment Method
         if(true == $meta_data['payment_status']){ 
 
@@ -355,27 +479,38 @@ class HydraBookingShortcode {
         // GetHost meta Data
         $host_id = isset($meta_data['host_id']) ? $meta_data['host_id'] : 0;
         $host_meta = get_user_meta($host_id, '_tfhb_host', true); 
+ 
 
-        // Checked if the booking is already booked
-
-          
+      
         $check_booking = $booking->get(
             array(
+                'meeting_id' => $data['meeting_id'], 
                 'meeting_dates' => $data['meeting_dates'], 
                 'start_time' => $data['start_time'], 
                 'end_time' => $data['end_time']
             )
         );
- 
 
-        if($check_booking){
-            wp_send_json_error( array( 'message' => 'Already Booked' ) );
+        if('one-to-group' == $meta_data['meeting_type'] ){ 
+            $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1; 
+            if(count($check_booking) >= $max_book_per_slot){
+                wp_send_json_error( array( 'message' => 'Already Booked' ) );
+            } 
+        }else{ 
+            if($check_booking){
+                wp_send_json_error( array( 'message' => 'Already Booked' ) );
+            }
         }
 
+        
 
-        // Get booking Data using Hash
 
+        // Get booking Data using Hash 
         if(isset($_POST['action_type']) && 'reschedule' == $_POST['action_type']){ 
+
+            // if general_settings['allowed_reschedule_before_meeting_start'] is available exp 100 then check the time before reschedule
+           
+
             $get_booking = $booking->get(
                 array('hash' => $meeting_hash),
                 false,
@@ -383,6 +518,25 @@ class HydraBookingShortcode {
             ); 
             // Get Post Meta 
             $booking_meta = get_post_meta($get_booking->post_id, '_tfhb_booking_opt', true);
+
+            if(isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start'])){
+                $allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
+                if(isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start'])){
+                    $allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
+                    $DateTime = new DateTimeController($booking_meta['attendee_time_zone']);
+                    // Time format if has AM and PM into start time
+                    $time_format =strpos($booking_meta['start_time'], 'AM') || strpos($booking_meta['start_time'], 'PM') ? '12' : '24';
+                    $current_time = strtotime($DateTime->convert_time_based_on_timezone(date('Y-m-d H:i:s'), 'UTC', $booking_meta['attendee_time_zone'],  $time_format)); 
+                    $meeting_time = strtotime($booking_meta['meeting_dates'].' '.$booking_meta['start_time']);
+                    $time_diff = $meeting_time - $current_time;
+                    $time_diff = $time_diff / 60; // convert to minutes
+                    
+                    if($time_diff < $allowed_reschedule_before_meeting_start){ 
+                        wp_send_json_error( array( 'message' => 'You can not reschedule the meeting before '.$allowed_reschedule_before_meeting_start.' minutes' ) );
+                    }
+                }
+            }
+
             $reschedule_data = array(
                 'id' => $get_booking->id,
                 'attendee_time_zone' =>  isset($_POST['attendee_time_zone']) ? sanitize_text_field($_POST['attendee_time_zone']) : '',
@@ -390,10 +544,12 @@ class HydraBookingShortcode {
                 'start_time' => sanitize_text_field($_POST['meeting_time_start']),
                 'end_time' => sanitize_text_field($_POST['meeting_time_end']),
                 'reason' =>  isset($_POST['reason']) ? sanitize_text_field($_POST['reason']) : '',
-                'status' =>  'rescheduled',
+                'status' =>  isset($general_settings['reschedule_status']) && $general_settings['reschedule_status'] == 1 ? 'rescheduled' : 'pending',
             );
             
             $booking_meta = array_merge($booking_meta, $reschedule_data);
+
+           
 
             // Update Post Meta
             update_post_meta($get_booking->post_id, '_tfhb_booking_opt',  $booking_meta);
@@ -401,7 +557,7 @@ class HydraBookingShortcode {
 
 
             $booking->update($reschedule_data);
-            $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
+            $confirmation_template =  $this->tfhb_booking_confirmation($booking_meta, $MeetingData, $host_meta);
 
             // Single Booking & Mail Notification
             $single_booking_meta = $booking->get($get_booking->id);
@@ -461,14 +617,52 @@ class HydraBookingShortcode {
             }
 
             $response['message'] = 'Rescheduled Successfully';
-            $response['confirmation_template'] = $confirmation_template;
+            $response['action'] = 'rescheduled';
+            $response['confirmation_template'] = $confirmation_template; 
+            // $booking_meta, $MeetingData, $host_meta
             wp_send_json_success(  $response );
                 
-        }
+        } 
+        // Booking Frequency 
+        $current_user_booking =  $booking->get(array( 'meeting_id' => $data['meeting_id']) ); 
+        if($current_user_booking){
+            $last_items_of_booking = end($current_user_booking);
+        
+         
+
+            $booking_frequency = isset($meta_data['booking_frequency']) ? $meta_data['booking_frequency'] : array();
             
+            if( $booking_frequency ){ 
+                $created_date = $last_items_of_booking->created_at; // 2024-07-02 14:26:29
+                $current_date = date('Y-m-d H:i:s');
+              
+                $last_created_date = date('Y-m-d', strtotime($created_date));
+                foreach($booking_frequency as $key => $value){ 
+                    $days = isset($value['times']) ? $value['times'] : 1; 
+                    $limit = isset($value['limit']) ? $value['limit'] : 1; 
+                   
+                    $booking_frequency_date = date('Y-m-d', strtotime($last_created_date. ' + '.$days.' days'));
+                    $total_booking = count(array_filter($current_user_booking, function($booking) use ($booking_frequency_date, $last_created_date ) {
+                        $created_date = date('Y-m-d', strtotime($booking->created_at));
+                        // Check if the created date is between last_created_date and booking_frequency_date 
+                        return strtotime($last_created_date) >= strtotime($created_date) || strtotime($created_date) <= strtotime($booking_frequency_date);
+                    }));
+                    
+                    //  if currentdate is greater than booking_frequency_date then you can book the meeting
+                    if(strtotime($current_date) > strtotime($booking_frequency_date)){
+                        continue;
+                    }
+                    if($total_booking >= $limit){
+                        wp_send_json_error( array( 'message' => ' Meeting Frequency Limit Reached' ) );
+                     
+                    }
 
-        // Create a new booking
-
+                     
+    
+                } 
+            }
+        } 
+        // Create a new booking 
         $title = 'New booking Booking ';
 
         // Create an array to store the post data for meeting the current row
@@ -500,17 +694,39 @@ class HydraBookingShortcode {
             $response['redirect'] =  wc_get_checkout_url();
         }  
 
+        if(true == $meta_data['payment_status'] && 'stripe_payment' == $meta_data['payment_method']){
+            $data['tokenId'] = !empty($_POST['tokenId']) ? $_POST['tokenId'] : '';
+            $data['price'] = !empty($MeetingData->meeting_price) ? $MeetingData->meeting_price : '';
+            $data['currency'] = !empty($MeetingData->payment_currency) ? $MeetingData->payment_currency : 'USD';
+            if( empty($_POST['action_type']) ){
+                do_action('hydra_booking/stripe_payment_method', $data, $result['insert_id']);
+            }
+        } 
+        if(true == $meta_data['payment_status'] && 'paypal_payment' == $meta_data['payment_method']){
+            $data['paymentID'] = !empty($_POST['paymentID']) ? $_POST['paymentID'] : '';
+            $data['paymentToken'] = !empty($_POST['paymentToken']) ? $_POST['paymentToken'] : '';
+            $data['payerID'] = !empty($_POST['payerID']) ? $_POST['payerID'] : '';
+            $data['price'] = !empty($MeetingData->meeting_price) ? $MeetingData->meeting_price : '';
+            $data['currency'] = !empty($MeetingData->payment_currency) ? $MeetingData->payment_currency : 'USD';
+            if( empty($_POST['action_type']) ){
+                do_action('hydra_booking/paypal_payment_method', $data, $result['insert_id']);
+            }
+        } 
+        
       
- 
         // Load Meeting Confirmation Template 
         $confirmation_template =  $this->tfhb_booking_confirmation($data, $MeetingData, $host_meta);
 
  
 
-        $single_booking_meta = $booking->get($result['insert_id'], false);
-
+        $single_booking_meta = $booking->get(
+            array('id' => $result['insert_id']),
+            false,
+        ); 
         // After Booking Hooks
         do_action('hydra_booking/after_booking_confirmation', $single_booking_meta);
+
+        
 
         // Single Booking & Mail Notification, Google Calendar 
         do_action('hydra_booking/after_booking_completed', $single_booking_meta);
@@ -523,18 +739,22 @@ class HydraBookingShortcode {
 
         // Meeting Location Check
         $meeting_locations = json_decode($single_booking_meta->meeting_location);
+        
+        
         $zoom_exists = false;
-        if (is_array($meeting_locations)) {
-            foreach ($meeting_locations as $location) {
-                if (isset($location->location) && $location->location === "zoom") {
-                    $zoom_exists = true;
-                    break;
-                }
-            }
+        if(is_array($meeting_locations)){
+            // if in array location value is meet then set google meet using array filter  
+            $meeting_location = array_filter($meeting_locations, function($location){
+                return $location['location'] == 'zoom';
+            });
+
+            $zoom_exists  = count($meeting_location) > 0 ? true : false; 
         }
+        
 
         // Global Integration
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+        
         if( !empty($_tfhb_integration_settings['zoom_meeting']) && !empty($_tfhb_integration_settings['zoom_meeting']['connection_status'])){
             $account_id = $_tfhb_integration_settings['zoom_meeting']['account_id'];
             $app_client_id = $_tfhb_integration_settings['zoom_meeting']['app_client_id'];
@@ -548,13 +768,27 @@ class HydraBookingShortcode {
             $app_secret_key = $_tfhb_host_integration_settings['zoom_meeting']['app_secret_key'];
         }
         
-        if( $zoom_exists && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+        
+        if($zoom_exists == true && !empty($account_id) && !empty($app_client_id) && !empty($app_secret_key) ){
+        //     echo "<pre>";
+        // print_r($account_id);
+        // echo "<br>";
+        // print_r($app_client_id);
+        // echo "<br>";
+        // print_r($app_secret_key);
+        // echo "</pre>";
+        // exit;
             $zoom = new ZoomServices(
                 sanitize_text_field($account_id), 
                 sanitize_text_field($app_client_id),  
                 sanitize_text_field($app_secret_key)
             ); 
             $meeting_creation = $zoom->create_zoom_meeting($single_booking_meta);
+        //         echo "<pre>";
+        // print_r($meeting_creation);
+        // echo "<br>";
+        // exit;
+            
             $meeting_location_data["zoom"]['address'] = $meeting_creation;
 
             // Get Post Meta 
@@ -567,6 +801,7 @@ class HydraBookingShortcode {
         }
         
         $response['message'] = 'Booking Successful';
+        $response['action'] = 'create';
         $response['confirmation_template'] = $confirmation_template;
 
 
@@ -592,6 +827,93 @@ class HydraBookingShortcode {
     }
 
 
+    // Insert Calender After Booking Schedule
+    public function insert_calender_after_booking_completed($data){
+       
+        $booking = new Booking();
+        $meeting = new Meeting();
+        $BookingMeta = new BookingMeta();
+        $MeetingData = $meeting->get( $data->meeting_id );
+        $meta_data = get_post_meta($MeetingData->post_id, '__tfhb_meeting_opt', true);
+        if('one-to-group' == $meta_data['meeting_type'] ){
+            $max_book_per_slot = isset($meta_data['max_book_per_slot']) ? $meta_data['max_book_per_slot'] : 1; 
+            $check_booking = $booking->get(
+                array(
+                    'meeting_id' => $data->meeting_id, 
+                    'meeting_dates' => $data->meeting_dates, 
+                    'start_time' => $data->start_time, 
+                    'end_time' => $data->end_time
+                ),
+                false,
+                false, 
+                false,
+                'id DESC',
+            );
+            
+            // unset if check_booking has current booking data->id without loop and array maps or filter
+            $check_booking = array_filter($check_booking, function($booking) use ($data) {
+                return $booking->id !== $data->id;
+            });
+            // Get First Items form the array
+            $first_item = reset($check_booking);
+            
+            if($first_item->meeting_calendar != 'null' && !empty($first_item->meeting_calendar) && $first_item->meeting_calendar != 0 ){
+             
+                $booking_calendar = $BookingMeta->getFirstOrFail(
+                    $first_item->meeting_calendar
+                );
+                $update = array();
+                $update['id'] = $data->id;
+                $update['meeting_calendar'] = $booking_calendar->id;
+               
+                $booking->update($update); 
+                $booking_calendar_value = json_decode($booking_calendar->value);
+               
+                $booking_calendar_value =  apply_filters('hydra_booking_calendar_add_new_attendee', $booking_calendar_value, $data);
+
+                // Update the Booking meta 
+                $booking_meta = array(
+                    'id' => $booking_calendar->id, 
+                    'value' => json_encode($booking_calendar_value, true),
+                );
+
+                $BookingMeta->update($booking_meta);
+                
+                return ;
+                
+
+            } 
+             
+        }else{
+          
+             // Update the Booking
+            $calendar_data = apply_filters('after_booking_completed_calendar_data', [], $data);
+         
+         
+            $booking_meta = array(
+                'booking_id' => $data->id,
+                'meta_key' => 'booking_calendar',
+                'value' => json_encode($calendar_data, true),
+            );
+            
+            $insert = $BookingMeta->add($booking_meta);
+
+            $insert_id = $insert['insert_id'];
+            if ( $insert_id === false ) {
+                return false;
+            }
+
+            $update = array();
+            $update['id'] = $data->id;
+            $update['meeting_calendar'] = $insert_id;
+    
+            $booking->update($update); 
+        }
+       
+        return true;
+      
+    }
+
     // Already Booked Times Callback
     public function tfhb_already_booked_times_callback() { 
         // Checked Nonce validation.
@@ -612,33 +934,18 @@ class HydraBookingShortcode {
 
 
         $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : '';
+        $meeting_id = isset($_POST['meeting_id']) ? sanitize_text_field($_POST['meeting_id']) : 0;
         $selected_time_format = isset($_POST['time_format']) ? sanitize_text_field($_POST['time_format']) : '12';
         $selected_time_zone = isset($_POST['time_zone']) ? sanitize_text_field($_POST['time_zone']) : 'UTC';
 
-
-        // Get All Booking Data.
-        $booking = new Booking();
-        $bookings = $booking->get(array('meeting_dates' => $selected_date)); 
+         
+        
         $date_time = new DateTimeController( $selected_time_zone );
+        $data = $date_time->getAvailableTimeData($meeting_id, $selected_date, $selected_time_zone, $selected_time_format);
  
+      
 
-        $disabled_times = array();
-        foreach($bookings as $booking){
-            $start_time = $booking->start_time;
-            $end_time = $booking->end_time;
-            $time_zone = $booking->attendee_time_zone; 
- 
-            $start_time = $date_time->convert_time_based_on_timezone($start_time, $time_zone, $selected_time_zone, $selected_time_format);
-            $end_time = $date_time->convert_time_based_on_timezone($end_time, $time_zone, $selected_time_zone, $selected_time_format);
-
-            $disabled_times[] = array(
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            );
-
-        }
-
-        wp_send_json_success(  $disabled_times );
+        wp_send_json_success(  $data );
         wp_die();
     }
 

@@ -1,12 +1,9 @@
 <?php
-get_header();
+wp_head();
 
 global $wp_query;
 
-// echo "<pre>";
-// print_r($wp_query);
-// echo "</pre>";
-
+ 
 
 if (isset($wp_query->query_vars['hydra-booking'])) {
     $meeting_id = intval($wp_query->query_vars['meeting-id']);
@@ -19,4 +16,4 @@ if (isset($wp_query->query_vars['hydra-booking'])) {
     <?php }
 }
 
-get_footer();
+wp_footer();

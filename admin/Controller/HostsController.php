@@ -7,6 +7,7 @@ namespace HydraBooking\Admin\Controller;
  use HydraBooking\Admin\Controller\CountryController;
  use HydraBooking\Services\Integrations\Zoom\ZoomServices;
  use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
+ use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
  // Use DB 
 use HydraBooking\DB\Host;
 use HydraBooking\DB\Availability;
@@ -217,7 +218,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'about' => '',
             'avatar' => '',
             'featured_image' => '', 
-            'status' => 1, 
+            'status' => 'activate', 
         ];
 
         // Insert Host
@@ -447,8 +448,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
  
+        // Google Calendar API
         $google_calendar = isset($_tfhb_host_integration_settings['google_calendar']) ? $_tfhb_host_integration_settings['google_calendar'] : array();
-        
+       
         if($_tfhb_integration_settings['google_calendar']['status'] == true){  
 
             $google_calendar['type'] = 'google_calendar';
@@ -460,7 +462,86 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             
             
         } 
+
+        // Outlook Calendar API
+        $outlook_calendar = isset($_tfhb_host_integration_settings['outlook_calendar']) ? $_tfhb_host_integration_settings['outlook_calendar'] : array();
+ 
+
+        if($_tfhb_integration_settings['outlook_calendar']['status'] == true){  
+
+            $outlook_calendar['type'] = 'outlook_calendar';
+            $OutlookCalendar = new OutlookCalendar();  
+            $outlook_calendar['access_url'] = $OutlookCalendar->GetAccessTokenUrl($user_id ); 
+            $outlook_calendar['status'] = $_tfhb_integration_settings['outlook_calendar']['status']; 
+            $outlook_calendar['connection_status'] = $_tfhb_integration_settings['outlook_calendar']['connection_status'];  
+          
+            
+            
+        } 
+
+        // Apple Calendar  
+        $apple_calendar = isset($_tfhb_host_integration_settings['apple_calendar']) ? $_tfhb_host_integration_settings['apple_calendar'] : array();
+ 
+
+        if($_tfhb_integration_settings['apple_calendar']['connection_status'] == true){  
+
+            $apple_calendar['type'] = 'calendar';  
+            $apple_calendar['status'] = $_tfhb_integration_settings['apple_calendar']['status']; 
+            $apple_calendar['connection_status'] = $_tfhb_integration_settings['apple_calendar']['connection_status'];  
+            $apple_calendar['apple_id'] = isset($apple_calendar['apple_id']) ? $apple_calendar['apple_id'] : '';
+            $apple_calendar['app_password'] = isset($apple_calendar['app_password']) ? $apple_calendar['app_password'] : ''; 
+        } 
         
+        // Stripe API
+        $stripe = isset($_tfhb_host_integration_settings['stripe']) ? $_tfhb_host_integration_settings['stripe'] : array();
+        if($_tfhb_integration_settings['stripe']['status'] == true){  
+
+            $stripe['type'] = 'stripe';
+            $stripe['status'] = $_tfhb_host_integration_settings['stripe']['status']; 
+            $stripe['connection_status'] = $_tfhb_integration_settings['stripe']['status']; 
+            $stripe['public_key'] = $_tfhb_host_integration_settings['stripe']['public_key'];  
+            $stripe['secret_key'] = $_tfhb_host_integration_settings['stripe']['secret_key']; 
+        
+        } 
+
+        // Paypal API
+        $paypal = isset($_tfhb_host_integration_settings['paypal']) ? $_tfhb_host_integration_settings['paypal'] : array();
+        if($_tfhb_integration_settings['paypal']['status'] == true){  
+
+        $paypal['type'] = 'paypal';
+        $paypal['status'] = $_tfhb_host_integration_settings['paypal']['status']; 
+        $paypal['connection_status'] = $_tfhb_integration_settings['paypal']['status']; 
+        $paypal['client_id'] = $_tfhb_host_integration_settings['paypal']['client_id'];  
+        $paypal['secret_key'] = $_tfhb_host_integration_settings['paypal']['secret_key']; 
+        $paypal['environment'] =  $_tfhb_host_integration_settings['paypal']['environment'];
+        
+        } 
+
+        // Mailchimp API
+        $mailchimp = isset($_tfhb_host_integration_settings['mailchimp']) ? $_tfhb_host_integration_settings['mailchimp'] : array();
+        if($_tfhb_integration_settings['mailchimp']['status'] == true){  
+
+            $mailchimp['type'] = 'mailchimp';
+            $mailchimp['status'] = $_tfhb_host_integration_settings['mailchimp']['status']; 
+            $mailchimp['connection_status'] = $_tfhb_integration_settings['mailchimp']['status']; 
+            $mailchimp['key'] = $_tfhb_host_integration_settings['mailchimp']['key'];  
+          
+        } 
+
+        // Zoho
+        $zoho = isset($_tfhb_host_integration_settings['zoho']) ? $_tfhb_host_integration_settings['zoho'] : array();
+        if($_tfhb_integration_settings['zoho']['client_id']){  
+
+            $zoho['type'] = 'zoho';
+            $zoho['status'] = $_tfhb_host_integration_settings['zoho']['status']; 
+            $zoho['client_id'] = $_tfhb_host_integration_settings['zoho']['client_id'];  
+            $zoho['client_secret'] = $_tfhb_host_integration_settings['zoho']['client_secret'];  
+            $zoho['redirect_url'] = $_tfhb_host_integration_settings['zoho']['redirect_url'];  
+            $zoho['access_token'] = $_tfhb_host_integration_settings['zoho']['access_token'];  
+            $zoho['modules'] = json_decode($_tfhb_host_integration_settings['zoho']['modules']);
+            $zoho['refresh_token'] = json_decode($_tfhb_host_integration_settings['zoho']['refresh_token']);
+          
+        } 
 
 
         // Checked if woo
@@ -468,6 +549,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'status' => true,  
             'integration_settings' => $_tfhb_host_integration_settings,
             'google_calendar' => $google_calendar,  
+            'outlook_calendar' => $outlook_calendar,  
+            'apple_calendar' => $apple_calendar,  
+            'mailchimp' => $mailchimp,  
+            'stripe' => $stripe,  
+            'zoho' => $zoho,  
+            'paypal' => $paypal,
+            '_tfhb_integration_settings' => $_tfhb_integration_settings,
         );
         return rest_ensure_response($data);
     }
@@ -481,7 +569,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $host_id = $request['id'];
         $user_id = $request['user_id'];
         
-        $_tfhb_host_integration_settings = get_user_meta($user_id, '_tfhb_host_integration_settings');
+        $_tfhb_host_integration_settings = is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array();
+
         $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
         if($key == 'zoom_meeting'){ 
 
@@ -523,6 +612,106 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             $data = array(
                 'status' => true,   
                 'message' => 'Google Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'outlook_calendar'){
+            // Get Global Settings 
+            $_tfhb_host_integration_settings['outlook_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['outlook_calendar']['status'] =  sanitize_text_field($data['status']);     
+            $_tfhb_host_integration_settings['outlook_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['outlook_calendar']['selected_calendar_id'] =  $data['selected_calendar_id'];
+            $_tfhb_host_integration_settings['outlook_calendar']['tfhb_outlook_calendar'] =  $data['tfhb_outlook_calendar'];
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+            
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Outlook Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'apple_calendar'){
+            // Get Global Settings 
+            $_tfhb_host_integration_settings['apple_calendar']['type'] =  sanitize_text_field($data['type']);
+            $_tfhb_host_integration_settings['apple_calendar']['status'] =  sanitize_text_field($data['status']);     
+            $_tfhb_host_integration_settings['apple_calendar']['connection_status'] = isset($data['secret_key']) && !empty($data['secret_key']) ? 1 : sanitize_text_field($data['connection_status']);  
+            $_tfhb_host_integration_settings['apple_calendar']['apple_id'] =  $data['apple_id'];
+            $_tfhb_host_integration_settings['apple_calendar']['app_password'] =  $data['app_password'];
+ 
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+            
+
+
+            //  woocommerce payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Apple Calendar Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'stripe'){
+            $_tfhb_host_integration_settings['stripe']['type'] =  'stripe';
+            $_tfhb_host_integration_settings['stripe']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['stripe']['public_key'] =  sanitize_text_field($data['public_key']);
+            $_tfhb_host_integration_settings['stripe']['secret_key'] =  sanitize_text_field($data['secret_key']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            //  stripe payment   
+            $data = array(
+                'status' => true,   
+                'message' => 'Stripe Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'mailchimp'){
+            $_tfhb_host_integration_settings['mailchimp']['type'] =  'mailchimp';
+            $_tfhb_host_integration_settings['mailchimp']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['mailchimp']['key'] =  sanitize_text_field($data['key']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'message' => 'Mailchimp Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'zoho'){
+            $_tfhb_host_integration_settings['zoho']['type'] =  'zoho';
+            $_tfhb_host_integration_settings['zoho']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['zoho']['client_id'] =  sanitize_text_field($data['client_id']);
+            $_tfhb_host_integration_settings['zoho']['client_secret'] =  sanitize_text_field($data['client_secret']);
+            $_tfhb_host_integration_settings['zoho']['redirect_url'] =  sanitize_url($data['redirect_url']);
+            $_tfhb_host_integration_settings['zoho']['access_token'] =  sanitize_text_field($data['access_token']);
+            $_tfhb_host_integration_settings['zoho']['refresh_token'] =  sanitize_text_field($data['refresh_token']);
+            $_tfhb_host_integration_settings['zoho']['modules'] =  json_encode($data['modules']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'message' => 'Zoho Settings Updated Successfully',
+            );
+            return rest_ensure_response($data);
+        }elseif($key == 'paypal'){
+            $_tfhb_host_integration_settings['paypal']['type'] =  'paypal';
+            $_tfhb_host_integration_settings['paypal']['status'] =  sanitize_text_field($data['status']);
+            $_tfhb_host_integration_settings['paypal']['client_id'] =  sanitize_text_field($data['client_id']);
+            $_tfhb_host_integration_settings['paypal']['secret_key'] =  sanitize_text_field($data['secret_key']);
+            $_tfhb_host_integration_settings['paypal']['environment'] =  sanitize_text_field($data['environment']);
+
+            // update User Meta  
+            update_user_meta($user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+            $data = array(
+                'status' => true,  
+                'message' => 'Paypal Settings Updated Successfully',
             );
             return rest_ensure_response($data);
         }

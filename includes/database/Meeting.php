@@ -37,7 +37,7 @@ class Meeting {
                 availability_range_type VARCHAR(20) NULL,
                 availability_range LONGTEXT NULL, 
                 availability_type VARCHAR(20) NULL,
-                availability_id INT(11) NULL,
+                availability_id VARCHAR(11) NULL,
                 availability_custom LONGTEXT NULL, 
                 buffer_time_before VARCHAR(20) NULL,
                 buffer_time_after VARCHAR(20) NULL,
@@ -48,7 +48,9 @@ class Meeting {
                 recurring_maximum VARCHAR(20) NULL,
                 attendee_can_cancel VARCHAR(20) NULL,
                 attendee_can_reschedule VARCHAR(20) NULL,
-                questions_status VARCHAR(20) NULL,
+                questions_type VARCHAR(20) NULL,
+                questions_form_type LONGTEXT NULL,
+                questions_form LONGTEXT NULL,
                 questions LONGTEXT NULL, 
                 notification LONGTEXT NULL, 
                 payment_status VARCHAR(20) NULL, 
@@ -56,6 +58,10 @@ class Meeting {
                 payment_currency VARCHAR(20) NULL, 
                 meeting_price VARCHAR(20) NULL, 
                 payment_meta LONGTEXT NULL, 
+                webhook LONGTEXT NULL, 
+                integrations LONGTEXT NULL, 
+                max_book_per_slot VARCHAR(20) NULL, 
+                is_display_max_book_slot VARCHAR(20) NULL, 
                 status VARCHAR(20) NULL, 
                 created_by VARCHAR(20) NOT NULL, 
                 updated_by VARCHAR(20) NOT NULL, 
@@ -121,14 +127,30 @@ class Meeting {
         unset($request['id']);
 
         // encode json in array data
-        $request['meeting_locations'] = wp_json_encode($request['meeting_locations']);
-        $request['availability_range'] = wp_json_encode($request['availability_range']);
-        $request['availability_custom'] = wp_json_encode($request['availability_custom']);
-        $request['booking_frequency'] = wp_json_encode($request['booking_frequency']);
-        $request['recurring_repeat'] = wp_json_encode($request['recurring_repeat']);
-        $request['questions'] = wp_json_encode($request['questions']);
-        $request['notification'] = wp_json_encode($request['notification']);
-        $request['payment_meta'] = wp_json_encode($request['payment_meta']);
+        if($request['meeting_locations']){
+            $request['meeting_locations'] = wp_json_encode($request['meeting_locations']);
+        }
+        if($request['availability_range']){
+            $request['availability_range'] = wp_json_encode($request['availability_range']);
+        }
+        if($request['availability_custom']){
+            $request['availability_custom'] = wp_json_encode($request['availability_custom']);
+        }
+        if($request['booking_frequency']){
+            $request['booking_frequency'] = wp_json_encode($request['booking_frequency']);
+        }
+        if($request['recurring_repeat']){
+            $request['recurring_repeat'] = wp_json_encode($request['recurring_repeat']);
+        }
+        if($request['questions']){
+            $request['questions'] = wp_json_encode($request['questions']);
+        }
+        if($request['notification']){
+            $request['notification'] = wp_json_encode($request['notification']);
+        }
+        if($request['payment_meta']){
+            $request['payment_meta'] = wp_json_encode($request['payment_meta']);
+        }
 
 
         // Update meeting
@@ -182,15 +204,38 @@ class Meeting {
                 $sql .= (!empty($filterData['title']) || isset($filterData['fhosts'])) ? " AND" : "";
                 $sql .= " meeting_category IN ($category_ids)";
             }
+           
+            $data = $wpdb->get_results($sql);
 
             if (!empty($filterData['startDate']) && !empty($filterData['endDate'])) {
-                // Escape and format dates for SQL query
+                
                 $startDate = date('Y-m-d', strtotime($filterData['startDate']));
                 $endDate = date('Y-m-d', strtotime($filterData['endDate']));
-                $sql .= " JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$startDate'), '$') AND JSON_CONTAINS(availability_custom->'$.date_slots[*].date', JSON_QUOTE('$endDate'), '$')";
-            }
 
-            $data = $wpdb->get_results($sql);
+                $filteredData = array_filter($data, function($row) use ($startDate, $endDate) {
+                    $customAvailableData = json_decode($row->availability_custom, true);
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        // Handle JSON decoding error if any
+                        return false;
+                    }
+                
+                    if (!isset($customAvailableData['date_slots'])) {
+                        return false;
+                    }
+                    foreach ($customAvailableData['date_slots'] as $dateSlot) {
+                        // Split the dates if they are comma-separated
+                        $dates = explode(', ', $dateSlot['date']);
+                        
+                        foreach ($dates as $date) {
+                            if ($date >= $startDate && $date <= $endDate) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+            }
 
         }elseif(!empty($user_id)){
             $data = $wpdb->get_results(

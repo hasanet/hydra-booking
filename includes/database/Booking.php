@@ -81,7 +81,7 @@ class Booking {
         global $wpdb;
 
         $table_name = $wpdb->prefix . $this->table;
-
+ 
         // json encode meeting locations
         $request['others_info'] = json_encode($request['others_info']);
         $request['meeting_locations'] = json_encode($request['meeting_locations']);
@@ -143,17 +143,33 @@ class Booking {
         $meeting_table = $wpdb->prefix . 'tfhb_meetings';
         $host_table = $wpdb->prefix . 'tfhb_hosts';
 
+ 
         if(is_array($where) && $join==false){
             $sql = "SELECT * FROM $table_name WHERE ";
             $i = 0;
             foreach($where as $k => $v){
                 if($i == 0){
+                    if($k == 'meeting_dates'){
+                        $sql .= " FIND_IN_SET('$v', $k)";
+                        continue;
+                    }
                     $sql .= " $k = '$v'";
+                   
                 }else{
+                    if($k == 'meeting_dates'){
+                        $sql .= " AND FIND_IN_SET('$v', $k)";
+                        continue;
+                    }
                     $sql .= " AND $k = '$v'";
                 }
                 $i++;
             }
+             // Add Order by if exist
+             $sql .= $orderBy != null ? " ORDER BY $orderBy" : " ORDER BY id DESC";
+
+             // Add Limit if exist
+             $sql .= $limit != null ? " LIMIT $limit" : ""; 
+     
             if($FirstOrFaill == true){
                 // only get first item 
                 $data = $wpdb->get_row(
@@ -240,9 +256,7 @@ class Booking {
             $sql .= $orderBy != null ? " ORDER BY $orderBy" : " ORDER BY id DESC";
 
             // Add Limit if exist
-            $sql .= $limit != null ? " LIMIT $limit" : "";
-    
-
+            $sql .= $limit != null ? " LIMIT $limit" : ""; 
     
             $data = $wpdb->get_results($sql);
         }

@@ -1,17 +1,21 @@
 <script setup>
 import {ref, onBeforeMount, reactive} from 'vue'
 import axios from 'axios'  
-import HbSelect from '@/components/form-fields/HbSelect.vue'
 import HbDateTime from '@/components/form-fields/HbDateTime.vue';
 import Icon from '@/components/icon/LucideIcon.vue'
 import HbText from '@/components/form-fields/HbText.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
 import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import useValidators from '@/store/validator'
+import { Availability } from '@/store/availability';
 import AvailabilityTime from '@/store/times'
 import { toast } from "vue3-toastify"; 
 import { Host } from '@/store/hosts';
 const { errors, isEmpty } = useValidators();
+
+const user = tfhb_core_apps.user || '';
+const user_id = user.id || '';
+const user_role = user.role[0] || '';
 
 const emit = defineEmits(["availability-time", "availability-time-del", "availability-date", "availability-date-del", "availability-tabs", "update-meeting", "add-overrides-time", "remove-overrides-time"]); 
 const props = defineProps({
@@ -30,9 +34,15 @@ const props = defineProps({
 
 });
 
+
 // Fetch Single Availability while Schdeule on change 
 const Settings_avalibility = ref();
 const fetchAvailabilitySettings = async (availability_id) => {
+    if('tfhb_host' == user_role && props.meeting.host_id == ''){
+        props.meeting.host_id = user_id
+    }
+    
+
     let data = {
         host_id: props.meeting.host_id,
         availability_id: availability_id
@@ -45,6 +55,8 @@ const fetchAvailabilitySettings = async (availability_id) => {
         } );
         if (response.data.status && response.data.availability) { 
             Settings_avalibility.value = response.data;
+            Settings_avalibility.value.availability.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, Settings_avalibility.value.availability.time_slots) : Settings_avalibility.value.availability.time_slots;
+            
         }
     } catch (error) {
         console.log(error);
@@ -57,6 +69,11 @@ const Settings_Avalibility_Callback = (e) => {
 }
 
 const tfhbValidateInput = (fieldName) => {
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+    
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], props.meeting[fieldParts[0]]);
@@ -77,15 +94,18 @@ const fetchHostAvailability = async (host) => {
             delete HostAvailabilities[key];
         }
         if("settings"==response.data.host_availble){
-            console.log(response.data.host.availability);
             Settings_avalibility.value = response.data.host;
         }else{
-            // use Each Loop
-            for (const key in response.data.host.availability) {
-                HostAvailabilities.push({
-                    name: response.data.host.availability[key].title,
-                    value: key // Adjust 'someValue' as per your data structure
-                });
+            Settings_avalibility.value = '';
+            if(response.data.host.availability){
+
+                // use Each Loop
+                for (const key in response.data.host.availability) {
+                    HostAvailabilities.push({
+                        name: response.data.host.availability[key].title,
+                        value: key // Adjust 'someValue' as per your data structure
+                    });
+                }
             }
         }
     } catch (error) {
@@ -121,7 +141,13 @@ const fetchSingleAvailabilitySettings = async (host_id, availability_id) => {
 
 // Mount
 onBeforeMount(() => { 
+    Availability.getGeneralSettings();
     Host.fetchHosts().then(() => {
+        if('tfhb_host' == user_role && props.meeting.host_id == ''){
+           
+            props.meeting.host_id = user_id
+            alert(props.meeting.host_id);
+        }
         if(props.meeting.host_id!=0){
             fetchHostAvailability(props.meeting.host_id);
             fetchSingleAvailabilitySettings(props.meeting.host_id, props.meeting.availability_id);
@@ -263,7 +289,7 @@ const isobjectempty = (data) => {
 </script>
 
 <template>
-   
+    
     <div class="meeting-create-details tfhb-gap-24">
         <div class="tfhb-meeting-range tfhb-full-width">
             <div class="tfhb-admin-title" >
@@ -324,6 +350,7 @@ const isobjectempty = (data) => {
         <!-- Select Host -->
 
         <HbDropdown 
+            v-if="'tfhb_host' != user_role"
             v-model="meeting.host_id"
             required= "true" 
             :label="$tfhb_trans['Select Host']"  
@@ -336,7 +363,7 @@ const isobjectempty = (data) => {
             @tfhb-onchange="Host_Avalibility_Callback"
         />
 
-        <div class="tfhb-add-moreinfo tfhb-full-width" v-if="isobjectempty(Host.hosts)">
+        <div class="tfhb-add-moreinfo tfhb-full-width" v-if="isobjectempty(Host.hosts) && 'tfhb_host' != user_role">
             <router-link :to="'/hosts/list'" exact :class="'tfhb-btn tfhb-inline-flex tfhb-gap-8 tfhb-justify-normal tfhb-height-auto'">
                 <Icon name="PlusCircle" :width="20"/>
                 Create Host
@@ -573,32 +600,23 @@ const isobjectempty = (data) => {
                             <h3>{{ $tfhb_trans['Which hours are you free?'] }}</h3>
 
                             <div class="tfhb-availability-schedule-inner tfhb-flexbox tfhb-gap-16 tfhb-mt-16" v-for="(time, tkey) in OverridesDates.times" :key="tkey" v-if="OverridesDates.available!=1">
-                                <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16">
-                                    <HbDateTime  
-                                        v-model="time.start"
-                                        selected = "1" 
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i'
-                                        }"
+                                <div class="tfhb-availability-schedule-time tfhb-flexbox tfhb-gap-16"> 
+                                    <HbDropdown 
+                                        v-model="time.start"  
+                                        required= "true" 
                                         width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock"
-                                    /> 
+                                        :selected = "1"
+                                        placeholder="Start"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
+                                    />  
                                     <Icon name="MoveRight" size="20" /> 
-                                    <HbDateTime  
-                                        v-model="time.end"
-                                        :label="$tfhb_trans['End']"  
-                                        selected = "1"
-                                        :config="{
-                                            enableTime: true,
-                                            noCalendar: true,
-                                            dateFormat: 'H:i'
-                                        }"
+                                    <HbDropdown 
+                                        v-model="time.end"  
+                                        required= "true" 
                                         width="45"
-                                        placeholder="Type your schedule title"   
-                                        icon="Clock"
+                                        :selected = "1"
+                                        placeholder="End"   
+                                        :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                     /> 
 
                                 </div>

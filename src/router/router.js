@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import Dashboard from '../view/dashboard/Dashboard.vue';  
 import Booking from '../view/booking/booking.vue'; 
 import Settings from '../view/settings/Settings.vue';
+import setupWizard from '../view/setup-wizard/setup-wizard.vue';
 import Hosts from '../view/hosts/hosts.vue';
 import Meetings from '../view/meetings/meetings.vue';
 import { AuthData } from '@/store/auth';
@@ -32,6 +33,18 @@ const routes = [
                 name: 'BookingLists',
                 meta: { Capabilities: 'tfhb_manage_options' },
                 component: () => import('../view/booking/booking-list.vue')
+            }, 
+            {
+                path: 'create-new',
+                name: 'BookingCreate',
+                meta: { Capabilities: 'tfhb_manage_settings' },
+                component: () => import('../view/booking/booking-create.vue')
+            },
+            {
+                path: 'update/:id',
+                name: 'bookingUpdate',
+                meta: { Capabilities: 'tfhb_manage_options' },
+                component: () => import('../view/booking/booking-update.vue')
             }, 
         ]
     }, 
@@ -76,6 +89,12 @@ const routes = [
                         name: 'HostsProfileIntegrations',
                         meta: { Capabilities: 'tfhb_manage_integrations' },
                         component: () => import('../view/hosts/hosts-integrations.vue')
+                    }, 
+                    {
+                        path: 'calendars',
+                        name: 'HostsProfileCalendars',
+                        meta: { Capabilities: 'tfhb_manage_integrations' },
+                        component: () => import('../view/hosts/hosts-calendars.vue')
                     }, 
                 ]
             }, 
@@ -140,6 +159,18 @@ const routes = [
                         name: 'MeetingsCreatePayment',
                         meta: { Capabilities: 'tfhb_manage_options' },
                         component: () => import('../view/meetings/meetings-payment.vue')
+                    },
+                    {
+                        path: 'webhook',
+                        name: 'MeetingsCreateWebhook',
+                        meta: { Capabilities: 'tfhb_manage_options' },
+                        component: () => import('../view/meetings/meetings-webhook.vue')
+                    },
+                    {
+                        path: 'integrations',
+                        name: 'MeetingsCreateIntegrations',
+                        meta: { Capabilities: 'tfhb_manage_options' },
+                        component: () => import('../view/meetings/meetings-integrations.vue')
                     }
                 ]
             }, 
@@ -211,6 +242,17 @@ const routes = [
             },  
              
         ]
+        
+    },
+    // ...
+
+     // Setup Wizard routes
+     {
+        path: '/setup-wizard',
+        component: setupWizard,
+        meta: { Capabilities: 'tfhb_manage_settings' },
+        // redirect: { name: 'SettingsGeneral' },
+       
         
     },
     // ...

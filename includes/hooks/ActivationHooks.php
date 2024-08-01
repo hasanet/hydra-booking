@@ -1,5 +1,5 @@
 <?php
-namespace HydraBooking\Hooks;
+namespace HydraBooking\Hooks; 
 class ActivationHooks{
 
     public function __construct( ) { 
@@ -17,8 +17,12 @@ class ActivationHooks{
         $this->tfhb_create_host_role();
 
         // Add Capabilities to the role
-        $this->tfhb_add_capabilities_to_role();
+        $this->tfhb_add_capabilities_to_role(); 
 
+        // Tfhb Options Activation hooks
+        $this->tfhb_options_activation_hooks();
+ 
+     
     }
 
     public function tfhb_create_host_role(){
@@ -66,5 +70,19 @@ class ActivationHooks{
         $role->add_cap( 'tfhb_manage_integrations' );
 
     }
+
+
+    // Tfhb Options Activation hooks
+    public function  tfhb_options_activation_hooks(){
+
+        // setup default options 
+
+        // Activation date 
+        update_option('tfhb_hydra_activation_date', time() );
+
+        
     
+    }
+    
+
 }

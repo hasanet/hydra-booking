@@ -1,12 +1,11 @@
 <script setup> 
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView,} from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import AvailabilityPopupSingle from '@/components/availability/AvailabilityPopupSingle.vue';
 import AvailabilitySingle from '@/components/availability/AvailabilitySingle.vue';
 import { toast } from "vue3-toastify"; 
-
+import { Availability } from '@/store/availability';
 const isModalOpened = ref(false);
 const timeZone = reactive({}); 
 const AvailabilityGet = reactive({
@@ -99,26 +98,19 @@ const openModal = () => {
     ],
     date_slots: [
     ]
-  };
-//   console.log(GeneralSettings);
-  availabilityDataSingle.value.time_zone = GeneralSettings.value.time_zone ? GeneralSettings.value.time_zone : '';
-  if( GeneralSettings.value.week_start_from ){
-    // make week start from as time slot rearrainge
-    let week_start_from = GeneralSettings.value.week_start_from; 
-     
-    let week_start_from_index = availabilityDataSingle.value.time_slots.findIndex( x => x.day == week_start_from );
-    let week_start_from_data = availabilityDataSingle.value.time_slots.splice(week_start_from_index, availabilityDataSingle.value.time_slots.length);
-    availabilityDataSingle.value.time_slots = [...week_start_from_data, ...availabilityDataSingle.value.time_slots];
-
+  }; 
+    availabilityDataSingle.value.time_zone = GeneralSettings.value.time_zone ? GeneralSettings.value.time_zone : '';
+  
+    availabilityDataSingle.value.time_slots = GeneralSettings.value.week_start_from ?  Availability.RearraingeWeekStart(GeneralSettings.value.week_start_from, availabilityDataSingle.value.time_slots) : availabilityDataSingle.value.time_slots;
  
-  }
-  isModalOpened.value = true;
+    isModalOpened.value = true;
 };
 
 // Edit availability
 const EditAvailabilitySettings = async (key, id, availability ) => { 
-  // availabilityDataSingle.value.key = key;
   availabilityDataSingle.value = availability;
+
+  availabilityDataSingle.value.time_slots = GeneralSettings.value.week_start_from ?  Availability.RearraingeWeekStart(GeneralSettings.value.week_start_from, availabilityDataSingle.value.time_slots) : availabilityDataSingle.value.time_slots;
   isModalOpened.value = true;
 }
 
@@ -198,6 +190,7 @@ onBeforeMount(() => {
          <AvailabilitySingle  v-for="(availability, key) in AvailabilityGet.data" :availability="availability" :key="key" @delete-availability="deleteAvailabilitySettings(key, availability.id)" @edit-availability="EditAvailabilitySettings(key, availability.id, availability)"  />
 
          <AvailabilityPopupSingle v-if="isModalOpened" :timeZone="timeZone.value" :availabilityDataSingle="availabilityDataSingle.value" :isOpen="isModalOpened" @modal-close="closeModal"  @update-availability="fetchAvailabilitySettingsUpdate" />
+    
     </div>
 </div>
  

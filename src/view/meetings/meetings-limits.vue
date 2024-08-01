@@ -3,7 +3,9 @@ import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 import HbCounter from '@/components/meetings/HbCounter.vue'
 import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 import HbCheckbox from '@/components/form-fields/HbCheckbox.vue';
+import HbText from '@/components/form-fields/HbText.vue';
 const emit = defineEmits(["update-meeting", "limits-frequency-add"]); 
+
 const props = defineProps({
     meetingId: {
         type: Number,
@@ -86,15 +88,17 @@ const removeExtraFrequency = (key) => {
             <!-- Buffer time after meeting -->
 
             <!-- Booking Frequency -->
-
+           
             <HbCounter
                 :label="$tfhb_trans['Booking frequency']"
                 width="50"
                 :description="$tfhb_trans['Limit how many times this meeting can be booked']"
-                :repater="true"
+                :repater="true" 
+                counterLabel="Bookings"
                 :counter_value="meeting.booking_frequency"
                 @limits-frequency-add="addExtraFrequency"
                 @limits-frequency-remove="removeExtraFrequency"
+                limit="1"
             />
 
             <!-- Meeting interval -->
@@ -138,26 +142,20 @@ const removeExtraFrequency = (key) => {
                 width="50"
                 :repater="false"
                 :counter_value="meeting.recurring_repeat"
+                limit="1"
             />
             
-            <!-- For a maximum of -->
-            <HbDropdown 
-                v-model="meeting.recurring_maximum"
-                required= "true"  
-                :label="$tfhb_trans['For a maximum of']"   
-                width="50"
-                selected = "1"
-                :placeholder="$tfhb_trans['Use meeting length (default)']"
-                :option = "[
-                    {name: 'Sunday', value: 'Sunday'},
-                    {name: 'Monday', value: 'Monday'},
-                    {name: 'Tuesday', value: 'Tuesday'},
-                    {name: 'Wednesday', value: 'Wednesday'},
-                    {name: 'Thursday', value: 'Thursday'},
-                    {name: 'Friday', value: 'Friday'},
-                    {name: 'Saturday', value: 'Saturday'},
-                ]" 
-            />
+            <!-- For a maximum of --> 
+            <HbText  
+                    v-model="meeting.recurring_maximum"   
+                    type="number"
+                    :label="$tfhb_trans['Maximum number of bookings']"  
+                    selected = "1"
+                    :placeholder="$tfhb_trans['Use meeting length (default)']" 
+                    width="50"  
+                    limit="1"
+                /> 
+
 
         </div>  
 

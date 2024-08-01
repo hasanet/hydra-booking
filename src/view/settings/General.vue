@@ -1,7 +1,7 @@
 <script setup> 
 // Use children routes for the tabs 
 import { ref, reactive, onBeforeMount } from 'vue';
-import { useRouter, RouterView,} from 'vue-router' 
+import { useRouter } from 'vue-router' 
 import axios from 'axios' 
 import Icon from '@/components/icon/LucideIcon.vue'
 import { toast } from "vue3-toastify";
@@ -30,6 +30,11 @@ const generalSettings = reactive({
 // Field Validator
 
 const tfhbValidateInput = (fieldName) => {
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+
     const fieldParts = fieldName.split('.');
     if(fieldParts[0] && !fieldParts[1]){
         isEmpty(fieldParts[0], generalSettings[fieldParts[0]]);
@@ -72,8 +77,14 @@ const fetchGeneralSettings = async () => {
     } 
 }
 const UpdateGeneralSettings = async () => { 
+
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
+    
     // Errors Added
-    let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'date_format', 'country']
+    let validator_field = ['admin_email', 'time_zone', 'time_format', 'week_start_from', 'country']
     if(validator_field){
         validator_field.forEach(field => {
 
@@ -193,6 +204,7 @@ onBeforeMount(() => {
                     :errors="errors.time_format"
                 />
                 <!-- Time format --> 
+                
                 <!-- Week start from -->
                 <HbDropdown 
                     
@@ -219,7 +231,7 @@ onBeforeMount(() => {
                 <!-- Week start from -->
                 
                 <!-- Date Format -->
-                <HbDropdown 
+                <!-- <HbDropdown 
                     
                     v-model="generalSettings.date_format"  
                     required= "true" 
@@ -233,7 +245,7 @@ onBeforeMount(() => {
                     @add-change="tfhbValidateInput('date_format')" 
                     @add-click="tfhbValidateInput('date_format')" 
                     :errors="errors.date_format"
-                />
+                /> -->
                 <!-- Date Format -->
 
                 <!-- Select countr -->
@@ -310,7 +322,7 @@ onBeforeMount(() => {
                 <HbSwitch 
                     v-model="generalSettings.booking_status"
                     width="100"
-                    :label="$tfhb_trans['Approved bookings by default.']"  
+                    :label="$tfhb_trans['Confirmed bookings by default.']"  
                 />
                
                 <!-- Default status of bookings --> 
@@ -319,7 +331,7 @@ onBeforeMount(() => {
                  <HbSwitch 
                     v-model="generalSettings.reschedule_status"
                     width="100"
-                    :label="$tfhb_trans[ 'Approved reschedule by default.']"  
+                    :label="$tfhb_trans[ 'Confirmed reschedule by default.']"  
                 />
                 <!-- Default status of bookings --> 
                  

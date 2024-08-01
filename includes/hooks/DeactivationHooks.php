@@ -14,6 +14,11 @@ class DeactivationHooks{
         // Remove Capabilities to the role
         $this->tfhb_add_capabilities_to_role();
 
+        $this->remove_cron_job_schedule();
+
+        // Deactivate Options 
+        $this->tfhb_options_deactivation_hooks();
+
 
     }
 
@@ -34,6 +39,22 @@ class DeactivationHooks{
         $role->remove_cap( 'tfhb_manage_hosts' );
         $role->remove_cap( 'tfhb_manage_custom_availability' );
         $role->remove_cap( 'tfhb_manage_integrations' );
+    }
+
+    public function remove_cron_job_schedule(){
+        if ( wp_next_scheduled( 'tfhb_after_booking_completed_schedule' ) ) {
+
+            wp_clear_scheduled_hook('tfhb_after_booking_completed_schedule');
+        }
+    }
+
+    // Deactivate Options
+    public function tfhb_options_deactivation_hooks(){
+
+        // Delete Quick Setup Option
+        delete_option('tfhb_hydra_quick_setup');
+
+        
     }
     
 }

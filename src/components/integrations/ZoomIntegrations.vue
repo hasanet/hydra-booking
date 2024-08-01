@@ -6,6 +6,7 @@ import Icon from '@/components/icon/LucideIcon.vue'
 // import Form Field 
 import HbText from '@/components/form-fields/HbText.vue' 
 import HbPopup from '@/components/widgets/HbPopup.vue';  
+import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 
 const zoomPopup = ref(false);
 
@@ -45,7 +46,7 @@ const closePopup = () => {
             <button @click="emit('popup-open-control')" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ zoom_meeting.connection_status == 1 ? 'Connected' : 'Connect'  }} <Icon name="ChevronRight" size="18" /></button>
                 <!-- Checkbox swicher -->
 
-                <HbSwitch v-if="zoom_meeting.connection_status" @change="emit('update-integrations', 'zoom_meeting', zoom_meeting)" v-model="zoom_meeting.status"    />
+                <HbSwitch v-if="zoom_meeting.connection_status" @change="emit('update-integrations', 'zoom_meeting', zoom_meeting)" v-model="zoom_meeting.status"    /> 
             <!-- Swicher --> 
         </div>
 

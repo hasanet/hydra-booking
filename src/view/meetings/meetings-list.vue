@@ -12,7 +12,6 @@ const FilterPreview = ref(false);
 const FilterHostPreview = ref(false);
 const FilterCatgoryPreview = ref(false);
 const isModalOpened = ref(false);
-const skeleton = ref(true);
 const sharePopup = ref(false)
 
 const openModal = () => {
@@ -44,7 +43,8 @@ const shareData = reactive({
     meeting_type: '',
     share_type: 'link',
     link: '',
-    shortcode: ''
+    shortcode: '',
+    embed: ''
 })
 
 const ShareTabs = (tab) => {
@@ -59,6 +59,7 @@ const sharePopupData = (data) => {
     shareData.meeting_type = data.meeting_type
     shareData.shortcode = '[hydra_booking id="'+data.id+'"]'
     shareData.link = tfhb_core_apps.admin_url + '/' + data.slug
+    shareData.embed = '<iframe src="'+ tfhb_core_apps.admin_url +'/?hydra-booking=meeting&meeting-id='+data.id+'&type=iframe" title="description"  height="600" width="100%" ></iframe>'
 
     // Popup open
     sharePopup.value = true;
@@ -112,13 +113,13 @@ const copyMeeting = (link) => {
                     <ul class="tfhb-flexbox">
                         <li class="tfhb-flexbox" v-for="(shost, key) in Host.hosts" :key="key">
                             <label>
-                                <input type="checkbox" :value="key" v-model="filterData.fhosts" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
+                                <input type="checkbox" :value="shost.value" v-model="filterData.fhosts" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
                                 <span class="checkmark"></span>
-                                {{ shost }}
+                                {{ shost.name }}
                             </label>
-                            <div class="tfhb-category-items">
+                            <!-- <div class="tfhb-category-items">
                                 25
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>
@@ -130,15 +131,15 @@ const copyMeeting = (link) => {
                 </div>
                 <div class="tfhb-filter-category-box" v-show="FilterCatgoryPreview">
                     <ul class="tfhb-flexbox">
-                        <li class="tfhb-flexbox" v-for="(mcategory, key) in Meeting.meetingCategory.data" :key="key">
+                        <li class="tfhb-flexbox" v-for="(mcategory, key) in Meeting.meetingCategory" :key="key">
                             <label>
                                 <input type="checkbox" :value="mcategory.id" v-model="filterData.fcategory" @change="Meeting.Tfhb_Meeting_Select_Filter(filterData)">
                                 <span class="checkmark"></span>
                                 {{ mcategory.name }}
                             </label>
-                            <div class="tfhb-category-items">
+                            <!-- <div class="tfhb-category-items">
                                 25
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>
@@ -289,7 +290,7 @@ const copyMeeting = (link) => {
                                         <Icon name="Clock" size="16" /> 
                                     </div>
                                     <div class="user-info-title">
-                                        {{ shareData.time }}
+                                        {{ shareData.time }} {{ $tfhb_trans['minutes'] }}
                                     </div>
                                 </div>
                             </li>
@@ -321,7 +322,7 @@ const copyMeeting = (link) => {
                             <ul class="tfhb-flexbox tfhb-gap-8">
                                 <li :class="'link'==shareData.share_type ? 'active' : ''" @click="ShareTabs('link')">{{ $tfhb_trans['Share link'] }}</li>
                                 <li :class="'short'==shareData.share_type ? 'active' : ''" @click="ShareTabs('short')">{{ $tfhb_trans['Short code'] }}</li>
-                                <!-- <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li> -->
+                                <li :class="'embed'==shareData.share_type ? 'active' : ''" @click="ShareTabs('embed')">Embed code</li>
                             </ul>
                         </div>
 
@@ -338,6 +339,13 @@ const copyMeeting = (link) => {
 
                                 <div class="tfhb-copy-btn tfhb-mt-32">
                                     <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.shortcode)">{{ $tfhb_trans['Copy Code'] }}</button>
+                                </div>
+                            </div>
+                            <div class="share-link" v-if="'embed'==shareData.share_type">
+                                <input type="text" :value="shareData.embed" readonly>
+
+                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.embed)">{{ $tfhb_trans['Copy Code'] }}</button>
                                 </div>
                             </div>
                         </div>

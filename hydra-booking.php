@@ -30,6 +30,13 @@ class THB_INIT{
             require_once THB_PATH . '/vendor/autoload.php'; 
         }
 
+        // Helper Function
+        // Load Vendor Auto Load
+        if(file_exists(THB_PATH . '/includes/helper/helper-functions.php')) {
+           
+            require_once THB_PATH . '/includes/helper/helper-functions.php'; 
+        }
+
         // Activation Hooks
         new HydraBooking\Hooks\ActivationHooks();  
 
@@ -39,22 +46,36 @@ class THB_INIT{
         // Mail Hooks
         new HydraBooking\Hooks\MailHooks(); 
 
+        // Web Hooks
+        new HydraBooking\Services\Integrations\WebHook\WebHook(); 
+
+        // Integrations
+        new HydraBooking\Services\Integrations\MailChimp\MailChimp(); 
+        new HydraBooking\Services\Integrations\Zoho\Zoho(); 
+        new HydraBooking\Services\Integrations\FluentCRM\FluentCRM(); 
+
+      
         add_action('init', array($this, 'init'));
         add_filter( 'authenticate', array( new HydraBooking\Admin\Controller\AuthController(), 'tfhb_restrict_unverified_user'), 10, 3 );
         add_action('current_screen', array($this, 'tfhb_get_plugin_screen'));
         add_action( 'wp_enqueue_scripts', array($this, 'tfhb_enqueue_scripts' ));
+
+       
+
+
    }
 
+ 
     public function init() {   
-        
-        
+       new HydraBooking\Admin\Controller\ScheduleController(); 
+ 
         // Post Type 
         new HydraBooking\PostType\Meeting\Meeting_CPT();
         new HydraBooking\PostType\Booking\Booking_CPT(); 
 
         // Create a New host Role 
         new HydraBooking\Admin\Controller\RouteController();   
- 
+       
         
         if(is_admin()) { 
             // Load Admin Class
@@ -87,6 +108,10 @@ class THB_INIT{
     public function tfhb_enqueue_scripts(){
         wp_enqueue_style( 'tfhb-style', THB_URL . 'assets/app/css/style.css', '', THB_VERSION );
         wp_register_style( 'tfhb-select2-style', THB_URL . 'assets/app/css/select2.min.css', array(), THB_VERSION );
+
+        // Global General Settings
+        $general_settings = get_option('_tfhb_general_settings', true) ? get_option('_tfhb_general_settings', true) : array();
+
         $_tfhb_appearance_settings = get_option('_tfhb_appearance_settings');
         // var_dump($_tfhb_appearance_settings);
         $tfhb_primary_color = !empty($_tfhb_appearance_settings['primary_color']) ? $_tfhb_appearance_settings['primary_color'] : '#F62881';
@@ -102,12 +127,15 @@ class THB_INIT{
         wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );
 
         // register script 
+        wp_enqueue_script( 'stripe', '//checkout.stripe.com/checkout.js', array( 'jquery' ), '1.0.0', true );
+        wp_enqueue_script( 'paypal', '//paypalobjects.com/api/checkout.js', array( 'jquery' ), '1.0.0', true );
         wp_register_script( 'tfhb-select2-script', THB_URL . 'assets/app/js/select2.min.js', array('jquery', 'tfhb-app-script'), THB_VERSION, true );
         wp_register_script( 'tfhb-app-script', THB_URL . 'assets/app/js/main.js', array('jquery'), THB_VERSION, true ); 
 
         wp_localize_script( 'tfhb-app-script', 'tfhb_app_booking', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce' => wp_create_nonce( 'tfhb_nonce' ),
+            'general_settings' => $general_settings,
         ) );
 
     }
@@ -117,5 +145,6 @@ class THB_INIT{
 
 
 new THB_INIT();
+ 
  
  

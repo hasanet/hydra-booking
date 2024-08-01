@@ -5,8 +5,8 @@ import { useRouter, useRoute, RouterView } from 'vue-router'
 import axios from 'axios'  
 import { toast } from "vue3-toastify"; 
 import useValidators from '@/store/validator'
+import { Availability } from '@/store/availability';
 const { errors } = useValidators();
-const error = reactive({})
 
 const route = useRoute();
 const router = useRouter();
@@ -14,7 +14,11 @@ const skeleton = ref(true);
 const timeZone = reactive({});
 const meetingCategory = reactive({});
 const wcProduct = reactive({});
-
+const integrations = reactive({
+    google_calendar_status : 1,
+    zoom_meeting_status : 1,
+});
+const formsList = reactive({});
 const meetingData = reactive({
     id: 0,
     user_id: 0,
@@ -137,8 +141,10 @@ const meetingData = reactive({
     ],
     recurring_maximum: '',
     attendee_can_cancel: 1,
-    attendee_can_reschedule: 1,
-    questions_status: 1,
+    attendee_can_reschedule: 1, 
+    questions_type: 'custom',
+    form_type: '',
+    form_id: '',
     questions: [
         {
             label: 'name',
@@ -238,8 +244,16 @@ const meetingData = reactive({
     payment_method: '',
     payment_meta: {
         product_id: '',
-    }
+    },
+    webhook: '',
+    integrations: '',
+    max_book_per_slot: 1,
+    is_display_max_book_slot: 0,
+    mailchimp: '',
+    fluentcrm: '',
+    zohocrm: ''
 });
+
 
 // Add more Location
 function addMoreLocations(){
@@ -311,8 +325,12 @@ const meetingId = route.params.id;
         if (response.data.status == true) { 
             // Time Zone = 
             timeZone.value = response.data.time_zone;  
+            console.log(response.data.integrations);
+            integrations.google_calendar_status = response.data.integrations.google_calendar_status && response.data.integrations.google_calendar_status == 1 ? false : true;  
+            integrations.zoom_meeting_status = response.data.integrations.zoom_meeting_status && response.data.integrations.zoom_meeting_status == 1  ? false : true;  
 
             wcProduct.value = response.data.wc_product;  
+            formsList.value = response.data.formsList;  
             meetingCategory.value = response.data.meeting_category;
 
             meetingData.id = response.data.meeting.id
@@ -334,10 +352,17 @@ const meetingId = route.params.id;
             meetingData.availability_range_type = response.data.meeting.availability_range_type ? response.data.meeting.availability_range_type : 'indefinitely'
 
             meetingData.availability_range = response.data.meeting.availability_range ? JSON.parse(response.data.meeting.availability_range) : {}
-
+           
             if(response.data.meeting.availability_custom){
+                 
                 meetingData.availability_custom = JSON.parse(response.data.meeting.availability_custom)
-            }
+             
+                
+            } 
+            meetingData.availability_custom.time_zone = Availability.GeneralSettings.time_zone ? Availability.GeneralSettings.time_zone : '';
+
+            meetingData.availability_custom.time_slots = Availability.GeneralSettings.week_start_from ?  Availability.RearraingeWeekStart(Availability.GeneralSettings.week_start_from, meetingData.availability_custom.time_slots) : meetingData.availability_custom.time_slots;
+            
             if(response.data.meeting.availability_type){
                 meetingData.availability_type = response.data.meeting.availability_type
             }
@@ -360,12 +385,18 @@ const meetingId = route.params.id;
             meetingData.attendee_can_cancel = response.data.meeting.attendee_can_cancel
             meetingData.attendee_can_reschedule = response.data.meeting.attendee_can_reschedule
 
-            if(response.data.meeting.questions_status){
-                meetingData.questions_status = response.data.meeting.questions_status
+            if(response.data.meeting.questions_type){
+                meetingData.questions_type = response.data.meeting.questions_type
+            }
+            if(response.data.meeting.questions_form_type){
+                meetingData.questions_form_type = response.data.meeting.questions_form_type
             }
 
             if(response.data.meeting.questions){
                 meetingData.questions = JSON.parse(response.data.meeting.questions)
+            }
+            if(response.data.meeting.questions_form){
+                meetingData.questions_form = response.data.meeting.questions_form
             }
             if(response.data.meeting.notification && "string" == typeof response.data.meeting.notification){
                 meetingData.notification = JSON.parse(response.data.meeting.notification)
@@ -386,6 +417,12 @@ const meetingId = route.params.id;
                 meetingData.payment_meta = response.data.meeting.payment_meta
             }
 
+            meetingData.webhook = response.data.meeting.webhook ? JSON.parse(response.data.meeting.webhook) : '';
+            meetingData.integrations = response.data.meeting.integrations ? JSON.parse(response.data.meeting.integrations) : '';
+            meetingData.mailchimp = response.data.mailchimp ? response.data.mailchimp : '';
+            meetingData.fluentcrm = response.data.fluentcrm ? response.data.fluentcrm : '';
+            meetingData.zohocrm = response.data.zohocrm ? response.data.zohocrm : '';
+
             skeleton.value = false
         }else{ 
             router.push({ name: 'MeetingsLists' });
@@ -396,11 +433,18 @@ const meetingId = route.params.id;
 } 
 
 onBeforeMount(() => { 
+
     fetchMeeting();
+    Availability.getGeneralSettings();
 });
 
 
 const UpdateMeetingData = async (validator_field) => {
+    
+    // Clear the errors object
+    Object.keys(errors).forEach(key => {
+        delete errors[key];
+    });
     
     // Errors Added
     if(validator_field){
@@ -449,6 +493,9 @@ const UpdateMeetingData = async (validator_field) => {
                 router.push({ name: 'MeetingsCreatePayment' });
             }
             if("MeetingsCreatePayment"==route.name){
+                router.push({ name: 'MeetingsCreateWebhook' });
+            }
+            if("MeetingsCreateWebhook"==route.name){
                 router.push({ name: 'MeetingsLists' });
             }
         }else{
@@ -478,6 +525,9 @@ const TfhbPrevNavigator = () => {
     if("MeetingsCreatePayment"==route.name){
         router.push({ name: 'MeetingsCreateNotifications' });
     }
+    if("MeetingsCreateWebhook"==route.name){
+        router.push({ name: 'MeetingsCreatePayment' });
+    }
 }
 </script>
 
@@ -504,6 +554,9 @@ const TfhbPrevNavigator = () => {
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/questions'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/questions' }"> {{ $tfhb_trans['Questions'] }}</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/notifications'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/notifications' }"> {{ $tfhb_trans['Notifications'] }}</router-link></li>  
                 <li><router-link :to="'/meetings/single/'+ $route.params.id +'/payment'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/payment' }">{{ $tfhb_trans['Payment'] }}</router-link></li>  
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/webhook'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/webhook' }">{{ $tfhb_trans['Webhook'] }}</router-link></li>  
+
+                <li><router-link :to="'/meetings/single/'+ $route.params.id +'/integrations'" :class="{ 'active': $route.path === '/meetings/single/'+ $route.params.id +'/integrations' }">{{ $tfhb_trans['Integrations'] }}</router-link></li> 
 
             </ul>  
         </nav>
@@ -512,8 +565,10 @@ const TfhbPrevNavigator = () => {
             <router-view 
             :meetingId ="meetingId" 
             :meeting="meetingData" 
+            :integrations="integrations" 
             :timeZone="timeZone.value" 
             :wcProduct="wcProduct.value" 
+            :formsList="formsList.value" 
             :meetingCategory="meetingCategory.value" 
             @add-more-location="addMoreLocations" 
             @remove-meeting-location="removeLocations" 

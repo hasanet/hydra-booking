@@ -19,6 +19,7 @@ const props = defineProps([
     'subtitle',
     'placeholder',
     'description', 
+    'change', 
     'icon'
 ])
 const emit = defineEmits(['update:modelValue'])
@@ -26,9 +27,19 @@ const emit = defineEmits(['update:modelValue'])
 // Read more at https://flatpickr.js.org/options/
 const config = ref(props.config || {});
 
+const flatPickrChange = (e) => {
+    if(props.change) {
+      let date = e.target.value;
+      emit('dateChange', date);
+    }
+   
+
+}
+
 </script>
 
 <template>
+
   <div class="tfhb-single-form-field " :class="[name,fieldClass]" 
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : '100%' }" 
     >
@@ -39,7 +50,7 @@ const config = ref(props.config || {});
         <h4 v-if="subtitle">{{ subtitle }}</h4>
         <p v-if="description">{{ description }}</p>
         
-        <flatPickr  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" />
+        <flatPickr  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" @change="flatPickrChange"  />
     
         <span class="tfhb-flat-icon"><Icon v-if="icon" :name="icon" size="20" /> </span>
              

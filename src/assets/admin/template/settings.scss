@@ -81,13 +81,12 @@
 		.tfhb-integrations-wrap{
 			width: 100% !important; 
 			justify-content: normal !important;
-			flex-wrap: nowrap !important;
 			@media #{$max1240}{
 				flex-wrap: wrap !important;
 			}
 			.tfhb-integrations-single-block{
 				margin: 0 !important;
-				width: calc(33% - 12px);
+				width: calc(33% - 14px);
 				@media #{$max1240}{
                     width: calc(50% - 12px);
                 }
@@ -191,6 +190,34 @@
 					&:focus {
 						outline: none;
 						box-shadow: none;
+					}
+				}
+				.dropdown {
+					width: 100%;
+					display: none !important;
+					visibility: hidden;
+					li{
+						
+						a {
+							padding-left: 32px !important;
+							border-radius: 6px; 
+							color: $ui600;
+							&.active {
+								background-color: $ui25;
+								color: $primaryi;
+							}
+							&:focus {
+								outline: none;
+								box-shadow: none;
+							}
+						}
+					}
+
+				}
+				&.expand{
+					.dropdown{
+						display: block !important;
+						visibility: visible !important;
 					}
 				}
 			}

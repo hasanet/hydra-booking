@@ -15,6 +15,7 @@ const zoom_integration = reactive(  {
 
 const props = defineProps([
     'woo_payment', 
+    'display',
 ])
 const emit = defineEmits([ "update-integrations", ]); 
 const plugin_url = tfhb_core_apps.admin_url+'/wp-admin/plugin-install.php?s=WooCommerce&tab=search';
@@ -22,12 +23,17 @@ const plugin_url = tfhb_core_apps.admin_url+'/wp-admin/plugin-install.php?s=WooC
 
 <template>
     <div class="tfhb-integrations-single-block tfhb-admin-card-box ">
-        <span class="tfhb-integrations-single-block-icon">
-            <img :src="$tfhb_url+'/assets/images/Woo.png'" alt="">
-        </span> 
+        <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
+            <span class="tfhb-integrations-single-block-icon">
+                <img :src="$tfhb_url+'/assets/images/Woo.png'" alt="">
+            </span> 
 
-        <h3>{{ $tfhb_trans['Woo Payment'] }}</h3>
-        <p>{{ $tfhb_trans['New standard in online payment'] }}</p>
+            <div class="cartbox-text">
+                <h3>{{ $tfhb_trans['Woo Payment'] }}</h3>
+                <p>{{ $tfhb_trans['New standard in online payment'] }}</p>
+            </div>
+        </div>
+       
 
 <!-- Aadmin -->
 

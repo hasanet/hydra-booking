@@ -19,8 +19,20 @@ $host = isset($args['host']) ? $args['host'] : array();
 $time_zone = isset($args['time_zone']) ? $args['time_zone'] : array();
 $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
 
+// Stripe Public api Key
+$_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+$stripePublicKey = !empty($_tfhb_integration_settings['stripe']['public_key']) ? $_tfhb_integration_settings['stripe']['public_key'] : '';
+$paypalPublicKey = !empty($_tfhb_integration_settings['paypal']['client_id']) ? $_tfhb_integration_settings['paypal']['client_id'] : '';
+
+$_tfhb_host_integration_settings = get_user_meta($host['host_id'], '_tfhb_host_integration_settings');
+$stripePublicKey = !empty($_tfhb_host_integration_settings['stripe']['public_key']) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripePublicKey;
+$paypalPublicKey = !empty($_tfhb_host_integration_settings['paypal']['client_id']) ? $_tfhb_host_integration_settings['paypal']['client_id'] : $paypalPublicKey;
+
+
+
 
 ?> 
+
 <div class="tfhb-meeting-info">
     <div class="hidden-field">
         <input type="hidden" id="meeting_id" name="meeting_id" value="<?php echo $meeting['id']; ?>">
@@ -29,6 +41,11 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
         <input type="hidden" id="meeting_dates" name="meeting_dates" value="">
         <input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">
         <input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
+        <input type="hidden" id="payment_method" name="payment_method" value="<?php echo $meeting['payment_method']; ?>">
+        <input type="hidden" id="payment_amount" name="payment_amount" value="<?php echo !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : ''; ?>">
+        <input type="hidden" id="payment_currency" name="payment_currency" value="<?php echo !empty($meeting['payment_currency']) ? $meeting['payment_currency'] : 'USD'; ?>">
+        <input type="hidden" id="stpublic_key" name="public_key" value="<?php echo $stripePublicKey; ?>">
+        <input type="hidden" id="paypal_public_key" name="public_key" value="<?php echo $paypalPublicKey; ?>">
         <?php 
             if(!empty($booking_data)) {    
                 echo '<input type="hidden" id="booking_hash" name="booking_hash" value="'.esc_attr($booking_data->hash).'">'; 
@@ -95,6 +112,8 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
             ?>
             <?php 
                 if(!empty($meeting['payment_status']) && true == $meeting['payment_status']) {  
+
+
                     $price = !empty($meeting['meeting_price']) ? $meeting['meeting_price'] : 'Free';
                     echo '<li class="tfhb-flexbox tfhb-gap-8">
                             <input type="hidden" id="meeting_price" name="meeting_price" value="'.esc_attr($price).'">
@@ -111,6 +130,7 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
             ?> 
             <?php 
                 if(!empty($meeting['recurring_status']) && true == $meeting['recurring_status']) {  
+                    
                     echo '<li class="tfhb-flexbox tfhb-gap-8">
                             <input type="hidden" id="recurring_maximum" name="recurring_maximum" value="'.esc_attr($meeting['recurring_maximum']).'">
                             <div class="tfhb-icon">  
@@ -121,16 +141,19 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
                                 <path d="M5.33333 10.6667H2V14" stroke="#765664" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div> 
-                            Recurring for  <span>'.esc_attr($meeting['recurring_repeat'][0]['limit']).'</span> '.esc_attr($meeting['recurring_repeat'][0]['times']).'
+                            <div>
+                                Recurring every  <span>'.esc_attr($meeting['recurring_repeat'][0]['limit']).'</span> '.esc_attr($meeting['recurring_repeat'][0]['times']).' for  <span>'.esc_attr($meeting['recurring_maximum']).'</span>  Bookings
+                            </div>
                         </li>'; 
                 }
-            ?>
+            ?> 
         </ul>
 
-        <div class="tfhb-timezone ">  
-            <select class="tfhb-time-zone-select" name="attendee_time_zone" id="">
+        <div class="tfhb-timezone ">   
+            <select class="tfhb-time-zone-select" name="attendee_time_zone" id="attendee_time_zone">
                 <?php 
                     if(!empty($time_zone)) {
+                      
                         $selected_timezone = $meeting['availability_custom']['time_zone'] ; 
                         if('settings' === $meeting['availability_type']){
                             $_tfhb_availability_settings = get_user_meta($meeting['host_id'], '_tfhb_host', true); 
@@ -165,8 +188,7 @@ $booking_data = isset($args['booking_data']) ? $args['booking_data'] : array();
         </div>
     </div>
 
-    <?php 
-
+    <?php  
         // Hooks After Meeting Info
          do_action('hydra_booking/after_meeting_info');
     

@@ -48,6 +48,28 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'updateMeeting'),
         ));   
 
+        register_rest_route('hydra-booking/v1', '/meetings/webhook/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'updateMeetingWebhook'),
+        ));   
+        register_rest_route('hydra-booking/v1', '/meetings/webhook/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'deleteMeetingWebhook'),
+        ));
+
+        register_rest_route('hydra-booking/v1', '/meetings/integration/update', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'updateMeetingIntegration'),
+        ));   
+        register_rest_route('hydra-booking/v1', '/meetings/integration/delete', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'deleteMeetingIntegration'),
+        ));
+        register_rest_route('hydra-booking/v1', '/meetings/integration/fields', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getZohoModulsFields'),
+        ));
+
         register_rest_route('hydra-booking/v1', '/meetings/filter', array(
             'methods' => 'GET',
             'callback' => array($this, 'filterMeetings'),
@@ -79,6 +101,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'callback' => array($this, 'getTheHostAvailabilityData'),
             // 'permission_callback' =>  array(new RouteController() , 'permission_callback'),
         ));
+
+                
+        register_rest_route('hydra-booking/v1', '/meetings/question/forms-list', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'getQuestionFormsList'),
+        ));
+
     }
     // Meeting List
     public function getMeetingsData() { 
@@ -216,6 +245,204 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
     }    
 
+    // Webhook Integrations
+    public function updateMeetingWebhook() {
+        $request = json_decode(file_get_contents('php://input'), true);
+        
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+    
+        // Decode existing webhook data if it exists
+        $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
+    
+        $key = isset($request['key']) ? $request['key'] : '';
+    
+        // New webhook data to be updated
+        $newWebHookdata = array(
+            'webhook' => !empty($request['webhook']) ? $request['webhook'] : '',
+            'url' => !empty($request['url']) ? $request['url'] : '',
+            'request_method' => !empty($request['request_method']) ? $request['request_method'] : '',
+            'request_format' => !empty($request['request_format']) ? $request['request_format'] : '',
+            'events' => !empty($request['events']) ? $request['events'] : '',
+            'request_body' => !empty($request['request_body']) ? $request['request_body'] : '',
+            'request_header' => !empty($request['request_header']) ? $request['request_header'] : '',
+            'headers' => !empty($request['headers']) ? $request['headers'] : '',
+            'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
+            'status' => !empty($request['status']) ? $request['status'] : '',
+        );
+    
+        if ($key !== '' && isset($webHookdata[$key])) {
+            // Update the existing webhook data at the specified key
+            $webHookdata[$key] = $newWebHookdata;
+        } else {
+            // Append the new webhook data
+            $webHookdata[] = $newWebHookdata;
+        }
+    
+        // Encode the updated webhook data back to JSON
+        $encodedWebHookdata = json_encode($webHookdata);
+    
+        $data = [
+            'id'      => $request['meeting_id'],
+            'webhook' => $encodedWebHookdata,
+        ];
+    
+        // Update the meeting with the new webhook data
+        $MeetingUpdate = $meeting->update($data);
+    
+        // Retrieve updated meeting data
+        $updateMeetingData = $meeting->get($request['meeting_id']);
+        
+        return rest_ensure_response(array(
+            'status' => true,
+            'webhook' => $updateMeetingData->webhook,
+            'message' => 'Webhook Successfully Updated!',
+        ));
+    }       
+
+    // Webhook Delete
+    public function deleteMeetingWebhook($request){
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+
+        $key = $request['key'];
+
+        // Decode existing webhook data if it exists
+        $webHookdata = !empty($MeetingData->webhook) ? json_decode($MeetingData->webhook, true) : array();
+
+        // Check if the key exists in the array
+        if (isset($webHookdata[$key])) {
+            // Remove the element at the specified key
+            unset($webHookdata[$key]);
+
+            // Re-index the array to maintain sequential keys
+            $webHookdata = array_values($webHookdata);
+
+            // Encode the updated webhook data back to JSON
+            $encodedWebHookdata = json_encode($webHookdata);
+
+            // Update the meeting with the new webhook data
+            $data = [
+                'id'      => $request['meeting_id'],
+                'webhook' => $encodedWebHookdata,
+            ];
+            $MeetingUpdate = $meeting->update($data);
+            $updateMeetingData = $meeting->get($request['meeting_id']);
+
+            return rest_ensure_response(array(
+                'status' => true,
+                'webhook' => $updateMeetingData->webhook,
+                'message' => 'Webhook Successfully Deleted!',
+            ));
+        } else {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Webhook key does not exist!',
+            ));
+        }
+    }
+
+    // Integrations
+    public function updateMeetingIntegration() {
+        $request = json_decode(file_get_contents('php://input'), true);
+        
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+    
+        // Decode existing integrations data if it exists
+        $Integrationsdata = !empty($MeetingData->integrations) ? json_decode($MeetingData->integrations, true) : array();
+    
+        $key = isset($request['key']) ? $request['key'] : '';
+    
+        // New webhook data to be updated
+        $newIntegrationsdata = array(
+            'title' => !empty($request['title']) ? $request['title'] : '',
+            'webhook' => !empty($request['webhook']) ? $request['webhook'] : '',
+            'bodys' => !empty($request['bodys']) ? $request['bodys'] : '',
+            'events' => !empty($request['events']) ? $request['events'] : '',
+            'audience' => "Mailchimp"==$request['webhook'] && !empty($request['audience']) ? $request['audience'] : '',
+            'tags' => "FluentCRM"==$request['webhook'] && !empty($request['tags']) ? $request['tags'] : '',
+            'lists' => "FluentCRM"==$request['webhook'] && !empty($request['lists']) ? $request['lists'] : '',
+            'modules' => "ZohoCRM"==$request['webhook'] && !empty($request['modules']) ? $request['modules'] : '',
+            'fields' => !empty($request['fields']) ? $request['fields'] : '',
+            'status' => !empty($request['status']) ? $request['status'] : '',
+        );
+    
+        if ($key !== '' && isset($Integrationsdata[$key])) {
+            // Update the existing webhook data at the specified key
+            $Integrationsdata[$key] = $newIntegrationsdata;
+        } else {
+            // Append the new webhook data
+            $Integrationsdata[] = $newIntegrationsdata;
+        }
+    
+        // Encode the updated webhook data back to JSON
+        $encodedIntegrationsdata = json_encode($Integrationsdata);
+    
+        $data = [
+            'id'      => $request['meeting_id'],
+            'integrations' => $encodedIntegrationsdata,
+        ];
+    
+        // Update the meeting with the new webhook data
+        $MeetingUpdate = $meeting->update($data);
+    
+        // Retrieve updated meeting data
+        $updateMeetingData = $meeting->get($request['meeting_id']);
+        
+        return rest_ensure_response(array(
+            'status' => true,
+            'integrations' => $updateMeetingData->integrations,
+            'message' => 'Integrations Successfully Updated!',
+        ));
+    }       
+
+    // Integration Delete
+    public function deleteMeetingIntegration($request){
+        // Get Meeting
+        $meeting = new Meeting();
+        $MeetingData = $meeting->get($request['meeting_id']);
+
+        $key = $request['key'];
+
+        // Decode existing webhook data if it exists
+        $Integrationsdata = !empty($MeetingData->integrations) ? json_decode($MeetingData->integrations, true) : array();
+
+        // Check if the key exists in the array
+        if (isset($Integrationsdata[$key])) {
+            // Remove the element at the specified key
+            unset($Integrationsdata[$key]);
+
+            // Re-index the array to maintain sequential keys
+            $Integrationsdata = array_values($Integrationsdata);
+
+            // Encode the updated Integrations data back to JSON
+            $encodedIntegrationsdata = json_encode($Integrationsdata);
+
+            // Update the meeting with the new Integrations data
+            $data = [
+                'id'      => $request['meeting_id'],
+                'integrations' => $encodedIntegrationsdata,
+            ];
+            $MeetingUpdate = $meeting->update($data);
+            $updateMeetingData = $meeting->get($request['meeting_id']);
+
+            return rest_ensure_response(array(
+                'status' => true,
+                'integrations' => $updateMeetingData->integrations,
+                'message' => 'Integrations Successfully Deleted!',
+            ));
+        } else {
+            return rest_ensure_response(array(
+                'status' => false,
+                'message' => 'Integrations key does not exist!',
+            ));
+        }
+    }
+
     // Category Delete
     public function DeleteCategory(){
         $request = json_decode(file_get_contents('php://input'), true);
@@ -331,6 +558,12 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         if (empty($meeting_id) || $meeting_id == 0) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
         }
+
+        $current_user = wp_get_current_user();
+		// get user role
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+        $current_user_id = $current_user->ID;
+
         // Delete Meeting
         $meeting = new Meeting();
         $meetingDelete = $meeting->delete($meeting_id);
@@ -346,12 +579,21 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             delete_post_meta( $post_id, '__tfhb_meeting_opt' ); 
         }
 
+       
+
         // Meeting Lists
-        $MeetingsList = $meeting->get();
+        if(!empty($current_user_role) && "administrator"==$current_user_role){
+            $MeetingsList = $meeting->get();
+        }
+
+        if(!empty($current_user_role) && "tfhb_host"==$current_user_role){
+            $MeetingsList = $meeting->get(null, null, $current_user_id);
+        }
         // Return response
         $data = array(
             'status' => true, 
             'meetings' => $MeetingsList,  
+            'data' => $current_user_id,  
             'message' => 'Meeting Deleted Successfully', 
         );
         return rest_ensure_response($data);
@@ -367,6 +609,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // Get Meeting
         $meeting = new Meeting();
         $MeetingData = $meeting->get( $id );
+
+        // Integration
+        $integrations = array();
 
         if(empty($MeetingData)) {
             return rest_ensure_response(array('status' => false, 'message' => 'Invalid Meeting'));
@@ -396,9 +641,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         }else{
             $_tfhb_integration_settings['woo_payment']['connection_status'] =  $woo_connection_status;
         }
-        if(empty($MeetingData->payment_meta)){
-            $MeetingData->payment_meta = $_tfhb_integration_settings;
-        }
+        // if(empty($MeetingData->payment_meta)){
+        //     $MeetingData->payment_meta = $_tfhb_integration_settings;
+        // }
 
         // Time Zone 
         $DateTimeZone = new DateTimeController('UTC');
@@ -407,6 +652,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         // WooCommerce Product
         $woo_commerce = new  WooBooking();
         $wc_product =  $woo_commerce->getAllProductList();
+
+        // google  Meeting
+        if($_tfhb_integration_settings['google_calendar']){
+            $integrations['google_calendar_status'] = isset($_tfhb_integration_settings['google_calendar']['status']) ? $_tfhb_integration_settings['google_calendar']['status'] : 0; 
+        }
+        // Zoom Meeting
+        if($_tfhb_integration_settings['zoom_meeting']){
+            $integrations['zoom_meeting_status'] = isset($_tfhb_integration_settings['zoom_meeting']['status']) ? $_tfhb_integration_settings['zoom_meeting']['status'] : 0; 
+        }
 
         // Meeting Category
         $terms = get_terms(array(
@@ -422,6 +676,101 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             );
         }
 
+        $_tfhb_host_integration_settings = !empty($MeetingData->host_id) ? get_user_meta($MeetingData->host_id, '_tfhb_host_integration_settings', true) : ''; 
+        $api_key = !empty($_tfhb_integration_settings['mailchimp']['key']) ? $_tfhb_integration_settings['mailchimp']['key'] : '';
+        $api_key = !empty($_tfhb_host_integration_settings['mailchimp']['key']) ? $_tfhb_host_integration_settings['mailchimp']['key'] : $api_key;
+        $mailchimp_Data = [];
+        if ( $api_key != '' ) {
+			$response = $this->set_config( $api_key, 'ping' );
+			$response = json_decode( $response );
+			if ( isset( $response->health_status ) ) { //Display success message
+				$mailchimp_Data['status'] = true;
+                $aud_lists = $this->get_audiance($api_key);
+                $mailchimp_Data['audience'] = $aud_lists;
+			} else {
+				$mailchimp_Data['status'] = false;
+			}
+		}else{
+            $mailchimp_Data['status'] = false;
+        }
+
+        // FluentCRM
+        $fluentcrm_Data = [];
+        if(!file_exists(WP_PLUGIN_DIR . '/' . 'fluent-crm/fluent-crm.php')){
+            $fluentcrm_Data['status'] = false;
+
+        } else if(!is_plugin_active( 'fluent-crm/fluent-crm.php')){
+            $fluentcrm_Data['status'] = false;
+        }else{
+            $fluentcrm_Data['status'] = true;
+        } 
+        if($fluentcrm_Data['status']){
+            global $wpdb;
+            // Check if table exists
+            $fluent_crm_tags = $wpdb->prefix . 'fc_tags';
+            $fluent_crm_lists = $wpdb->prefix . 'fc_lists';
+            $tags_table_exists = $wpdb->get_var("SHOW TABLES LIKE '$fluent_crm_tags'") == $fluent_crm_tags;
+            $lists_table_exists = $wpdb->get_var("SHOW TABLES LIKE '$fluent_crm_lists'") == $fluent_crm_lists;
+
+            if ($tags_table_exists) {
+                // Table exists, retrieve data
+                $results = $wpdb->get_results("SELECT id, title FROM $fluent_crm_tags", ARRAY_A);
+
+                // Check if results are not empty
+                if (!empty($results)) {
+                    // Output the results as an array
+                    $tags_array = array();
+                    foreach ($results as $row) {
+                        $tags_array[] = array(
+                            'name' => $row['title'],
+                            'value' => $row['id']
+                        );
+                    }
+                    $fluentcrm_Data['tags'] = $tags_array;
+                }
+            }
+
+            if ($lists_table_exists) {
+                // Table exists, retrieve data
+                $results = $wpdb->get_results("SELECT id, title FROM $fluent_crm_lists", ARRAY_A);
+
+                // Check if results are not empty
+                if (!empty($results)) {
+                    // Output the results as an array
+                    $lists_array = array();
+                    foreach ($results as $row) {
+                        $lists_array[] = array(
+                            'name' => $row['title'],
+                            'value' => $row['id']
+                        );
+                    }
+                    $fluentcrm_Data['lists'] = $lists_array;
+                }
+            }
+        }
+
+        // Zoho
+        $client_id = !empty($_tfhb_host_integration_settings['zoho']['client_id']) ? $_tfhb_host_integration_settings['zoho']['client_id'] : '';
+        $client_secret = !empty($_tfhb_host_integration_settings['zoho']['client_secret']) ? $_tfhb_host_integration_settings['zoho']['client_secret'] : '';
+        $access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+        $zoho_modules = !empty($_tfhb_host_integration_settings['zoho']['modules']) ? json_decode($_tfhb_host_integration_settings['zoho']['modules']) : '';
+
+        $zohocrm_Data = [];
+        if(!empty($access_token)){
+            $zohocrm_Data['status'] = true;
+            $zohocrm_Data['modules'] = $zoho_modules;
+        }else{
+            $zohocrm_Data['status'] = false;
+        }
+
+        // Fetch Questions Data
+        $questions_form_type = !empty($MeetingData->questions_form_type) ? $MeetingData->questions_form_type : '';
+        $questions_form = !empty($MeetingData->questions_form) ? $MeetingData->questions_form : 0;
+        $formsList = array();
+        if( $questions_form_type ){
+            $formsList = $this->getQuestionFormsData($questions_form_type);
+        }
+
         // Return response
         $data = array(
             'status' => true, 
@@ -429,6 +778,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'time_zone' => $time_zone,  
             'wc_product' => $wc_product,  
             'meeting_category' => $term_array,
+            'mailchimp' => $mailchimp_Data,
+            'fluentcrm' => $fluentcrm_Data,
+            'zohocrm' => $zohocrm_Data,
+            'formsList' => $formsList,
+            'integrations' => $integrations,
             'message' => 'Meeting Data',
         );
         return rest_ensure_response($data);
@@ -483,17 +837,28 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
             'recurring_maximum'         => isset($request['recurring_maximum']) ? sanitize_text_field($request['recurring_maximum']) : '',
             'attendee_can_cancel'       => isset($request['attendee_can_cancel']) ? sanitize_text_field($request['attendee_can_cancel']) : '',
             'attendee_can_reschedule'   => isset($request['attendee_can_reschedule']) ? sanitize_text_field($request['attendee_can_reschedule']) : '',
-            'questions_status'          => isset($request['questions_status']) ? sanitize_text_field($request['questions_status']) : '',
+            'questions_type'          => isset($request['questions_type']) ? sanitize_text_field($request['questions_type']) : '',
+            'questions_form_type'          => isset($request['questions_form_type']) ? sanitize_text_field($request['questions_form_type']) : '',
+            'questions_form'          => isset($request['questions_form']) ? sanitize_text_field($request['questions_form']) : '',
             'questions'                 => isset($request['questions']) ? $request['questions'] : '',
             'notification'              => isset($request['notification']) ? $request['notification'] : '',
             'payment_status'            => isset($request['payment_status']) ? sanitize_text_field($request['payment_status']) : '',
             'meeting_price'             => isset($request['meeting_price']) ? sanitize_text_field($request['meeting_price']) : '',
             'payment_currency'          => isset($request['payment_currency']) ? sanitize_text_field($request['payment_currency']) : '',
             'payment_method'            => isset($request['payment_method']) ? sanitize_text_field($request['payment_method'])  : '',
+            'max_book_per_slot'            => isset($request['max_book_per_slot']) ? sanitize_text_field($request['max_book_per_slot'])  : '',
+            'is_display_max_book_slot'            => isset($request['is_display_max_book_slot']) ? sanitize_text_field($request['is_display_max_book_slot'])  : '',
             'payment_meta'              => isset($request['payment_meta']) ? $request['payment_meta'] : '',
             'updated_at'                => date('Y-m-d'),
             'updated_by'                => $current_user_id
         ];
+
+        // if Payment Methood is woo_payment
+        if('woo_payment' == $data['payment_method']){
+            $products = wc_get_product($data['payment_meta']['product_id']);
+            $data['meeting_price'] = $products->price;
+
+        }
 
         // Meeting Update into 
         $meeting_post_data = array(
@@ -582,4 +947,320 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         return rest_ensure_response($data);
 
     }
+
+    /* Mailchimp audiance List */
+    private function get_audiance($api_key){
+
+        $response = $this->set_config( $api_key, 'lists' );
+        $audience = array();
+        $response = json_decode( $response, true );
+        $x = 0;
+        if ( isset( $response['lists'] ) && $response != null ) {
+            foreach ( $response['lists'] as $list ) {
+                $audience[] = array(
+                    'name' => $list['name'],
+                    'value' => "".$list['id']."",
+                );
+
+                $x++;
+            }
+        }
+        return $audience;
+    }
+
+    /* Mailchimp config set */
+	private function set_config( $api_key = '', $path = '' ) {
+
+
+		$server_prefix = explode( "-", $api_key );
+
+		if ( ! isset( $server_prefix[1] ) ) {
+			return;
+		}
+		$server_prefix = $server_prefix[1];
+
+		$url = "https://$server_prefix.api.mailchimp.com/3.0/$path";
+
+		$curl = curl_init( $url );
+		curl_setopt( $curl, CURLOPT_URL, $url );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+
+		$headers = array(
+			"Authorization: Bearer $api_key"
+		);
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+		//for debug only!
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, false );
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
+
+		$resp = curl_exec( $curl );
+		curl_close( $curl );
+
+		return $resp;
+	}
+
+    /* Modules Fileds */
+    public function getZohoModulsFields($request){
+        $host = !empty($request['host_id']) ? $request['host_id'] : '';
+        $hook_type = !empty($request['webhook']) ? $request['webhook'] : '';
+        
+        $_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
+
+        if('ZohoCRM'==$hook_type){
+            $access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+            $access_token = $this->refreshToken($host);
+            // The Zoho CRM API URL to get all modules
+            $api_url = 'https://www.zohoapis.com/crm/v6/settings/fields?module='.$request['module'];
+
+            // Initialize cURL session
+            $ch = curl_init();
+            // Set the URL and other necessary options
+            curl_setopt($ch, CURLOPT_URL, $api_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Set the headers, including the authorization token
+            $headers = [
+                'Authorization: Zoho-oauthtoken ' . $access_token,
+                'Content-Type: application/json'
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // Execute the cURL session and fetch the response
+            $response = curl_exec($ch);
+
+            // Check for cURL errors
+            if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+            }
+            // Close the cURL session
+            curl_close($ch);
+
+            // Decode the JSON response
+            $response_data = json_decode($response, true);
+
+            $fields = [];
+            $response_data = json_decode($response, true);
+            if (isset($response_data['fields'])) {
+                // Loop through each field and print its name
+                foreach ($response_data['fields'] as $field) {
+                    $fields[] =  array(
+                        'name' =>  $field['field_label'],
+                        'value' => $field['api_name']
+                    );
+                }
+            }
+        }elseif('Mailchimp'==$hook_type){
+            $_tfhb_integration_settings = get_option('_tfhb_integration_settings');
+            $api_key = !empty($_tfhb_integration_settings['mailchimp']['key']) ? $_tfhb_integration_settings['mailchimp']['key'] : '';
+            $api_key = !empty($_tfhb_host_integration_settings['mailchimp']['key']) ? $_tfhb_host_integration_settings['mailchimp']['key'] : $api_key;
+
+            $mail_fields = $this->get_mailchimp_fields($api_key, $request['module']);
+            if(!empty($mail_fields)){
+                $fields = array(
+                    array(
+                        'name' => 'Email Address',
+                        'value' => 'EMAIL'
+                    )
+                );
+                $mail_fields = json_decode($mail_fields); 
+                if(!empty($mail_fields->merge_fields)){
+                    foreach($mail_fields->merge_fields as $field){
+                        $fields[] = array(
+                            'name' => $field->name,
+                            'value' => $field->tag
+                        );
+                    }
+                }
+            }
+        }else{
+            $fields = array(
+                array(
+                    'name' => 'First Name',
+                    'value' => 'first_name'
+                ),
+                array(
+                    'name' => 'Last Name',
+                    'value' => 'last_name'
+                ),
+                array(
+                    'name' => 'Email',
+                    'value' => 'email'
+                ),
+                array(
+                    'name' => 'Phone',
+                    'value' => 'phone'
+                ),
+                array(
+                    'name' => 'Timezone',
+                    'value' => 'timezone'
+                ),
+                array(
+                    'name' => 'Address',
+                    'value' => 'address_line_1'
+                ),
+                array(
+                    'name' => 'Postal Code',
+                    'value' => 'postal_code'
+                ),
+                array(
+                    'name' => 'City',
+                    'value' => 'city'
+                ),
+                array(
+                    'name' => 'Country',
+                    'value' => 'country'
+                )
+            );
+        }
+        
+        // Return response
+        $data = array(
+            'status' => true, 
+            'fields' => $fields,  
+            'message' => 'Fields Data',
+        );
+        return rest_ensure_response($data);
+
+    }
+
+
+    /* Mailchimp Fields */
+	private function get_mailchimp_fields( $api_key = '', $module = '' ) {
+
+		$server_prefix = explode( "-", $api_key );
+
+		if ( ! isset( $server_prefix[1] ) ) {
+			return;
+		}
+		$server_prefix = $server_prefix[1];
+
+		$url = "https://$server_prefix.api.mailchimp.com/3.0/lists/$module/merge-fields";
+		$curl = curl_init( $url );
+		curl_setopt( $curl, CURLOPT_URL, $url );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+
+		$headers = array(
+			"Authorization: Bearer $api_key"
+		);
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+		//for debug only!
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, false );
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
+
+		$resp = curl_exec( $curl );
+		curl_close( $curl );
+
+		return $resp;
+	}
+
+    // Refresh Token
+	public function refreshToken($host){
+		$_tfhb_host_integration_settings =  is_array(get_user_meta($host, '_tfhb_host_integration_settings', true)) ? get_user_meta($host, '_tfhb_host_integration_settings', true) : array();
+
+		$client_id = !empty($_tfhb_host_integration_settings['zoho']['client_id']) ? $_tfhb_host_integration_settings['zoho']['client_id'] : '';
+		$client_secret = !empty($_tfhb_host_integration_settings['zoho']['client_secret']) ? $_tfhb_host_integration_settings['zoho']['client_secret'] : '';
+		$access_token = !empty($_tfhb_host_integration_settings['zoho']['access_token']) ? $_tfhb_host_integration_settings['zoho']['access_token'] : '';
+		$refresh_token = !empty($_tfhb_host_integration_settings['zoho']['refresh_token']) ? $_tfhb_host_integration_settings['zoho']['refresh_token'] : '';
+
+		$url = "https://accounts.zoho.com/oauth/v2/token";
+		$data = array(
+			'grant_type' => 'refresh_token',
+			'client_id' => $client_id,
+			'client_secret' => $client_secret,
+			'refresh_token' => $refresh_token
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+		curl_close($ch);
+
+		$response_data = json_decode($response, true);
+		
+		if( !empty($response_data['access_token']) ){
+			$_tfhb_host_integration_settings['zoho']['access_token'] = $response_data['access_token'];
+
+			// save to user metadata
+			update_user_meta($host_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings);
+
+			return $response_data['access_token'];
+		}
+	}
+
+    // Meeting Questions Forms List
+    public function getQuestionFormsList(){
+        $request = json_decode(file_get_contents('php://input'), true);
+        $form_type = $request['form_type'];
+        $questionForms = $this->getQuestionFormsData($form_type);
+
+        $data = array(
+            'status' => true, 
+            'questionForms' => $questionForms,  
+            'message' => 'Question Forms Data',
+        );
+        return rest_ensure_response($data);
+    }
+    // Fetch Forms list based on form Types
+    public function getQuestionFormsData($form_type){
+        $questionForms = [];
+        if($form_type == 'wpcf7'){
+            $args = array(
+                'post_type' => 'wpcf7_contact_form',
+                'posts_per_page' => -1,
+            );
+            $forms = get_posts($args);
+            
+            foreach ($forms as $form) {
+                $questionForms[] = array(
+                    'name' => $form->post_title,
+                    'value' => $form->ID
+                );
+            } 
+        }else if($form_type == 'fluent-forms'){
+            $args = array(
+                'post_type' => 'forminator_forms',
+                'posts_per_page' => -1,
+            );
+            $forms = get_posts($args);
+            
+            foreach ($forms as $form) {
+                $questionForms[] = array(
+                    'name' => $form->post_title,
+                    'value' => $form->ID
+                );
+            } 
+        }else if($form_type == 'fluent-forms'){
+            // Query arguments get custom fluentform_forms data all into custom database table
+             global $wpdb;
+            $table_name = $wpdb->prefix . 'fluentform_forms';
+            $results = $wpdb->get_results("SELECT id, title FROM $table_name");
+            foreach ($results as $form) {
+                $questionForms[] = array(
+                    'name' => $form->title,
+                    'value' => $form->id
+                );
+            }
+        }else if($form_type == 'gravityforms'){
+            // Query arguments get custom fluentform_forms data all into custom database table
+             global $wpdb;
+            $table_name = $wpdb->prefix . 'gf_form';
+            $results = $wpdb->get_results("SELECT id, title FROM $table_name");
+            foreach ($results as $form) {
+                $questionForms[] = array(
+                    'name' => $form->title,
+                    'value' => $form->id
+                );
+            }
+        }
+        return $questionForms;
+    }
+
 } 

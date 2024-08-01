@@ -1,6 +1,5 @@
 import { reactive } from 'vue';
 import axios from 'axios'; 
-import { toast } from "vue3-toastify"; 
 
 const Dashboard = reactive({
     skeleton: true,

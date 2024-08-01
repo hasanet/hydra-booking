@@ -8,11 +8,13 @@ const props = defineProps([
     'required',
     'type',
     'label',
+    'counterLabel',
     'width',
     'subtitle',
     'counter_value',
     'description', 
     'repater', 
+    'limit'
 ])
 const emit = defineEmits(['update:counter_value','limits-frequency-add', 'limits-frequency-remove'])
 const counter_number = ref(1);
@@ -20,7 +22,13 @@ function CounterInc(key){
     props.counter_value[key].limit ++;
 }
 function CounterDec(key){
-    props.counter_value[key].limit --;
+    if ( props.limit && props.counter_value[key].limit > props.limit ) {
+        props.counter_value[key].limit --;
+    }
+
+    if ( !props.limit ) {
+        props.counter_value[key].limit --;
+    }
 }
 
 </script>
@@ -37,7 +45,8 @@ function CounterDec(key){
                         <div class="tfhb-dec" @click="CounterDec(key)">
                             <Icon name="Minus" />
                         </div>
-                        <span>{{ counter.limit = counter.limit}} {{ $tfhb_trans['Booking'] }}</span>
+
+                        <span>{{ counter.limit = counter.limit}} {{ counterLabel }}</span>
                         <div class="tfhb-inc" @click="CounterInc(key)">
                             <Icon name="Plus" />
                         </div>
@@ -48,7 +57,7 @@ function CounterDec(key){
                         required= "true"  
                         selected = "1"
                         placeholder="Select Time Zone"  
-                        :option = "{'Month': 'Month','Year': 'Year'}" 
+                        :option = "{'days': 'Days','weeks': 'Weeks','months': 'Months','years': 'Years'}" 
                     /> 
 
                     <div v-if="repater && key == 0" class="tfhb-availability-schedule-clone-single">

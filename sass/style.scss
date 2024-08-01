@@ -13,6 +13,7 @@
         gap: 24px;
         width: fit-content;
         position: relative;
+        margin: 0 auto;
         @media #{$max1170}{
             flex-wrap: wrap;
         }
@@ -320,6 +321,7 @@
                     font-weight: 400;
                     line-height: 24px; /* 160% */
                     padding: 16px 0;
+                    box-sizing: border-box;
                     &.inactive{
                         color: $ui600;
                         cursor: not-allowed !important;
@@ -328,6 +330,7 @@
                             position: static !important;
                             margin: 0 !important;
                             border: 0px solid !important;
+                            box-sizing: inherit;
                         }
                     }
                     &.current {
@@ -346,6 +349,7 @@
                             z-index: -1;
                             margin-left: -45%;
                             top: 5%;
+                            box-sizing: inherit;
                         }
                     }
                     &.current.active{
@@ -364,6 +368,7 @@
                             z-index: -1;
                             margin-left: -45%;
                             top: 5%;
+                            box-sizing: inherit;
                         }
 
                         &::before{
@@ -376,6 +381,7 @@
                             bottom: 9px;
                             left: 50%;
                             margin-left: -8px;
+                            box-sizing: inherit;
                         }
                     }
                 }
