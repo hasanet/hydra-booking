@@ -62,6 +62,7 @@ namespace HydraBooking\Admin\Controller;
             'Admin Email' => __('Admin Email', 'hydra-booking'),
             'Type your Admin Email' => __('Type your Admin Email', 'hydra-booking'),
             'Meeting Category' => __('Meeting Category', 'hydra-booking'),
+            'Import/Export' => __('Import/Export', 'hydra-booking'),
             'Category Title' => __('Category Title', 'hydra-booking'),
             'Save Category' => __('Save Category', 'hydra-booking'),
             'Update Category' => __('Update Category', 'hydra-booking'),
@@ -379,8 +380,16 @@ namespace HydraBooking\Admin\Controller;
             'This month' => __('This month', 'hydra-booking'),
             'This Year' => __('This Year', 'hydra-booking'),
             'Join Meet' => __('Join Meet','hydra-booking'),
-            '' => __('','hydra-booking'),
-            '' => __('','hydra-booking'),
+            'Export as CSV' => __('Export as CSV','hydra-booking'),
+            'Date Range' => __('Date Range','hydra-booking'),
+            'Custom Date Range' => __('Custom Date Range','hydra-booking'),
+            'Select Date Range' => __('Select Date Range','hydra-booking'),
+            'Export Meeting' => __('Export Meeting','hydra-booking'),
+
+            //Import Export
+            'Import bookings from a CSV file' => __('Import bookings from a CSV file','hydra-booking'),
+            'This tool allows you to import or merge booking data to your store from a CSV file.' => __('This tool allows you to import or merge booking data to your store from a CSV file.','hydra-booking'),
+            
            
         );
      } 

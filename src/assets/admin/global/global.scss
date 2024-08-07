@@ -504,7 +504,50 @@
           color: $ui600 !important;
         }
       }
-
+      .tfhb-filter-dates{
+        gap: 8px !important;
+        padding: 24px;
+        border-bottom: 1px solid $ui50; 
+        .tfhb-filter-start-date,
+        .tfhb-filter-end-date{
+            border-radius: 8px;
+            border: 1px solid $ui50;
+            padding: 8px 8px 8px 12px; 
+            width: 132px;
+            box-sizing: border-box;
+            position: relative;
+            height: 40px;
+            z-index: 0;
+            svg{
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                margin-top: -10px;
+                z-index: -1;
+            }
+            .tfhb-single-form-field{
+                width: 100% !important;
+                input{
+                    min-width: auto !important;
+                    width: 100%;
+                    border: 0px solid;
+                    margin: 0 !important;
+                    min-height: auto;
+                    height: 20px;
+                    padding: 0px;
+                }
+                h4,p,label{
+                    display: none;
+                }
+            }
+        }
+    }
+    .custom-date-range {
+        .tfhb-filter-dates {
+            padding: 0 !important;
+            padding-top: 8px !important;
+        }
+    }
     
  
     .tfhb-header-notification {

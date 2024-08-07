@@ -279,6 +279,22 @@ class Booking {
             ];
         } 
     }
+    // export data
+    public function export($where = null, $join = false, $FirstOrFaill = false){
+        global $wpdb;
+        $table_name = $wpdb->prefix . $this->table;
+        $sql = "SELECT * FROM $table_name";
+        if($where != null){
+            foreach($where as $key => $value){
+                $sql .= " WHERE ".$value['column']." ".$value['operator']." ".$value['value']."";
+                
+            }
+        }else{
+            $sql .= " ORDER BY id DESC";
+        } 
+        $data = $wpdb->get_results($sql);
+        return $data;
+    }
 
 }
 
