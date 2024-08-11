@@ -8,7 +8,8 @@ import Icon from '@/components/icon/LucideIcon.vue'
 import { importExport } from '@/store/settings/importExport';
 
  
-onBeforeMount(() => {    
+onBeforeMount(() => {  
+    importExport.GetImportExportData();  
 });
 const updateHosts = async () => { 
 }

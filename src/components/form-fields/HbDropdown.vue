@@ -17,7 +17,8 @@ const props = defineProps([
     'optionType',
     'country',
     'parent_key',
-    'single_key'
+    'single_key',
+    'selected',
   ])
 
  
@@ -78,6 +79,7 @@ const handleChange = (e) => {
                     :placeholder="placeholder"  
                     :optionDisabled="disabled"
                     :style="{ 'width': '100%' }"  
+                    :selected="selected"
                 />
                 <Dropdown 
                     v-else

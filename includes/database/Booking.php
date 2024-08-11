@@ -296,6 +296,57 @@ class Booking {
         return $data;
     }
 
+
+    // Get Only column list as array
+    public function getColumns(){
+        global $wpdb;
+        $table_name = $wpdb->prefix . $this->table;
+        $sql = "SHOW COLUMNS FROM $table_name";
+        $data = $wpdb->get_results($sql);
+        $columns = []; 
+        
+        foreach($data as $key => $value){
+            if($value->Field == 'id'){
+                continue;
+            }
+            $columns[$key] = array(
+                'name' => $value->Field,
+                'value' => $value->Field
+            );
+        }
+        return $columns;
+    }
+
+    public function importBooking($data){
+        global $wpdb;
+        $table_name = $wpdb->prefix . $this->table;
+        $columns = $this->getColumns();
+        $columns = array_column($columns, 'name'); 
+        $columns = implode(',', $columns);
+        $sql = "INSERT INTO $table_name ($columns) VALUES ";
+        $i = 0;
+        // remove the first row and get the columns
+        unset($data[0]); 
+        // also remove the first item of the 
+        foreach($data as $key => $value){
+            if($value[0] == ''){
+                continue;
+            }
+            if($i == 0){
+                $sql .= "(".implode(',', array_map(function($v){
+                    return "'".$v."'";
+                }, $value)).")";
+            }else{
+                $sql .= ",(".implode(',', array_map(function($v){
+                    return "'".$v."'";
+                }, $value)).")";
+            }
+            $i++;
+        }
+        // echo $sql;
+        // exit;
+        $wpdb->query($sql);
+    }
 }
 
 

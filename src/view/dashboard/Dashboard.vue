@@ -44,9 +44,7 @@ const  ChangeStatisticData = (day) => {
     const dropdown = document.getElementById('tfhb-chart-filter');
     dropdown.querySelector('span').innerText = event.target.getAttribute('data-name');
     
-    Dashboard.fetcDashboardStatistics();
-    
- 
+    Dashboard.fetcDashboardStatistics(); 
 }
 
 

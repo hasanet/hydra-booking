@@ -388,6 +388,9 @@ namespace HydraBooking\Admin\Controller;
 
             //Import Export
             'Import bookings from a CSV file' => __('Import bookings from a CSV file','hydra-booking'),
+            'Run The Import' => __('Run The Import','hydra-booking'),
+            'Map CSV fields to Booking' => __('Map CSV fields to Booking','hydra-booking'),
+            'Select fields from your CSV file to map against booking fields, or to ignore during import.' => __('Select fields from your CSV file to map against booking fields, or to ignore during import.','hydra-booking'),
             'This tool allows you to import or merge booking data to your store from a CSV file.' => __('This tool allows you to import or merge booking data to your store from a CSV file.','hydra-booking'),
             
            

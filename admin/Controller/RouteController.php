@@ -12,6 +12,8 @@ use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 use HydraBooking\Services\Integrations\OutlookCalendar\OutlookCalendar;
 use HydraBooking\Services\Integrations\Zoho\Zoho;
 use HydraBooking\Admin\Controller\SetupWizard;
+use HydraBooking\Admin\Controller\ImportExport;
+
 
 // Use DB 
 use HydraBooking\DB\Availability;
@@ -34,6 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
         $this->create(new DashboardController(), 'create_endpoint');
         $this->create(new Zoho(), 'create_endpoint');
         $this->create(new SetupWizard(), 'create_endpoint');
+        $this->create(new ImportExport(), 'create_endpoint');
     }
 
     public function create($class, $function){
