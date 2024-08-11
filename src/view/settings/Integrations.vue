@@ -13,6 +13,13 @@ import AppleCalendarIntegrations from '@/components/integrations/AppleCalendarIn
 import StripeIntegrations from '@/components/integrations/StripeIntegrations.vue'; 
 import MailchimpIntegrations from '@/components/integrations/MailchimpIntegrations.vue'; 
 import PaypalIntegrations from '@/components/integrations/PaypalIntegrations.vue'; 
+import CF7Integrations from '@/components/integrations/CF7Integrations.vue'; 
+import FluentFormsIntegrations from '@/components/integrations/FluentFormsIntegrations.vue'; 
+import ForminatorIntegrations from '@/components/integrations/ForminatorIntegrations.vue'; 
+import GravityFormsIntegrations from '@/components/integrations/GravityFormsIntegrations.vue'; 
+import WebhookIntegrations from '@/components/integrations/WebhookIntegrations.vue'; 
+import FluentCRMIntegrations from '@/components/integrations/FluentCRMIntegrations.vue'; 
+import ZohoCRMIntegrations from '@/components/integrations/ZohoCRMIntegrations.vue'; 
 
 // import Form Field 
 import Icon from '@/components/icon/LucideIcon.vue' 
@@ -145,6 +152,34 @@ const Integration = reactive( {
         client_id: '',
         secret_key: '',
     },
+    cf7 : {
+        type: 'forms', 
+        status: 0, 
+    },
+    fluent : {
+        type: 'forms', 
+        status: 0, 
+    },
+    forminator : {
+        type: 'forms', 
+        status: 0, 
+    },
+    gravity : {
+        type: 'forms', 
+        status: 0, 
+    },
+    webhook : {
+        type: 'others', 
+        status: 0, 
+    },
+    fluent_crm : {
+        type: 'others', 
+        status: 0, 
+    },
+    zoho_crm : {
+        type: 'others', 
+        status: 0, 
+    }
 });
 
 //  update Integration
@@ -296,16 +331,7 @@ onBeforeMount(() => {
                 />
                 <!-- stripe intrigation -->
 
-                <!-- Mailchimp intrigation -->
-                <MailchimpIntegrations 
-                :mail_data="Integration.mailchimp" 
-                @update-integrations="UpdateIntegration" 
-                :ispopup="mailpopup"
-                @popup-open-control="ismailchimpPopupOpen"
-                @popup-close-control="ismailchimpPopupClose" 
-                v-if="currentHash === 'all' || currentHash === 'all'"
-                />
-                <!-- Mailchimp intrigation -->
+              
 
                 <!-- paypal intrigation -->
                 <PaypalIntegrations 
@@ -317,6 +343,74 @@ onBeforeMount(() => {
                 v-if="currentHash === 'all' || currentHash === 'payments'"
                 />
                 <!-- paypal intrigation -->
+
+                
+                <!-- CF7 -->
+                <CF7Integrations 
+                :cf7_data="Integration.cf7" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'forms'"
+                />
+                <!-- CF7 -->
+
+                <!-- Fluent -->
+                <FluentFormsIntegrations 
+                :fluent_data="Integration.fluent" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'forms'"
+                />
+                <!-- CF7 -->
+
+                <!-- Forminator -->
+                <ForminatorIntegrations 
+                :forminator_data="Integration.forminator" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'forms'"
+                />
+                <!-- CF7 -->
+
+                <!-- gravity -->
+                <GravityFormsIntegrations 
+                :gravity_data="Integration.gravity" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'forms'"
+                />
+                <!-- gravity -->
+
+                <!-- webhook -->
+                <WebhookIntegrations 
+                :webhook_data="Integration.webhook" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'others'"
+                />
+                <!-- webhook -->
+          
+                <!-- Mailchimp intrigation -->
+                <MailchimpIntegrations 
+                :mail_data="Integration.mailchimp" 
+                @update-integrations="UpdateIntegration" 
+                :ispopup="mailpopup"
+                @popup-open-control="ismailchimpPopupOpen"
+                @popup-close-control="ismailchimpPopupClose" 
+                v-if="currentHash === 'all' || currentHash === 'others'"
+                />
+                <!-- Mailchimp intrigation -->
+
+                <!-- Fluent CRM -->
+                <FluentCRMIntegrations 
+                :fluent_crm_data="Integration.fluent_crm" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'others'"
+                />
+                <!-- Fluent CRM -->
+                
+                <!-- Zoho CRM -->
+                <ZohoCRMIntegrations 
+                :zoho_crm_data="Integration.zoho_crm" 
+                @update-integrations="UpdateIntegration"   
+                v-if="currentHash === 'all' || currentHash === 'others'"
+                />
+                <!-- Zoho CRM -->
           
 
             </div> 

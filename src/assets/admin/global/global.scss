@@ -1,4 +1,5 @@
 #tfhb-admin-app {
+
     margin-top: 20px;
     a,
     h1,
@@ -63,6 +64,21 @@
     ul li{
         margin: 0;
         font-family: "Inter", sans-serif;
+    }
+
+
+    .tfhb-badge{
+        &.tfhb-badge-pro {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            box-shadow: 0px 1px 3px 0px rgba(40, 16, 26, 0.10), 0px 1px 2px 0px rgba(40, 16, 26, 0.06);
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: #F62881 !important;
+            background-color: $primaryi50;
+            font-weight: 600 !important;
+          }
     }
     .tfhb-mb-32{
         margin-bottom: 32px !important;
@@ -651,6 +667,7 @@
     width: 100% !important; 
     justify-content: normal !important;
     .tfhb-integrations-single-block{
+        position: relative;
         margin: 0;
         width: calc(30% - 48px);
         display: flow-root !important;

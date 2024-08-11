@@ -11,7 +11,7 @@ import HbSwitch from '@/components/form-fields/HbSwitch.vue';
 const props = defineProps([
     'class', 
     'display', 
-    'stripe_data', 
+    'zoho_crm_data', 
     'ispopup'
 ])
 const emit = defineEmits([ "update-integrations", 'popup-open-control', 'popup-close-control' ]); 
@@ -23,9 +23,9 @@ const closePopup = () => {
 </script>
 
 <template>
-      <!-- Stripe Integrations  -->
-      <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box ">
-        <span class="tfhb-badge tfhb-badge-pro">{{ $tfhb_trans['Pro'] }}</span>
+      <!-- webhook Integrations  -->
+      <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box "> 
+        <!-- <span class="tfhb-badge tfhb-badge-pro">{{ $tfhb_trans['Pro'] }}</span> -->
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
             <span class="tfhb-integrations-single-block-icon">
                 <img :src="$tfhb_url+'/assets/images/stripe.png'" alt="">
@@ -33,12 +33,13 @@ const closePopup = () => {
 
 
             <div class="cartbox-text">
-                <h3>{{ $tfhb_trans['Stripe'] }}</h3>
+                <h3>{{ $tfhb_trans['Zoho CRM'] }}</h3>
                 <p>{{ $tfhb_trans['New standard in online payment'] }}</p>
             </div>
         </div>
         <div class="tfhb-integrations-single-block-btn tfhb-flexbox">
-            <a href="#" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ $tfhb_trans['Upgrade to Pro'] }}  <Icon name="ChevronRight" size="18" /></a>
+            <HbSwitch  @change="emit('update-integrations', 'zoho_crm', zoho_crm_data)" v-model="zoho_crm_data.status"    />
+            <!-- <a href="#" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ $tfhb_trans['Upgrade to Pro'] }}  <Icon name="ChevronRight" size="18" /></a> -->
  
         </div>
 

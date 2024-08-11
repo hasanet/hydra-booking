@@ -25,14 +25,14 @@ import Icon from '@/components/icon/LucideIcon.vue'
 
                             <li><router-link to="/settings/integrations#payments" :class="{ 'active': $route.hash === '#payments' }" class="integrations-submenu" data-filter="payments"> <Icon name="HandCoins" /> {{ $tfhb_trans['Payments'] }}</router-link></li> 
 
+                            <li><router-link to="/settings/integrations#others" :class="{ 'active': $route.hash === '#others' }" class="integrations-submenu" data-filter="others"> <Icon name="Unplug" /> {{ $tfhb_trans['Others'] }}</router-link></li> 
+
                         </ul>
                     </li>
                     <li><router-link to="/settings/appearance" :class="{ 'active': $route.path === '/settings/appearance' }"> <Icon name="SwatchBook" /> {{ $tfhb_trans['Appearance'] }}</router-link></li>
 
                     <li><router-link to="/settings/category" :class="{ 'active': $route.path === '/settings/category' }"> <Icon name="ClipboardList" /> {{ $tfhb_trans['Meeting Category'] }}</router-link></li>
-                    
-                    <li><router-link to="/settings/import-export" :class="{ 'active': $route.path === '/settings/import-export' }"> <Icon name="Import" /> {{ $tfhb_trans['Import/Export'] }}</router-link></li>
-
+                     
                 </ul>  
             </nav>  
             <div class="tfhb-hydra-dasboard-content"> 

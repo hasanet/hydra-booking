@@ -190,22 +190,7 @@ const routes = [
                 name: 'SettingsGeneral',
                 meta: { Capabilities: 'tfhb_manage_settings' },
                 component: () => import('../view/settings/General.vue')
-            }, 
-            {
-                path: 'import-export',
-                name: 'ImportExport',
-                meta: { Capabilities: 'tfhb_manage_settings' },
-                component: () => import('../view/settings/ImportExport.vue'),
-                redirect: { name: 'ImportExportBooking' },
-                children: [ 
-                    {
-                        path: 'booking',
-                        name: 'ImportExportBooking',
-                        meta: { Capabilities: 'tfhb_manage_settings' },
-                        component: () => import('@/components/settings/BookingImportExport.vue')
-                    }, 
-                ]
-            },
+            },  
             {
                 path: 'hosts-settings',
                 name: 'HostsSettings',

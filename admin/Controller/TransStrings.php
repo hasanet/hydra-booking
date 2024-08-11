@@ -13,6 +13,8 @@ namespace HydraBooking\Admin\Controller;
             'Save & Validate' =>  __('Save & Validate', 'hydra-booking'),
             'Statistics' =>  __('Statistics', 'hydra-booking'),
             'This Week' =>  __('This Week', 'hydra-booking'),
+            'Pro' =>  __('Pro', 'hydra-booking'),
+            'Upgrade to Pro' =>  __('Upgrade to Pro', 'hydra-booking'),
             
             // General Settings
             'General' =>  __('General', 'hydra-booking'),
@@ -87,6 +89,14 @@ namespace HydraBooking\Admin\Controller;
             'Conference' => __('Conference', 'hydra-booking'),
             'Calendars' => __('Calendars', 'hydra-booking'),
             'Payments' => __('Payments', 'hydra-booking'),
+            'Contact Form 7' => __('Contact Form 7', 'hydra-booking'),
+            'Fluent Forms' => __('Fluent Forms', 'hydra-booking'),
+            'Forminator' => __('Forminator', 'hydra-booking'),
+            'Gravity Forms' => __('Gravity Forms', 'hydra-booking'),
+            'Webhook' => __('Webhook', 'hydra-booking'),
+            'Fluent CRM' => __('Fluent CRM', 'hydra-booking'),
+            'Zoho CRM' => __('Zoho CRM', 'hydra-booking'),
+            'Others' => __('Others', 'hydra-booking'),
 
             // Availability Settings
             'Availability' =>  __('Availability', 'hydra-booking'),

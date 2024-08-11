@@ -111,6 +111,7 @@ const addNewIntegrations = (integration) => {
 }
 
 const backtointegrationsList = () => {
+  
     integrationscreate.value = false;
     integrationsList.value = true;
 }

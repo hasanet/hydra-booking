@@ -21,7 +21,3 @@ tfhbApps.config.globalProperties.$user = user;
 
 tfhbApps.mount('#tfhb-admin-app')
 
-// const app = createApp(App)
-// app.use(router)
-// app.use(ElementPlus)
-// app.mount('#thb-admin-app')
