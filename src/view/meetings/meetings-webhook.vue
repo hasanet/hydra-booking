@@ -194,16 +194,18 @@ const deleteBodyField = (key) => {
     <div class="tfhb-webhook-title tfhb-flexbox tfhb-full-width">
         <div class="tfhb-admin-title tfhb-m-0">
             <h2>{{ $tfhb_trans['Availability Range for this Booking'] }}</h2> 
-            <p>{{ $tfhb_trans['How many days can the invitee schedule?'] }}</p>
+            <p>{{ $tfhb_trans['How many days can the invitee schedule?'] }}</p> 
         </div>
-        <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookList" @click="addNewWebHook">
+        <a href="#" class="tfhb-btn tfhb-flexbox tfhb-gap-8">{{ $tfhb_trans['Upgrade to Pro'] }}  <Icon name="ChevronRight" size="18" /></a>
+ 
+        <!-- <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookList" @click="addNewWebHook">
             <Icon name="PlusCircle" :width="20"/>
             {{ $tfhb_trans['Add New Webhook'] }}
         </button>
         <button class="tfhb-btn boxed-btn tfhb-flexbox tfhb-gap-8" v-if="webhookcreate" @click="backtoWebHookList">
             <Icon name="ArrowLeft" :width="20"/>
             {{ $tfhb_trans['Back'] }}
-        </button>
+        </button> -->
     </div>
 
     <div class="tfhb-webhook-content tfhb-full-width" v-if="meeting.webhook && webhookList">

@@ -163,7 +163,7 @@
     }
 
     .tfhb-admin-title {
-        margin-bottom: 16px;
+        margin-bottom: 16px; 
     }
     .tfhb-mail-shortcode-badge {
         background-color: $ui25;
@@ -470,8 +470,12 @@
 		z-index: 9999;
         display: flex;
         justify-content: center;
-        align-items: center;
-		
+        align-items: center; 
+        // &.tfhb-popup-open {
+        //         visibility: visible;
+        //         opacity: 1; 
+        // }
+            
 		.tfhb-popup-wrap {
 			max-width: 800px;
 			padding: 24px;
@@ -484,6 +488,7 @@
             
             .tfhb-dashboard-heading {
                 .tfhb-admin-title{
+                    position: relative;
                     margin-bottom: 0 !important;
                 }
                 margin-bottom: 24px !important;

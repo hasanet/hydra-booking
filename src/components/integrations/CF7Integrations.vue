@@ -27,7 +27,7 @@ const closePopup = () => {
       <div :class="props.class" class="tfhb-integrations-single-block tfhb-admin-card-box "> 
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
             <span class="tfhb-integrations-single-block-icon">
-                <img :src="$tfhb_url+'/assets/images/stripe.png'" alt="">
+                <img :src="$tfhb_url+'/assets/images/cf7.png'" alt="">
             </span> 
 
 

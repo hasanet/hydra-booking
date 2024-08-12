@@ -17,6 +17,12 @@ const wcProduct = reactive({});
 const integrations = reactive({
     google_calendar_status : 1,
     zoom_meeting_status : 1,
+    cf7_status : 1,
+    fluent_status : 1,
+    forminator_status : 1,
+    gravity_status : 1,
+    fluent_crm_status : 1,
+    zoho_status : 1,
 });
 const formsList = reactive({});
 const meetingData = reactive({
@@ -324,10 +330,16 @@ const meetingId = route.params.id;
         const response = await axios.get(tfhb_core_apps.admin_url + '/wp-json/hydra-booking/v1/meetings/'+meetingId);
         if (response.data.status == true) { 
             // Time Zone = 
-            timeZone.value = response.data.time_zone;  
-            console.log(response.data.integrations);
+            timeZone.value = response.data.time_zone;   
             integrations.google_calendar_status = response.data.integrations.google_calendar_status && response.data.integrations.google_calendar_status == 1 ? false : true;  
             integrations.zoom_meeting_status = response.data.integrations.zoom_meeting_status && response.data.integrations.zoom_meeting_status == 1  ? false : true;  
+            integrations.cf7_status = response.data.integrations.cf7_status && response.data.integrations.cf7_status == 1  ? false : true;  
+            integrations.fluent_status = response.data.integrations.fluent_status && response.data.integrations.fluent_status == 1  ? false : true;  
+            integrations.forminator_status = response.data.integrations.forminator_status && response.data.integrations.forminator_status == 1  ? false : true;  
+            integrations.gravity_status = response.data.integrations.gravity_status && response.data.integrations.gravity_status == 1  ? false : true;  
+            integrations.webhook_status = response.data.integrations.webhook_status && response.data.integrations.webhook_status == 1  ? false : true;  
+            integrations.fluent_crm_status = response.data.integrations.fluent_crm_status && response.data.integrations.fluent_crm_status == 1  ? false : true;  
+            integrations.zoho_crm_status = response.data.integrations.zoho_crm_status && response.data.integrations.zoho_crm_status == 1  ? false : true;  
 
             wcProduct.value = response.data.wc_product;  
             formsList.value = response.data.formsList;  

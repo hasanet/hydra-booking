@@ -28,7 +28,7 @@ const closePopup = () => {
         <!-- <span class="tfhb-badge tfhb-badge-pro">{{ $tfhb_trans['Pro'] }}</span> -->
          <div :class="display =='list' ? 'tfhb-flexbox' : '' " class="tfhb-admin-cartbox-cotent">
             <span class="tfhb-integrations-single-block-icon">
-                <img :src="$tfhb_url+'/assets/images/stripe.png'" alt="">
+                <img :src="$tfhb_url+'/assets/images/zoho.png'" alt="">
             </span> 
 
 

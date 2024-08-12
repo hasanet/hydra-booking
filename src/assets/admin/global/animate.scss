@@ -1,0 +1,65 @@
+/* Define the custom zoomIn animation */
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Apply the animation to the transition */
+.zoom-in-enter-active {
+  animation: zoomIn 0.6s ease both;
+}
+.tfhb-popup-open .tfhb-popup-wrap {
+    animation: zoomIn 0.6s ease both;
+}
+
+
+.zoom-in-leave-active {
+  animation: zoomIn 0.6s ease reverse both;
+}
+.tfhb-popup-close .tfhb-popup-wrap {
+  animation: zoomIn 0.6s ease reverse both;
+}
+.tfhb-popup-open {
+    visibility: visible !important;
+    opacity: 1 !important; 
+    transition: 0.4s;
+} 
+
+
+/* Define the custom flipInX animation */
+@keyframes flipInX {
+  from {
+    transform: perspective(400px) rotateX(90deg);
+    opacity: 0;
+  }
+  40% {
+    transform: perspective(400px) rotateX(-20deg);
+  }
+  60% {
+    transform: perspective(400px) rotateX(10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: perspective(400px) rotateX(-5deg);
+  }
+  to {
+    transform: perspective(400px);
+  }
+}
+
+/* Apply the animation to the transition */
+.flip-in-x-enter-active {
+  animation: flipInX 0.6s ease both;
+}
+
+.flip-in-x-leave-active {
+  animation: flipInX 0.6s ease reverse both;
+}

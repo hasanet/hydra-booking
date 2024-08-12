@@ -17,6 +17,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    integrations: {
+        type: Object,
+        required: true
+    },
     formsList: {
         type: Object,
         required: true
@@ -181,10 +185,10 @@ const GetFormsData = async (e) => {
                     :selected = "1"
                     placeholder="Select Form Types"   
                     :option = "[
-                        {'name': 'Contact Form 7', 'value': 'wpcf7'},  
-                        {'name': 'Fluent Forms', 'value': 'fluent-forms'},  
-                        {'name': 'Forminator Forms', 'value': 'forminator'},  
-                        {'name': 'Gravity Forms', 'value': 'gravityforms'},  
+                        {'name': 'Contact Form 7', 'value': 'wpcf7', disable:  integrations.cf7_status},  
+                        {'name': 'Fluent Forms', 'value': 'fluent-forms', disable:  integrations.fluent_status},  
+                        {'name': 'Forminator Forms', 'value': 'forminator', disable:  integrations.forminator_status},  
+                        {'name': 'Gravity Forms', 'value': 'gravityforms', disable:  integrations.gravity_status},  
                     ]"
                     @tfhb-onchange="GetFormsData" 
                     

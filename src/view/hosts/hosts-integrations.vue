@@ -163,6 +163,7 @@ const fetchIntegration = async () => {
             Integration.stripe = response.data.stripe  ? response.data.stripe  : Integration.stripe ;  
             Integration.zoho = response.data.zoho  ? response.data.zoho  : Integration.zoho ;  
             Integration.paypal = response.data.paypal  ? response.data.paypal  : Integration.paypal ;  
+            Integration.zoho = response.data.zoho  ? response.data.zoho  : Integration.zoho ;  
             
 
             skeleton.value = false;
@@ -216,7 +217,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="tfhb-admin-card-box tfhb-hydra-wrap tfhb-m-0">    
+    <div class="tfhb-admin-card-box tfhb-m-0">    
         <!-- Woo  Integrations  --> 
         <ZoomIntregration display="list" class="tfhb-flexbox tfhb-host-integrations" 
         :zoom_meeting="Integration.zoom_meeting" 
@@ -262,6 +263,7 @@ onBeforeMount(() => {
         <!-- Zoho intrigation -->
         <ZohoIntegrations display="list" class="tfhb-flexbox tfhb-host-integrations"  
         :zoho_data="Integration.zoho" 
+        v-if="Integration.zoho.connection_status == 1"
         @update-integrations="UpdateIntegration" 
         :ispopup="zohopopup"
         :host_id="props.hostId"
