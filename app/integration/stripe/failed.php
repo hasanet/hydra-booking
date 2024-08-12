@@ -2,47 +2,47 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>Payment - Parker Prins Lebano</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
-  <meta content="" name="description">
+	<meta charset="utf-8">
+	<title>Payment - Parker Prins Lebano</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="" name="keywords">
+	<meta content="" name="description">
 
-  <!-- Facebook Opengraph integration: https://developers.facebook.com/docs/sharing/opengraph -->
-  <meta property="og:title" content="">
-  <meta property="og:image" content="">
-  <meta property="og:url" content="">
-  <meta property="og:site_name" content="">
-  <meta property="og:description" content="">
+	<!-- Facebook Opengraph integration: https://developers.facebook.com/docs/sharing/opengraph -->
+	<meta property="og:title" content="">
+	<meta property="og:image" content="">
+	<meta property="og:url" content="">
+	<meta property="og:site_name" content="">
+	<meta property="og:description" content="">
 
-  <!-- Twitter Cards integration: https://dev.twitter.com/cards/  -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="">
-  <meta name="twitter:title" content="">
-  <meta name="twitter:description" content="">
-  <meta name="twitter:image" content="">
+	<!-- Twitter Cards integration: https://dev.twitter.com/cards/  -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="">
+	<meta name="twitter:title" content="">
+	<meta name="twitter:description" content="">
+	<meta name="twitter:image" content="">
 
-  <!-- Place your favicon.ico and apple-touch-icon.png in the template root directory -->
-  <link href="favicon.ico" rel="shortcut icon">
+	<!-- Place your favicon.ico and apple-touch-icon.png in the template root directory -->
+	<link href="favicon.ico" rel="shortcut icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
 
-  <!-- Bootstrap CSS File -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<!-- Bootstrap CSS File -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-  <!-- Main Stylesheet File -->
-  <link href="css/style.css" rel="stylesheet">
-  <style>
-    /*
+	<!-- Main Stylesheet File -->
+	<link href="css/style.css" rel="stylesheet">
+	<style>
+	/*
 
-  Theme Name: Imperial
+	Theme Name: Imperial
 
-  Theme URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-template/
+	Theme URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-template/
 
-  Author: BootstrapMade
+	Author: BootstrapMade
 
-  Author URL: https://bootstrapmade.com
+	Author URL: https://bootstrapmade.com
 
 */
 
@@ -214,7 +214,7 @@ background-size: cover;
 
 #hero {
 
-  background-attachment: fixed;
+	background-attachment: fixed;
 
 }
 
@@ -276,9 +276,9 @@ color: #fff;
 
 #hero h1 {
 
-  font-size: 28px;
+	font-size: 28px;
 
-  line-height: 36px;
+	line-height: 36px;
 
 }
 
@@ -300,17 +300,17 @@ margin-bottom: 50px;
 
 #hero h2 {
 
-  font-size: 24px;
+	font-size: 24px;
 
-  line-height: 26px;
+	line-height: 26px;
 
-  margin-bottom: 30px;
+	margin-bottom: 30px;
 
 }
 
 #hero h2 .rotating {
 
-  display: block;
+	display: block;
 
 }
 
@@ -468,19 +468,19 @@ max-height: 50px;
 
 #header {
 
-  height: 80px;
+	height: 80px;
 
 }
 
 #header #logo h1 {
 
-  font-size: 26px;
+	font-size: 26px;
 
 }
 
 #header #logo img {
 
-  max-height: 40px;
+	max-height: 40px;
 
 }
 
@@ -630,7 +630,7 @@ margin: 5px 0;
 
 #nav-menu-container {
 
-  display: none;
+	display: none;
 
 }
 
@@ -764,7 +764,7 @@ color: #fff;
 
 #mobile-nav-toggle {
 
-  display: inline;
+	display: inline;
 
 }
 
@@ -1028,15 +1028,15 @@ max-width: 100%;
 
 #about .about-img {
 
-  height: auto;
+	height: auto;
 
 }
 
 #about .about-img img {
 
-  margin-left: 0;
+	margin-left: 0;
 
-  padding-bottom: 30px;
+	padding-bottom: 30px;
 
 }
 
@@ -1787,27 +1787,27 @@ transition: 0.4s;
 }
 
 .btn-theme{
-      width: 100%;
-  margin-top: 25px;
-  border-radius: 3px;
-  background-color: #a19e69 !important;
-  font-family: 'DM Sans', sans-serif;
-  color: #fff;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  text-align: center;
+		width: 100%;
+	margin-top: 25px;
+	border-radius: 3px;
+	background-color: #a19e69 !important;
+	font-family: 'DM Sans', sans-serif;
+	color: #fff;
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 400;
+	text-align: center;
 } 
 .w-button {
-  display: inline-block;
-  padding: 9px 15px;
-  /* background-color: #3898EC; */
-  /* color: white; */
-  border: 0;
-  /* line-height: inherit; */
-  text-decoration: none;
-  cursor: pointer;
-  /* border-radius: 0; */
+	display: inline-block;
+	padding: 9px 15px;
+	/* background-color: #3898EC; */
+	/* color: white; */
+	border: 0;
+	/* line-height: inherit; */
+	text-decoration: none;
+	cursor: pointer;
+	/* border-radius: 0; */
 }
 
 #contact .form input[type="submit"] {
@@ -1894,49 +1894,49 @@ color: #ccc;
 
 .back-to-top {
 
-  bottom: 15px;
+	bottom: 15px;
 
 }
 
 .special-3{
 
-  width: 100%;
+	width: 100%;
 
 }
 
 }
 
 
-  </style>
+	</style>
 </head>
 
 <body>
-  <!--==========================
-  Contact Section
-  ============================-->
-  <section id="contact">
-    <div class="container wow fadeInUp">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="section-title">Transaction Failed</h3>
-          <div class="section-title-divider"></div>
-          <p class="section-description">
-            <?php
-                if($_GET['msg']) {
-                    echo $_GET['msg'];
-                } else {
-                    echo "Your Transaction has been failed!!!";
-                }
-            ?>  
-          </p>
-        </div>
-      </div>
-        <a href="index.php" class="btn btn-success">Back</a>
-    </div>
-  </section>
+	<!--==========================
+	Contact Section
+	============================-->
+	<section id="contact">
+	<div class="container wow fadeInUp">
+		<div class="row">
+		<div class="col-md-12">
+			<h3 class="section-title">Transaction Failed</h3>
+			<div class="section-title-divider"></div>
+			<p class="section-description">
+			<?php
+			if ( $_GET['msg'] ) {
+				echo $_GET['msg'];
+			} else {
+				echo 'Your Transaction has been failed!!!';
+			}
+			?>  
+			</p>
+		</div>
+		</div>
+		<a href="index.php" class="btn btn-success">Back</a>
+	</div>
+	</section>
 
-  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

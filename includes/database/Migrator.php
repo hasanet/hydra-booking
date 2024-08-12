@@ -1,6 +1,6 @@
 <?php
 namespace HydraBooking\DB;
- 
+
 use HydraBooking\DB\Availability;
 use HydraBooking\DB\Host;
 use HydraBooking\DB\Booking;
@@ -11,57 +11,56 @@ use HydraBooking\DB\BookingMeta;
 
 class Migrator {
 
-    public function __construct() { 
-        $this->migrate();
-    }
+	public function __construct() {
+		$this->migrate();
+	}
 
-    /**
-     * Run the database migration.
-     */
-    public function migrate() {
-        // availability migration
-        $Availability =  new Availability(); 
-        $Availability->migrate();
+	/**
+	 * Run the database migration.
+	 */
+	public function migrate() {
+		// availability migration
+		$Availability = new Availability();
+		$Availability->migrate();
 
-        // Host migration
-        $Host =  new Host();
-        $Host->migrate();
-        
-        // Booking migration
-        $Booking =  new Booking();
-        $Booking->migrate();
+		// Host migration
+		$Host = new Host();
+		$Host->migrate();
 
-        // Meeting migration
-        $Meeting =  new Meeting();
-        $Meeting->migrate();
+		// Booking migration
+		$Booking = new Booking();
+		$Booking->migrate();
 
-        // Transactions migration
-        $Transactions =  new Transactions();
-        $Transactions->migrate();
+		// Meeting migration
+		$Meeting = new Meeting();
+		$Meeting->migrate();
 
-        // Meta migration
-        $Meta =  new Meta();
-        $Meta->migrate();
+		// Transactions migration
+		$Transactions = new Transactions();
+		$Transactions->migrate();
 
-        // BookingMeta migration
-        $BookingMeta =  new BookingMeta();
-        $BookingMeta->migrate();
-    }
+		// Meta migration
+		$Meta = new Meta();
+		$Meta->migrate();
 
-    /**
-     * Rollback the database migration.
-     */
-    public function rollback() {
-        // $this->availability();
-    }
+		// BookingMeta migration
+		$BookingMeta = new BookingMeta();
+		$BookingMeta->migrate();
+	}
 
-   
+	/**
+	 * Rollback the database migration.
+	 */
+	public function rollback() {
+		// $this->availability();
+	}
 
 
-    /**
-     * Availability migration.
-     */
-    private function availability() {
-       
-    }
-} 
+
+
+	/**
+	 * Availability migration.
+	 */
+	private function availability() {
+	}
+}

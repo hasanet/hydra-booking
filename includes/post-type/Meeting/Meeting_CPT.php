@@ -1,6 +1,7 @@
 <?php
 
 namespace HydraBooking\PostType\Meeting;
+
 defined( 'ABSPATH' ) || exit;
 
 class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
@@ -11,7 +12,7 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 	 * @return static
 	 */
 	public static function instance() {
-		if(!self::$instance) {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 
@@ -20,6 +21,7 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 
 	/**
 	 * Initialize custom post type
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -32,8 +34,8 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 			'supports'      => apply_filters( 'tfhb_meeting_supports', array( 'title', 'editor', 'thumbnail', 'comments', 'author' ) ),
 			'capability'    => 'post',
 			'rewrite_slug'  => '/',
-			'show_ui'  => true,
-			'show_in_menu' => false
+			'show_ui'       => true,
+			'show_in_menu'  => false,
 		);
 
 		$tax_args = array(
@@ -42,13 +44,11 @@ class Meeting_CPT extends \HydraBooking\PostType\Post_Type {
 				'singular_name' => 'Category',
 				'taxonomy'      => 'meeting_category',
 				'rewrite_slug'  => apply_filters( 'meeting_category_slug', 'meeting-category' ),
-				'show_ui'  => true,
-				'show_in_menu' => true
+				'show_ui'       => true,
+				'show_in_menu'  => true,
 			),
 		);
 
 		parent::__construct( $meeting_args, $tax_args );
-
 	}
-
 }

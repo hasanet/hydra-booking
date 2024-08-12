@@ -1,66 +1,55 @@
-<?php 
+<?php
 namespace HydraBooking\Admin;
 
-
 use HydraBooking\Admin\Controller\Enqueue;
-use HydraBooking\Admin\Controller\AdminMenu; 
+use HydraBooking\Admin\Controller\AdminMenu;
 use HydraBooking\Admin\Controller\AvailabilityController;
-use HydraBooking\Services\Integrations\Zoom\ZoomServices; 
+use HydraBooking\Services\Integrations\Zoom\ZoomServices;
 use HydraBooking\Migration\Migration;
 
-//  Load Migrator
+// Load Migrator
 use HydraBooking\DB\Migrator;
 
-  // exit
-  if ( ! defined( 'ABSPATH' ) ) { exit; }
+	// exit
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; }
 
-  class Admin {
+class Admin {
 
-    // constaract
-    public function __construct() {
-    
-      // run migrator
-      new Migrator();
-      // enqueue
-      new Enqueue();
- 
+	// constaract
+	public function __construct() {
 
-      // admin menu
-      new AdminMenu();
+		// run migrator
+		new Migrator();
+		// enqueue
+		new Enqueue();
 
-      // availability controller
-      new AvailabilityController();
+		// admin menu
+		new AdminMenu();
 
-      // activation hooks 
-      register_activation_hook(THB_URL, array($this, 'activate'));
+		// availability controller
+		new AvailabilityController();
 
-      Migration::instance();
-      
-      add_action('admin_init', array($this, 'tfhb_hydra_activation_redirect'));
- 
- 
+		// activation hooks
+		register_activation_hook( THB_URL, array( $this, 'activate' ) );
 
-    }
+		Migration::instance();
 
-    public function activate() {
-      // $Migrator = new Migrator();
-      new Migrator(); 
+		add_action( 'admin_init', array( $this, 'tfhb_hydra_activation_redirect' ) );
+	}
 
-    }
+	public function activate() {
+		// $Migrator = new Migrator();
+		new Migrator();
+	}
 
-    public function tfhb_hydra_activation_redirect() {
-      if (!get_option('tfhb_hydra_quick_setup')) {
+	public function tfhb_hydra_activation_redirect() {
+		if ( ! get_option( 'tfhb_hydra_quick_setup' ) ) {
 
-        update_option('tfhb_hydra_quick_setup', 1);
-        wp_redirect(admin_url('admin.php?page=hydra-booking#/setup-wizard'));
+			update_option( 'tfhb_hydra_quick_setup', 1 );
+			wp_redirect( admin_url( 'admin.php?page=hydra-booking#/setup-wizard' ) );
 
-        // exit;
-      }
-    }
-
-
- 
-
+			// exit;
+		}
+	}
 }
-
-

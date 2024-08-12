@@ -1,29 +1,30 @@
-<?php 
+<?php
 namespace HydraBooking\Migration;
-  // exit
-  if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-  use HydraBooking\Migration\ThirdParty\ThirdParty;
+	// exit
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; }
 
-  class Migration {
+	use HydraBooking\Migration\ThirdParty\ThirdParty;
 
-    private static $instance;
+class Migration {
+
+	private static $instance;
 
 	/**
 	 * @return static
 	 */
 	public static function instance() {
-		if(!self::$instance) {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 
 		return self::$instance;
 	}
- 
-	public function __construct(   ) {
-		ThirdParty::instance();
-	} 
 
+	public function __construct() {
+		ThirdParty::instance();
+	}
 }
 
 // call the class

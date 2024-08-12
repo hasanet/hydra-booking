@@ -15,5 +15,12 @@
             "HydraBooking\\Migration\\": "includes/migration/",
             "HydraBooking\\App\\": "app/"
         }
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "3.0"
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "lint-fix": "phpcbf"
     }
 }

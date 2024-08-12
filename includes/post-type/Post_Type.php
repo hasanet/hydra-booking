@@ -1,24 +1,26 @@
-<?php 
+<?php
 namespace HydraBooking\PostType;
-  // exit
-  if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-  class Post_Type {
+	// exit
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; }
 
-    private static $instance;
+class Post_Type {
+
+	private static $instance;
 
 	/**
 	 * @return static
 	 */
 	public static function instance() {
-		if(!self::$instance) {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
 
 		return self::$instance;
 	}
 
-    protected $post_args;
+	protected $post_args;
 	protected $tax_args;
 
 	public function __construct( $post_args = array(), $tax_args = array() ) {
@@ -30,8 +32,8 @@ namespace HydraBooking\PostType;
 	}
 
 	public function tfhb_post_type_register() {
-		$post_args = $this->post_args; 
-		$labels = array(
+		$post_args = $this->post_args;
+		$labels    = array(
 			'name'                  => _x( $post_args['name'], 'hydra-booking post type name', 'hydra-booking' ),
 			'singular_name'         => _x( $post_args['singular_name'], 'singular hydra-booking post type name', 'hydra-booking' ),
 			'add_new'               => __( 'Add New', 'hydra-booking' ),
@@ -67,7 +69,10 @@ namespace HydraBooking\PostType;
 			'show_in_menu'       => $post_args['show_in_menu'],
 			'query_var'          => true,
 			'menu_icon'          => $post_args['menu_icon'],
-			'rewrite'            => array( 'slug' => $post_args['rewrite_slug'], 'with_front' => false ),
+			'rewrite'            => array(
+				'slug'       => $post_args['rewrite_slug'],
+				'with_front' => false,
+			),
 			'capability_type'    => $post_args['capability'],
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -116,7 +121,10 @@ namespace HydraBooking\PostType;
 				'show_in_menu'          => $tax_args['show_in_menu'],
 				'show_in_nav_menus'     => true,
 				'query_var'             => true,
-				'rewrite'               => array( 'slug' => $tax_args['rewrite_slug'], 'with_front' => false ),
+				'rewrite'               => array(
+					'slug'       => $tax_args['rewrite_slug'],
+					'with_front' => false,
+				),
 				'show_admin_column'     => true,
 				'show_in_rest'          => true,
 				'rest_base'             => $tax_args['taxonomy'],
@@ -128,5 +136,4 @@ namespace HydraBooking\PostType;
 			register_taxonomy( $tax_args['taxonomy'], $this->post_args['slug'], $tfhb_tax_args );
 		}
 	}
-
 }
