@@ -281,7 +281,7 @@ onBeforeMount(() => {
                 </div>
                 <div class="tfhb-integrations-searchbar">
                     <input @keyup="FilterBySearch" type="text" placeholder="Search Integrations">
-                    <Icon name="ChevronRight" size="20" /> 
+                    <Icon name="Search" size="20" /> 
                 </div>
             </div>
 

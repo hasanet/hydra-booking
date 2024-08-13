@@ -330,21 +330,21 @@ const copyMeeting = (link) => {
                             <div class="share-link" v-if="'link'==shareData.share_type">
                                 <input type="text" :value="shareData.link" readonly>
 
-                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                <div class="tfhb-copy-btn ">
                                     <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.link)">{{ $tfhb_trans['Copy link'] }}</button>
                                 </div>
                             </div>
                             <div class="share-link" v-if="'short'==shareData.share_type">
                                 <input type="text" :value="shareData.shortcode" readonly>
 
-                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                <div class="tfhb-copy-btn">
                                     <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.shortcode)">{{ $tfhb_trans['Copy Code'] }}</button>
                                 </div>
                             </div>
                             <div class="share-link" v-if="'embed'==shareData.share_type">
                                 <input type="text" :value="shareData.embed" readonly>
 
-                                <div class="tfhb-copy-btn tfhb-mt-32">
+                                <div class="tfhb-copy-btn">
                                     <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.embed)">{{ $tfhb_trans['Copy Code'] }}</button>
                                 </div>
                             </div>

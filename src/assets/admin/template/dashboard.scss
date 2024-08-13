@@ -1,8 +1,9 @@
 .tfhb-admin-dashboard {
-
+  background-color: #FAF5F7;
   .tfhb-dashboard-wrap {
     margin-right: 16px;
     margin-top: 16px;
+    margin-left: 16px;
 
 
     .tfhb-chart-statistic-wrap{
@@ -119,8 +120,18 @@
       .tfhb-dashboard-notice-box-wrap {
         background-color: #ffffff;
         border-radius: 12px;
-        padding: 24px;
-        margin-top: 8px;
+        padding: 16px;
+        // margin-top: 8px;
+
+        #tfhb-chart-filter{
+          span{
+            font-weight: 600 !important;
+            color: $primaryi !important;
+          }
+        }
+        .tfhb-admin-title{
+          margin-bottom: 0 !important;
+        }
         h3{
           font-size: 17px !important;
           font-style: normal !important;

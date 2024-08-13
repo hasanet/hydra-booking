@@ -1,6 +1,9 @@
+.toplevel_page_hydra-booking #wpcontent {
+	padding: 0;
+}
 #tfhb-admin-app {
 
-    margin-top: 20px;
+    // margin-top: 20px;
     a,
     h1,
     h2,
@@ -401,14 +404,15 @@
     .tfhb-dashboard-heading {  
         // height: 60px;  
         border-radius: 4px; 
-        // margin-right: 16px;
+        margin-left: 16px;
         h2 {
-            font-size: 24px;
+            font-size: 17px;
             font-weight: 600;
-            color: #000;
+            // color: #000;
             text-decoration: none;
             outline: none;
             box-shadow: none;
+            margin: 0 !important;
             margin-left: 5px;
         }
         .tfhb-action-filter-button{
@@ -451,6 +455,9 @@
             padding: 24px;
             @media #{$max1140}{
                 width: calc(100% - 200px);
+            }
+            .tfhb-dashboard-heading{
+                margin-left: 0 !important;
             }
         }
     
@@ -572,6 +579,11 @@
     
  
     .tfhb-header-notification {
+        .tfhb-dropdown{
+            svg{
+                stroke: #9089A9 !important;
+            }
+        }
         .tfhb-dropdown-wrap {
             padding: 24px !important;
             border-radius: 8px !important;
@@ -962,21 +974,85 @@
 // Prime Vue Dropdown
 .p-dropdown-panel {
     z-index: 99999 !important;
+    
+        
+        .p-dropdown-header {
+            margin-bottom: 10px !important;
+        }
+        .p-dropdown-filter {
+            width: 100%;
+            border-radius: 4px !important; 
+            background: #FFF !important; 
+             
+            &:focus, &:active {
+                outline: none;
+                box-shadow: none; 
+                border-color: $ui900;
+            }
+        }
     .p-dropdown-items {
         .p-dropdown-item{
-            &:last-child{
-                margin: 0px !important;
-            }
+            border-radius: 4px;
+            background: $ui0;
+            margin: 2px;
+
+            
+ 
             &.p-highlight {
                 color: #F62881 !important;
-                background: #FEE6F0 !important;
+                background: $primaryi50 !important;
+                span {
+                    color: $ui900 !important
+                    
+                }
             }
             &.p-focus {
-                background: #FEE6F0 !important;
+                background: $ui25;
+                span {
+                    color: $ui900 !important
+                    
+                }
+            }
+
+            span {
+                font-size: 15px;
+                color: $ui600 !important;
             }
         }
     }
 } 
+// Tostify
+.Toastify__toast--error {
+    border: none !important;
+    border-radius: 8px;
+    border: 0.5px solid $warning700;
+    background: $warning50 !important;
+    .Toastify__progress-bar--error {
+        visibility: hidden;
+       opacity: 0;
+       
+     } 
+      .Toastify__toast-body {
+        color: $warning700;
+      }
+  }
+ 
+  .Toastify__toast--success {
+    border: none !important;
+    border-radius: 8px;
+    border: 0.5px solid $success700;
+    background: $success50 !important;
+    .Toastify__progress-bar--success {
+        visibility: hidden;
+       opacity: 0;
+       
+     } 
+      .Toastify__toast-body {
+        color: $success700;
+      }
+  }
+ 
+// Tostify
 
 // Pagination
 .tfhb-booking-details-pagination{

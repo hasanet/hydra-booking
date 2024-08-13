@@ -21,13 +21,26 @@
         }
         // Dropdown Field
         &.tfhb-field-dropdown{ 
+            .p-dropdown .p-dropdown-trigger {
+                color: #8F707D !important;
+            }
             .p-dropdown { 
                 border: 1px solid $ui50 !important; 
                 box-shadow: none !important;
                 &.tfhb-required{
                     border: 1px solid red !important;
                 }
+
+                 
+                // &:focus, &:active, &:not(.p-disabled):hover {
+                //     outline: none;
+                //     box-shadow: none; 
+                    
+                // }
             } 
+            .p-dropdown:not(.p-disabled):hover,  .p-dropdown:not(.p-disabled).p-focus {
+                border-color: $ui900 !important;
+            }
             span{
             margin: 0 !important;
             }
@@ -50,6 +63,7 @@
                 &:focus, &:active {
                     outline: none;
                     box-shadow: none; 
+                    border-color: $ui900;
                 }
             }
         }
@@ -98,7 +112,7 @@
                 height: 20px;
                 width: 20px;
                 background-color: $ui50;
-                border-radius: 5px;
+                border-radius: 3px;
                 border: 1px solid $ui50;
                 margin: 0 !important;
                 &:after {
@@ -116,15 +130,16 @@
                     display: none;
                 }
             }
+            
             label{
                 color: $ui800 !important;
                 font-size: 15px !important;
                 font-style: normal;
                 font-weight: 400;
-                line-height: 24px !important;
+                // line-height: 24px !important;
                 margin: 0 !important;
                 position: relative;
-                padding-left: 38px;
+                padding-left: 28px;
                 margin-right: 16px !important;
                 input:checked~.checkmark {
                     background-color: $primaryi;

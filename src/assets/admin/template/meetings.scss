@@ -1,6 +1,7 @@
 .tfhb-admin-meetings{
     >.tfhb-dashboard-heading {
         margin-right: 16px !important;
+        margin-left: 16px !important;
       }
       .tfhb-availability-schedule-wrap{
         .tfhb-availability-schedule-inner{
@@ -145,6 +146,7 @@
     }
 
     .tfhb-meetings-list-content{
+        margin-left: 16px;
      .tfhb-meetings-list-wrap{
         justify-content: normal;
         .tfhb-single-meeting{
@@ -511,6 +513,7 @@
                 font-weight: 400;
                 line-height: 24px; /* 160% */
                 width: 100%;
+                padding-right: 80px;
                 background: transparent;
                 &:focus{
                     outline: none;
@@ -520,6 +523,15 @@
             .tfhb-copy-btn{
                 display: flex;
                 justify-content: right;
+            }
+            .share-link {
+                position: relative;
+                .tfhb-copy-btn {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    margin-top: 0 !important;
+                }
             }
         }
     }

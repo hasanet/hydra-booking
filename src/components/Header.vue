@@ -27,7 +27,7 @@ const props = defineProps([
         </div>
         <div class="tfhb-header-notification">
             <div class="tfhb-dropdown tfhb-mega-dropdown">
-            <span> <Icon name="BellDot" size="24" /> </span>
+            <span> <Icon name="Bell" size="24" /> </span>
            
             <div class="tfhb-dropdown-wrap ">   <!-- active class-->
                 <div class="tfhb-flexbox">
@@ -91,7 +91,7 @@ const props = defineProps([
         border-bottom: 1px solid #eaeaea;
         border-radius: 8px;
         box-shadow: 0 1px 1px rgba(0,0,0,.04);
-        margin-right: 16px;
+        /* margin-right: 16px; */
         margin-bottom: 24px;
     }
     .thb-admin-header .header-navigation ul { 

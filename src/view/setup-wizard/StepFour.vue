@@ -55,6 +55,22 @@ const sharePopupData = (data) => {
 const StepFour = () => {
     props.setupWizard.currentStep = 'step-end';
 }
+const copyMeeting = (link) => {
+    //  copy to clipboard without navigator 
+    const textarea = document.createElement('textarea');
+    textarea.value = link;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    
+    // Show a toast notification or perform any other action
+    toast.success(link + ' is Copied');
+}
+
 
 </script>
 
@@ -117,13 +133,16 @@ const StepFour = () => {
                                             </div>
                                         </div>
                                     </li>
-                                    <li v-if="setupWizard.data.meeting.meeting_price">
+                                    <li >
                                         <div class="tfhb-flexbox">
                                             <div class="user-info-icon">
                                                 <Icon name="Banknote" size="16" /> 
                                             </div>
-                                            <div class="user-info-title">
+                                            <div v-if="setupWizard.data.meeting.meeting_price" class="user-info-title">
                                                 {{ setupWizard.data.meeting.meeting_price }}
+                                            </div>
+                                            <div else class="user-info-title">
+                                                Free
                                             </div>
                                         </div>
                                     </li>
@@ -226,21 +245,21 @@ const StepFour = () => {
                                 <div class="share-link" v-if="'link'==shareData.share_type">
                                     <input type="text" :value="shareData.link" readonly>
 
-                                    <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <div class="tfhb-copy-btn">
                                         <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.link)">{{ $tfhb_trans['Copy link'] }}</button>
                                     </div>
                                 </div>
                                 <div class="share-link" v-if="'short'==shareData.share_type">
                                     <input type="text" :value="shareData.shortcode" readonly>
 
-                                    <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <div class="tfhb-copy-btn">
                                         <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.shortcode)">{{ $tfhb_trans['Copy Code'] }}</button>
                                     </div>
                                 </div>
                                 <div class="share-link" v-if="'embed'==shareData.share_type">
                                     <input type="text" :value="shareData.embed" readonly>
 
-                                    <div class="tfhb-copy-btn tfhb-mt-32">
+                                    <div class="tfhb-copy-btn">
                                         <button class="tfhb-btn boxed-btn flex-btn" @click="copyMeeting(shareData.embed)">{{ $tfhb_trans['Copy Code'] }}</button>
                                     </div>
                                 </div>

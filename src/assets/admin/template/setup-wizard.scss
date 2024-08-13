@@ -38,7 +38,7 @@
     .tfhb-s-w-geting-start {
         .tfhb-single-form-field {
             min-width: 400px !important;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
     }
 
@@ -88,6 +88,10 @@
         flex-direction: column;
         gap: 56px !important;
         justify-content: center !important;
+        &.tfhb-s-w-step-end{
+            width: 90%;
+            padding: 64px 50px;
+        }
 
         .tfhb-s-w-icon-text {
             text-align: center;
@@ -193,6 +197,11 @@
                     border-radius: 4px;
                     border: 1px solid var(--Border, #F6EEF2);
                     background: #FFF;
+                    &:focus, &:active {
+                        outline: none;
+                        box-shadow: none; 
+                        border-color: $ui900;
+                    }
                 }
 
                 svg {
@@ -211,6 +220,9 @@
         .tfhb-s-w-integrations-dropdown {
             padding: 8px;
 
+             > span{
+                font-weight: 600 !important;
+            }
             .tfhb-dropdown-wrap {
                 background-color: #fff !important;
 

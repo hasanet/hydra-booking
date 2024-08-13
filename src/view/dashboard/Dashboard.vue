@@ -56,11 +56,11 @@ const  ChangeStatisticData = (day) => {
     <Header title="Dashboard" /> 
     <div  :class="{ 'tfhb-skeleton': Dashboard.skeleton }"  class="tfhb-dashboard-heading tfhb-flexbox">
         <div class="thb-admin-title">
-            <h1>{{ $tfhb_trans['Data'] }}</h1>
+            <h2>{{ $tfhb_trans['Data'] }}</h2>
             <p>{{ $tfhb_trans['One-liner description'] }}</p> 
         </div>  
         <div class="tfhb-dropdown tfhb-mega-dropdown tfhb-no-hover">
-            <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading " @click="datachart_box_dropdown = !datachart_box_dropdown"  id="tfhb-datachart-filter"> <span>{{ $tfhb_trans['Today'] }}</span>  <Icon name="ChevronDown" size="15" /> </span>
+            <span class="tfhb-flexbox tfhb-gap-8 tfhb-mega-dropdown-heading " @click="datachart_box_dropdown = !datachart_box_dropdown"  id="tfhb-datachart-filter"> <span>{{ $tfhb_trans['Today'] }}</span>  <Icon name="ChevronDown" size="20" /> </span>
             <div 
                 :class="{ 'active': datachart_box_dropdown }"
                 class="tfhb-dropdown-wrap"
@@ -103,7 +103,7 @@ const  ChangeStatisticData = (day) => {
         </div>
     </div>
     <div  :class="{ 'tfhb-skeleton': Dashboard.skeleton }"  class="tfhb-dashboard-wrap">
-      
+   
         <div :class="{ 'tfhb-skeleton': Dashboard.skeleton_chartbox }"  class="tfhb-dashboard-chartbox tfhb-flexbox tfhb-gap-24">
 
             <!-- Single Chartbox -->
@@ -688,7 +688,7 @@ const  ChangeStatisticData = (day) => {
                     </div>
                     <div class="thb-admin-btn right"> 
                         <div class="tfhb-dropdown  tfhb-no-hover">
-                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"  @click="datachart_dropdown = !datachart_dropdown" id="tfhb-chart-filter" > <span> {{ $tfhb_trans['This Week'] }}</span>  <Icon name="ChevronDown" size="15" /> </a>
+                            <a class="tfhb-flexbox tfhb-gap-8 tfhb-btn"  @click="datachart_dropdown = !datachart_dropdown" id="tfhb-chart-filter" > <span> {{ $tfhb_trans['This Week'] }}</span>  <Icon name="ChevronDown" size="20" /> </a>
                             <div  
                                 :class="{ 'active': datachart_dropdown }"
                                 class="tfhb-dropdown-wrap"

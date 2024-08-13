@@ -27,7 +27,7 @@ const checkedValue = (e) => {
       :style="{ 'width':  width ? 'calc('+(width || 100)+'% - 12px)' : 'auto' }" 
     >
         <div class="tfhb-single-form-field-wrap tfhb-field-swicher">
-            <div class="tfhb-swicher-wrap tfhb-flexbox">
+            <div class="tfhb-swicher-wrap tfhb-flexbox tfhb-gap-8">
                 <!-- Checkbox swicher -->
                 <!--   @change="checkedValue" -->
                 <label class="switch">
