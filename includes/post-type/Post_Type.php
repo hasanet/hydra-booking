@@ -34,28 +34,45 @@ class Post_Type {
 	public function tfhb_post_type_register() {
 		$post_args = $this->post_args;
 		$labels    = array(
-			'name'                  => _x( $post_args['name'], 'hydra-booking post type name', 'hydra-booking' ),
-			'singular_name'         => _x( $post_args['singular_name'], 'singular hydra-booking post type name', 'hydra-booking' ),
-			'add_new'               => __( 'Add New', 'hydra-booking' ),
-			'add_new_item'          => __( 'Add New ' . $post_args['singular_name'], 'hydra-booking' ),
-			'edit_item'             => __( 'Edit ' . $post_args['singular_name'], 'hydra-booking' ),
-			'new_item'              => __( 'New ' . $post_args['singular_name'], 'hydra-booking' ),
-			'all_items'             => __( 'All ' . $post_args['name'], 'hydra-booking' ),
-			'view_item'             => __( 'View ' . $post_args['singular_name'], 'hydra-booking' ),
-			'view_items'            => __( 'View ' . $post_args['name'], 'hydra-booking' ),
-			'search_items'          => __( 'Search ' . $post_args['name'], 'hydra-booking' ),
-			'not_found'             => __( 'No ' . $post_args['name'] . ' found', 'hydra-booking' ),
-			'not_found_in_trash'    => __( 'No ' . $post_args['name'] . ' found in Trash', 'hydra-booking' ),
+			'name'                  => $post_args['name'],
+			'singular_name'         => $post_args['singular_name'],
+			'add_new'               => esc_html__( 'Add New', 'hydra-booking' ),
+			/* translators: %s: post type singular name */
+			'add_new_item'             => sprintf( esc_html__( 'Add New %s', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'edit_item'             => sprintf( esc_html__( 'Edit %s', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'new_item'              => sprintf( esc_html__( 'New %s', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type name */
+			'all_items'             => sprintf( esc_html__( 'All %s', 'hydra-booking' ), $post_args['name'] ),
+			/* translators: %s: post type singular name */
+			'view_item'             => sprintf( esc_html__( 'View %s', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type name */
+			'view_items'            => sprintf( esc_html__( 'View %s', 'hydra-booking' ), $post_args['name'] ),
+			/* translators: %s: post type name */
+			'search_items'          => sprintf( esc_html__( 'Search %s', 'hydra-booking' ), $post_args['name'] ),
+			/* translators: %s: post type singular name */
+			'not_found'             => sprintf( esc_html__( 'No %s found', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'not_found_in_trash'    => sprintf( esc_html__( 'No %s found in Trash', 'hydra-booking' ), $post_args['singular_name'] ),
 			'parent_item_colon'     => '',
-			'menu_name'             => _x( $post_args['name'], 'hydra-booking post type menu name', 'hydra-booking' ),
-			'featured_image'        => __( $post_args['singular_name'] . ' Image', 'hydra-booking' ),
-			'set_featured_image'    => __( 'Set ' . $post_args['singular_name'] . ' Image', 'hydra-booking' ),
-			'remove_featured_image' => __( 'Remove ' . $post_args['singular_name'] . ' Image', 'hydra-booking' ),
-			'use_featured_image'    => __( 'Use as ' . $post_args['singular_name'] . ' Image', 'hydra-booking' ),
-			'attributes'            => __( $post_args['singular_name'] . ' Attributes', 'hydra-booking' ),
-			'filter_items_list'     => __( 'Filter ' . $post_args['name'] . ' list', 'hydra-booking' ),
-			'items_list_navigation' => __( $post_args['name'] . ' list navigation', 'hydra-booking' ),
-			'items_list'            => __( $post_args['name'] . ' list', 'hydra-booking' ),
+			'menu_name'             => $post_args['name'],
+			/* translators: %s: post type singular name */
+			'featured_image'        => sprintf( esc_html__( '%s Image', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'set_featured_image'    => sprintf( esc_html__( 'Set %s Image', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'remove_featured_image' => sprintf( esc_html__( 'Remove %s Image', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'use_featured_image'    => sprintf( esc_html__( 'Use as %s Image', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type singular name */
+			'attributes'            => sprintf( esc_html__( '%s Attributes', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type name */
+			'filter_items_list'     => sprintf( esc_html__( 'Filter %s list', 'hydra-booking' ), $post_args['name'] ),
+			/* translators: %s: post type singular name */
+			'items_list_navigation' => sprintf( esc_html__( '%s list navigation', 'hydra-booking' ), $post_args['singular_name'] ),
+			/* translators: %s: post type name */
+			'items_list'            => sprintf( esc_html__( '%s list', 'hydra-booking' ), $post_args['name'] )
 		);
 
 		$labels = apply_filters( $post_args['slug'] . '_labels', $labels );
@@ -88,27 +105,45 @@ class Post_Type {
 		foreach ( $this->tax_args as $tax_args ) {
 
 			$tax_labels = array(
-				'name'                       => __( $tax_args['name'], 'hydra-booking' ),
-				'singular_name'              => __( $tax_args['singular_name'], 'hydra-booking' ),
-				'menu_name'                  => __( $tax_args['name'], 'hydra-booking' ),
-				'all_items'                  => __( 'All ' . $tax_args['name'], 'hydra-booking' ),
-				'edit_item'                  => __( 'Edit ' . $tax_args['singular_name'], 'hydra-booking' ),
-				'view_item'                  => __( 'View ' . $tax_args['singular_name'], 'hydra-booking' ),
-				'update_item'                => __( 'Update ' . strtolower( $tax_args['singular_name'] ) . ' name', 'hydra-booking' ),
-				'add_new_item'               => __( 'Add new ' . strtolower( $tax_args['singular_name'] ), 'hydra-booking' ),
-				'new_item_name'              => __( 'New ' . strtolower( $tax_args['singular_name'] ) . ' name', 'hydra-booking' ),
-				'parent_item'                => __( 'Parent ' . $tax_args['singular_name'], 'hydra-booking' ),
-				'parent_item_colon'          => __( 'Parent :' . $tax_args['singular_name'], 'hydra-booking' ),
-				'search_items'               => __( 'Search ' . $tax_args['singular_name'], 'hydra-booking' ),
-				'popular_items'              => __( 'Popular ' . $tax_args['singular_name'], 'hydra-booking' ),
-				'separate_items_with_commas' => __( 'Separate ' . strtolower( $tax_args['singular_name'] ) . ' with commas', 'hydra-booking' ),
-				'add_or_remove_items'        => __( 'Add or remove ' . strtolower( $tax_args['singular_name'] ), 'hydra-booking' ),
-				'choose_from_most_used'      => __( 'Choose from the most used ' . strtolower( $tax_args['singular_name'] ), 'hydra-booking' ),
-				'not_found'                  => __( 'No ' . strtolower( $tax_args['singular_name'] ) . ' found', 'hydra-booking' ),
-				'no_terms'                   => __( 'No ' . strtolower( $tax_args['singular_name'] ), 'hydra-booking' ),
-				'items_list_navigation'      => __( $tax_args['singular_name'] . ' list navigation', 'hydra-booking' ),
-				'items_list'                 => __( $tax_args['name'] . ' list', 'hydra-booking' ),
-				'back_to_items'              => __( 'Back to ' . strtolower( $tax_args['singular_name'] ), 'hydra-booking' ),
+				'name'                       => $tax_args['name'],
+				'singular_name'              => $tax_args['singular_name'],
+				'menu_name'                  => $tax_args['name'],
+				/* translators: %s: taxonomy name */
+				'all_items'                  => sprintf( esc_html__( 'All %s', 'hydra-booking' ), $tax_args['name'] ),
+				/* translators: %s: taxonomy singular name */
+				'edit_item'                  => sprintf( esc_html__( 'Edit %s', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy singular name */
+				'view_item'                  => sprintf( esc_html__( 'View %s', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy singular name */
+				'update_item'                => sprintf( esc_html__( 'Update %s name', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'add_new_item'               => sprintf( esc_html__( 'Add New %s', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'new_item_name'              => sprintf( esc_html__( 'New %s name', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'parent_item'                => sprintf( esc_html__( 'Parent %s', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy singular name */
+				'parent_item_colon'          => sprintf( esc_html__( 'Parent : %s', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy singular name */
+				'search_items'               => sprintf( esc_html__( 'Search %s', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy singular name */
+				'popular_items'              => sprintf( esc_html__( 'Popular %s', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy singular name */
+				'separate_items_with_commas' => sprintf( esc_html__( 'Separate %s with commas', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'add_or_remove_items'        => sprintf( esc_html__( 'Add or remove %s', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'choose_from_most_used'      => sprintf( esc_html__( 'Choose from the most used %s', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'not_found'                  => sprintf( esc_html__( 'No %s found.', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'no_terms'                   => sprintf( esc_html__( 'No %s', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) ),
+				/* translators: %s: taxonomy singular name */
+				'items_list_navigation'      => sprintf( esc_html__( '%s list navigation', 'hydra-booking' ), $tax_args['singular_name'] ),
+				/* translators: %s: taxonomy name */
+				'items_list'                 => sprintf( esc_html__( '%s list', 'hydra-booking' ), $tax_args['name'] ),
+				/* translators: %s: taxonomy singular name */
+				'back_to_items'              => sprintf( esc_html__( 'Back to %s', 'hydra-booking' ), strtolower( $tax_args['singular_name'] ) )
 			);
 			$tax_labels = apply_filters( 'tfhb_' . $tax_args['taxonomy'] . '_labels', $tax_labels );
 
