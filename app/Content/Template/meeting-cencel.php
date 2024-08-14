@@ -100,7 +100,7 @@ $booking = isset( $args['booking_data'] ) ? $args['booking_data'] : array();
 				<div class="tfhb-forms">
 					<div  class="tfhb-single-form">
 						<br>
-						<label for="attendee_name"> Reason for Reschedule </label>
+						<label for="attendee_name"> <?php echo esc_html__( 'Reason for Reschedule', 'hydra-booking' ); ?> </label>
 						<br>
 
 						<textarea name="reason" required id="reason"></textarea>

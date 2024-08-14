@@ -95,7 +95,7 @@ class OutlookCalendar {
 				wp_die();
 
 			} catch ( Exception $e ) {
-				echo $e->getMessage();
+				echo esc_html($e->getMessage());
 				exit();
 			}
 		}

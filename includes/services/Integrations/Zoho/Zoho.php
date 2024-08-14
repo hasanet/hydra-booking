@@ -58,7 +58,7 @@ class Zoho {
 				$result = json_decode( $response, true );
 
 				if ( isset( $result['error'] ) ) {
-					echo 'Error: ' . $result['error'];
+					echo 'Error: ' . esc_attr($result['error']);
 				} else {
 					$_tfhb_host_integration_settings['zoho']['access_token']  = $result['access_token'];
 					$_tfhb_host_integration_settings['zoho']['refresh_token'] = $result['refresh_token'];
@@ -86,7 +86,7 @@ class Zoho {
 
 				// Check for cURL errors
 				if ( curl_errno( $ch ) ) {
-					echo 'Error:' . curl_error( $ch );
+					echo 'Error:' . esc_html(curl_error( $ch ));
 				}
 
 				// Close the cURL session
@@ -116,7 +116,7 @@ class Zoho {
 				// wp_redirect($redirect_url);
 				// wp_die();
 			} catch ( Exception $e ) {
-				echo $e->getMessage();
+				echo esc_html($e->getMessage());
 				exit();
 			}
 		}
@@ -220,7 +220,7 @@ class Zoho {
 
 			$response = curl_exec( $ch );
 			if ( curl_errno( $ch ) ) {
-				echo 'Error:' . curl_error( $ch );
+				echo 'Error:' . esc_html(curl_error( $ch ));
 			}
 			curl_close( $ch );
 
@@ -253,7 +253,7 @@ class Zoho {
 
 		$response = curl_exec( $ch );
 		if ( curl_errno( $ch ) ) {
-			echo 'Error:' . curl_error( $ch );
+			echo 'Error:' . esc_html(curl_error( $ch ));
 		}
 		curl_close( $ch );
 

@@ -123,7 +123,7 @@ class HydraBookingShortcode {
 				// Load Reschedule Template
 				// You are rescheduling the booking: 3:15 pm - 3:30 pm, May 27, 2024 (Asia/Dhaka)
 				echo '<div class="tfhb-reschedule-box">';
-				echo '<p>' . __( 'You are rescheduling the booking:', 'hydra-booking' ) . ' ' . esc_html( $booking_data->start_time ) . ' - ' . esc_html( $booking_data->end_time ) . ', ' . esc_html( date( 'F j, Y', strtotime( $booking_data->meeting_dates ) ) ) . ' (' . esc_html( $booking_data->attendee_time_zone ) . ')</p>';
+				echo '<p>' . esc_html__( 'You are rescheduling the booking:', 'hydra-booking' ) . ' ' . esc_html( $booking_data->start_time ) . ' - ' . esc_html( $booking_data->end_time ) . ', ' . esc_html( date( 'F j, Y', strtotime( $booking_data->meeting_dates ) ) ) . ' (' . esc_html( $booking_data->attendee_time_zone ) . ')</p>';
 				echo '</div>';
 
 			}
