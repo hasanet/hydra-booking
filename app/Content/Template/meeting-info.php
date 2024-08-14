@@ -34,17 +34,17 @@ $paypalPublicKey                 = ! empty( $_tfhb_host_integration_settings['pa
 
 <div class="tfhb-meeting-info">
 	<div class="hidden-field">
-		<input type="hidden" id="meeting_id" name="meeting_id" value="<?php echo $meeting['id']; ?>">
-		<input type="hidden" id="host_id" name="host_id" value="<?php echo $host['host_id']; ?>"> 
-		<input type="hidden" id="meeting_duration" name="meeting_dates" value="<?php echo $meeting['duration']; ?>">
+		<input type="hidden" id="meeting_id" name="meeting_id" value="<?php echo esc_attr($meeting['id']); ?>">
+		<input type="hidden" id="host_id" name="host_id" value="<?php echo esc_attr($host['host_id']); ?>"> 
+		<input type="hidden" id="meeting_duration" name="meeting_dates" value="<?php echo esc_attr($meeting['duration']); ?>">
 		<input type="hidden" id="meeting_dates" name="meeting_dates" value="">
 		<input type="hidden" id="meeting_time_start" name="meeting_time_start" value="">
 		<input type="hidden" id="meeting_time_end" name="meeting_time_end" value="">
-		<input type="hidden" id="payment_method" name="payment_method" value="<?php echo $meeting['payment_method']; ?>">
-		<input type="hidden" id="payment_amount" name="payment_amount" value="<?php echo ! empty( $meeting['meeting_price'] ) ? $meeting['meeting_price'] : ''; ?>">
-		<input type="hidden" id="payment_currency" name="payment_currency" value="<?php echo ! empty( $meeting['payment_currency'] ) ? $meeting['payment_currency'] : 'USD'; ?>">
-		<input type="hidden" id="stpublic_key" name="public_key" value="<?php echo $stripePublicKey; ?>">
-		<input type="hidden" id="paypal_public_key" name="public_key" value="<?php echo $paypalPublicKey; ?>">
+		<input type="hidden" id="payment_method" name="payment_method" value="<?php echo esc_attr($meeting['payment_method']); ?>">
+		<input type="hidden" id="payment_amount" name="payment_amount" value="<?php echo ! empty( $meeting['meeting_price'] ) ? esc_attr($meeting['meeting_price']) : ''; ?>">
+		<input type="hidden" id="payment_currency" name="payment_currency" value="<?php echo ! empty( $meeting['payment_currency'] ) ? esc_attr($meeting['payment_currency']) : esc_attr('USD'); ?>">
+		<input type="hidden" id="stpublic_key" name="public_key" value="<?php echo esc_attr($stripePublicKey); ?>">
+		<input type="hidden" id="paypal_public_key" name="public_key" value="<?php echo esc_attr($paypalPublicKey); ?>">
 		<?php
 		if ( ! empty( $booking_data ) ) {
 			echo '<input type="hidden" id="booking_hash" name="booking_hash" value="' . esc_attr( $booking_data->hash ) . '">';
@@ -52,7 +52,7 @@ $paypalPublicKey                 = ! empty( $_tfhb_host_integration_settings['pa
 		}
 		?>
 	</div>  
-	<div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo THB_URL . 'assets/app/images/meeting-cover.png'; ?>) lightgray 50% / cover no-repeat;">
+	<div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo esc_url(THB_URL . 'assets/app/images/meeting-cover.png'); ?>) lightgray 50% / cover no-repeat;">
 		<div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
 			<?php echo ! empty( $host['avatar'] ) ? '<img src="' . esc_url( $host['avatar'] ) . '" alt="">' : ''; ?>
 				  
@@ -72,7 +72,7 @@ $paypalPublicKey                 = ! empty( $_tfhb_host_integration_settings['pa
 		<ul>
 			<li class="tfhb-flexbox tfhb-gap-8">
 				<div class="tfhb-icon">
-					<!-- <img src="<?php echo THB_URL . 'assets/app/images/clock.svg'; ?>" alt="Clock"> -->
+					<!-- <img src="<?php echo esc_url(THB_URL . 'assets/app/images/clock.svg'); ?>" alt="Clock"> -->
 
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<g clip-path="url(#clip0_1911_10275)">
@@ -93,8 +93,8 @@ $paypalPublicKey                 = ! empty( $_tfhb_host_integration_settings['pa
 			if ( ! empty( $meeting['meeting_locations'] ) ) {
 				foreach ( $meeting['meeting_locations'] as $key => $location ) {
 					echo '<li class="tfhb-flexbox tfhb-gap-8">
-                                <input type="hidden" id="meeting_locations[' . $key . '][location]" name="meeting_locations[' . $key . '][location]" value="' . esc_attr( $location['location'] ) . '">
-                                <input type="hidden" id="meeting_locations[' . $key . '][address]" name="meeting_locations[' . $key . '][address]" value="' . esc_attr( $location['address'] ) . '">
+                                <input type="hidden" id="meeting_locations[' . esc_attr($key) . '][location]" name="meeting_locations[' . esc_attr($key) . '][location]" value="' . esc_attr( $location['location'] ) . '">
+                                <input type="hidden" id="meeting_locations[' . esc_attr($key) . '][address]" name="meeting_locations[' . esc_attr($key) . '][address]" value="' . esc_attr( $location['address'] ) . '">
                                 <div class="tfhb-icon">
                                     
                                     
