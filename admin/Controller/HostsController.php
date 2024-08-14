@@ -797,7 +797,7 @@ class HostsController {
 			$_tfhb_host_integration_settings['zoho']['redirect_url']  = sanitize_url( $data['redirect_url'] );
 			$_tfhb_host_integration_settings['zoho']['access_token']  = sanitize_text_field( $data['access_token'] );
 			$_tfhb_host_integration_settings['zoho']['refresh_token'] = sanitize_text_field( $data['refresh_token'] );
-			$_tfhb_host_integration_settings['zoho']['modules']       = json_encode( $data['modules'] );
+			$_tfhb_host_integration_settings['zoho']['modules']       = wp_json_encode( $data['modules'] );
 
 			// update User Meta
 			update_user_meta( $user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings );
@@ -983,8 +983,8 @@ class HostsController {
 				'date_status' => $availability['date_status'],
 				'date_slots'  => $request['date_slots'],
 				'status'      => 'active',
-				'created_at'  => date( 'y-m-d' ),
-				'updated_at'  => date( 'y-m-d' ),
+				'created_at'  => gmdate( 'y-m-d' ),
+				'updated_at'  => gmdate( 'y-m-d' ),
 			);
 
 			$hostAvailability = new Availability();
@@ -1012,8 +1012,8 @@ class HostsController {
 				'date_status' => $availability['date_status'],
 				'date_slots'  => serialize( $request['date_slots'] ),
 				'status'      => 'active',
-				'created_at'  => date( 'y-m-d' ),
-				'updated_at'  => date( 'y-m-d' ),
+				'created_at'  => gmdate( 'y-m-d' ),
+				'updated_at'  => gmdate( 'y-m-d' ),
 			);
 
 			$hostAvailability = new Availability();

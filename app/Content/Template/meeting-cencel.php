@@ -52,7 +52,7 @@ $booking = isset( $args['booking_data'] ) ? $args['booking_data'] : array();
 							$date_strings = '';
 							foreach ( $meeting_dates as $key => $date ) {
 
-								$date_strings .= date( 'l, F j', strtotime( $date ) );
+								$date_strings .= gmdate( 'l, F j', strtotime( $date ) );
 								$date_strings .= ', ';
 							}
 

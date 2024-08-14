@@ -59,9 +59,9 @@ class ScheduleController {
 		$general_settings        = get_option( '_tfhb_general_settings', true ) ? get_option( '_tfhb_general_settings', true ) : array();
 		$after_booking_completed = isset( $general_settings['after_booking_completed'] ) ? $general_settings['after_booking_completed'] : 60; // minutes
 		// Get all bookings current date before 60 minutes of Current Time and status is confirmed
-		$time = date( 'H:i:s', strtotime( '-' . $after_booking_completed . ' minutes', strtotime( date( 'H:i:s' ) ) ) );
+		$time = gmdate( 'H:i:s', strtotime( '-' . $after_booking_completed . ' minutes', strtotime( gmdate( 'H:i:s' ) ) ) );
 		// meeting_dates 2024-06-06
-		$meeting_dates = date( 'Y-m-d', strtotime( date( 'Y-m-d' ) ) );
+		$meeting_dates = gmdate( 'Y-m-d', strtotime( gmdate( 'Y-m-d' ) ) );
 		$booking       = new Booking();
 		$bookings      = $booking->get(
 			array(
@@ -74,7 +74,7 @@ class ScheduleController {
 			$DateTime = new DateTimeController( $value->attendee_time_zone );
 					// Time format if has AM and PM into start time
 			$time_format              = strpos( $value->start_time, 'AM' ) || strpos( $value->start_time, 'PM' ) ? '12' : '24';
-			$before_booking_completed = $DateTime->convert_time_based_on_timezone( date( 'Y-m-d H:i:s', strtotime( '-' . $after_booking_completed . ' minutes' ) ), 'UTC', $value->attendee_time_zone, $time_format );
+			$before_booking_completed = $DateTime->convert_time_based_on_timezone( gmdate( 'Y-m-d H:i:s', strtotime( '-' . $after_booking_completed . ' minutes' ) ), 'UTC', $value->attendee_time_zone, $time_format );
 
 			if ( $value->end_time < $before_booking_completed ) {
 
