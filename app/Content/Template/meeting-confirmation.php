@@ -27,17 +27,17 @@ $host    = isset( $args['host'] ) ? $args['host'] : array();
 
 	?>
 	<div class="tfhb-confirmation-seccess">
-		<img src="<?php echo THB_URL . 'assets/app/images/sucess.gif'; ?>" alt="Success"> 
+		<img src="<?php echo esc_url(THB_URL . 'assets/app/images/sucess.gif'); ?>" alt="Success"> 
 		<h3><?php echo esc_html( __( 'Booking', 'hydra-booking' ) ); ?> <?php echo esc_html( $booking['status'] ); ?></h3>
 		<!-- <p>Please check your email for more information. Now you can reschedule or cancel booking from here.</p> -->
 	</div>
 
 	<div class="tfhb-meeting-hostinfo">
-		<h4 class="tfhb-mb-16"><?php echo $meeting->title; ?></h4>
+		<h4 class="tfhb-mb-16"><?php echo esc_html($meeting->title); ?></h4>
 		<ul>
 			<li class="tfhb-flexbox tfhb-gap-8">
 				<div class="tfhb-icon">
-					<img src="<?php echo THB_URL . 'assets/app/images/user.svg'; ?>" alt="User">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/user.svg'); ?>" alt="User">
 				</div>
 				<?php echo ! empty( $host['first_name'] ) ? '' . esc_html( $host['first_name'] ) . '  ' . esc_html( $host['last_name'] ) . '' : ''; ?>
 				<span>Host</span>
@@ -45,7 +45,7 @@ $host    = isset( $args['host'] ) ? $args['host'] : array();
 			<?php if ( ! empty( $booking['start_time'] ) ) { ?>
 			<li class="tfhb-flexbox tfhb-gap-8">
 				<div class="tfhb-icon">
-					<img src="<?php echo THB_URL . 'assets/app/images/Meeting.svg'; ?>" alt="User">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/Meeting.svg'); ?>" alt="User">
 				</div>
 				<!--date stored in this format  2024-05-24  9:00pm-9:45pm, Saturday, April 25 -->
 				<?php
@@ -66,7 +66,7 @@ $host    = isset( $args['host'] ) ? $args['host'] : array();
 			<?php if ( ! empty( $booking['attendee_time_zone'] ) ) { ?>
 			<li class="tfhb-flexbox tfhb-gap-8">
 				<div class="tfhb-icon">
-					<img src="<?php echo THB_URL . 'assets/app/images/globe.svg'; ?>" alt="User">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/globe.svg'); ?>" alt="User">
 				</div>
 				<!-- Asia/Dhaka  -->
 				<?php echo ! empty( $booking['attendee_time_zone'] ) ? '' . esc_html( $booking['attendee_time_zone'] ) . '' : ''; ?>
@@ -94,22 +94,22 @@ $host    = isset( $args['host'] ) ? $args['host'] : array();
 		<ul class="tfhb-flexbox tfhb-gap-16">
 			<li>
 				<a href="#">
-					<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 				</a>
 			</li>
 			<li>
 				<a href="#">
-					<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 				</a>
 			</li>
 			<li>
 				<a href="#">
-					<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 				</a>
 			</li>
 			<li>
 				<a href="#">
-					<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 				</a>
 			</li>
 		</ul>

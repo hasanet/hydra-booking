@@ -27,8 +27,8 @@ class AdminMenu {
 		// $userRole = $this->auth->userAllCaps();
 
 		add_menu_page(
-			esc_html__( 'Hydra Booking', 'thb-hydra-booking' ),
-			esc_html__( 'Hydra Booking', 'thb-hydra-booking' ),
+			esc_html__( 'Hydra Booking', 'hydra-booking' ),
+			esc_html__( 'Hydra Booking', 'hydra-booking' ),
 			'tfhb_manage_options',
 			// array($this, 'hydra_booking_access'),
 			'hydra-booking',
@@ -39,8 +39,8 @@ class AdminMenu {
 
 		add_submenu_page(
 			'hydra-booking',
-			esc_html__( 'Dashboard', 'dashboardpress' ),
-			esc_html__( 'Dashboard', 'dashboardpress' ),
+			esc_html__( 'Dashboard', 'hydra-booking' ),
+			esc_html__( 'Dashboard', 'hydra-booking' ),
 			'tfhb_manage_dashboard',
 			'hydra-booking#',
 			array( $this, 'hydra_booking_page' )
@@ -49,27 +49,27 @@ class AdminMenu {
 		$sub_menu = array(
 			array(
 				'id'         => 'meetings',
-				'Title'      => esc_html__( 'Meetings', 'thb-hydra-booking' ),
+				'Title'      => esc_html__( 'Meetings', 'hydra-booking' ),
 				'capability' => 'tfhb_manage_meetings',
 			),
 			array(
 				'id'         => 'booking',
-				'Title'      => esc_html__( 'Booking', 'thb-hydra-booking' ),
+				'Title'      => esc_html__( 'Booking', 'hydra-booking' ),
 				'capability' => 'tfhb_manage_booking',
 			),
 			array(
 				'id'         => 'hosts',
-				'Title'      => esc_html__( 'Hosts', 'thb-hydra-booking' ),
+				'Title'      => esc_html__( 'Hosts', 'hydra-booking' ),
 				'capability' => 'tfhb_manage_hosts',
 			),
 			array(
 				'id'         => 'settings',
-				'Title'      => esc_html__( 'Settings', 'thb-hydra-booking' ),
+				'Title'      => esc_html__( 'Settings', 'hydra-booking' ),
 				'capability' => 'tfhb_manage_settings',
 			),
 			array(
 				'id'         => 'setup-wizard',
-				'Title'      => esc_html__( 'Setup Wizard', 'thb-hydra-booking' ),
+				'Title'      => esc_html__( 'Setup Wizard', 'hydra-booking' ),
 				'capability' => 'tfhb_manage_settings',
 			),
 
@@ -98,7 +98,7 @@ class AdminMenu {
 	}
 	public function hydra_booking_access() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'hydra-booking' ) );
 		}
 	}
 }
