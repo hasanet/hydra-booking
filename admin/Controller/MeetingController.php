@@ -843,12 +843,12 @@ class MeetingController {
 			// Check if table exists
 			$fluent_crm_tags    = $wpdb->prefix . 'fc_tags';
 			$fluent_crm_lists   = $wpdb->prefix . 'fc_lists';
-			$tags_table_exists  = $wpdb->get_var( "SHOW TABLES LIKE '$fluent_crm_tags'" ) == $fluent_crm_tags;
-			$lists_table_exists = $wpdb->get_var( "SHOW TABLES LIKE '$fluent_crm_lists'" ) == $fluent_crm_lists;
+			$tags_table_exists  = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}fc_tags'" ) == $fluent_crm_tags;
+			$lists_table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}fc_lists'" ) == $fluent_crm_lists;
 
 			if ( $tags_table_exists ) {
 				// Table exists, retrieve data
-				$results = $wpdb->get_results( "SELECT id, title FROM $fluent_crm_tags", ARRAY_A );
+				$results = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}fc_tags", ARRAY_A );
 
 				// Check if results are not empty
 				if ( ! empty( $results ) ) {
@@ -866,7 +866,7 @@ class MeetingController {
 
 			if ( $lists_table_exists ) {
 				// Table exists, retrieve data
-				$results = $wpdb->get_results( "SELECT id, title FROM $fluent_crm_lists", ARRAY_A );
+				$results = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}fc_lists", ARRAY_A );
 
 				// Check if results are not empty
 				if ( ! empty( $results ) ) {
@@ -1395,8 +1395,7 @@ class MeetingController {
 		} elseif ( $form_type == 'fluent-forms' ) {
 			// Query arguments get custom fluentform_forms data all into custom database table
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'fluentform_forms';
-			$results    = $wpdb->get_results( "SELECT id, title FROM $table_name" );
+			$results    = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}fluentform_forms" );
 			foreach ( $results as $form ) {
 				$questionForms[] = array(
 					'name'  => $form->title,
@@ -1406,8 +1405,7 @@ class MeetingController {
 		} elseif ( $form_type == 'gravityforms' ) {
 			// Query arguments get custom fluentform_forms data all into custom database table
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'gf_form';
-			$results    = $wpdb->get_results( "SELECT id, title FROM $table_name" );
+			$results    = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}gf_form" );
 			foreach ( $results as $form ) {
 				$questionForms[] = array(
 					'name'  => $form->title,
