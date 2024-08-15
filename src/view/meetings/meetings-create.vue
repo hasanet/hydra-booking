@@ -550,9 +550,13 @@ const TfhbPrevNavigator = () => {
                 <div class="prev-navigator" @click="TfhbPrevNavigator()">
                     <Icon name="ArrowLeft" size="20" /> 
                 </div>
-                <h3>{{ $tfhb_trans['Create One-to-One booking type'] }}</h3>
+                <h3 v-if="meetingData.title != ''">{{ meetingData.title }}</h3>
+                <h3 v-else >{{ $tfhb_trans['Create One-to-One booking type'] }}</h3>
             </div>
-            <div class="tfhb-meeting-subtitle">
+            <div v-if="meetingData.description != ''" class="tfhb-meeting-subtitle">
+                {{ meetingData.description }}
+            </div>
+            <div v-else class="tfhb-meeting-subtitle">
                 {{ $tfhb_trans['Create and manage booking/appointment form'] }}
             </div>
         </div>

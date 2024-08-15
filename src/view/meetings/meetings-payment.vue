@@ -82,6 +82,7 @@ const attendee = ref(false);
                             <option value="USD">USD</option>
                             <option value="EUR">Euro</option>
                         </select>
+                       
                     </div>
                 </div>
             </div>

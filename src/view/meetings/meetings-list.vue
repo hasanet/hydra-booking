@@ -103,7 +103,7 @@ const copyMeeting = (link) => {
 
     <CreateMeetingPopup v-if="isModalOpened" @modal-close="closeModal" @meetings-create="Meeting.CreatePopupMeeting"  />
 
-    <div class="tfhb-filter-box-content tfhb-mt-32" v-show="FilterPreview">
+    <div class="tfhb-filter-box-content" v-show="FilterPreview">
         <div class="tfhb-filter-form">
             <div class="tfhb-filter-category">
                 <div class="tfhb-host-filter-box tfhb-flexbox" @click="FilterHostPreview=!FilterHostPreview">
@@ -220,14 +220,18 @@ const copyMeeting = (link) => {
                                         </div>
                                     </div>
                                 </li>
-                                <li v-if="smeeting.meeting_price">
+                                <li >
                                     <div class="tfhb-flexbox">
                                         <div class="user-info-icon">
                                             <Icon name="Banknote" size="16" /> 
                                         </div>
-                                        <div class="user-info-title">
+                                        <div v-if="smeeting.meeting_price" class="user-info-title">
                                             {{ smeeting.meeting_price }}
                                         </div>
+                                        <div v-else class="user-info-title">
+                                            Free
+                                        </div>
+                                        
                                     </div>
                                 </li>
                                 <li v-if="smeeting.host_first_name">
@@ -259,7 +263,7 @@ const copyMeeting = (link) => {
                             <!-- route link -->
                             <router-link :to="{ name: 'MeetingsCreate', params: { id: smeeting.id } }" class="tfhb-dropdown-single">{{ $tfhb_trans['Edit'] }}</router-link>
                             
-                            <span class="tfhb-dropdown-single" @click="Meeting.deleteMeeting(smeeting.id, smeeting.post_id)">{{ $tfhb_trans['Delete'] }}</span>
+                            <span class="tfhb-dropdown-single tfhb-dropdown-error" @click="Meeting.deleteMeeting(smeeting.id, smeeting.post_id)">{{ $tfhb_trans['Delete'] }}</span>
                         </div>
                     </div>
                 </div>

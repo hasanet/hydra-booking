@@ -1,7 +1,7 @@
 <script setup>
 import {ref} from 'vue'
 import Icon from '@/components/icon/LucideIcon.vue'
-import HbSelect from '../form-fields/HbSelect.vue';
+import HbDropdown from '@/components/form-fields/HbDropdown.vue'
 const props = defineProps([
     'name',
     'modelValue',
@@ -51,13 +51,19 @@ function CounterDec(key){
                             <Icon name="Plus" />
                         </div>
                     </div>
-                    <HbSelect 
-                        width="172px"
+                    
+                    <HbDropdown 
                         v-model="counter.times"  
-                        required= "true"  
-                        selected = "1"
-                        placeholder="Select Time Zone"  
-                        :option = "{'days': 'Days','weeks': 'Weeks','months': 'Months','years': 'Years'}" 
+                        required= "true" 
+                        width="50"
+                        :selected = "1"   
+                        placeholder="Select" 
+                        :option = "[ 
+                            {'name': 'days', 'value': 'days'},  
+                            {'name': 'weeks', 'value': 'weeks'},  
+                            {'name': 'months', 'value': 'months'},  
+                            {'name': 'years', 'value': 'years'},
+                        ]"
                     /> 
 
                     <div v-if="repater && key == 0" class="tfhb-availability-schedule-clone-single">
