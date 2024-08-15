@@ -329,18 +329,17 @@ const isobjectempty = (data) => {
                             :config="{
                             }"
                             width="41"
-                            placeholder="Type your schedule title"   
+                            :placeholder="$tfhb_trans['Start']"
                         /> 
                         <Icon name="MoveRight" size="20" /> 
                         <HbDateTime  
                             v-model="meeting.availability_range.end"
-                            icon="CalendarDays"
-                            :label="$tfhb_trans['End']"  
+                            icon="CalendarDays" 
                             selected = "1"
                             :config="{
                             }"
                             width="41"
-                            placeholder="Type your schedule title"   
+                            :placeholder="$tfhb_trans['End']"   
                         /> 
 
                     </div>
@@ -431,7 +430,7 @@ const isobjectempty = (data) => {
             </div>
             
             <div v-for="(time_slot, key) in Settings_avalibility.availability.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
-                <div class="tfhb-swicher-wrap  tfhb-flexbox">
+                <div class="tfhb-swicher-wrap tfhb-gap-8  tfhb-flexbox">
                     <label class="tfhb-schedule-swicher" for="swicher"> {{time_slot.day}}</label>
                     <!-- Swicher -->
                 </div>
@@ -500,7 +499,7 @@ const isobjectempty = (data) => {
             </div>
             
             <div v-for="(time_slot, key) in meeting.availability_custom.time_slots" :key="key" class="tfhb-availability-schedule-single tfhb-flexbox tfhb-align-baseline">
-                <div class="tfhb-swicher-wrap tfhb-flexbox">
+                <div class="tfhb-swicher-wrap tfhb-gap-8 tfhb-flexbox">
                     <!-- Checkbox swicher -->
                     <label class="switch">
                         <input id="swicher" v-model="time_slot.status" true-value="1" type="checkbox">
@@ -521,6 +520,7 @@ const isobjectempty = (data) => {
                                 placeholder="Start"   
                                 :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                 @tfhb_start_change="TfhbStartDataEvent"
+                                icon="Clock"
                                 :parent_key = "key"
                                 :single_key = "tkey"
                             />                
@@ -530,6 +530,7 @@ const isobjectempty = (data) => {
                                 required= "true" 
                                 width="50"
                                 :selected = "1"
+                                 icon="Clock"
                                 placeholder="End"   
                                 :option = "AvailabilityTime.AvailabilityTime.timeSchedule"
                                 @tfhb_start_change="TfhbEndDataEvent"

@@ -1,6 +1,7 @@
 <script setup>
 import {ref} from 'vue';
 import Dropdown from 'primevue/dropdown';
+import Icon from '@/components/icon/LucideIcon.vue'
 const props = defineProps([
     'modelValue',
     'name',
@@ -19,6 +20,7 @@ const props = defineProps([
     'parent_key',
     'single_key',
     'selected',
+    'icon',
   ])
 
  
@@ -80,7 +82,12 @@ const handleChange = (e) => {
                     :optionDisabled="disabled"
                     :style="{ 'width': '100%' }"  
                     :selected="selected"
-                />
+                >
+                <template v-if="props.icon" #dropdownicon>
+
+                    <Icon :name="props.icon" size="16" />
+                </template>
+                </Dropdown>
                 <Dropdown 
                     v-else
                     v-model="props.modelValue"  
@@ -94,7 +101,12 @@ const handleChange = (e) => {
                     :style="{ 'width': '100%' }"  
                     @click="emit('add-click')"
                     :class="errors ? 'tfhb-required' : ''"
-                />
+                >
+                <template v-if="props.icon" #dropdownicon>
+
+                    <Icon :name="props.icon" size="16" />
+                </template>
+                </Dropdown>
             </div>
      
     

@@ -9,7 +9,7 @@ const props = defineProps([
 
 <template>
     <div class="thb-admin-header">
-        <div class="thb-admin-header-icon tfhb-flexbox">
+        <div class="thb-admin-header-icon tfhb-flexbox tfhb-gap-16">
             <svg width="40" height="40" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="128" height="128" rx="32" fill="url(#paint0_radial_1_31)"/>
                 <path d="M69.9489 96.522L52.2774 78.8506L48.0965 74.6696L45.6437 72.2168L35.9996 62.5728V103.1H69.9489C71.9557 103.1 73.9068 102.821 75.7465 102.32L69.9489 96.522Z" fill="white"/>
@@ -113,6 +113,9 @@ const props = defineProps([
         outline: none;
         box-shadow: none;
         margin-left: 5px;
+    }
+    .tfhb-admin-header-title{
+        font-size: 24px;
     }
     .thb-admin-header .header-navigation ul li a:hover,
     .thb-admin-header .header-navigation ul li a.active{

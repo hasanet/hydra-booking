@@ -17,6 +17,8 @@ class TransStrings {
 			'This Week'                                   => __( 'This Week', 'hydra-booking' ),
 			'Pro'                                         => __( 'Pro', 'hydra-booking' ),
 			'Upgrade to Pro'                              => __( 'Upgrade to Pro', 'hydra-booking' ),
+			'Start'                              => __( 'Start', 'hydra-booking' ),
+			'End'                              => __( 'End', 'hydra-booking' ),
 
 			// General Settings
 			'General'                                     => __( 'General', 'hydra-booking' ),

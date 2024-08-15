@@ -222,12 +222,18 @@ const prevPage = () => {
             <span><Icon name="Search" size="20" /></span>
         </div>
     </div>
-    <div class="thb-admin-btn right tfhb-flexbox tfhb-action-filter-button">
-        <HbSelect 
+    <div class="thb-admin-btn right tfhb-flexbox tfhb-action-filter-button"> 
+        <HbDropdown  
+            v-model="status" 
             :selected = "1"
-            placeholder="Status"  
-            :option = "{'12_hours': '30 minutes', '24_hours': '10 minutes'}" 
-        />
+            placeholder="Status"   
+            :option = "[
+                {'name': 'Pending', 'value': 'pending'},  
+                {'name': 'Confirmed', 'value': 'confirmed'},   
+                {'name': 'Canceled', 'value': 'canceled'}
+            ]"
+            @tfhb-onchange="Booking_Status_Callback" 
+        />  
         <button @click="ExportAsCSV = true" class="tfhb-btn boxed-secondary-btn flex-btn">
             <!-- <Icon name="PlusCircle " size="20" />   -->
             {{ $tfhb_trans['Export as CSV'] }}
@@ -372,12 +378,13 @@ const prevPage = () => {
 <!-- Booking Quick View End -->
 
 <!-- Booking Calendar View -->
-<div class="tfhb-booking-calendar tfhb-mt-32" v-if="bookingView=='calendar'">
+<div class="tfhb-booking-calendar tfhb-mt-72" v-if="bookingView=='calendar'"> 
     <FullCalendar class='demo-app-calendar' :options='Booking.calendarbooking'>
         <template v-slot:eventContent='arg'>
-            <!-- <b>{{ arg.timeText }}</b> -->
-            <!-- {{ arg.event.extendedProps.status }} -->
-            <b class="tfhb-calendar-popup" :class="arg.event.extendedProps.status" @click="bookingCalendarPopup(arg.event)">{{ arg.event.title }}</b>
+            <!-- {{ arg.event.booking_date }}
+            <b>{{ arg.timeText }}</b>
+            {{ arg.event.extendedProps.booking_time }} -->
+            <b class="tfhb-calendar-popup" :class="arg.event.extendedProps.status" @click="bookingCalendarPopup(arg.event)">{{ arg.event.title }}  ( {{  arg.event.extendedProps.booking_time }} )</b>
         </template>
     </FullCalendar>
 </div>
@@ -439,7 +446,8 @@ const prevPage = () => {
     <table class="table" cellpadding="0" :cellspacing="0">
         <thead>
             <tr>
-                <th></th>
+                <th> 
+                </th>
                 <th>{{ $tfhb_trans['Date & Time'] }}</th>
                 <th>{{ $tfhb_trans['Title'] }}</th>
                 <th>{{ $tfhb_trans['Host'] }}</th>

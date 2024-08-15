@@ -50,7 +50,7 @@ const flatPickrChange = (e) => {
         <h4 v-if="subtitle">{{ subtitle }}</h4>
         <p v-if="description">{{ description }}</p>
         
-        <flatPickr  @input="emit('update:modelValue', $event.target.value)"  :value="props.modelValue" :config="config" @change="flatPickrChange"  />
+        <flatPickr  @input="emit('update:modelValue', $event.target.value)"  :placeholder="props.placeholder" :value="props.modelValue" :config="config" @change="flatPickrChange"  />
     
         <span class="tfhb-flat-icon"><Icon v-if="icon" :name="icon" size="20" /> </span>
              

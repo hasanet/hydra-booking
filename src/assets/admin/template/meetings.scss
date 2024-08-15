@@ -28,11 +28,12 @@
             gap: 8px !important;
             cursor: pointer;
             height: 40px;
-        }
-        .tfhb-filter-btn.active{
-            border: 1px solid $ui50;
-            background: $primaryi50;
-        }
+            &.active, &:hover{
+                border: 1px solid $ui50;
+                background: $primaryi50;
+                color: $primaryi;
+            }
+        } 
     }
     .tfhb-filter-box-content{
         border-radius: 8px;
@@ -258,7 +259,7 @@
     .tfhb-meeting-create{
         border-radius: 16px;
         background: #fff;
-        padding: 32px; 
+        padding: 24px; 
         width: 980px;
         margin: 0 auto;
         @media #{$max1240}{
@@ -270,8 +271,15 @@
                 justify-content: normal !important;
                 gap: 2px !important;
                 .prev-navigator{
+                    
                     svg{
+                        transition: 0.2s;
                         cursor: pointer;
+                    }
+                    &:hover{
+                        svg{
+                            color: $primaryi;
+                        }
                     }
                 }
                 h3{
@@ -307,6 +315,13 @@
                     &:last-child {
                         margin-bottom: 0;
                     }
+                }
+                .tfhb-availability-schedule-single{
+                     .thb-admin-btn{
+                        span{
+                            font-weight: 400;
+                        }
+                     }
                 }
                 .tfhb-add-new-question{
                     color: $primaryi;
@@ -375,6 +390,10 @@
     .tfhb-meeting-location-removed{
         margin-top: 24px;
         cursor: pointer;
+        transition: 0.4s;
+        &:hover{
+            color: $primaryi;
+        }
     }
     .tfhb-meeting-currency{
         input{
