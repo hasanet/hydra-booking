@@ -77,13 +77,8 @@ class Meeting {
 	 * Rollback the database migration.
 	 */
 	public function rollback() {
-			global $wpdb;
-
-		$table_name = $wpdb->prefix . $this->table;
-
-		$sql = "DROP TABLE IF EXISTS $table_name;";
-
-		$wpdb->query( $sql );
+		global $wpdb;
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}tfhb_meetings" );
 	}
 
 	/**
@@ -175,7 +170,7 @@ class Meeting {
 
 		if ( $id ) {
 			$data = $wpdb->get_row(
-				$wpdb->prepare( "SELECT * FROM $table_name WHERE id = %s", $id )
+				$wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tfhb_meetings WHERE id = %s", $id )
 			);
 		} elseif ( ! empty( $filterData['title'] ) || ! empty( $filterData['fhosts'] ) || ! empty( $filterData['fcategory'] ) || ( ! empty( $filterData['startDate'] ) && ! empty( $filterData['endDate'] ) ) ) {
 			$sql = "SELECT * FROM $table_name WHERE";
@@ -201,8 +196,8 @@ class Meeting {
 
 			if ( ! empty( $filterData['startDate'] ) && ! empty( $filterData['endDate'] ) ) {
 
-				$startDate = date( 'Y-m-d', strtotime( $filterData['startDate'] ) );
-				$endDate   = date( 'Y-m-d', strtotime( $filterData['endDate'] ) );
+				$startDate = gmdate( 'Y-m-d', strtotime( $filterData['startDate'] ) );
+				$endDate   = gmdate( 'Y-m-d', strtotime( $filterData['endDate'] ) );
 
 				$filteredData = array_filter(
 					$data,
@@ -233,13 +228,12 @@ class Meeting {
 			}
 		} elseif ( ! empty( $user_id ) ) {
 			$data = $wpdb->get_results(
-				$wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %s", $user_id )
+				$wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tfhb_meetings WHERE user_id = %s", $user_id )
 			);
 		} else {
-			$sql = "SELECT * FROM $table_name";
 
 			$data = $wpdb->get_results(
-				$wpdb->prepare( $sql )
+				"SELECT * FROM {$wpdb->prefix}tfhb_meetings"
 			);
 		}
 

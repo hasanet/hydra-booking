@@ -117,7 +117,7 @@ class WebHook {
 
 		// Set up the request arguments
 		$request_args = array(
-			'body'    => json_encode( $body_data ),
+			'body'    => wp_json_encode( $body_data ),
 			'headers' => array_merge(
 				// Need loop for additional input
 				array( 'Content-Type' => 'application/json' ),
