@@ -351,7 +351,7 @@ class MeetingController {
 		}
 
 		// Encode the updated webhook data back to JSON
-		$encodedWebHookdata = json_encode( $webHookdata );
+		$encodedWebHookdata = wp_json_encode( $webHookdata );
 
 		$data = array(
 			'id'      => $request['meeting_id'],
@@ -393,7 +393,7 @@ class MeetingController {
 			$webHookdata = array_values( $webHookdata );
 
 			// Encode the updated webhook data back to JSON
-			$encodedWebHookdata = json_encode( $webHookdata );
+			$encodedWebHookdata = wp_json_encode( $webHookdata );
 
 			// Update the meeting with the new webhook data
 			$data              = array(
@@ -456,7 +456,7 @@ class MeetingController {
 		}
 
 		// Encode the updated webhook data back to JSON
-		$encodedIntegrationsdata = json_encode( $Integrationsdata );
+		$encodedIntegrationsdata = wp_json_encode( $Integrationsdata );
 
 		$data = array(
 			'id'           => $request['meeting_id'],
@@ -498,7 +498,7 @@ class MeetingController {
 			$Integrationsdata = array_values( $Integrationsdata );
 
 			// Encode the updated Integrations data back to JSON
-			$encodedIntegrationsdata = json_encode( $Integrationsdata );
+			$encodedIntegrationsdata = wp_json_encode( $Integrationsdata );
 
 			// Update the meeting with the new Integrations data
 			$data              = array(
@@ -606,8 +606,8 @@ class MeetingController {
 			'post_id'      => $meeting_post_id,
 			'created_by'   => $current_user_id,
 			'updated_by'   => $current_user_id,
-			'created_at'   => date( 'Y-m-d' ),
-			'updated_at'   => date( 'Y-m-d' ),
+			'created_at'   => gmdate( 'Y-m-d' ),
+			'updated_at'   => gmdate( 'Y-m-d' ),
 			'status'       => 'draft',
 		);
 
@@ -843,12 +843,12 @@ class MeetingController {
 			// Check if table exists
 			$fluent_crm_tags    = $wpdb->prefix . 'fc_tags';
 			$fluent_crm_lists   = $wpdb->prefix . 'fc_lists';
-			$tags_table_exists  = $wpdb->get_var( "SHOW TABLES LIKE '$fluent_crm_tags'" ) == $fluent_crm_tags;
-			$lists_table_exists = $wpdb->get_var( "SHOW TABLES LIKE '$fluent_crm_lists'" ) == $fluent_crm_lists;
+			$tags_table_exists  = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}fc_tags'" ) == $fluent_crm_tags;
+			$lists_table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}fc_lists'" ) == $fluent_crm_lists;
 
 			if ( $tags_table_exists ) {
 				// Table exists, retrieve data
-				$results = $wpdb->get_results( "SELECT id, title FROM $fluent_crm_tags", ARRAY_A );
+				$results = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}fc_tags", ARRAY_A );
 
 				// Check if results are not empty
 				if ( ! empty( $results ) ) {
@@ -866,7 +866,7 @@ class MeetingController {
 
 			if ( $lists_table_exists ) {
 				// Table exists, retrieve data
-				$results = $wpdb->get_results( "SELECT id, title FROM $fluent_crm_lists", ARRAY_A );
+				$results = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}fc_lists", ARRAY_A );
 
 				// Check if results are not empty
 				if ( ! empty( $results ) ) {
@@ -992,7 +992,7 @@ class MeetingController {
 			'max_book_per_slot'        => isset( $request['max_book_per_slot'] ) ? sanitize_text_field( $request['max_book_per_slot'] ) : '',
 			'is_display_max_book_slot' => isset( $request['is_display_max_book_slot'] ) ? sanitize_text_field( $request['is_display_max_book_slot'] ) : '',
 			'payment_meta'             => isset( $request['payment_meta'] ) ? $request['payment_meta'] : '',
-			'updated_at'               => date( 'Y-m-d' ),
+			'updated_at'               => gmdate( 'Y-m-d' ),
 			'updated_by'               => $current_user_id,
 		);
 
@@ -1395,8 +1395,7 @@ class MeetingController {
 		} elseif ( $form_type == 'fluent-forms' ) {
 			// Query arguments get custom fluentform_forms data all into custom database table
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'fluentform_forms';
-			$results    = $wpdb->get_results( "SELECT id, title FROM $table_name" );
+			$results    = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}fluentform_forms" );
 			foreach ( $results as $form ) {
 				$questionForms[] = array(
 					'name'  => $form->title,
@@ -1406,8 +1405,7 @@ class MeetingController {
 		} elseif ( $form_type == 'gravityforms' ) {
 			// Query arguments get custom fluentform_forms data all into custom database table
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'gf_form';
-			$results    = $wpdb->get_results( "SELECT id, title FROM $table_name" );
+			$results    = $wpdb->get_results( "SELECT id, title FROM {$wpdb->prefix}gf_form" );
 			foreach ( $results as $form ) {
 				$questionForms[] = array(
 					'name'  => $form->title,

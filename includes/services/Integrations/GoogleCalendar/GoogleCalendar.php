@@ -117,7 +117,7 @@ class GoogleCalendar {
 				wp_die();
 
 			} catch ( Exception $e ) {
-				echo $e->getMessage();
+				echo esc_html($e->getMessage());
 				exit();
 			}
 		}
@@ -279,8 +279,8 @@ class GoogleCalendar {
 
 		$google_calendar_data = array();
 		foreach ( $meeting_dates as $meeting_date ) {
-			$start_date = date( 'Y-m-d', strtotime( $meeting_date ) ) . 'T' . date( 'H:i:s', $start_time );
-			$end_date   = date( 'Y-m-d', strtotime( $meeting_date ) ) . 'T' . date( 'H:i:s', $end_time );
+			$start_date = gmdate( 'Y-m-d', strtotime( $meeting_date ) ) . 'T' . gmdate( 'H:i:s', $start_time );
+			$end_date   = gmdate( 'Y-m-d', strtotime( $meeting_date ) ) . 'T' . gmdate( 'H:i:s', $end_time );
 
 			// Meeting location google meeting
 			$setData = array(
@@ -347,7 +347,7 @@ class GoogleCalendar {
 						$url,
 						array(
 							'headers'     => array( 'Authorization' => 'Bearer ' . $this->accessToken ),
-							'body'        => json_encode( $setData ),
+							'body'        => wp_json_encode( $setData ),
 							'method'      => 'PUT',
 							'data_format' => 'body',
 						)
@@ -366,7 +366,7 @@ class GoogleCalendar {
 							'headers'     => array(
 								'Authorization' => 'Bearer ' . $this->accessToken,
 							),
-							'body'        => json_encode( $setData ),
+							'body'        => wp_json_encode( $setData ),
 							'method'      => 'POST',
 							'data_format' => 'body',
 						)
@@ -418,7 +418,7 @@ class GoogleCalendar {
 					$url,
 					array(
 						'headers'     => array( 'Authorization' => 'Bearer ' . $this->accessToken ),
-						'body'        => json_encode( $event ),
+						'body'        => wp_json_encode( $event ),
 						'method'      => 'PUT',
 						'data_format' => 'body',
 					)

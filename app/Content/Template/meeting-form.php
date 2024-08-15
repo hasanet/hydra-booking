@@ -36,7 +36,7 @@ $booking_data        = isset( $args['booking_data'] ) ? $args['booking_data'] : 
 		<path d="M9.99935 15.8334L4.16602 10L9.99935 4.16669" stroke="#F62881" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 		<path d="M15.8327 10H4.16602" stroke="#F62881" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 		</svg>
-		<h3>Details</h3>
+		<h3><?php echo esc_html__( 'Details', 'hydra-booking' ); ?></h3>
 	</div>
 	<div class="tfhb-notice notice-error" style="display:none;"> 
 	</div>
@@ -87,29 +87,29 @@ $booking_data        = isset( $args['booking_data'] ) ? $args['booking_data'] : 
 					$required      = $question['required'] == 1 ? 'required' : '';
 
 					echo '<div class="tfhb-single-form">
-                                <label for="' . $name . '">' . $question['placeholder'] . ' ' . $required_star . '</label>';
+                                <label for="' . esc_attr($name) . '">' . esc_attr($question['placeholder']) . ' ' . esc_attr($required_star) . '</label>';
 					if ( $question['type'] == 'select' ) {
 
-						echo '<select name="' . $name . '" id="' . $name . '" ' . $disable . ' ' . $required . '>';
+						echo '<select name="' . esc_attr($name) . '" id="' . esc_attr($name) . '" ' . esc_attr($disable) . ' ' . esc_attr($required) . '>';
 						foreach ( $question['options'] as $option ) {
-							echo '<option value="' . $option['value'] . '">' . $option['label'] . '</option>';
+							echo '<option value="' . esc_attr($option['value']) . '">' . esc_attr($option['label']) . '</option>';
 						}
 						echo '</select>';
 
 					} elseif ( $question['type'] == 'textarea' ) {
 
-						echo '<textarea name="' . $name . '" id="' . $name . '" ' . $disable . ' ' . $required . '>' . $value . '</textarea>';
+						echo '<textarea name="' . esc_attr($name) . '" id="' . esc_attr($name) . '" ' . esc_attr($disable) . ' ' . esc_attr($required) . '>' . esc_html($value) . '</textarea>';
 
 					} elseif ( $question['type'] == 'checkbox' ) {
 
-						echo '<label for="' . $name . '">
-                                            <input name="' . $name . '" id="' . $name . '"  type="' . $question['type'] . '" ' . $disable . ' ' . $required . '>
-                                            <span class="checkmark"></span> ' . $question['placeholder'] . '
+						echo '<label for="' . esc_attr($name) . '">
+                                            <input name="' . esc_attr($name) . '" id="' . esc_attr($name) . '"  type="' . esc_attr($question['type']) . '" ' . esc_attr($disable) . ' ' . esc_attr($required) . '>
+                                            <span class="checkmark"></span> ' . esc_attr($question['placeholder']) . '
                                         </label>';
 
 					} else {
 
-						echo '<input name="' . $name . '" id="' . $name . '"  value="' . $value . '" type="' . $question['type'] . '" ' . $required . ' ' . $disable . ' placeholder="' . $question['placeholder'] . '">';
+						echo '<input name="' . esc_attr($name) . '" id="' . esc_attr($name) . '"  value="' . esc_attr($value) . '" type="' . esc_attr($question['type']) . '" ' . esc_attr($required) . ' ' . esc_attr($disable) . ' placeholder="' . esc_attr($question['placeholder']) . '">';
 					}
 							echo '</div>';
 
@@ -124,7 +124,7 @@ $booking_data        = isset( $args['booking_data'] ) ? $args['booking_data'] : 
 				
 				<div class="tfhb-forms">
 					<div  class="tfhb-single-form">
-						<label for="attendee_name"> Reason for Reschedule </label>
+						<label for="attendee_name"> <?php echo esc_html__( 'Reason for Reschedule', 'hydra-booking' ); ?> </label>
 						<br>
 
 						<textarea name="reason" required id="reason"></textarea>
@@ -137,7 +137,7 @@ $booking_data        = isset( $args['booking_data'] ) ? $args['booking_data'] : 
 							<input required name="tfhb_booking_checkbox" type="checkbox">
 							<div class="slider"></div>
 						</label>
-						<label class="swicher-label">Booking Confirmation</label>
+						<label class="swicher-label"><?php echo esc_html__( 'Booking Confirmation', 'hydra-booking' ); ?></label>
 					</div>
 	
 				</div>
@@ -145,7 +145,7 @@ $booking_data        = isset( $args['booking_data'] ) ? $args['booking_data'] : 
 			<div class="tfhb-confirmation-button">
 				<button class="tfhb-flexbox tfhb-gap-8 tfhb-booking-submit">
 				<?php echo ! empty( $booking_data ) ? 'Reschedule' : 'Confirm'; ?>  
-					<img src="<?php echo THB_URL . 'assets/app/images/arrow-right.svg'; ?>" alt="arrow"> 
+					<img src="<?php echo esc_url(THB_URL . 'assets/app/images/arrow-right.svg'); ?>" alt="arrow"> 
 				</button>
 			</div>
 			<?php

@@ -144,8 +144,8 @@ class BookingController {
 		foreach ( $extractedBookings as $book ) {
 
 			// Convert start and end times to 24-hour format
-			$start_time_24hr = date( 'H:i', strtotime( $book['start_time'] ) );
-			$end_time_24hr   = date( 'H:i', strtotime( $book['end_time'] ) );
+			$start_time_24hr = gmdate( 'H:i', strtotime( $book['start_time'] ) );
+			$end_time_24hr   = gmdate( 'H:i', strtotime( $book['end_time'] ) );
 
 			$booking_array[] = array(
 				'booking_id'   => $book['id'],
@@ -445,8 +445,8 @@ class BookingController {
 		$booking_array = array();
 		foreach ( $extractedBookings as $book ) {
 			// Convert start and end times to 24-hour format
-			$start_time_24hr = date( 'H:i', strtotime( $book['start_time'] ) );
-			$end_time_24hr   = date( 'H:i', strtotime( $book['end_time'] ) );
+			$start_time_24hr = gmdate( 'H:i', strtotime( $book['start_time'] ) );
+			$end_time_24hr   = gmdate( 'H:i', strtotime( $book['end_time'] ) );
 
 			$booking_array[] = array(
 				'booking_id'   => $book['id'],
@@ -649,8 +649,8 @@ class BookingController {
 		$booking_array = array();
 		foreach ( $extractedBookings as $book ) {
 			// Convert start and end times to 24-hour format
-			$start_time_24hr = date( 'H:i', strtotime( $book['start_time'] ) );
-			$end_time_24hr   = date( 'H:i', strtotime( $book['end_time'] ) );
+			$start_time_24hr = gmdate( 'H:i', strtotime( $book['start_time'] ) );
+			$end_time_24hr   = gmdate( 'H:i', strtotime( $book['end_time'] ) );
 
 			$booking_array[] = array(
 				'booking_id'   => $book['id'],
@@ -700,35 +700,35 @@ class BookingController {
 		$time         = '00:00:00';
 		$current_time = '23:59:59';
 		// Get Current Date baded on time
-		$current_date  = date( 'Y-m-d H:i:s', strtotime( $time ) );
-		$previous_date = date( 'Y-m-d H:i:s', strtotime( '-1 day', strtotime( $current_date ) ) );
+		$current_date  = gmdate( 'Y-m-d H:i:s', strtotime( $time ) );
+		$previous_date = gmdate( 'Y-m-d H:i:s', strtotime( '-1 day', strtotime( $current_date ) ) );
 
 		$booking = new Booking();
 		if ( ! empty( $request['date_range'] == 'custom' ) ) {
 			// in this format 2024-07-03 23:48:25 form 2024-07-03 request['start_date'] variable
-			$current_date  = date( 'Y-m-d H:i:s', strtotime( $request['end_date'] ) );
-			$previous_date = date( 'Y-m-d H:i:s', strtotime( $request['start_date'] ) );
+			$current_date  = gmdate( 'Y-m-d H:i:s', strtotime( $request['end_date'] ) );
+			$previous_date = gmdate( 'Y-m-d H:i:s', strtotime( $request['start_date'] ) );
 
 		} elseif ( $request['date_range'] == 'today' ) {
-			$current_date  = date( 'Y-m-d H:i:s', strtotime( $time ) );
-			$previous_date = date( 'Y-m-d H:i:s', strtotime( '-1 day', strtotime( $current_date ) ) );
+			$current_date  = gmdate( 'Y-m-d H:i:s', strtotime( $time ) );
+			$previous_date = gmdate( 'Y-m-d H:i:s', strtotime( '-1 day', strtotime( $current_date ) ) );
 		} elseif ( $request['date_range'] == 'weeks' ) {
-			$current_date  = date( 'Y-m-d H:i:s', strtotime( $current_time ) );
-			$previous_date = date( 'Y-m-d H:i:s', strtotime( '-7 day', strtotime( $current_date ) ) );
+			$current_date  = gmdate( 'Y-m-d H:i:s', strtotime( $current_time ) );
+			$previous_date = gmdate( 'Y-m-d H:i:s', strtotime( '-7 day', strtotime( $current_date ) ) );
 		} elseif ( $request['date_range'] == 'months' ) {  // current month
 			// This month end date
-			$current_date  = date( 'Y-m-d H:i:s', strtotime( 'last day of this month', strtotime( $current_time ) ) );
-			$previous_date = date( 'Y-m-d H:i:s', strtotime( 'first day of last month', strtotime( $current_time ) ) );
+			$current_date  = gmdate( 'Y-m-d H:i:s', strtotime( 'last day of this month', strtotime( $current_time ) ) );
+			$previous_date = gmdate( 'Y-m-d H:i:s', strtotime( 'first day of last month', strtotime( $current_time ) ) );
 		} elseif ( $request['date_range'] == 'years' ) {  // current year
 			// This year end date
-			$current_date  = date( 'Y-m-d H:i:s', strtotime( 'last day of this year', strtotime( $current_time ) ) );
-			$previous_date = date( 'Y-m-d H:i:s', strtotime( 'first day of last year', strtotime( $current_time ) ) );
+			$current_date  = gmdate( 'Y-m-d H:i:s', strtotime( 'last day of this year', strtotime( $current_time ) ) );
+			$previous_date = gmdate( 'Y-m-d H:i:s', strtotime( 'first day of last year', strtotime( $current_time ) ) );
 		}
 		if ( $request['date_range'] == 'all' ) {
 			$file_name = 'booking-data.csv';
 
 		} else {
-			$file_name = 'booking-data-' . date( 'Y-m-d', strtotime( $previous_date ) ) . '-' . date( 'Y-m-d', strtotime( $current_date ) ) . '.csv';
+			$file_name = 'booking-data-' . gmdate( 'Y-m-d', strtotime( $previous_date ) ) . '-' . gmdate( 'Y-m-d', strtotime( $current_date ) ) . '.csv';
 
 		}
 

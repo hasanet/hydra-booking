@@ -62,13 +62,8 @@ class Booking {
 	 * Rollback the database migration.
 	 */
 	public function rollback() {
-			global $wpdb;
-
-		$table_name = $wpdb->prefix . $this->table;
-
-		$sql = "DROP TABLE IF EXISTS $table_name;";
-
-		$wpdb->query( $sql );
+		global $wpdb;
+		$wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}tfhb_bookings");
 	}
 
 	/**
@@ -81,8 +76,8 @@ class Booking {
 		$table_name = $wpdb->prefix . $this->table;
 
 		// json encode meeting locations
-		$request['others_info']       = json_encode( $request['others_info'] );
-		$request['meeting_locations'] = json_encode( $request['meeting_locations'] );
+		$request['others_info']       = wp_json_encode( $request['others_info'] );
+		$request['meeting_locations'] = wp_json_encode( $request['meeting_locations'] );
 
 		// insert Booking
 		$result = $wpdb->insert(

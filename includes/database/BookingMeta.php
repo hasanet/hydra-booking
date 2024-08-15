@@ -125,7 +125,7 @@ class BookingMeta {
 			);
 		} else {
 			$data = $wpdb->get_row(
-				"SELECT * FROM $table_name WHERE id = $where"
+				$wpdb->prepare("SELECT * FROM {$wpdb->prefix}tfhb_booking_meta WHERE id = %d", $where)
 			);
 
 		}

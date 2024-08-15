@@ -75,8 +75,8 @@ class SetupWizard {
 		$email_subscribe                         = array();
 		$email_subscribe['email']                = $request['email'];
 		$email_subscribe['subscribe_status']     = $request['enable_recevie_updates'];
-		$email_subscribe['subscribe_date']       = date( 'Y-m-d' );
-		$email_subscribe['subscribe_time']       = date( 'H:i:s' );
+		$email_subscribe['subscribe_date']       = gmdate( 'Y-m-d' );
+		$email_subscribe['subscribe_time']       = gmdate( 'H:i:s' );
 		$email_subscribe['subscribe_ip']         = $_SERVER['REMOTE_ADDR'];
 		$email_subscribe['subscribe_user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 		$email_subscribe['subscribe_referer']    = $_SERVER['HTTP_REFERER'];
@@ -181,7 +181,7 @@ class SetupWizard {
 			'availability_range_type'  => 'indefinitely',
 			'availability_type'        => 'custom',
 			'availability_id'          => '0',
-			'availability_custom'      => isset( $request['availabilityDataSingle'] ) ? json_encode( $request['availabilityDataSingle'] ) : '',
+			'availability_custom'      => isset( $request['availabilityDataSingle'] ) ? wp_json_encode( $request['availabilityDataSingle'] ) : '',
 			'booking_frequency'        => '[{"limit":1,"times":"Year"}]',
 			'recurring_status'         => '0',
 			'recurring_repeat'         => '[{"limit":1,"times":"Year"}]',
@@ -193,8 +193,8 @@ class SetupWizard {
 			'is_display_max_book_slot' => '0',
 			'created_by'               => $request['user_id'],
 			'updated_by'               => $request['user_id'],
-			'created_at'               => date( 'Y-m-d' ),
-			'updated_at'               => date( 'Y-m-d' ),
+			'created_at'               => gmdate( 'Y-m-d' ),
+			'updated_at'               => gmdate( 'Y-m-d' ),
 			'status'                   => 'publish',
 		);
 

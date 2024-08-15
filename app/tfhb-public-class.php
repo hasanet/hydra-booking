@@ -16,9 +16,9 @@ class Tfhb_APP {
 			<div class="tfhb-meeting-card">
 				<div class="tfhb-meeting-info">
 
-					<div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo THB_URL . 'assets/app/images/meeting-cover.png'; ?>) lightgray 50% / cover no-repeat;">
+					<div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo esc_url(THB_URL . 'assets/app/images/meeting-cover.png'); ?>) lightgray 50% / cover no-repeat;">
 						<div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
-							<img src="<?php echo THB_URL . 'assets/app/images/host.png'; ?>" alt="">
+							<img src="<?php echo esc_url(THB_URL . 'assets/app/images/host.png'); ?>" alt="">
 							<div class="tfhb-host-name">
 								<h3>Abdullah Eusuf</h3>
 								<p>Design system manager</p>
@@ -33,25 +33,25 @@ class Tfhb_APP {
 						<ul>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/clock.svg'; ?>" alt="Clock">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/clock.svg'); ?>" alt="Clock">
 								</div>
 								45 minutes
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/location.svg'; ?>" alt="location">   
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/location.svg'); ?>" alt="location">   
 								</div> 
 								Google Meet
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/payment.svg'; ?>" alt="payment"> 
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/payment.svg'); ?>" alt="payment"> 
 								</div> 
 								$200
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/refresh-cw.svg'; ?>" alt="refresh"> 
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/refresh-cw.svg'); ?>" alt="refresh"> 
 								</div> 
 								Recurring for <span>8</span> weeks
 							</li>
@@ -59,10 +59,10 @@ class Tfhb_APP {
 
 						<div class="tfhb-timezone tfhb-flexbox">
 							<div class="tfhb-timezone-title tfhb-flexbox tfhb-gap-8">
-								<img src="<?php echo THB_URL . 'assets/app/images/globe.svg'; ?>" alt="globe"> 
+								<img src="<?php echo esc_url(THB_URL . 'assets/app/images/globe.svg'); ?>" alt="globe"> 
 								Asia/Dhaka(09.00 PM)
 							</div>
-							<img src="<?php echo THB_URL . 'assets/app/images/chevrons-up-down.svg'; ?>" alt="chevrons"> 
+							<img src="<?php echo esc_url(THB_URL . 'assets/app/images/chevrons-up-down.svg'); ?>" alt="chevrons"> 
 						</div>
 					</div>
 				</div>
@@ -151,9 +151,9 @@ class Tfhb_APP {
 			<div class="tfhb-meeting-card">
 				<div class="tfhb-meeting-info">
 
-					<div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo THB_URL . 'assets/app/images/meeting-cover.png'; ?>) lightgray 50% / cover no-repeat;">
+					<div class="tfhb-host-info" style="background: linear-gradient(181deg, rgba(252, 169, 185, 0.00) 1.18%, rgba(89, 1, 39, 0.70) 98.83%), url(<?php echo esc_url(THB_URL . 'assets/app/images/meeting-cover.png'); ?>) lightgray 50% / cover no-repeat;">
 						<div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
-							<img src="<?php echo THB_URL . 'assets/app/images/host.png'; ?>" alt="">
+							<img src="<?php echo esc_url(THB_URL . 'assets/app/images/host.png'); ?>" alt="">
 							<div class="tfhb-host-name">
 								<h3>Abdullah Eusuf</h3>
 								<p>Design system manager</p>
@@ -168,25 +168,25 @@ class Tfhb_APP {
 						<ul>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/clock.svg'; ?>" alt="Clock">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/clock.svg'); ?>" alt="Clock">
 								</div>
 								45 minutes
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/location.svg'; ?>" alt="location">   
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/location.svg'); ?>" alt="location">   
 								</div> 
 								Google Meet
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/payment.svg'; ?>" alt="payment"> 
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/payment.svg'); ?>" alt="payment"> 
 								</div> 
 								$200
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/refresh-cw.svg'; ?>" alt="refresh"> 
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/refresh-cw.svg'); ?>" alt="refresh"> 
 								</div> 
 								Recurring for <span>8</span> weeks
 							</li>
@@ -194,17 +194,17 @@ class Tfhb_APP {
 
 						<div class="tfhb-timezone tfhb-flexbox">
 							<div class="tfhb-timezone-title tfhb-flexbox tfhb-gap-8">
-								<img src="<?php echo THB_URL . 'assets/app/images/globe.svg'; ?>" alt="globe"> 
+								<img src="<?php echo esc_url(THB_URL . 'assets/app/images/globe.svg'); ?>" alt="globe"> 
 								Asia/Dhaka(09.00 PM)
 							</div>
-							<img src="<?php echo THB_URL . 'assets/app/images/chevrons-up-down.svg'; ?>" alt="chevrons"> 
+							<img src="<?php echo esc_url(THB_URL . 'assets/app/images/chevrons-up-down.svg'); ?>" alt="chevrons"> 
 						</div>
 					</div>
 				</div>
 
 				<div class="tfhb-meeting-booking-form">
 					<div class="tfhb-back-btn tfhb-flexbox tfhb-gap-8">
-						<img src="<?php echo THB_URL . 'assets/app/images/arrow-left.svg'; ?>" alt="arrow"> 
+						<img src="<?php echo esc_url(THB_URL . 'assets/app/images/arrow-left.svg'); ?>" alt="arrow"> 
 						<h3>Details</h3>
 					</div>
 
@@ -242,7 +242,7 @@ class Tfhb_APP {
 						<div class="tfhb-confirmation-button">
 							<button class="tfhb-flexbox tfhb-gap-8">
 								Confirm
-								<img src="<?php echo THB_URL . 'assets/app/images/arrow-right.svg'; ?>" alt="arrow"> 
+								<img src="<?php echo esc_url(THB_URL . 'assets/app/images/arrow-right.svg'); ?>" alt="arrow"> 
 							</button>
 						</div>
 
@@ -256,7 +256,7 @@ class Tfhb_APP {
 			<div class="tfhb-meeting-card">
 				<div class="tfhb-meeting-confirmation">
 					<div class="tfhb-confirmation-seccess">
-						<img src="<?php echo THB_URL . 'assets/app/images/sucess.gif'; ?>" alt="Success"> 
+						<img src="<?php echo esc_url(THB_URL . 'assets/app/images/sucess.gif'); ?>" alt="Success"> 
 						<h3>Booking Confirmed!</h3>
 						<p>Please check your email for more information. Now you can reschedule or cancel booking from here.</p>
 					</div>
@@ -266,26 +266,26 @@ class Tfhb_APP {
 						<ul>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/location.svg'; ?>" alt="User">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/location.svg'); ?>" alt="User">
 								</div>
 								Abdullah Eusuf 
 								<span>Host</span>
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/location.svg'; ?>" alt="User">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/location.svg'); ?>" alt="User">
 								</div>
 								9:00pm-9:45pm, Saturday, April 25
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/location.svg'; ?>" alt="User">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/location.svg'); ?>" alt="User">
 								</div>
 								Asia/Dhaka(09.00pm)
 							</li>
 							<li class="tfhb-flexbox tfhb-gap-8">
 								<div class="tfhb-icon">
-									<img src="<?php echo THB_URL . 'assets/app/images/location.svg'; ?>" alt="User">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/location.svg'); ?>" alt="User">
 								</div>
 								Google Meet
 							</li>
@@ -297,22 +297,22 @@ class Tfhb_APP {
 						<ul class="tfhb-flexbox tfhb-gap-16">
 							<li>
 								<a href="#">
-									<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 								</a>
 							</li>
 							<li>
 								<a href="#">
-									<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 								</a>
 							</li>
 							<li>
 								<a href="#">
-									<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 								</a>
 							</li>
 							<li>
 								<a href="#">
-									<img src="<?php echo THB_URL . 'assets/app/images/g-calendar.svg'; ?>" alt="calendar">
+									<img src="<?php echo esc_url(THB_URL . 'assets/app/images/g-calendar.svg'); ?>" alt="calendar">
 								</a>
 							</li>
 						</ul>

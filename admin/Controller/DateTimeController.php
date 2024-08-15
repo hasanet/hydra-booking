@@ -143,7 +143,7 @@ class DateTimeController extends \DateTimeZone {
 		// Time Slot
 		$time_slots_data = array();
 		// get Selected Date day
-		$selected_day = date( 'l', strtotime( $selected_date ) );
+		$selected_day = gmdate( 'l', strtotime( $selected_date ) );
 
 		// only get selected day time slot in single array using array finter
 		$selected_available = array();

@@ -165,7 +165,7 @@ class ZoomServices {
 	public function create_zoom_meeting( $meeting_data ) {
 		$access_response = $this->generateAccessToken();
 
-		$time_in_24_hour_format = date( 'H:i:s', strtotime( $meeting_data->start_time ) );
+		$time_in_24_hour_format = gmdate( 'H:i:s', strtotime( $meeting_data->start_time ) );
 
 		$data = array(
 			'topic'      => ! empty( $meeting_data->meeting_title ) ? $meeting_data->meeting_title : '',
@@ -184,7 +184,7 @@ class ZoomServices {
 		$response = wp_remote_post(
 			'https://api.zoom.us/v2/users/me/meetings',
 			array(
-				'body'    => json_encode( $data ),
+				'body'    => wp_json_encode( $data ),
 				'headers' => array(
 					'Authorization' => 'Bearer ' . $access_response['access_token'],
 					'Content-Type'  => 'application/json',
@@ -205,7 +205,7 @@ class ZoomServices {
 	public function update_zoom_meeting( $meeting_schedule_id, $meeting_data ) {
 		$access_response = $this->generateAccessToken();
 
-		$time_in_24_hour_format = date( 'H:i:s', strtotime( $meeting_data->start_time ) );
+		$time_in_24_hour_format = gmdate( 'H:i:s', strtotime( $meeting_data->start_time ) );
 
 		$data = array(
 			'topic'      => ! empty( $meeting_data->meeting_title ) ? $meeting_data->meeting_title : '',
@@ -225,7 +225,7 @@ class ZoomServices {
 			'https://api.zoom.us/v2/meetings/' . $meeting_schedule_id,
 			array(
 				'method'  => 'PATCH',
-				'body'    => json_encode( $data ),
+				'body'    => wp_json_encode( $data ),
 				'headers' => array(
 					'Authorization' => 'Bearer ' . $access_response['access_token'],
 					'Content-Type'  => 'application/json',

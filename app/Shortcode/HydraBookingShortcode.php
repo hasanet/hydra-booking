@@ -123,7 +123,7 @@ class HydraBookingShortcode {
 				// Load Reschedule Template
 				// You are rescheduling the booking: 3:15 pm - 3:30 pm, May 27, 2024 (Asia/Dhaka)
 				echo '<div class="tfhb-reschedule-box">';
-				echo '<p>' . __( 'You are rescheduling the booking:', 'hydra-booking' ) . ' ' . esc_html( $booking_data->start_time ) . ' - ' . esc_html( $booking_data->end_time ) . ', ' . esc_html( date( 'F j, Y', strtotime( $booking_data->meeting_dates ) ) ) . ' (' . esc_html( $booking_data->attendee_time_zone ) . ')</p>';
+				echo '<p>' . esc_html__( 'You are rescheduling the booking:', 'hydra-booking' ) . ' ' . esc_html( $booking_data->start_time ) . ' - ' . esc_html( $booking_data->end_time ) . ', ' . esc_html( gmdate( 'F j, Y', strtotime( $booking_data->meeting_dates ) ) ) . ' (' . esc_html( $booking_data->attendee_time_zone ) . ')</p>';
 				echo '</div>';
 
 			}
@@ -306,7 +306,7 @@ class HydraBookingShortcode {
 
 		} else {
 
-			$meeting_hash = md5( sanitize_text_field( $_POST['meeting_dates'] ) . sanitize_text_field( $_POST['meeting_time_start'] ) . sanitize_text_field( $_POST['meeting_time_end'] ) . sanitize_text_field( $_POST['meeting_id'] ) . rand( 1000, 9999 ) );
+			$meeting_hash = md5( sanitize_text_field( $_POST['meeting_dates'] ) . sanitize_text_field( $_POST['meeting_time_start'] ) . sanitize_text_field( $_POST['meeting_time_end'] ) . sanitize_text_field( $_POST['meeting_id'] ) . wp_rand( 1000, 9999 ) );
 
 		}
 
@@ -434,7 +434,7 @@ class HydraBookingShortcode {
 
 			for ( $i = 1; $i < $recurring_maximum; $i++ ) {
 
-				$recurring_current_date = date( 'Y-m-d', strtotime( $next_date . ' + ' . $recurring_repeat_limit . ' ' . $recurring_repeat_times . '' ) );
+				$recurring_current_date = gmdate( 'Y-m-d', strtotime( $next_date . ' + ' . $recurring_repeat_limit . ' ' . $recurring_repeat_times . '' ) );
 				$meeting_dates         .= ',' . $recurring_current_date;
 				$next_date              = $recurring_current_date;
 			}
@@ -526,7 +526,7 @@ class HydraBookingShortcode {
 					$DateTime                                = new DateTimeController( $booking_meta['attendee_time_zone'] );
 					// Time format if has AM and PM into start time
 					$time_format  = strpos( $booking_meta['start_time'], 'AM' ) || strpos( $booking_meta['start_time'], 'PM' ) ? '12' : '24';
-					$current_time = strtotime( $DateTime->convert_time_based_on_timezone( date( 'Y-m-d H:i:s' ), 'UTC', $booking_meta['attendee_time_zone'], $time_format ) );
+					$current_time = strtotime( $DateTime->convert_time_based_on_timezone( gmdate( 'Y-m-d H:i:s' ), 'UTC', $booking_meta['attendee_time_zone'], $time_format ) );
 					$meeting_time = strtotime( $booking_meta['meeting_dates'] . ' ' . $booking_meta['start_time'] );
 					$time_diff    = $meeting_time - $current_time;
 					$time_diff    = $time_diff / 60; // convert to minutes
@@ -605,7 +605,7 @@ class HydraBookingShortcode {
 				// Get Post Meta
 				$meeting_address_data = array(
 					'id'                => $single_booking_meta->id,
-					'meeting_locations' => json_encode( $meeting_location_data ),
+					'meeting_locations' => wp_json_encode( $meeting_location_data ),
 				);
 				$booking->update( $meeting_address_data );
 
@@ -627,19 +627,19 @@ class HydraBookingShortcode {
 
 			if ( $booking_frequency ) {
 				$created_date = $last_items_of_booking->created_at; // 2024-07-02 14:26:29
-				$current_date = date( 'Y-m-d H:i:s' );
+				$current_date = gmdate( 'Y-m-d H:i:s' );
 
-				$last_created_date = date( 'Y-m-d', strtotime( $created_date ) );
+				$last_created_date = gmdate( 'Y-m-d', strtotime( $created_date ) );
 				foreach ( $booking_frequency as $key => $value ) {
 					$days  = isset( $value['times'] ) ? $value['times'] : 1;
 					$limit = isset( $value['limit'] ) ? $value['limit'] : 1;
 
-					$booking_frequency_date = date( 'Y-m-d', strtotime( $last_created_date . ' + ' . $days . ' days' ) );
+					$booking_frequency_date = gmdate( 'Y-m-d', strtotime( $last_created_date . ' + ' . $days . ' days' ) );
 					$total_booking          = count(
 						array_filter(
 							$current_user_booking,
 							function ( $booking ) use ( $booking_frequency_date, $last_created_date ) {
-								$created_date = date( 'Y-m-d', strtotime( $booking->created_at ) );
+								$created_date = gmdate( 'Y-m-d', strtotime( $booking->created_at ) );
 								// Check if the created date is between last_created_date and booking_frequency_date
 								return strtotime( $last_created_date ) >= strtotime( $created_date ) || strtotime( $created_date ) <= strtotime( $booking_frequency_date );
 							}
@@ -782,7 +782,7 @@ class HydraBookingShortcode {
 			// Get Post Meta
 			$meeting_address_data = array(
 				'id'                => $single_booking_meta->id,
-				'meeting_locations' => json_encode( $meeting_location_data ),
+				'meeting_locations' => wp_json_encode( $meeting_location_data ),
 			);
 			$booking->update( $meeting_address_data );
 
@@ -867,7 +867,7 @@ class HydraBookingShortcode {
 				// Update the Booking meta
 				$booking_meta = array(
 					'id'    => $booking_calendar->id,
-					'value' => json_encode( $booking_calendar_value, true ),
+					'value' => wp_json_encode( $booking_calendar_value, true ),
 				);
 
 				$BookingMeta->update( $booking_meta );
@@ -883,7 +883,7 @@ class HydraBookingShortcode {
 			$booking_meta = array(
 				'booking_id' => $data->id,
 				'meta_key'   => 'booking_calendar',
-				'value'      => json_encode( $calendar_data, true ),
+				'value'      => wp_json_encode( $calendar_data, true ),
 			);
 
 			$insert = $BookingMeta->add( $booking_meta );
