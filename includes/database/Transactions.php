@@ -39,12 +39,7 @@ class Transactions {
 	 */
 	public function rollback() {
 		global $wpdb;
-
-		$table_name = $wpdb->prefix . $this->table;
-
-		$sql = "DROP TABLE IF EXISTS $table_name;";
-
-		$wpdb->query( $sql );
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}tfhb_transactions" );
 	}
 
 	/**
@@ -104,21 +99,13 @@ class Transactions {
 	public function get( $id = null ) {
 
 		global $wpdb;
-
-		$table_name = $wpdb->prefix . $this->table;
-
+		
 		if ( $id ) {
-			$sql = "SELECT * FROM $table_name WHERE id = $id";
-
 			$data = $wpdb->get_row(
-				$wpdb->prepare( $sql )
+				$wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tfhb_transactions WHERE id = %d",$id )
 			);
 		} else {
-			$sql = "SELECT * FROM $table_name";
-
-			$data = $wpdb->get_results(
-				$wpdb->prepare( $sql )
-			);
+			$data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}tfhb_transactions");
 		}
 
 		// Get all data

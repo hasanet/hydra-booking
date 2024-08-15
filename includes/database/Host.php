@@ -48,13 +48,8 @@ class Host {
 	 * Rollback the database migration.
 	 */
 	public function rollback() {
-			global $wpdb;
-
-		$table_name = $wpdb->prefix . $this->table;
-
-		$sql = "DROP TABLE IF EXISTS $table_name;";
-
-		$wpdb->query( $sql );
+		global $wpdb;
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}tfhb_hosts" );
 	}
 
 	/**
@@ -137,7 +132,7 @@ class Host {
 			);
 		} elseif ( $where != null ) {
 			$data = $wpdb->get_row(
-				$wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = $where" )
+				$wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tfhb_hosts WHERE user_id = %d",$where )
 			);
 		} elseif ( ! empty( $filterData['name'] ) ) {
 			// Corrected SQL query for searching by name
@@ -145,11 +140,7 @@ class Host {
 			$data = $wpdb->get_results( $wpdb->prepare( $sql, '%' . $filterData['name'] . '%' ) );
 
 		} else {
-			$sql = "SELECT * FROM $table_name";
-
-			$data = $wpdb->get_results(
-				$wpdb->prepare( $sql )
-			);
+			$data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}tfhb_hosts");
 		}
 		// Get all data
 
