@@ -72,10 +72,10 @@ class FluentCRM {
 		global $wpdb;
 		// Check if table exists
 		$subscriber_table_name = $wpdb->prefix . 'fc_subscribers';
-		$table_exists          = $wpdb->get_var( "SHOW TABLES LIKE '$subscriber_table_name'" ) == $subscriber_table_name;
+		$table_exists          = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}fc_subscribers'" ) == $subscriber_table_name;
 
 		$subscriber_pivot_table_name = $wpdb->prefix . 'fc_subscriber_pivot';
-		$pivot_table_exists          = $wpdb->get_var( "SHOW TABLES LIKE '$subscriber_pivot_table_name'" ) == $subscriber_pivot_table_name;
+		$pivot_table_exists          = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}fc_subscriber_pivot'" ) == $subscriber_pivot_table_name;
 
 		if ( $table_exists ) {
 			// Table exists, prepare and insert data

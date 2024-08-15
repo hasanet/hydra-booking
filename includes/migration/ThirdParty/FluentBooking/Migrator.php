@@ -69,7 +69,7 @@ class Migrator {
 		// custom query with prepare statement
 		$zoom_integration = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$prefix}fcal_meta WHERE object_type = %s AND object_id = %s  AND  `key` = %s",
+				"SELECT * FROM {$wpdb->prefix}fcal_meta WHERE object_type = %s AND object_id = %s  AND  `key` = %s",
 				'user_meta',
 				1,
 				'zoom_credentials'
@@ -99,7 +99,7 @@ class Migrator {
 		// Get all availability
 		$availabilities = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$prefix}fcal_meta WHERE object_type = %s",
+				"SELECT * FROM {$wpdb->prefix}fcal_meta WHERE object_type = %s",
 				'availability',
 			)
 		);
@@ -165,21 +165,14 @@ class Migrator {
 
 		global $wpdb;
 
-		// Get Wpdb prefix
-		$prefix = $wpdb->prefix;
-
 		// Get all booking
 		$fluent_calender = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$prefix}fcal_calendars"
-			)
+			"SELECT * FROM {$wpdb->prefix}fcal_calendars"
 		);
 
 		// Get all booking
 		$meeting = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$prefix}tfhb_meetings"
-			)
+			"SELECT * FROM {$wpdb->prefix}tfhb_meetings"
 		);
 
 		foreach ( $fluent_calender as $key => $value ) {
@@ -189,7 +182,7 @@ class Migrator {
 			// Get all booking
 			$fluent_calender_event = (array) $wpdb->get_row(
 				$wpdb->prepare(
-					"SELECT * FROM {$prefix}fcal_calendar_events where calendar_id = %s",
+					"SELECT * FROM {$wpdb->prefix}fcal_calendar_events where calendar_id = %s",
 					$value['id']
 				)
 			);
@@ -252,7 +245,7 @@ class Migrator {
 				'payment_currency'        => isset( $value['payment_currency'] ) ? sanitize_text_field( $value['payment_currency'] ) : '',
 				'payment_method'          => isset( $value['payment_method'] ) ? sanitize_text_field( $value['payment_method'] ) : '',
 				'payment_meta'            => isset( $value['payment_meta'] ) ? $value['payment_meta'] : '',
-				'updated_at'              => date( 'Y-m-d' ),
+				'updated_at'              => gmdate( 'Y-m-d' ),
 				'updated_by'              => $current_user_id,
 			);
 			$data['slug'] = get_post_field( 'post_name', $meeting_post_id );
@@ -272,28 +265,23 @@ class Migrator {
 	public function migrateHost() {
 		global $wpdb;
 
-		// Get Wpdb prefix
-		$prefix = $wpdb->prefix;
-
 		// Get all booking
 		$fluent_calender = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$prefix}fcal_calendars"
-			)
+			"SELECT * FROM {$wpdb->prefix}fcal_calendars"
 		);
 		foreach ( $fluent_calender as $key => $value ) {
 
 			$user_id              = $value->user_id;
 			$fluent_calender_meta = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$prefix}fcal_meta where object_type = %s AND object_id = %s",
+					"SELECT * FROM {$wpdb->prefix}fcal_meta where object_type = %s AND object_id = %s",
 					'Calendar',
 					$value->id
 				)
 			);
 			$wp_tfhb_bookings     = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$prefix}fcal_meta where object_type = %s AND object_id = %s",
+					"SELECT * FROM {$wpdb->prefix}fcal_meta where object_type = %s AND object_id = %s",
 					'Calendar',
 					$value->id
 				)
@@ -357,14 +345,8 @@ class Migrator {
 	public function migrateBooking() {
 		global $wpdb;
 
-		// Get Wpdb prefix
-
-		$prefix = $wpdb->prefix;
-
 		$fluent_booking = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$prefix}fcal_bookings "
-			)
+			"SELECT * FROM {$wpdb->prefix}fcal_bookings"
 		);
 		$booking        = new Booking();
 		$tfhb_booking   = $booking->get( 7 );
