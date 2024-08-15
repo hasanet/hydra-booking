@@ -136,8 +136,7 @@ class Host {
 			);
 		} elseif ( ! empty( $filterData['name'] ) ) {
 			// Corrected SQL query for searching by name
-			$sql  = "SELECT * FROM $table_name WHERE concat(first_name, last_name) LIKE %s";
-			$data = $wpdb->get_results( $wpdb->prepare( $sql, '%' . $filterData['name'] . '%' ) );
+			$data = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tfhb_hosts WHERE concat(first_name, last_name) LIKE %s", '%' . $filterData['name'] . '%' ) );
 
 		} else {
 			$data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}tfhb_hosts");
